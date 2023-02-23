@@ -127,8 +127,8 @@ document.addEventListener(
         dataImportButton.addEventListener('click',function() {
                 var data = $("#import-data").val();
                 var json = jQuery.parseJSON(data);
-                localStorage.setItem('funds',JSON.stringify(stockList));
-                localStorage.setItem('funds',JSON.stringify(fundList));
+                localStorage.setItem('stocks',JSON.stringify(json.stocks));
+                localStorage.setItem('funds',JSON.stringify(json.funds));
                 $("#data-import-modal").modal( "hide" );
             }
         );
