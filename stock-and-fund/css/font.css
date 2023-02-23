@@ -5,3 +5,11 @@
 	width:1000px;
 	overflow-x:auto;
 }
+.my-text {
+    width:400px
+}
+.my-div {
+    width:900px;
+    height:500px;
+    overflow-x:auto;
+}

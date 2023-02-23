@@ -114,12 +114,13 @@ document.addEventListener(
                 $("#data-import-modal").modal();
             }
         );
-        let exportData = document.getElementById('exportData');
-        exportData.addEventListener('click',function() {
+        let showExportDataDialog = document.getElementById('showExportDataDialog');
+        showExportDataDialog.addEventListener('click',function() {
+                $("#data-export-modal").modal();
                 var data = {};
                 data.stocks = stockList;
                 data.funds = fundList;
-                alert(JSON.stringify(data));
+                $("#export-data").val(JSON.stringify(data));
             }
         );
 
@@ -130,6 +131,7 @@ document.addEventListener(
                 localStorage.setItem('stocks',JSON.stringify(json.stocks));
                 localStorage.setItem('funds',JSON.stringify(json.funds));
                 $("#data-import-modal").modal( "hide" );
+                location.reload();
             }
         );
         let fundSaveButton = document.getElementById('fund-save-button');
