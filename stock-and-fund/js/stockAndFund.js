@@ -109,6 +109,29 @@ document.addEventListener(
                 $("#stock-modal").modal();
             }
         );
+        let showImportDataDialog = document.getElementById('showImportDataDialog');
+        showImportDataDialog.addEventListener('click',function() {
+                $("#data-import-modal").modal();
+            }
+        );
+        let exportData = document.getElementById('exportData');
+        exportData.addEventListener('click',function() {
+                var data = {};
+                data.stocks = stockList;
+                data.funds = fundList;
+                alert(JSON.stringify(data));
+            }
+        );
+
+        let dataImportButton = document.getElementById('data-import-button');
+        dataImportButton.addEventListener('click',function() {
+                var data = $("#import-data").val();
+                var json = jQuery.parseJSON(data);
+                localStorage.setItem('funds',JSON.stringify(stockList));
+                localStorage.setItem('funds',JSON.stringify(fundList));
+                $("#data-import-modal").modal( "hide" );
+            }
+        );
         let fundSaveButton = document.getElementById('fund-save-button');
         fundSaveButton.addEventListener('click',function() {
                 var code =$("#fund-code").val();

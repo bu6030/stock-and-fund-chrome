@@ -184,6 +184,38 @@
             </div>
         </div>
     </div>
+
+    <!-- 导入数据模态框 -->
+    <div class="modal fade" id="data-import-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">导入数据</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body my-font">
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">导入数据文本：</div>
+                        <div class="you">
+                            <input type="text" class="am-input-sm" id="import-data" >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" id="data-import-button">导入</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <!-- 股票基金主体页面 start -->
     <div >
         <div>
@@ -192,6 +224,8 @@
                 <dl>
                     <button type="button" id="showFundDialog" class="btn btn-secondary btn-sm" data-toggle="modal">添加基金</button>
                     <button type="button" id="showStockDialog" class="btn btn-secondary btn-sm" data-toggle="modal">添加股票</button>
+                    <button type="button" id="exportData" class="btn btn-secondary btn-sm" data-toggle="modal">导出数据</button>
+                    <button type="button" id="showImportDataDialog" class="btn btn-secondary btn-sm" data-toggle="modal">导入数据</button>
                 </dl>
             </div>
 
