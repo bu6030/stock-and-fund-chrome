@@ -1,0 +1,7 @@
+.my-font {
+	font-size: 10px
+}
+.my-scroll {
+	width:1000px;
+	overflow-x:auto;
+}
