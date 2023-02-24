@@ -313,39 +313,43 @@ function initFund() {
             dataType:'text',
             contentType: 'application/x-www-form-urlencoded',
             success: function (data) {
-                for(var k in fundList) {
-                    if(fundList[k].fundCode == fundCode){
-                        var json = jQuery.parseJSON(data.substring(8, data.length - 2));
-                        fundList[k].name = json.name+"";
-                        fundList[k].dwjz = json.dwjz+"";
-                        fundList[k].jzrq = json.jzrq+"";
-                        fundList[k].gsz = json.gsz+"";
-                        fundList[k].gztime = json.gztime+"";
-                        var gsz = new BigDecimal(json.gsz+"");
-                        var dwjz = new BigDecimal(json.dwjz+"");
-                        fundList[k].gszzl = gsz.subtract(dwjz).divide(gsz).multiply(new BigDecimal("100")).setScale(2) + "";
-
-                        var now = new BigDecimal(json.gsz+"");
-                        var costPrice = new BigDecimal(fundList[k].costPrise+"");
-                        var incomeDiff = now.add(costPrice.negate());
-                        if (costPrice <= 0) {
-                            fundList[k].incomePercent = "0";
+                for (var k in fundList) {
+                    if (fundList[k].fundCode == fundCode) {
+                        if (data == "jsonpgz();") {
+                            getFundBySelfService(fundList[k]);
                         } else {
-                            var incomePercent = incomeDiff.divide(costPrice)
-                                .multiply(BigDecimal.TEN)
-                                .multiply(BigDecimal.TEN)
-                                .setScale(3);
-                            fundList[k].incomePercent = incomePercent + "";
+                            var json = jQuery.parseJSON(data.substring(8, data.length - 2));
+                            fundList[k].name = json.name + "";
+                            fundList[k].dwjz = json.dwjz + "";
+                            fundList[k].jzrq = json.jzrq + "";
+                            fundList[k].gsz = json.gsz + "";
+                            fundList[k].gztime = json.gztime + "";
+                            var gsz = new BigDecimal(json.gsz + "");
+                            var dwjz = new BigDecimal(json.dwjz + "");
+                            fundList[k].gszzl = gsz.subtract(dwjz).divide(gsz).multiply(new BigDecimal("100")).setScale(2) + "";
+
+                            var now = new BigDecimal(json.gsz + "");
+                            var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                            var incomeDiff = now.add(costPrice.negate());
+                            if (costPrice <= 0) {
+                                fundList[k].incomePercent = "0";
+                            } else {
+                                var incomePercent = incomeDiff.divide(costPrice)
+                                    .multiply(BigDecimal.TEN)
+                                    .multiply(BigDecimal.TEN)
+                                    .setScale(3);
+                                fundList[k].incomePercent = incomePercent + "";
+                            }
+                            var bonds = new BigDecimal(fundList[k].bonds + "");
+                            var income = incomeDiff.multiply(bonds)
+                                .setScale(2);
+                            fundList[k].income = income + "";
                         }
-                        var bonds = new BigDecimal(fundList[k].bonds+"");
-                        var income = incomeDiff.multiply(bonds)
-                            .setScale(2);
-                        fundList[k].income = income + "";
                     }
                 }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(errorThrown)
+                alert(errorThrown);
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
@@ -353,6 +357,37 @@ function initFund() {
         });
     }
     initStockAndFundHtml();
+}
+
+function getFundBySelfService(fund) {
+    // 下面这个地址可以通过本地启动stock-and-fund项目
+    // github地址为：https://github.com/bu6030/stock-and-fund
+    $.ajax({
+        url:"http://127.0.0.1:8080/chrome/fund?fundCode="+ fund.fundCode + "&costPrise=" + fund.costPrise + "&bonds=" + fund.bonds + "&app=" + fund.app,
+        type:"get",
+        data :{
+        },
+        async: false,
+        dataType:'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            // alert(data.value.fundName+"");
+            fund.name = data.value.fundName+"";
+            fund.jzrq = data.value.jzrq+"";
+            fund.dwjz = data.value.dwjz+"";
+            fund.gsz = data.value.gsz+"";
+            fund.gszzl = data.value.gszzl+"";
+            fund.gztime = data.value.gztime+"";
+            fund.incomePercent = data.value.incomePercent+"";
+            fund.income = data.value.income+"";
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert(errorThrown);
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
 }
 
 function checkFundExsit(code) {
