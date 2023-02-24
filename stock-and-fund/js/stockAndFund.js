@@ -56,7 +56,7 @@ window.addEventListener("load", (event) => {
 });
 
 function initHtml(){
-    var fundHead = " <tr > " +
+    var stockHead = " <tr > " +
         " <th >APP</th> " +
         " <th >股票名称</th> " +
         " <th >当日盈利</th> " +
@@ -69,7 +69,7 @@ function initHtml(){
         " <th >收益率</th> " +
         " <th >收益</th> " +
         " </tr>";
-    var stockHead = " <tr >\n" +
+    var fundHead = " <tr >\n" +
         " <th >APP</th>\n" +
         " <th >基金名称</th>\n" +
         " <th >当日盈利</th>\n" +
