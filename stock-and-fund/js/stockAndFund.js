@@ -123,7 +123,6 @@ document.addEventListener(
                 $("#export-data").val(JSON.stringify(data));
             }
         );
-
         let dataImportButton = document.getElementById('data-import-button');
         dataImportButton.addEventListener('click',function() {
                 var data = $("#import-data").val();
@@ -140,6 +139,7 @@ document.addEventListener(
                 var costPrise =$("#fund-costPrise").val();
                 var bonds =$("#fund-bonds").val();
                 var app = $("#fund-app").val();
+                var fundName = $("#fund-name").val();
                 if(code==null||code==''||
                     costPrise==null||costPrise==''||
                     bonds==null||bonds==''||
@@ -149,7 +149,7 @@ document.addEventListener(
                 }
                 var fund = {
                     "fundCode": code,
-                    "fundName": "华宝中证医疗ETF",
+                    "fundName": fundName,
                     "costPrise": costPrise,
                     "bonds": bonds,
                     "app": app
@@ -162,8 +162,10 @@ document.addEventListener(
                 }
                 for (var k in funds) {
                     if(funds[k].fundCode == fund.fundCode) {
-                        alert("已添加该基金");
+                        funds[k] = fund;
+                        localStorage.setItem('funds',JSON.stringify(funds));
                         $("#fund-modal").modal( "hide" );
+                        location.reload();
                         return;
                     }
                 }
@@ -184,6 +186,7 @@ document.addEventListener(
                 var costPrise =$("#stock-costPrise").val();
                 var bonds =$("#stock-bonds").val();
                 var app = $("#stock-app").val();
+                var name = $("#stock-name").val();
                 if (code==null||code==''||
                     costPrise==null||costPrise==''||
                     bonds==null||bonds==''||
@@ -193,6 +196,7 @@ document.addEventListener(
                 }
                 var stock = {
                     "code": code,
+                    "name": name,
                     "costPrise": costPrise,
                     "bonds": bonds,
                     "app": app
@@ -205,8 +209,10 @@ document.addEventListener(
                 }
                 for (var k in stocks) {
                     if(stocks[k].code == stock.code) {
-                        alert("已添加该股票");
+                        stocks[k] = stock;
+                        localStorage.setItem('stocks',JSON.stringify(stocks));
                         $("#stock-modal").modal( "hide" );
+                        location.reload();
                         return;
                     }
                 }
@@ -476,6 +482,30 @@ function initStockAndFundHtml(){
 
     var str2 = getFundTableHtml(fundList, totalMarketValue);
     $("#fund-nr").html(str2);
+
+    for(k in stockList){
+        let stockTr = document.getElementById('stock-tr-'+k);
+        stockTr.addEventListener('click', function() {
+            $("#stock-name").val(stockList[this.sectionRowIndex].name);
+            $("#stock-code").val(stockList[this.sectionRowIndex].code);
+            $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
+            $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
+            $("#stock-app").val(stockList[this.sectionRowIndex].app);
+            $("#stock-modal").modal();
+        });
+    }
+
+    for(k in fundList){
+        let fundTr = document.getElementById('fund-tr-'+k);
+        fundTr.addEventListener('click', function() {
+            $("#fund-name").val(fundList[this.sectionRowIndex].fundName);
+            $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
+            $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
+            $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
+            $("#fund-app").val(fundList[this.sectionRowIndex].app);
+            $("#fund-modal").modal();
+        });
+    }
 }
 
 function getStockTableHtml(result, totalMarketValueResult){
@@ -528,7 +558,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-        str += "<tr>"
+        str += "<tr id=\"stock-tr-" + k + "\">"
             + "<td><a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td style=\"width: 200px;\">" +result[k].name
             // + "</td><td " + dayIncomeStyle + ">" + result[k].change
@@ -576,7 +606,7 @@ function getFundTableHtml(result, totalMarketValueResult){
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-        str += "<tr>"
+        str += "<tr id=\"fund-tr-" + k + "\">"
             + "<td><a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
             + "</td><td style=\"width: 200px;\">" +result[k].fundName
             // + "</td><td>"
