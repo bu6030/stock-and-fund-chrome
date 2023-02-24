@@ -1,6 +1,12 @@
 # 股基神器chrome扩展程序版本
 
-## 股基神器chrome安装步骤
+[股基神器chrome安装步骤](#chrome-stock-and-fund)  
+[股基神器Edge安装步骤](#edge-stock-and-fund)  
+[股基神器添加股票基金步骤](#add-stock-and-fund-step)  
+[股基神器导入导出数据步骤](#import-export-stock-and-fund-step)  
+
+
+## <span id="chrome-stock-and-fund">股基神器chrome安装步骤</span>
  1. 代码下载完成后，在chrome浏览器中选择扩展程序进入扩展程序页面    
 ![image](https://user-images.githubusercontent.com/11482988/220873576-c1234b8c-d66b-4059-94a1-4681ba728c2a.png)  
  2. 点击开发者模式    
@@ -14,7 +20,7 @@
  6. 添加后点击股基神器按钮，可以进入主页。
 ![image](https://user-images.githubusercontent.com/11482988/221104210-3a98e680-fc61-4f48-8fa3-b07d41bc318a.png)
 
-## 股基神器Edge安装步骤
+## <span id="edge-stock-and-fund">股基神器Edge安装步骤</span>
  1. 代码下载完成后，在Edge浏览器中选择扩展程序进入扩展程序页面    
 ![image](https://user-images.githubusercontent.com/11482988/221105602-07fd2e26-390f-4828-b2d8-4eae3d9205e9.png)
  2. 点击管理扩展  
@@ -28,13 +34,13 @@
  5. 击股基神器按钮，可以进入主页。  
 ![image](https://user-images.githubusercontent.com/11482988/221106457-9013f243-99be-481f-b603-3ab31deb2c73.png)
 
-## 股基神器添加股票基金步骤
+## <span id="add-stock-and-fund-step">股基神器添加股票基金步骤</span>
  1. 点击添加基金，输入基金编码（6位基金编码），持仓成本，持有份额，APP（目前支持东方财富，支付宝，中国银行，东方证券，平安银行），点击保存，即可添加新的基金。  
  ![image](https://user-images.githubusercontent.com/11482988/221102713-87017d20-b7ff-42bb-81ed-9e9cb70cb13c.png)
  2. 点击添加股票，输入股票编码（编码sh(上证)/sz(深证)开头+6位股票编码），持仓成本，持有份额，APP（目前支持东方财富，支付宝，中国银行，东方证券，平安银行），点击保存，即可添加新的基金。  
 ![image](https://user-images.githubusercontent.com/11482988/221103163-04834382-8136-4971-9b87-a98ac59d76ca.png)
 
-## 股基神器导入导出数据步骤
+## <span id="import-export-stock-and-fund-step">股基神器导入导出数据步骤</span>
  1. 由于数据是存储在浏览器本地的，因此增加导出导入数据功能，方便在不同的电脑复制数据。
  2. 点击导出数据，从表单中手动copy后，手动粘贴到文本编辑器保存成文件即可。
  ![image](https://user-images.githubusercontent.com/11482988/221103317-9f654c7a-c4bb-45bd-ad2b-04066d3e830c.png)
