@@ -373,7 +373,7 @@ function initFund() {
                             if (costPrice <= 0) {
                                 fundList[k].incomePercent = "0";
                             } else {
-                                var incomePercent = incomeDiff.divide(costPrice, 4)
+                                var incomePercent = incomeDiff.divide(costPrice, 5, 5)
                                     .multiply(BigDecimal.TEN)
                                     .multiply(BigDecimal.TEN)
                                     .setScale(3);
@@ -649,6 +649,7 @@ function getFundTableHtml(result, totalMarketValueResult){
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             +"</td></tr>";
+        // alert(result[k].income);
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);
         fundTotalmarketValue = fundTotalmarketValue.add(marketValue);
