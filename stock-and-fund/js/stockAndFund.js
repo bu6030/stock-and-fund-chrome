@@ -16,7 +16,7 @@ let URL = {
     // 下面这两个地址可以通过本地启动stock-and-fund项目
     // github地址为：https://github.com/bu6030/stock-and-fund
     GET_FUND_FROM_LOCAL_SERVICE : "http://127.0.0.1:8080/chrome/fund",
-    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE : "http://127.0.0.1:8080/chrome/stockAndFund",
+    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE : "http://1.117.221.208:8080/chrome/stockAndFund",
 }
 
 var appList = [
@@ -315,7 +315,7 @@ function initData() {
                         if (costPrise <= 0) {
                             stockList[l].incomePercent = 0 + "";
                         } else {
-                            var incomePercent = incomeDiff.divide(costPrise, 5)
+                            var incomePercent = incomeDiff.divide(costPrise, 5, 4)
                                 .multiply(BigDecimal.TEN)
                                 .multiply(BigDecimal.TEN)
                                 .setScale(3);
@@ -365,7 +365,7 @@ function initFund() {
                             fundList[k].gztime = json.gztime + "";
                             var gsz = new BigDecimal(json.gsz + "");
                             var dwjz = new BigDecimal(json.dwjz + "");
-                            fundList[k].gszzl = gsz.subtract(dwjz).divide(gsz).multiply(new BigDecimal("100")).setScale(2) + "";
+                            fundList[k].gszzl = gsz.subtract(dwjz).divide(gsz, 2).multiply(new BigDecimal("100")).setScale(2) + "";
 
                             var now = new BigDecimal(json.gsz + "");
                             var costPrice = new BigDecimal(fundList[k].costPrise + "");
@@ -373,7 +373,7 @@ function initFund() {
                             if (costPrice <= 0) {
                                 fundList[k].incomePercent = "0";
                             } else {
-                                var incomePercent = incomeDiff.divide(costPrice)
+                                var incomePercent = incomeDiff.divide(costPrice, 4)
                                     .multiply(BigDecimal.TEN)
                                     .multiply(BigDecimal.TEN)
                                     .setScale(3);
@@ -445,7 +445,7 @@ function checkFundExsit(code) {
             fund.gztime = json.gztime+"";
             var gsz = new BigDecimal(json.gsz+"");
             var dwjz = new BigDecimal(json.dwjz+"");
-            fund.gszzl = gsz.subtract(dwjz).divide(gsz).multiply(new BigDecimal("100")).setScale(2) + "";
+            fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
             var now = new BigDecimal(json.gsz+"");
             checkReuslt = true;
         },
@@ -582,7 +582,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         console.log(result[k].name+"计算当日买卖后："+ dayIncome);
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
@@ -608,8 +608,8 @@ function getStockTableHtml(result, totalMarketValueResult){
     var stockDayIncomePercent = new BigDecimal("0");
     var stockTotalIncomePercent = new BigDecimal("0");
     if (stockTotalmarketValue != 0) {
-        stockDayIncomePercent = stockDayIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue);
-        stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue);
+        stockDayIncomePercent = stockDayIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue, 4);
+        stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue, 4);
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
@@ -630,7 +630,7 @@ function getFundTableHtml(result, totalMarketValueResult){
         dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
@@ -656,8 +656,8 @@ function getFundTableHtml(result, totalMarketValueResult){
     var fundDayIncomePercent = new BigDecimal("0");
     var fundTotalIncomePercent = new BigDecimal("0");
     if (fundTotalmarketValue != 0) {
-        fundDayIncomePercent = fundDayIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue);
-        fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue);
+        fundDayIncomePercent = fundDayIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue, 4);
+        fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue, 4);
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
@@ -669,8 +669,8 @@ function getFundTableHtml(result, totalMarketValueResult){
     var allDayIncomePercent = new BigDecimal("0");
     var allTotalIncomePercent = new BigDecimal("0");
     if (totalMarketValueResult != 0) {
-        allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
-        allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult);
+        allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
+        allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
     }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
