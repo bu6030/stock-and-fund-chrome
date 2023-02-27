@@ -47,5 +47,6 @@
  3. 点击导入数据，可以选择刚才保存的文本，粘贴到输入框中，点击导入，即可导入数据。
  ![image](https://user-images.githubusercontent.com/11482988/221103612-504eae56-0763-4776-a19e-5a684b10171d.png)
  4. 导入数据成功后，页面如下：
- ![image](https://user-images.githubusercontent.com/11482988/221103796-8dcde910-20f1-42e1-bbd1-3d5f8fa7536c.png)
+![image](https://user-images.githubusercontent.com/11482988/221115838-567acfd3-b67d-4033-b62c-bed6b303075b.png)
+
 
