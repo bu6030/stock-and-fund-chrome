@@ -9,6 +9,16 @@ var totalMarketValue;
 var fundList;
 var stockList;
 
+let URL = {
+
+    GET_STOCK_FROM_GTIMG : "http://qt.gtimg.cn/",
+    GET_FUND_FROM_TIANTIANJIJIN : "http://fundgz.1234567.com.cn/js/",
+    // 下面这两个地址可以通过本地启动stock-and-fund项目
+    // github地址为：https://github.com/bu6030/stock-and-fund
+    GET_FUND_FROM_LOCAL_SERVICE : "http://127.0.0.1:8080/chrome/fund",
+    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE : "http://127.0.0.1:8080/chrome/stockAndFund",
+}
+
 var appList = [
     {
         "type": "APP",
@@ -221,6 +231,29 @@ document.addEventListener(
                 location.reload();
             }
         );
+        let importFromLocalSpringBoot = document.getElementById('importFromLocalSpringBoot');
+        importFromLocalSpringBoot.addEventListener('click',function() {
+            $.ajax({
+                url: URL.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
+                type:"get",
+                data :{
+                },
+                dataType:'json',
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (data) {
+                    localStorage.setItem('stocks',JSON.stringify(data.value.stocks));
+                    localStorage.setItem('funds',JSON.stringify(data.value.funds));
+                    location.reload();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.status);
+                    console.log(XMLHttpRequest.readyState);
+                    console.log(textStatus);
+                }
+            });
+
+            }
+        );
     }
 );
 
@@ -247,7 +280,7 @@ function initData() {
     }
 
     $.ajax({
-        url:"http://qt.gtimg.cn/q="+stocks,
+        url: URL.GET_STOCK_FROM_GTIMG + "q=" + stocks,
         type:"get",
         data :{
         },
@@ -305,7 +338,7 @@ function initFund() {
     for(var l in fundList) {
         var fundCode = fundList[l].fundCode;
         $.ajax({
-            url:"http://fundgz.1234567.com.cn/js/"+fundList[l].fundCode+".js",
+            url: URL.GET_FUND_FROM_TIANTIANJIJIN + fundList[l].fundCode + ".js",
             type:"get",
             data :{
             },
@@ -349,7 +382,6 @@ function initFund() {
                 }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(errorThrown);
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
@@ -360,10 +392,8 @@ function initFund() {
 }
 
 function getFundBySelfService(fund) {
-    // 下面这个地址可以通过本地启动stock-and-fund项目
-    // github地址为：https://github.com/bu6030/stock-and-fund
     $.ajax({
-        url:"http://127.0.0.1:8080/chrome/fund?fundCode="+ fund.fundCode + "&costPrise=" + fund.costPrise + "&bonds=" + fund.bonds + "&app=" + fund.app,
+        url: URL.GET_FUND_FROM_LOCAL_SERVICE + "?fundCode="+ fund.fundCode + "&costPrise=" + fund.costPrise + "&bonds=" + fund.bonds + "&app=" + fund.app,
         type:"get",
         data :{
         },
@@ -382,7 +412,6 @@ function getFundBySelfService(fund) {
             fund.income = data.value.income+"";
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert(errorThrown);
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
@@ -393,7 +422,7 @@ function getFundBySelfService(fund) {
 function checkFundExsit(code) {
     var checkReuslt = false;
     $.ajax({
-        url:"http://fundgz.1234567.com.cn/js/"+code+".js",
+        url: URL.GET_FUND_FROM_TIANTIANJIJIN + code + ".js",
         type:"get",
         data :{
         },
@@ -426,7 +455,7 @@ function checkFundExsit(code) {
 function checkStockExsit(code) {
     var checkReuslt = false;
     $.ajax({
-        url:"http://qt.gtimg.cn/q="+code,
+        url: URL.GET_STOCK_FROM_GTIMG + "q=" + code,
         type:"get",
         data :{
         },
