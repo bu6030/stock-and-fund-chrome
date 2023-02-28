@@ -365,7 +365,7 @@ function initFund() {
                             fundList[k].gztime = json.gztime + "";
                             var gsz = new BigDecimal(json.gsz + "");
                             var dwjz = new BigDecimal(json.dwjz + "");
-                            fundList[k].gszzl = gsz.subtract(dwjz).divide(gsz, 2).multiply(new BigDecimal("100")).setScale(2) + "";
+                            fundList[k].gszzl = gsz.subtract(dwjz).divide(gsz, 5, 5).multiply(new BigDecimal("100")).setScale(2) + "";
 
                             var now = new BigDecimal(json.gsz + "");
                             var costPrice = new BigDecimal(fundList[k].costPrise + "");
