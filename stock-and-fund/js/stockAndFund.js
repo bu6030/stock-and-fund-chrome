@@ -365,7 +365,7 @@ function initFund() {
                             fundList[k].gztime = json.gztime + "";
                             var gsz = new BigDecimal(json.gsz + "");
                             var dwjz = new BigDecimal(json.dwjz + "");
-                            fundList[k].gszzl = gsz.subtract(dwjz).divide(gsz, 5, 5).multiply(new BigDecimal("100")).setScale(2) + "";
+                            fundList[k].gszzl = json.gszzl + "";
 
                             var now = new BigDecimal(json.gsz + "");
                             var costPrice = new BigDecimal(fundList[k].costPrise + "");
@@ -373,15 +373,15 @@ function initFund() {
                             if (costPrice <= 0) {
                                 fundList[k].incomePercent = "0";
                             } else {
-                                var incomePercent = incomeDiff.divide(costPrice, 5, 5)
+                                var incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
                                     .multiply(BigDecimal.TEN)
                                     .multiply(BigDecimal.TEN)
-                                    .setScale(3);
+                                    .setScale(3, MathContext.ROUND_HALF_UP);
                                 fundList[k].incomePercent = incomePercent + "";
                             }
                             var bonds = new BigDecimal(fundList[k].bonds + "");
                             var income = incomeDiff.multiply(bonds)
-                                .setScale(2);
+                                .setScale(2, MathContext.ROUND_HALF_UP);
                             fundList[k].income = income + "";
                         }
                     }
