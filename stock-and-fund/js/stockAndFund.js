@@ -279,7 +279,6 @@ function initData() {
                         var income = incomeDiff.multiply(bonds)
                             .setScale(2);
                         stockList[l].income = income + "";
-                        stockList[l].hide = false;
                     }
                 }
             }
@@ -499,6 +498,9 @@ function getStockTableHtml(result, totalMarketValueResult){
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
     for(var k in result) {
+        if (result[k].hide == true) {
+            continue;
+        }
         var buyOrSells = result[k].buyOrSellStockRequestList;
         var todayBuyIncom = new BigDecimal("0");
         var todaySellIncom = new BigDecimal("0");
@@ -579,6 +581,9 @@ function getFundTableHtml(result, totalMarketValueResult){
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
     for(var k in result) {
+        if (result[k].hide == true) {
+            continue;
+        }
         dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
