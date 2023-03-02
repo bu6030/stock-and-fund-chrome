@@ -2,14 +2,14 @@
 	font-size: 10px
 }
 .my-scroll {
-	width:1000px;
+	width:900px;
 	overflow-x:auto;
 }
 .my-text {
     width:400px
 }
 .my-div {
-    width:900px;
+    width:820px;
     height:500px;
     overflow-x:auto;
 }
