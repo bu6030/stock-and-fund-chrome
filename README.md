@@ -35,10 +35,11 @@
 ![image](https://user-images.githubusercontent.com/11482988/221106457-9013f243-99be-481f-b603-3ab31deb2c73.png)
 
 ## <span id="add-stock-and-fund-step">股基神器添加股票基金步骤</span>
- 1. 点击添加基金，输入基金编码（6位基金编码），持仓成本，持有份额，APP（目前支持东方财富，支付宝，中国银行，东方证券，平安银行），点击保存，即可添加新的基金。  
- ![image](https://user-images.githubusercontent.com/11482988/221102713-87017d20-b7ff-42bb-81ed-9e9cb70cb13c.png)
- 2. 点击添加股票，输入股票编码（编码sh(上证)/sz(深证)开头+6位股票编码），持仓成本，持有份额，APP（目前支持东方财富，支付宝，中国银行，东方证券，平安银行），点击保存，即可添加新的基金。  
-![image](https://user-images.githubusercontent.com/11482988/221103163-04834382-8136-4971-9b87-a98ac59d76ca.png)
+ 1. 点击添加基金，输入基金编码（6位基金编码），持仓成本，持有份额，点击保存，即可添加新的基金。  
+![image](https://user-images.githubusercontent.com/11482988/222343071-8b4dcc67-15d1-4c93-901c-8184e40b215b.png)
+ 2. 点击添加股票，输入股票编码（编码sh(上证)/sz(深证)开头+6位股票编码），持仓成本，持有份额，点击保存，即可添加新的股票。  
+![image](https://user-images.githubusercontent.com/11482988/222343097-197dd492-fe05-4683-90f6-04888b05794c.png)
+
 
 ## <span id="import-export-stock-and-fund-step">股基神器导入导出数据步骤</span>
  1. 由于数据是存储在浏览器本地的，因此增加导出导入数据功能，方便在不同的电脑复制数据。
