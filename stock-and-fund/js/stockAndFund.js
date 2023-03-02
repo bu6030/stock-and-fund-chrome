@@ -10,7 +10,6 @@ var fundList;
 var stockList;
 
 let URL = {
-
     GET_STOCK_FROM_GTIMG : "http://qt.gtimg.cn/",
     GET_FUND_FROM_TIANTIANJIJIN : "http://fundgz.1234567.com.cn/js/",
     // 下面这两个地址可以通过本地启动stock-and-fund项目
@@ -18,34 +17,6 @@ let URL = {
     GET_FUND_FROM_LOCAL_SERVICE : "http://127.0.0.1:8080/chrome/fund",
     GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE : "http://127.0.0.1:8080/chrome/stockAndFund",
 }
-
-var appList = [
-    {
-        "type": "APP",
-        "code": "DFCF",
-        "name": "东方财富"
-    },
-    {
-        "type": "APP",
-        "code": "ZFB",
-        "name": "支付宝"
-    },
-    {
-        "type": "APP",
-        "code": "DFZQ",
-        "name": "东方证券"
-    },
-    {
-        "type": "APP",
-        "code": "ZGYH",
-        "name": "中国银行"
-    },
-    {
-        "type": "APP",
-        "code": "PAYH",
-        "name": "平安银行"
-    }
-];
 
 window.addEventListener("load", (event) => {
     var funds = localStorage.getItem('funds');
@@ -67,7 +38,6 @@ window.addEventListener("load", (event) => {
 
 function initHtml(){
     var stockHead = " <tr > " +
-        " <th >APP</th> " +
         " <th >股票名称</th> " +
         " <th >当日盈利</th> " +
         " <th >涨跌幅</th> " +
@@ -80,7 +50,6 @@ function initHtml(){
         " <th >收益</th> " +
         " </tr>";
     var fundHead = " <tr >\n" +
-        " <th >APP</th>\n" +
         " <th >基金名称</th>\n" +
         " <th >当日盈利</th>\n" +
         " <th >涨跌幅</th>\n" +
@@ -264,22 +233,6 @@ document.addEventListener(
 );
 
 function initData() {
-
-    var stockApp = $("#stock-app");
-    var fundApp = $("#fund-app");
-    stockApp.find('option').remove();
-    stockApp.append("<option value=''>请选择</option>");
-    for(var k in appList) {
-        var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
-        stockApp.append(opt);
-    }
-    fundApp.find('option').remove();
-    fundApp.append("<option value=''>请选择</option>");
-    for(var k in appList) {
-        var opt = $("<option></option>").text(appList[k].name).val(appList[k].code);
-        fundApp.append(opt);
-    }
-
     var stocks = "";
     for(var k in stockList) {
         stocks += stockList[k].code+",";
@@ -588,8 +541,7 @@ function getStockTableHtml(result, totalMarketValueResult){
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td><a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td style=\"width: 200px;\">" +result[k].name
+            + "<td style=\"width: 200px;\">" +result[k].name
             // + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent +"%"
@@ -613,7 +565,7 @@ function getStockTableHtml(result, totalMarketValueResult){
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td></td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent + "%</td><td colspan='3'></td><td colspan='2'>" + stockTotalmarketValue + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
+    str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent + "%</td><td colspan='3'></td><td colspan='2'>" + stockTotalmarketValue + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
         +"</td></tr>";
     return str;
 }
@@ -636,8 +588,7 @@ function getFundTableHtml(result, totalMarketValueResult){
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
         str += "<tr id=\"fund-tr-" + k + "\">"
-            + "<td><a onclick=\"filterApp('" + result[k].app + "')\">" + getAppName(result[k].app) + "</a>"
-            + "</td><td style=\"width: 200px;\">" +result[k].fundName
+            + "<td style=\"width: 200px;\">" +result[k].fundName
             // + "</td><td>"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" +result[k].gszzl + "%"
@@ -662,7 +613,7 @@ function getFundTableHtml(result, totalMarketValueResult){
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td></td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
+    str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
         +"</td></tr>";
 
     var allDayIncome = fundDayIncome.add(stockDayIncome);
@@ -676,26 +627,8 @@ function getFundTableHtml(result, totalMarketValueResult){
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0?"style=\"color:#c12e2a\"":"style=\"color:#3e8f3e\"");
 
-    str += "<tr><td>汇总合计</td><td></td><td " + allDayIncomePercentStyle + ">" + allDayIncome + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + totalMarketValueResult + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
+    str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + totalMarketValueResult + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
         +"</td></tr>";
 
     return str;
-}
-
-function getAppName(app){
-    for(var k in appList) {
-        if(app == appList[k].code){
-            return appList[k].name;
-        }
-    }
-    return app;
-}
-
-function filterApp(app) {
-    filteredApp = app;
-    getData();
-}
-
-function enableFilterHideChanged() {
-    initData();
 }
