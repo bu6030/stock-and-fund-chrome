@@ -449,11 +449,19 @@ function initStockAndFundHtml(){
     var marketValue = new BigDecimal("0");
     totalMarketValue = new BigDecimal("0");
     for(var k in stockList){
+        if (stockList[k].hide == true) {
+            stockList.splice(k, 1); // 将使后面的元素依次前移，数组长度减1
+            k--; // 如果不减，将漏掉一个元素
+        }
         marketValue = (new BigDecimal(stockList[k].now)).multiply(new BigDecimal(stockList[k].bonds));
         totalMarketValue = totalMarketValue.add(marketValue);
     }
 
     for(var k in fundList){
+        if (fundList[k].hide == true) {
+            fundList.splice(k, 1); // 将使后面的元素依次前移，数组长度减1
+            k--; // 如果不减，将漏掉一个元素
+        }
         marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds))).toFixed(2));
         totalMarketValue = totalMarketValue.add(marketValue);
     }
@@ -498,9 +506,6 @@ function getStockTableHtml(result, totalMarketValueResult){
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
     for(var k in result) {
-        if (result[k].hide == true) {
-            continue;
-        }
         var buyOrSells = result[k].buyOrSellStockRequestList;
         var todayBuyIncom = new BigDecimal("0");
         var todaySellIncom = new BigDecimal("0");
@@ -581,9 +586,6 @@ function getFundTableHtml(result, totalMarketValueResult){
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
     for(var k in result) {
-        if (result[k].hide == true) {
-            continue;
-        }
         dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
         marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
