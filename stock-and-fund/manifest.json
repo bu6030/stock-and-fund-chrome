@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "version": "1.0",
   "name": "股基神器",
-  "description": "a chrome extension for bookmarks",
+  "description": "a chrome extension for stock and fund",
   "action": {
     "default_title": "股基神器",
     "default_popup": "popup.html"
@@ -23,7 +23,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["fonts/*","i/*","i/examples/*","images/*","js/*","css/*"],
+      "resources": ["js/*","css/*"],
       "matches": ["<all_urls>"]
     }
   ],
