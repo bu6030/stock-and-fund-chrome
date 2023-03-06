@@ -27,6 +27,9 @@ window.addEventListener("load", (event) => {
 });
 
 function initHtml() {
+    if (!develop) {
+        $("#importFromLocalSpringBoot")[0].style.display = "none";
+    }
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
         " <th >当日盈利</th> " +
@@ -199,7 +202,7 @@ document.addEventListener(
         let importFromLocalSpringBoot = document.getElementById('importFromLocalSpringBoot');
         importFromLocalSpringBoot.addEventListener('click', function () {
                 $.ajax({
-                    url: URL.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
+                    url: Env.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
                     type: "get",
                     data: {},
                     dataType: 'json',
@@ -228,7 +231,7 @@ function initData() {
     }
 
     $.ajax({
-        url: URL.GET_STOCK_FROM_GTIMG + "q=" + stocks,
+        url: Env.GET_STOCK_FROM_GTIMG + "q=" + stocks,
         type: "get",
         data: {},
         dataType: 'text',
@@ -284,7 +287,7 @@ function initFund() {
     for (var l in fundList) {
         var fundCode = fundList[l].fundCode;
         $.ajax({
-            url: URL.GET_FUND_FROM_TIANTIANJIJIN + fundList[l].fundCode + ".js",
+            url: Env.GET_FUND_FROM_TIANTIANJIJIN + fundList[l].fundCode + ".js",
             type: "get",
             data: {},
             async: false,
@@ -338,7 +341,7 @@ function initFund() {
 
 function getFundBySelfService(fund) {
     $.ajax({
-        url: URL.GET_FUND_FROM_LOCAL_SERVICE + "?fundCode=" + fund.fundCode + "&costPrise=" + fund.costPrise + "&bonds=" + fund.bonds + "&app=" + fund.app,
+        url: Env.GET_FUND_FROM_LOCAL_SERVICE + "?fundCode=" + fund.fundCode + "&costPrise=" + fund.costPrise + "&bonds=" + fund.bonds + "&app=" + fund.app,
         type: "get",
         data: {},
         async: false,
@@ -366,7 +369,7 @@ function getFundBySelfService(fund) {
 function checkFundExsit(code) {
     var checkReuslt = false;
     $.ajax({
-        url: URL.GET_FUND_FROM_TIANTIANJIJIN + code + ".js",
+        url: Env.GET_FUND_FROM_TIANTIANJIJIN + code + ".js",
         type: "get",
         data: {},
         async: false,
@@ -398,7 +401,7 @@ function checkFundExsit(code) {
 function checkStockExsit(code) {
     var checkReuslt = false;
     $.ajax({
-        url: URL.GET_STOCK_FROM_GTIMG + "q=" + code,
+        url: Env.GET_STOCK_FROM_GTIMG + "q=" + code,
         type: "get",
         data: {},
         async: false,
