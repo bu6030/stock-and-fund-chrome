@@ -435,7 +435,7 @@ function checkStockExsit(code) {
 function initStockAndFundHtml() {
     var marketValue = new BigDecimal("0");
     totalMarketValue = new BigDecimal("0");
-    for (var k in stockList) {
+    for (var k = stockList.length - 1; k >= 0; k--) {
         if (stockList[k].hide == true) {
             stockList.splice(k, 1); // 将使后面的元素依次前移，数组长度减1
             k--; // 如果不减，将漏掉一个元素
@@ -444,7 +444,7 @@ function initStockAndFundHtml() {
         totalMarketValue = totalMarketValue.add(marketValue);
     }
 
-    for (var k in fundList) {
+    for (var k = fundList.length - 1; k >= 0; k--) {
         if (fundList[k].hide == true) {
             fundList.splice(k, 1); // 将使后面的元素依次前移，数组长度减1
             k--; // 如果不减，将漏掉一个元素
