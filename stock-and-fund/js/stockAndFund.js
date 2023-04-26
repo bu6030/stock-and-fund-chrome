@@ -67,7 +67,6 @@ document.addEventListener(
                 $("#fund-code").val('');
                 $("#fund-costPrise").val('');
                 $("#fund-bonds").val('');
-                $("#fund-app").val('');
                 $("#fund-modal").modal();
             }
         );
@@ -77,7 +76,6 @@ document.addEventListener(
                 $("#stock-code").val('');
                 $("#stock-costPrise").val('');
                 $("#stock-bonds").val('100');
-                $("#stock-app").val('');
                 $("#stock-modal").modal();
             }
         );
@@ -110,21 +108,16 @@ document.addEventListener(
                 var code = $("#fund-code").val();
                 var costPrise = $("#fund-costPrise").val();
                 var bonds = $("#fund-bonds").val();
-                var app = $("#fund-app").val();
-                var fundName = $("#fund-name").val();
                 if (code == null || code == '' ||
                     costPrise == null || costPrise == '' ||
-                    bonds == null || bonds == '' ||
-                    app == null || app == '') {
+                    bonds == null || bonds == '') {
                     alert("请添加必要信息");
                     return;
                 }
                 var fund = {
                     "fundCode": code,
-                    "fundName": fundName,
                     "costPrise": costPrise,
                     "bonds": bonds,
-                    "app": app
                 }
                 var funds = localStorage.getItem('funds');
                 if (funds == null) {
@@ -157,21 +150,16 @@ document.addEventListener(
                 var code = $("#stock-code").val();
                 var costPrise = $("#stock-costPrise").val();
                 var bonds = $("#stock-bonds").val();
-                var app = $("#stock-app").val();
-                var name = $("#stock-name").val();
                 if (code == null || code == '' ||
                     costPrise == null || costPrise == '' ||
-                    bonds == null || bonds == '' ||
-                    app == null || app == '') {
+                    bonds == null || bonds == '') {
                     alert("请添加必要信息");
                     return;
                 }
                 var stock = {
                     "code": code,
-                    "name": name,
                     "costPrise": costPrise,
                     "bonds": bonds,
-                    "app": app
                 }
                 var stocks = localStorage.getItem('stocks');
                 if (stocks == null) {
@@ -466,7 +454,6 @@ function initStockAndFundHtml() {
             $("#stock-code").val(stockList[this.sectionRowIndex].code);
             $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
-            $("#stock-app").val(stockList[this.sectionRowIndex].app);
             $("#stock-modal").modal();
         });
     }
@@ -474,11 +461,10 @@ function initStockAndFundHtml() {
     for (k in fundList) {
         let fundTr = document.getElementById('fund-tr-' + k);
         fundTr.addEventListener('click', function () {
-            $("#fund-name").val(fundList[this.sectionRowIndex].fundName);
+            $("#fund-name").val(fundList[this.sectionRowIndex].name);
             $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
             $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
             $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
-            $("#fund-app").val(fundList[this.sectionRowIndex].app);
             $("#fund-modal").modal();
         });
     }
@@ -582,7 +568,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
 
         str += "<tr id=\"fund-tr-" + k + "\">"
-            + "<td style=\"width: 200px;\">" + result[k].fundName
+            + "<td style=\"width: 200px;\">" + result[k].name
             // + "</td><td>"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].gszzl + "%"
