@@ -1,0 +1,280 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>股票基金汇总</title>
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/font.css"/>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/BigDecimal.js"></script>
+    <script src="js/env.js"></script>
+    <script src="js/stockAndFund.js"></script>
+
+</head>
+<body>
+
+<div>
+    <!-- 添加基金模态框 -->
+    <div class="modal fade" id="fund-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">添加/修改基金</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body my-font">
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">基金名称：</div>
+                        <div class="you">
+                            <input type="text" disabled="disabled" class="am-input-lg my-text" id="fund-name">
+                        </div>
+                    </div>
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">基金编码：</div>
+                        <div class="you">
+                            <input type="text" class="am-input-lg my-text" id="fund-code"
+                                   placeholder="请输入6位基金编码">
+                        </div>
+                    </div>
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">持仓成本：</div>
+                        <div class="you">
+                            <input type="number" class="am-input-lg my-text" id="fund-costPrise"
+                                   placeholder="请输入持仓成本">
+                        </div>
+                    </div>
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">持有份额：</div>
+                        <div class="you">
+                            <input type="number" class="am-input-lg my-text" id="fund-bonds"
+                                   placeholder="请输入持有份额">
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-lg" id="fund-save-button">保存</button>
+                    <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 添加股票模态框 -->
+    <div class="modal fade" id="stock-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">添加/修改股票</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">股票名称：</div>
+                        <div class="you">
+                            <input type="text" disabled="disabled" class="am-input-lg my-text" id="stock-name">
+                        </div>
+                    </div>
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">股票编码：</div>
+                        <div class="you">
+                            <input type="text" class="am-input-lg my-text" id="stock-code"
+                                   placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码">
+                        </div>
+                    </div>
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">持仓成本：</div>
+                        <div class="you">
+                            <input type="number" class="am-input-lg my-text" id="stock-costPrise"
+                                   placeholder="请输入持仓成本">
+                        </div>
+                    </div>
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">持有份额：</div>
+                        <div class="you">
+                            <input type="number" value="100" class="am-input-lg my-text" id="stock-bonds"
+                                   placeholder="请输入持有份额">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-lg" id="stock-save-button">保存</button>
+                    <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 股票买卖模态框 -->
+    <div class="modal fade" id="stock-buy-or-sell-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">买入/卖出股票</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <form class="am-form" id="buyOrSellForm">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">股票名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-lg my-text" id="nameBuyOrSell">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入/卖出：</div>
+                            <div class="you">
+                                <select data-am-selected="{btnSize: 'sm'}" id="buyOrSell" onchange="buyOrSellChanged()">
+                                    <option value="1">买入</option>
+                                    <option value="2">卖出</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">操作股数：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-lg my-text" id="handleBonds" value="100"
+                                       placeholder="请输入操作股数，买入/卖出股数">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入/卖出股价：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-lg my-text" id="price"
+                                       placeholder="请输入买入/卖出股价">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">手续费：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-lg my-text" id="cost" value="5"
+                                       placeholder="请输入手续费">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="submitBuyOrSell()">保存</button>
+                    <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 导入数据模态框 -->
+    <div class="modal fade" id="data-import-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">导入数据</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body my-font">
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">导入数据文本：</div>
+                        <div class="you">
+                            <input type="text" class="am-input-lg my-text" id="import-data">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-lg" id="data-import-button">导入</button>
+                    <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 导出数据模态框 -->
+    <div class="modal fade" id="data-export-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">导出数据</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body my-font">
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">导出数据文本：</div>
+                        <div class="you">
+                            <input type="text" class="my-text" id="export-data">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 股票基金主体页面 start -->
+    <div>
+        <div>
+            <!--                <ul class="am-icon-users my-font"> 股票基金汇总</ul>-->
+            <dl>
+                <button type="button" id="showFundDialog" class="btn btn-secondary btn-lg" data-toggle="modal">
+                    添加基金
+                </button>
+                <button type="button" id="showStockDialog" class="btn btn-secondary btn-lg" data-toggle="modal">
+                    添加股票
+                </button>
+                <button type="button" id="showExportDataDialog" class="btn btn-secondary btn-lg"
+                        data-toggle="modal">导出数据
+                </button>
+                <button type="button" id="showImportDataDialog" class="btn btn-secondary btn-lg"
+                        data-toggle="modal">导入数据
+                </button>
+                <button type="button" id="importFromLocalSpringBoot" class="btn btn-secondary btn-lg"
+                        data-toggle="modal">本地股基神器SpringBoot数据导入
+                </button>
+            </dl>
+        </div>
+        <div class="my-div">
+            <table class="my-table table my-font">
+                <thead id="stock-head"/>
+                <tbody id="stock-nr"/>
+                <thead id="fund-head"/>
+                <tbody id="fund-nr"/>
+            </table>
+            <div id="footer">CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com</div>
+        </div>
+    </div>
+    <!-- 股票基金主体页面 end -->
+</div>
+
+</body>
+</html>
