@@ -36,7 +36,7 @@
 ![image](https://user-images.githubusercontent.com/11482988/221106457-9013f243-99be-481f-b603-3ab31deb2c73.png)
 
 ## <span id="huhou-stock-and-fund">股基神器狐猴浏览器安装步骤</span>
-手机使用请在右侧的Release链接中下载stock-and-fund-for-mobile.crx文件下载安装
+手机使用请在右侧的[Release链接](https://github.com/bu6030/stock-and-fund-chrome/releases)中下载stock-and-fund-for-mobile.crx文件下载安装
 狐猴浏览器-》扩展程序-》开发者模式-》加载已解压的扩展程序-》选择crx文件即可完成安装
 
 
