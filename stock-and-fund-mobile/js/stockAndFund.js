@@ -31,7 +31,7 @@ function initHtml() {
         $("#importFromLocalSpringBoot")[0].style.display = "none";
     }
     var stockHead = " <tr > " +
-        " <th width='100px'>股票名称</th> " +
+        " <th width='150px'>股票名称</th> " +
         " <th width='100px' >当日盈利</th> " +
         " <th width='80px' >涨跌幅</th> " +
         " <th width='100px' >当前价</th> " +
@@ -39,11 +39,11 @@ function initHtml() {
         " <th width='100px' >持仓</th> " +
         " <th width='100px' >市值/金额</th> " +
         " <th width='100px' >持仓占比</th> " +
-        " <th width='80px' >收益率</th> " +
-        " <th width='80px' >收益</th> " +
+        " <th width='90px' >收益率</th> " +
+        " <th width='90px' >收益</th> " +
         " </tr>";
     var fundHead = " <tr >\n" +
-        " <th width='100px' >基金名称</th>\n" +
+        " <th width='150px' >基金名称</th>\n" +
         " <th width='100px'>当日盈利</th>\n" +
         " <th width='80px'>涨跌幅</th>\n" +
         " <th width='100px'>估算净值</th>\n" +
@@ -51,8 +51,8 @@ function initHtml() {
         " <th width='100px'>持有份额</th>\n" +
         " <th width='100px'>市值/金额</th>\n" +
         " <th width='100px'>持仓占比</th>\n" +
-        " <th width='80px'>收益率</th>\n" +
-        " <th width='80px'>收益</th>\n" +
+        " <th width='90px'>收益率</th>\n" +
+        " <th width='90px'>收益</th>\n" +
         " </tr>";
     $("#fund-head").html(fundHead);
     $("#stock-head").html(stockHead);
