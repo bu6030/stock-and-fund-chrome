@@ -67,6 +67,7 @@ document.addEventListener(
                 $("#fund-code").val('');
                 $("#fund-costPrise").val('');
                 $("#fund-bonds").val('');
+                $("#fund-delete-button")[0].style.display = "none";
                 $("#fund-modal").modal();
             }
         );
@@ -76,6 +77,7 @@ document.addEventListener(
                 $("#stock-code").val('');
                 $("#stock-costPrise").val('');
                 $("#stock-bonds").val('100');
+                $("#stock-delete-button")[0].style.display = "none";
                 $("#stock-modal").modal();
             }
         );
@@ -207,6 +209,39 @@ document.addEventListener(
                     }
                 });
 
+            }
+        );
+        let stockDeleteButton = document.getElementById('stock-delete-button');
+        stockDeleteButton.addEventListener('click', function () {
+                var stocks = localStorage.getItem('stocks');
+                stocks = jQuery.parseJSON(stocks);
+                var code = $("#stock-code").val();
+                for (var k in stocks) {
+                    if (stocks[k].code == code) {
+                        // delete stocks[k];
+                        stocks.splice(k, 1)
+                        break;
+                    }
+                }
+                localStorage.setItem('stocks', JSON.stringify(stocks));
+                $("#stock-modal").modal("hide");
+                location.reload();
+            }
+        );
+        let fundDeleteButton = document.getElementById('fund-delete-button');
+        fundDeleteButton.addEventListener('click', function () {
+                var funds = localStorage.getItem('funds');
+                funds = jQuery.parseJSON(funds);
+                var code = $("#fund-code").val();
+                for (var k in funds) {
+                    if (funds[k].fundCode == code) {
+                        funds.splice(k, 1)
+                        break;
+                    }
+                }
+                localStorage.setItem('funds', JSON.stringify(funds));
+                $("#fund-modal").modal("hide");
+                location.reload();
             }
         );
     }
@@ -424,19 +459,11 @@ function initStockAndFundHtml() {
     var marketValue = new BigDecimal("0");
     totalMarketValue = new BigDecimal("0");
     for (var k = stockList.length - 1; k >= 0; k--) {
-        if (stockList[k].hide == true) {
-            stockList.splice(k, 1); // 将使后面的元素依次前移，数组长度减1
-            k--; // 如果不减，将漏掉一个元素
-        }
         marketValue = (new BigDecimal(stockList[k].now)).multiply(new BigDecimal(stockList[k].bonds));
         totalMarketValue = totalMarketValue.add(marketValue);
     }
 
     for (var k = fundList.length - 1; k >= 0; k--) {
-        if (fundList[k].hide == true) {
-            fundList.splice(k, 1); // 将使后面的元素依次前移，数组长度减1
-            k--; // 如果不减，将漏掉一个元素
-        }
         marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds))).toFixed(2));
         totalMarketValue = totalMarketValue.add(marketValue);
     }
@@ -454,6 +481,7 @@ function initStockAndFundHtml() {
             $("#stock-code").val(stockList[this.sectionRowIndex].code);
             $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
+            $("#stock-delete-button")[0].style.display  = 'block';
             $("#stock-modal").modal();
         });
     }
@@ -465,6 +493,7 @@ function initStockAndFundHtml() {
             $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
             $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
             $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
+            $("#fund-delete-button")[0].style.display  = 'block';
             $("#fund-modal").modal();
         });
     }
