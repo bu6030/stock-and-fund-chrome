@@ -7,12 +7,6 @@
     "default_title": "股基神器",
     "default_popup": "popup.html"
   },
-  "permissions": [
-    "bookmarks",
-    "background",
-    "storage",
-    "tabs"
-  ],
   "content_scripts": [
       {
           "matches": ["https://*.google.com/*", "https://google.com/*"],
