@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.0",
+  "version": "1.1",
   "name": "股票基金神器",
   "description": "股票基金神器，添加股票基金，实时盯盘，实时计算盈亏，添加股票基金",
   "action": {
