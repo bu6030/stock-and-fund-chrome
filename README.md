@@ -1,11 +1,15 @@
 # 股基神器chrome扩展程序版本
 
+[Chrome应用市场安装](#chrome-plugin-stock-and-fund)
 [股基神器chrome安装步骤](#chrome-stock-and-fund)  
 [股基神器Edge安装步骤](#edge-stock-and-fund)  
 [股基神器狐猴浏览器安装步骤](#huhou-stock-and-fund)  
 [股基神器添加股票基金步骤](#add-stock-and-fund-step)  
-[股基神器导入导出数据步骤](#import-export-stock-and-fund-step)  
+[股基神器导入导出数据步骤](#import-export-stock-and-fund-step)
 
+## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
+点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
+如果没有科学上网工具，可以通过下面的几种下载程序包方式安装
 
 ## <span id="chrome-stock-and-fund">股基神器chrome安装步骤</span>
  1. 代码下载完成后，在chrome浏览器中选择扩展程序进入扩展程序页面    
