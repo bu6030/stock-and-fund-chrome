@@ -24,6 +24,7 @@ window.addEventListener("load", (event) => {
     }
     initHtml();
     initData();
+    initLargeMarketData();
 });
 
 function initHtml() {
