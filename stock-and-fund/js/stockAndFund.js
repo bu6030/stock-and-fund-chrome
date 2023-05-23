@@ -75,10 +75,12 @@ document.addEventListener(
         let showStockDialog = document.getElementById('showStockDialog');
         showStockDialog.addEventListener('click', function () {
                 $("#stock-name").val('');
+                $("#stock-name").removeAttr("disabled");
                 $("#stock-code").val('');
                 $("#stock-costPrise").val('');
                 $("#stock-bonds").val('100');
                 $("#stock-delete-button")[0].style.display = "none";
+                $("#stock-search-button")[0].style.display  = 'inline';
                 $("#stock-modal").modal();
             }
         );
@@ -243,6 +245,12 @@ document.addEventListener(
                 localStorage.setItem('funds', JSON.stringify(funds));
                 $("#fund-modal").modal("hide");
                 location.reload();
+            }
+        );
+        let stockSearchButton = document.getElementById('stock-search-button');
+        stockSearchButton.addEventListener('click', function () {
+                var stockName = $("#stock-name").val();
+                searchStockByName(stockName);
             }
         );
     }
@@ -479,10 +487,12 @@ function initStockAndFundHtml() {
         let stockTr = document.getElementById('stock-tr-' + k);
         stockTr.addEventListener('click', function () {
             $("#stock-name").val(stockList[this.sectionRowIndex].name);
+            $("#stock-name").attr("disabled", "disabled");
             $("#stock-code").val(stockList[this.sectionRowIndex].code);
             $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
             $("#stock-delete-button")[0].style.display  = 'block';
+            $("#stock-search-button")[0].style.display  = 'none';
             $("#stock-modal").modal();
         });
     }
@@ -641,4 +651,32 @@ function getFundTableHtml(result, totalMarketValueResult) {
         + "</td></tr>";
 
     return str;
+}
+
+function searchStockByName(name) {
+    $.ajax({
+        url: Env.GET_STOCK_CODE_BY_NAME_FROM_GTIMG + "?v=2&t=all&c=1&q=" + name,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data.indexOf("v_hint=\"N\";") != -1) {
+                alert("不存在该股票");
+                return;
+            }
+            data = data.replace("v_hint=\"", "").replace(" ", "");
+            var stocksArr = data.split("^");
+            var values = stocksArr[0].split("~");
+            var stockCode = values[0] + values[1];
+            $("#stock-code").val(stockCode);
+            console.log("股票code为", stockCode);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
 }
