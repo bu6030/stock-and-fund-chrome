@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.3",
+  "version": "1.4",
   "name": "股票基金神器",
   "description": "上班族必备，专为上班族编写，股票基金神器，添加股票基金，实时盯盘，实时计算盈亏，添加股票基金。",
   "action": {

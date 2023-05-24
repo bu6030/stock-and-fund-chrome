@@ -65,10 +65,12 @@ document.addEventListener(
         let showFundDialog = document.getElementById('showFundDialog');
         showFundDialog.addEventListener('click', function () {
                 $("#fund-name").val('');
+                $("#fund-name").removeAttr("disabled");
                 $("#fund-code").val('');
                 $("#fund-costPrise").val('');
                 $("#fund-bonds").val('');
                 $("#fund-delete-button")[0].style.display = "none";
+                $("#fund-search-button")[0].style.display  = 'inline';
                 $("#fund-modal").modal();
             }
         );
@@ -250,7 +252,21 @@ document.addEventListener(
         let stockSearchButton = document.getElementById('stock-search-button');
         stockSearchButton.addEventListener('click', function () {
                 var stockName = $("#stock-name").val();
+                if(stockName == "" || stockName == null){
+                    alert("请输入股票名称");
+                    return;
+                }
                 searchStockByName(stockName);
+            }
+        );
+        let fundSearchButton = document.getElementById('fund-search-button');
+        fundSearchButton.addEventListener('click', function () {
+                var fundName = $("#fund-name").val();
+                if(fundName == "" || fundName == null){
+                    alert("请输入基金名称");
+                    return;
+                }
+                searchFundByName(fundName);
             }
         );
     }
@@ -501,10 +517,12 @@ function initStockAndFundHtml() {
         let fundTr = document.getElementById('fund-tr-' + k);
         fundTr.addEventListener('click', function () {
             $("#fund-name").val(fundList[this.sectionRowIndex].name);
+            $("#fund-name").attr("disabled", "disabled");
             $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
             $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
             $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
             $("#fund-delete-button")[0].style.display  = 'block';
+            $("#fund-search-button")[0].style.display  = 'none';
             $("#fund-modal").modal();
         });
     }
@@ -672,6 +690,38 @@ function searchStockByName(name) {
             var stockCode = values[0] + values[1];
             $("#stock-code").val(stockCode);
             console.log("股票code为", stockCode);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+function searchFundByName(name) {
+    $.ajax({
+        url: Env.GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            data = data.replace("var r = ", "").replace(";", "");
+            var fundsArr = jQuery.parseJSON(data);
+            var fundCode = "";
+            var fundName = "";
+            for (var i = 0; i < fundsArr.length; i++) {
+                if (fundsArr[i][2].indexOf(name) != -1) {
+                    console.log(name, "==找到的结果", fundsArr[i]);
+                    fundCode = fundsArr[i][0];
+                    fundName = fundsArr[i][2];
+                    break;
+                }
+            }
+            $("#fund-code").val(fundCode);
+            $("#fund-name").val(fundName);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);

@@ -2,6 +2,7 @@ let Env = {
     GET_STOCK_FROM_GTIMG: "http://qt.gtimg.cn/",
     GET_STOCK_CODE_BY_NAME_FROM_GTIMG: "https://smartbox.gtimg.cn/s3/",
     GET_FUND_FROM_TIANTIANJIJIN: "http://fundgz.1234567.com.cn/js/",
+    GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN: "http://fund.eastmoney.com/js/fundcode_search.js",
     // 下面这两个地址可以通过本地启动stock-and-fund项目
     // github地址为：https://github.com/bu6030/stock-and-fund
     GET_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/fund",
