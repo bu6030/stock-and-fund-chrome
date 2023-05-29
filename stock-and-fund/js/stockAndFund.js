@@ -269,6 +269,27 @@ document.addEventListener(
                 searchFundByName(fundName);
             }
         );
+        let fundShowTimeImageButton = document.getElementById('fund-show-time-image-button');
+        fundShowTimeImageButton.addEventListener('click', function () {
+                let fundCode = $("#fund-code").val();
+                console.log("分时图", fundCode)
+                let path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + fundCode +".png";
+                $("#fund-modal").modal("hide");
+                $("#time-image-modal").modal();
+                $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
+            }
+        );
+
+        let stockShowTimeImageButton = document.getElementById('stock-show-time-image-button');
+        stockShowTimeImageButton.addEventListener('click', function () {
+                let stockCode = $("#stock-code").val();
+                console.log("分时图", stockCode)
+                let path = Env.GET_STOCK_TIME_IMAGE_FROM_DFCFW + stockCode +".gif";
+                $("#stock-modal").modal("hide");
+                $("#time-image-modal").modal();
+                $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
+            }
+        );
     }
 );
 
@@ -580,7 +601,6 @@ function getStockTableHtml(result, totalMarketValueResult) {
 
         str += "<tr id=\"stock-tr-" + k + "\">"
             + "<td style=\"width: 200px;\">" + result[k].name
-            // + "</td><td " + dayIncomeStyle + ">" + result[k].change
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
@@ -627,7 +647,6 @@ function getFundTableHtml(result, totalMarketValueResult) {
 
         str += "<tr id=\"fund-tr-" + k + "\">"
             + "<td style=\"width: 200px;\">" + result[k].name
-            // + "</td><td>"
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].gszzl + "%"
             + "</td><td>" + result[k].gsz
@@ -638,7 +657,6 @@ function getFundTableHtml(result, totalMarketValueResult) {
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td></tr>";
-        // alert(result[k].income);
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);
         fundTotalmarketValue = fundTotalmarketValue.add(marketValue);
