@@ -1,11 +1,30 @@
 # 股基神器chrome扩展程序版本
 
-[Chrome应用市场安装](#chrome-plugin-stock-and-fund)
+[版本更新历史记录](#develop-history)  
+[Chrome应用市场安装](#chrome-plugin-stock-and-fund)  
 [股基神器chrome安装步骤](#chrome-stock-and-fund)  
 [股基神器Edge安装步骤](#edge-stock-and-fund)  
 [股基神器狐猴浏览器安装步骤](#huhou-stock-and-fund)  
 [股基神器添加股票基金步骤](#add-stock-and-fund-step)  
 [股基神器导入导出数据步骤](#import-export-stock-and-fund-step)
+
+## <span id="develop-history">版本更新历史记录</span>
+1. 增加导入导出数据 Xuesong.Bu 2023/2/23, 18:22
+2. 表格名称股票基金写反了 Xuesong.Bu 2023/2/24, 15:12
+3. 增加修改股票基金 bu6030 2023/2/25, 00:48
+4. 添加修改基金展示不够长 bu6030 2023/2/28, 23:40
+5. 增加版权信息 Xuesong.Bu 2023/3/1, 16:00
+6. 去掉APP Xuesong.Bu 2023/3/2, 13:52
+7. 修改窗口大小 Xuesong.Bu 2023/3/2, 15:45
+8. 导入数据中存在隐藏的数据不展示 Xuesong.Bu 2023/3/3, 09:44
+9. 清理无用代码 Xuesong.Bu 2023/3/3, 11:08
+10. 格式化代码 Xuesong.Bu 2023/3/6, 14:12
+11. 修改总市值计算错误 Xuesong.Bu 2023/3/6, 14:51
+12. 修改去掉app后无法添加股票基金问题 Xuesong.Bu 2023/4/26, 14:18
+13. 增加大盘指数 Xuesong.Bu 2023/5/18, 11:15
+14. 添加股票支持通过名称搜索 Xuesong.Bu 2023/5/23, 14:04
+15. 添加分时图/日线图/轴线图/月线图 Xuesong.Bu 2023/5/30, 10:42
+16. 添加基金/股票页面不显示走势图按钮 Xuesong.Bu 2023/5/31, 10:42
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
