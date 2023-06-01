@@ -12,7 +12,7 @@ function initLargeMarketData() {
             var str = "";
             for (var k in stoksArr) {
                 var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                if(dataStr == '' || dataStr == null){
+                if(dataStr == '' || dataStr == null) {
                     break;
                 }
                 console.log("dataStr=====" + dataStr);

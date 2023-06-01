@@ -74,6 +74,7 @@ document.addEventListener(
                 $("#fund-bonds").val('');
                 $("#fund-delete-button")[0].style.display = "none";
                 $("#fund-search-button")[0].style.display  = 'inline';
+                $("#fund-show-time-image-button")[0].style.display  = 'none';
                 $("#fund-modal").modal();
             }
         );
@@ -86,6 +87,7 @@ document.addEventListener(
                 $("#stock-bonds").val('100');
                 $("#stock-delete-button")[0].style.display = "none";
                 $("#stock-search-button")[0].style.display  = 'inline';
+                $("#stock-show-time-image-button")[0].style.display  = 'none';
                 $("#stock-modal").modal();
             }
         );
@@ -555,6 +557,7 @@ function initStockAndFundHtml() {
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
             $("#stock-delete-button")[0].style.display  = 'block';
             $("#stock-search-button")[0].style.display  = 'none';
+            $("#stock-show-time-image-button")[0].style.display  = 'inline';
             $("#stock-modal").modal();
         });
     }
@@ -569,6 +572,7 @@ function initStockAndFundHtml() {
             $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
             $("#fund-delete-button")[0].style.display  = 'block';
             $("#fund-search-button")[0].style.display  = 'none';
+            $("#fund-show-time-image-button")[0].style.display  = 'inline';
             $("#fund-modal").modal();
         });
     }
