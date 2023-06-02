@@ -120,11 +120,15 @@ document.addEventListener(
                 var code = $("#fund-code").val();
                 var costPrise = $("#fund-costPrise").val();
                 var bonds = $("#fund-bonds").val();
-                if (code == null || code == '' ||
-                    costPrise == null || costPrise == '' ||
-                    bonds == null || bonds == '') {
-                    alert("请添加必要信息");
+                if (code == null || code == '') {
+                    alert("请添加基金编码");
                     return;
+                }
+                if (costPrise == null || costPrise == '') {
+                    costPrise = "0";
+                }
+                if (bonds == null || bonds == '') {
+                    bonds = "0";
                 }
                 var fund = {
                     "fundCode": code,
@@ -162,11 +166,15 @@ document.addEventListener(
                 var code = $("#stock-code").val();
                 var costPrise = $("#stock-costPrise").val();
                 var bonds = $("#stock-bonds").val();
-                if (code == null || code == '' ||
-                    costPrise == null || costPrise == '' ||
-                    bonds == null || bonds == '') {
-                    alert("请添加必要信息");
+                if (code == null || code == '') {
+                    alert("请添加股票编码");
                     return;
+                }
+                if (costPrise == null || costPrise == '') {
+                    costPrise = "0";
+                }
+                if (bonds == null || bonds == '') {
+                    bonds = "0";
                 }
                 var stock = {
                     "code": code,
