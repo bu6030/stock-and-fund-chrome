@@ -27,6 +27,7 @@
 16. 添加基金/股票页面不显示走势图按钮 Xuesong.Bu 2023/5/31, 10:42
 17. 持仓，持有份额非必填，不填写情况下默认值为0 Xuesong.Bu 2023/6/2, 15:58
 18. 格式化当日盈利/市值金额为2位小数 Xuesong.Bu 2023/6/5, 14:20
+19. 点击大盘指数显示走势图 Xuesong.Bu 2023/6/8, 22:20
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
