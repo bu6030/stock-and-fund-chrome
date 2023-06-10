@@ -45,18 +45,20 @@ function initHtml() {
         " <th >持仓占比</th> " +
         " <th >收益率</th> " +
         " <th >收益</th> " +
+        " <th >自选价格</th> " +
         " </tr>";
-    var fundHead = " <tr >\n" +
-        " <th >基金名称</th>\n" +
-        " <th >当日盈利</th>\n" +
-        " <th >涨跌幅</th>\n" +
-        " <th >估算净值</th>\n" +
-        " <th >持仓成本</th>\n" +
-        " <th >持有份额</th>\n" +
-        " <th >市值/金额</th>\n" +
-        " <th >持仓占比</th>\n" +
-        " <th >收益率</th>\n" +
-        " <th >收益</th>\n" +
+    var fundHead = " <tr >" +
+        " <th >基金名称</th>" +
+        " <th >当日盈利</th>" +
+        " <th >涨跌幅</th>" +
+        " <th >估算净值</th>" +
+        " <th >持仓成本</th>" +
+        " <th >持有份额</th>" +
+        " <th >市值/金额</th>" +
+        " <th >持仓占比</th>" +
+        " <th >收益率</th>" +
+        " <th >收益</th>" +
+        " <th >自选价格</th> " +
         " </tr>";
     $("#fund-head").html(fundHead);
     $("#stock-head").html(stockHead);
@@ -143,18 +145,23 @@ document.addEventListener(
                 }
                 for (var k in funds) {
                     if (funds[k].fundCode == fund.fundCode) {
-                        funds[k] = fund;
+                        funds[k].fundCode = fund.fundCode;
+                        funds[k].costPrise = fund.costPrise;
+                        funds[k].bonds = fund.bonds;
                         localStorage.setItem('funds', JSON.stringify(funds));
                         $("#fund-modal").modal("hide");
                         location.reload();
                         return;
                     }
                 }
-                if (!checkFundExsit(fund.fundCode)) {
+                let checkFundExsitReuslt = checkFundExsit(fund.fundCode);
+                if (!checkFundExsitReuslt.checkReuslt) {
                     alert("不存在该基金");
                     $("#fund-modal").modal("hide");
                     return;
                 }
+                fund.addTimePrice = checkFundExsitReuslt.now;
+                fund.addTime = getCurrentDate();
                 funds.push(fund);
                 localStorage.setItem('funds', JSON.stringify(funds));
                 $("#fund-modal").modal("hide");
@@ -189,18 +196,23 @@ document.addEventListener(
                 }
                 for (var k in stocks) {
                     if (stocks[k].code == stock.code) {
-                        stocks[k] = stock;
+                        stocks[k].code = stock.code;
+                        stocks[k].costPrise = stock.costPrise;
+                        stocks[k].bonds = stock.bonds;
                         localStorage.setItem('stocks', JSON.stringify(stocks));
                         $("#stock-modal").modal("hide");
                         location.reload();
                         return;
                     }
                 }
-                if (!checkStockExsit(stock.code)) {
+                let checkStockExsitResult = checkStockExsit(stock.code);
+                if (!checkStockExsitResult.checkReuslt) {
                     alert("不存在该股票");
                     $("#stock-modal").modal("hide");
                     return;
                 }
+                stock.addTimePrice = checkStockExsitResult.now;
+                stock.addTime = getCurrentDate();
                 stocks.push(stock);
                 localStorage.setItem('stocks', JSON.stringify(stocks));
                 $("#stock-modal").modal("hide");
@@ -471,7 +483,8 @@ function getFundBySelfService(fund) {
 }
 
 function checkFundExsit(code) {
-    var checkReuslt = false;
+    var fund = {};
+    fund.checkReuslt = false;
     $.ajax({
         url: Env.GET_FUND_FROM_TIANTIANJIJIN + code + ".js",
         type: "get",
@@ -481,7 +494,7 @@ function checkFundExsit(code) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             var json = jQuery.parseJSON(data.substring(8, data.length - 2));
-            var fund = {};
+
             fund.name = json.name + "";
             fund.dwjz = json.dwjz + "";
             fund.jzrq = json.jzrq + "";
@@ -491,7 +504,8 @@ function checkFundExsit(code) {
             var dwjz = new BigDecimal(json.dwjz + "");
             fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
             var now = new BigDecimal(json.gsz + "");
-            checkReuslt = true;
+            fund.checkReuslt = true;
+            fund.now = now + "";
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -499,11 +513,12 @@ function checkFundExsit(code) {
             console.log(textStatus);
         }
     });
-    return checkReuslt;
+    return fund;
 }
 
 function checkStockExsit(code) {
-    var checkReuslt = false;
+    var stock = {};
+    stock.checkReuslt = false;
     $.ajax({
         url: Env.GET_STOCK_FROM_GTIMG + "q=" + code,
         type: "get",
@@ -516,7 +531,7 @@ function checkStockExsit(code) {
 
             var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
             var values = dataStr.split("~");
-            var stock = {};
+
             stock.name = values[1] + "";
             stock.now = values[3] + "";
             stock.change = values[31] + "";
@@ -525,7 +540,7 @@ function checkStockExsit(code) {
             stock.max = values[33] + "";
             stock.min = values[34] + "";
             stock.buyOrSellStockRequestList = [];
-            checkReuslt = true;
+            stock.checkReuslt = true;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -533,7 +548,7 @@ function checkStockExsit(code) {
             console.log(textStatus);
         }
     });
-    return checkReuslt;
+    return stock;
 }
 
 function initStockAndFundHtml() {
@@ -633,20 +648,21 @@ function getStockTableHtml(result, totalMarketValueResult) {
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
-        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
 
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td style=\"width: 180px;\">" + result[k].name
+            + "<td style=\"width: 160px;\">" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
-            + "</td><td>" + result[k].costPrise
+            + "</td><td style=\"width: 60px;\">" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td>" + marketValue.setScale(2)
-            + "</td><td>" + marketValuePercent + "%"
+            + "</td><td style=\"width: 70px;\">" + marketValue.setScale(2)
+            + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
+            + "</td><td style=\"width: 140px;\">" + result[k].addTimePrice + "(" +result[k].addTime + ")"
             + "</td></tr>";
         stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
         stockDayIncome = stockDayIncome.add(dayIncome);
@@ -661,7 +677,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
     str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td><td colspan='3'></td><td colspan='2'>" + stockTotalmarketValue.setScale(2) + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
-        + "</td></tr>";
+        + "</td><td></td></tr>";
     return str;
 }
 
@@ -679,20 +695,21 @@ function getFundTableHtml(result, totalMarketValueResult) {
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
-        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
 
         str += "<tr id=\"fund-tr-" + k + "\">"
-            + "<td style=\"width: 180px;\">" + result[k].name
+            + "<td style=\"width: 160px;\">" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].gszzl + "%"
             + "</td><td>" + result[k].gsz
-            + "</td><td>" + result[k].costPrise
+            + "</td><td style=\"width: 60px;\">" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td>" + marketValue
-            + "</td><td>" + marketValuePercent + "%"
+            + "</td><td style=\"width: 70px;\">" + marketValue
+            + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
+            + "</td><td style=\"width: 140px;\">" + result[k].addTimePrice + "(" +result[k].addTime + ")"
             + "</td></tr>";
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);
@@ -707,7 +724,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
     str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
-        + "</td></tr>";
+        + "</td><td></td></tr>";
 
     var allDayIncome = fundDayIncome.add(stockDayIncome);
     var allTotalIncome = fundTotalIncome.add(stockTotalIncome);
@@ -721,7 +738,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
 
     str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td><td colspan='2'></td><td colspan='2'>" + totalMarketValueResult.setScale(2) + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
-        + "</td></tr>";
+        + "</td><td></td></tr>";
 
     return str;
 }
@@ -840,4 +857,14 @@ function showMonthImage() {
     }
     // $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+}
+
+function getCurrentDate() {
+    var date = new Date();
+    var year= date.getFullYear() ; // 得到当前年份
+    var month = date.getMonth()  + 1; // 得到当前月份（0-11月份，+1是当前月份）
+    month = month >= 10 ? month :'0' + month; // 补零
+    var day = date.getDate(); // 得到当前天数
+    day = day >= 10 ? day :'0' + day; // 补零
+    return year + '-' + month + '-' + day; // 这里传入的是字符串
 }
