@@ -650,9 +650,9 @@ function getStockTableHtml(result, totalMarketValueResult) {
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-
+        let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")"
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td style=\"width: 160px;\">" + result[k].name
+            + "<td style=\"width: 170px;\">" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
@@ -662,7 +662,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
             + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td style=\"width: 140px;\">" + result[k].addTimePrice + "(" +result[k].addTime + ")"
+            + "</td><td style=\"width: 140px;\">" + addTimePrice
             + "</td></tr>";
         stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
         stockDayIncome = stockDayIncome.add(dayIncome);
@@ -697,9 +697,9 @@ function getFundTableHtml(result, totalMarketValueResult) {
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-
+        let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")"
         str += "<tr id=\"fund-tr-" + k + "\">"
-            + "<td style=\"width: 160px;\">" + result[k].name
+            + "<td style=\"width: 170px;\">" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].gszzl + "%"
             + "</td><td>" + result[k].gsz
@@ -709,7 +709,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
             + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td style=\"width: 140px;\">" + result[k].addTimePrice + "(" +result[k].addTime + ")"
+            + "</td><td style=\"width: 140px;\">" + addTimePrice
             + "</td></tr>";
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);
