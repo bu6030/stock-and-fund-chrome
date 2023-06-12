@@ -148,6 +148,11 @@ document.addEventListener(
                         funds[k].fundCode = fund.fundCode;
                         funds[k].costPrise = fund.costPrise;
                         funds[k].bonds = fund.bonds;
+                        if (funds[k].addTimePrice == null || funds[k].addTimePrice == '') {
+                            let checkFundExsitReuslt = checkFundExsit(funds[k].fundCode);
+                            funds[k].addTimePrice = checkFundExsitReuslt.now;
+                            funds[k].addTime = getCurrentDate();
+                        }
                         localStorage.setItem('funds', JSON.stringify(funds));
                         $("#fund-modal").modal("hide");
                         location.reload();
@@ -199,6 +204,11 @@ document.addEventListener(
                         stocks[k].code = stock.code;
                         stocks[k].costPrise = stock.costPrise;
                         stocks[k].bonds = stock.bonds;
+                        if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
+                            let checkStockExsitResult = checkStockExsit(stocks[k].code);
+                            stocks[k].addTimePrice = checkStockExsitResult.now;
+                            stocks[k].addTime = getCurrentDate();
+                        }
                         localStorage.setItem('stocks', JSON.stringify(stocks));
                         $("#stock-modal").modal("hide");
                         location.reload();
