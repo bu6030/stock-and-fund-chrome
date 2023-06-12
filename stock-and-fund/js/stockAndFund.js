@@ -107,6 +107,14 @@ document.addEventListener(
                 $("#export-data").val(JSON.stringify(data));
             }
         );
+        let dataExportButton = document.getElementById('data-export-button');
+        dataExportButton.addEventListener('click', function () {
+                var data = {};
+                data.stocks = stockList;
+                data.funds = fundList;
+                downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
+            }
+        );
         let dataImportButton = document.getElementById('data-import-button');
         dataImportButton.addEventListener('click', function () {
                 var data = $("#import-data").val();
@@ -877,4 +885,17 @@ function getCurrentDate() {
     var day = date.getDate(); // 得到当前天数
     day = day >= 10 ? day :'0' + day; // 补零
     return year + '-' + month + '-' + day; // 这里传入的是字符串
+}
+
+function downloadJsonOrTxt(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    } else {
+        pom.click();
+    }
 }
