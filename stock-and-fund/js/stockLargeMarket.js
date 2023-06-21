@@ -8,7 +8,6 @@ function initLargeMarketData() {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             var stoksArr = data.split("\n");
-            console.log("=====" + stoksArr);
             var str = "";
             for (var k in stoksArr) {
                 var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
@@ -16,7 +15,6 @@ function initLargeMarketData() {
                 if(dataStr == '' || dataStr == null) {
                     break;
                 }
-                console.log("dataStr=====" + dataStr);
                 var values = dataStr.split("~");
                 var name = values[1] + "";
                 var change = values[31] + "";

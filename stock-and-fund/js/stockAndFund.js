@@ -317,7 +317,6 @@ document.addEventListener(
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
-                console.log("分时图", fundCode)
                 showMinuteImage();
             }
         );
@@ -327,7 +326,6 @@ document.addEventListener(
                 let stockCode = $("#stock-code").val();
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
-                console.log("分时图", stockCode)
                 showMinuteImage();
             }
         );
@@ -546,19 +544,19 @@ function checkStockExsit(code) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             var stoksArr = data.split("\n");
-
             var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
             var values = dataStr.split("~");
-
-            stock.name = values[1] + "";
-            stock.now = values[3] + "";
-            stock.change = values[31] + "";
-            stock.changePercent = values[32] + "";
-            stock.time = values[30] + "";
-            stock.max = values[33] + "";
-            stock.min = values[34] + "";
-            stock.buyOrSellStockRequestList = [];
-            stock.checkReuslt = true;
+            if (values.length > 5) {
+                stock.name = values[1] + "";
+                stock.now = values[3] + "";
+                stock.change = values[31] + "";
+                stock.changePercent = values[32] + "";
+                stock.time = values[30] + "";
+                stock.max = values[33] + "";
+                stock.min = values[34] + "";
+                stock.buyOrSellStockRequestList = [];
+                stock.checkReuslt = true;
+            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -636,32 +634,23 @@ function getStockTableHtml(result, totalMarketValueResult) {
             // 当天购买过
             if (buyOrSells[l].type == "1") {
                 maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
-                console.log("买入价格" + buyOrSells[l].price);
-                console.log("当前价格" + result[k].now);
                 var buyIncome = (new BigDecimal(result[k].now))
                     .subtract(new BigDecimal(buyOrSells[l].price + ""))
                     .multiply(new BigDecimal(buyOrSells[l].bonds + ""));
                 todayBuyIncom = todayBuyIncom.add(buyIncome);
-                console.log("买入收益：" + todayBuyIncom);
             }
             // 当天卖出过
             if (buyOrSells[l].type == "2") {
                 todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
-                console.log("卖出收益：" + todaySellIncom);
             }
         }
-        console.log("买卖最大数" + maxBuyOrSellBonds);
         if (maxBuyOrSellBonds < result[k].bonds) {
             var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-            console.log("剩余股数：" + restBonds);
             dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);
         } else {
             dayIncome = new BigDecimal("0");
         }
-        console.log(result[k].name + "计算当日买卖前：" + dayIncome);
-        console.log(result[k].name + "计算：" + dayIncome.add(todayBuyIncom).add(todaySellIncom));
         dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
-        console.log(result[k].name + "计算当日买卖后：" + dayIncome);
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
@@ -779,7 +768,6 @@ function searchStockByName(name) {
             var values = stocksArr[0].split("~");
             var stockCode = values[0] + values[1];
             $("#stock-code").val(stockCode);
-            console.log("股票code为", stockCode);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -804,7 +792,6 @@ function searchFundByName(name) {
             var fundName = "";
             for (var i = 0; i < fundsArr.length; i++) {
                 if (fundsArr[i][2].indexOf(name) != -1) {
-                    console.log(name, "==找到的结果", fundsArr[i]);
                     fundCode = fundsArr[i][0];
                     fundName = fundsArr[i][2];
                     break;
@@ -822,7 +809,6 @@ function searchFundByName(name) {
 }
 
 function showMinuteImage() {
-    console.log("分时线图", timeImageCode, "==", timeImageType);
     let path = "";
     if (timeImageType == "FUND") {
         path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
@@ -842,7 +828,6 @@ function showMinuteImage() {
 }
 
 function showDayImage() {
-    console.log("日线图", timeImageCode, "==", timeImageType);
     let path = "";
     if (timeImageType == "FUND") {
         path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
@@ -854,7 +839,6 @@ function showDayImage() {
 }
 
 function showWeekImage() {
-    console.log("周线图", timeImageCode, "==", timeImageType);
     let path = "";
     if (timeImageType == "FUND") {
         path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
@@ -866,7 +850,6 @@ function showWeekImage() {
 }
 
 function showMonthImage() {
-    console.log("月线图", timeImageCode, "==", timeImageType);
     let path = "";
     if (timeImageType == "FUND") {
         path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
