@@ -353,6 +353,16 @@ document.addEventListener(
                 showMonthImage();
             }
         );
+        //清理数据按钮点击
+        let removeAllDataButton = document.getElementById('remove-all-data-button');
+        removeAllDataButton.addEventListener('click', function () {
+                let stocksRemove = [];
+                let fundsRemove = [];
+                localStorage.setItem('stocks', JSON.stringify(stocksRemove));
+                localStorage.setItem('funds', JSON.stringify(fundsRemove));
+                location.reload();
+            }
+        );
     }
 );
 
