@@ -30,6 +30,8 @@
 19. 点击大盘指数显示走势图 Xuesong.Bu 2023/6/8, 22:20
 20. 增加自选日期以及自选价格 bu6030 2023/6/10, 23:59
 21. 增加导出txt文件按钮 bu6030 2023/6/13, 00:59
+22. 添加错误股票导致数据问题 Xuesong.Bu 2023/6/21, 22:45
+23. 增加清理数据按钮 Xuesong.Bu 2023/6/21, 23:56
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
