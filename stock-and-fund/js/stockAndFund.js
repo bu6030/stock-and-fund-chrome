@@ -4,6 +4,8 @@ var stockDayIncome;
 var fundDayIncome;
 var stockTotalmarketValue;
 var fundTotalmarketValue;
+var stockTotalCostValue;
+var fundTotalCostValue;
 var totalMarketValue;
 var fundList;
 var stockList;
@@ -43,6 +45,7 @@ function initHtml() {
         " <th >持仓</th> " +
         " <th >市值/金额</th> " +
         " <th >持仓占比</th> " +
+        " <th >成本</th> " +
         " <th >收益率</th> " +
         " <th >收益</th> " +
         " <th >自选价格</th> " +
@@ -56,6 +59,7 @@ function initHtml() {
         " <th >持有份额</th>" +
         " <th >市值/金额</th>" +
         " <th >持仓占比</th>" +
+        " <th >成本</th> " +
         " <th >收益率</th>" +
         " <th >收益</th>" +
         " <th >自选价格</th> " +
@@ -596,6 +600,9 @@ function initStockAndFundHtml() {
     var str2 = getFundTableHtml(fundList, totalMarketValue);
     $("#fund-nr").html(str2);
 
+    var str3 = getTotalTableHtml(totalMarketValue);
+    $("#total-nr").html(str3);
+
     for (k in stockList) {
         let stockTr = document.getElementById('stock-tr-' + k);
         stockTr.addEventListener('click', function () {
@@ -632,6 +639,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
     stockTotalIncome = new BigDecimal("0");
     stockDayIncome = new BigDecimal("0");
     stockTotalmarketValue = new BigDecimal("0");
+    stockTotalCostValue = new BigDecimal("0");
     var dayIncome = new BigDecimal("0");
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
@@ -667,7 +675,12 @@ function getStockTableHtml(result, totalMarketValueResult) {
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-        let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")"
+        let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")";
+        // 计算股票总成本
+        var costPrice = new BigDecimal(result[k].costPrise+"");
+        var costPriceValue = costPrice.multiply(new BigDecimal(result[k].bonds));
+        stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
+
         str += "<tr id=\"stock-tr-" + k + "\">"
             + "<td style=\"width: 170px;\">" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
@@ -677,6 +690,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
             + "</td><td>" + result[k].bonds
             + "</td><td style=\"width: 70px;\">" + marketValue.setScale(2)
             + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
+            + "</td><td style=\"width: 70px;\">" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td style=\"width: 140px;\">" + addTimePrice
@@ -688,12 +702,12 @@ function getStockTableHtml(result, totalMarketValueResult) {
     var stockDayIncomePercent = new BigDecimal("0");
     var stockTotalIncomePercent = new BigDecimal("0");
     if (stockTotalmarketValue != 0) {
-        stockDayIncomePercent = stockDayIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue, 4);
-        stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue, 4);
+        stockDayIncomePercent = stockDayIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue.subtract(stockDayIncome), 4);
+        stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100")).divide(stockTotalCostValue, 4);
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td><td colspan='3'></td><td colspan='2'>" + stockTotalmarketValue.setScale(2) + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
+    str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td><td colspan='3'></td><td colspan='2'>" + stockTotalmarketValue.setScale(2) + "</td><td>"+stockTotalCostValue+"</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
         + "</td><td></td></tr>";
     return str;
 }
@@ -703,6 +717,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
     fundTotalIncome = new BigDecimal("0");
     fundDayIncome = new BigDecimal("0");
     fundTotalmarketValue = new BigDecimal("0");
+    fundTotalCostValue = new BigDecimal("0");
     var dayIncome = new BigDecimal("0");
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
@@ -714,7 +729,12 @@ function getFundTableHtml(result, totalMarketValueResult) {
         }
         var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-        let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")"
+        let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")";
+        // 计算基金总成本
+        var costPrice = new BigDecimal(result[k].costPrise+"");
+        var costPriceValue = costPrice.multiply(new BigDecimal(result[k].bonds));
+        fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
+
         str += "<tr id=\"fund-tr-" + k + "\">"
             + "<td style=\"width: 170px;\">" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
@@ -724,6 +744,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
             + "</td><td>" + result[k].bonds
             + "</td><td style=\"width: 70px;\">" + marketValue
             + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
+            + "</td><td style=\"width: 70px;\">" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
             + "</td><td style=\"width: 140px;\">" + addTimePrice
@@ -735,30 +756,37 @@ function getFundTableHtml(result, totalMarketValueResult) {
     var fundDayIncomePercent = new BigDecimal("0");
     var fundTotalIncomePercent = new BigDecimal("0");
     if (fundTotalmarketValue != 0) {
-        fundDayIncomePercent = fundDayIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue, 4);
-        fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue, 4);
+        fundDayIncomePercent = fundDayIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue.subtract(fundDayIncome), 4);
+        fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100")).divide(fundTotalCostValue, 4);
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-    str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
-        + "</td><td></td></tr>";
-
-    var allDayIncome = fundDayIncome.add(stockDayIncome);
-    var allTotalIncome = fundTotalIncome.add(stockTotalIncome);
-    var allDayIncomePercent = new BigDecimal("0");
-    var allTotalIncomePercent = new BigDecimal("0");
-    if (totalMarketValueResult != 0) {
-        allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-        allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-    }
-    var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-    var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
-
-    str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td><td colspan='2'></td><td colspan='2'>" + totalMarketValueResult.setScale(2) + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
+    str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td>"+fundTotalCostValue+"</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
         + "</td><td></td></tr>";
 
     return str;
 }
+
+function getTotalTableHtml(totalMarketValueResult) {
+    var str = "";
+    var allDayIncome = fundDayIncome.add(stockDayIncome);
+    var allTotalIncome = fundTotalIncome.add(stockTotalIncome);
+    var allDayIncomePercent = new BigDecimal("0");
+    var allTotalIncomePercent = new BigDecimal("0");
+    var totalCostPrice = fundTotalCostValue.add(stockTotalCostValue);
+    if (totalMarketValueResult != 0) {
+        allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult.add(allDayIncome), 4);
+        allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalCostPrice, 4);
+    }
+    var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
+    var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
+
+    str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td><td colspan='2'></td><td colspan='2'>" + totalMarketValueResult.setScale(2) + "</td><td>"+totalCostPrice+"</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
+        + "</td><td></td></tr>";
+
+    return str;
+}
+
 
 function searchStockByName(name) {
     $.ajax({
