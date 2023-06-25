@@ -678,7 +678,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
         let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")";
         // 计算股票总成本
         var costPrice = new BigDecimal(result[k].costPrise+"");
-        var costPriceValue = costPrice.multiply(new BigDecimal(result[k].bonds));
+        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
 
         str += "<tr id=\"stock-tr-" + k + "\">"
@@ -732,7 +732,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
         let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")";
         // 计算基金总成本
         var costPrice = new BigDecimal(result[k].costPrise+"");
-        var costPriceValue = costPrice.multiply(new BigDecimal(result[k].bonds));
+        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
 
         str += "<tr id=\"fund-tr-" + k + "\">"
