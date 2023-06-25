@@ -33,6 +33,7 @@
 22. 添加错误股票导致数据问题 Xuesong.Bu 2023/6/21, 22:45
 23. 增加清理数据按钮 Xuesong.Bu 2023/6/21, 23:56
 24. 增加成本，重新准确计算涨跌幅/收益率 Xuesong.Bu 2023/6/25, 22:17
+25. 修复成本为0计算收益率报错 Xuesong.Bu 2023/6/25, 22:53
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

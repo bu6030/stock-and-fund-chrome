@@ -703,6 +703,8 @@ function getStockTableHtml(result, totalMarketValueResult) {
     var stockTotalIncomePercent = new BigDecimal("0");
     if (stockTotalmarketValue != 0) {
         stockDayIncomePercent = stockDayIncome.multiply(new BigDecimal("100")).divide(stockTotalmarketValue.subtract(stockDayIncome), 4);
+    }
+    if (stockTotalCostValue != 0) {
         stockTotalIncomePercent = stockTotalIncome.multiply(new BigDecimal("100")).divide(stockTotalCostValue, 4);
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
@@ -757,6 +759,8 @@ function getFundTableHtml(result, totalMarketValueResult) {
     var fundTotalIncomePercent = new BigDecimal("0");
     if (fundTotalmarketValue != 0) {
         fundDayIncomePercent = fundDayIncome.multiply(new BigDecimal("100")).divide(fundTotalmarketValue.subtract(fundDayIncome), 4);
+    }
+    if (fundTotalCostValue != 0) {
         fundTotalIncomePercent = fundTotalIncome.multiply(new BigDecimal("100")).divide(fundTotalCostValue, 4);
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
@@ -776,6 +780,8 @@ function getTotalTableHtml(totalMarketValueResult) {
     var totalCostPrice = fundTotalCostValue.add(stockTotalCostValue);
     if (totalMarketValueResult != 0) {
         allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult.add(allDayIncome), 4);
+    }
+    if (totalCostPrice != 0) {
         allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalCostPrice, 4);
     }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
