@@ -257,28 +257,30 @@ document.addEventListener(
                 location.reload();
             }
         );
-        let importFromLocalSpringBoot = document.getElementById('importFromLocalSpringBoot');
-        importFromLocalSpringBoot.addEventListener('click', function () {
-                $.ajax({
-                    url: Env.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
-                    type: "get",
-                    data: {},
-                    dataType: 'json',
-                    contentType: 'application/x-www-form-urlencoded',
-                    success: function (data) {
-                        localStorage.setItem('stocks', JSON.stringify(data.value.stocks));
-                        localStorage.setItem('funds', JSON.stringify(data.value.funds));
-                        location.reload();
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        console.log(XMLHttpRequest.status);
-                        console.log(XMLHttpRequest.readyState);
-                        console.log(textStatus);
-                    }
-                });
+        if (develop) {
+            let importFromLocalSpringBoot = document.getElementById('importFromLocalSpringBoot');
+            importFromLocalSpringBoot.addEventListener('click', function () {
+                    $.ajax({
+                        url: Env.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
+                        type: "get",
+                        data: {},
+                        dataType: 'json',
+                        contentType: 'application/x-www-form-urlencoded',
+                        success: function (data) {
+                            localStorage.setItem('stocks', JSON.stringify(data.value.stocks));
+                            localStorage.setItem('funds', JSON.stringify(data.value.funds));
+                            location.reload();
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            console.log(XMLHttpRequest.status);
+                            console.log(XMLHttpRequest.readyState);
+                            console.log(textStatus);
+                        }
+                    });
 
-            }
-        );
+                }
+            );
+        }
         let stockDeleteButton = document.getElementById('stock-delete-button');
         stockDeleteButton.addEventListener('click', function () {
                 var stocks = localStorage.getItem('stocks');
