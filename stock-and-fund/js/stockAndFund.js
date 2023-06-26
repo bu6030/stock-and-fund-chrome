@@ -131,11 +131,19 @@ document.addEventListener(
         );
         let fundSaveButton = document.getElementById('fund-save-button');
         fundSaveButton.addEventListener('click', function () {
-                var code = $("#fund-code").val();
                 var costPrise = $("#fund-costPrise").val();
                 var bonds = $("#fund-bonds").val();
+                var fundName = $("#fund-name").val();
+                if (fundName != "" && fundName != null) {
+                    searchFundByName(fundName);
+                    fundName = $("#fund-name").val();
+                    if (fundName == null || fundName == '') {
+                        return;
+                    }
+                }
+                var code = $("#fund-code").val();
                 if (code == null || code == '') {
-                    alert("请添加基金编码");
+                    alert("请添加基金编码或通过基金名称搜索");
                     return;
                 }
                 if (costPrise == null || costPrise == '') {
@@ -187,11 +195,19 @@ document.addEventListener(
         );
         let stockSaveButton = document.getElementById('stock-save-button');
         stockSaveButton.addEventListener('click', function () {
-                var code = $("#stock-code").val();
                 var costPrise = $("#stock-costPrise").val();
+                var stockName = $("#stock-name").val();
                 var bonds = $("#stock-bonds").val();
+                if (stockName != "" && stockName != null) {
+                    searchStockByName(stockName);
+                    stockName = $("#stock-name").val();
+                    if (stockName == null || stockName == '') {
+                        return;
+                    }
+                }
+                var code = $("#stock-code").val();
                 if (code == null || code == '') {
-                    alert("请添加股票编码");
+                    alert("请添加股票编码或通过股票名称搜索");
                     return;
                 }
                 if (costPrise == null || costPrise == '') {
@@ -805,6 +821,7 @@ function searchStockByName(name) {
         success: function (data) {
             if (data.indexOf("v_hint=\"N\";") != -1) {
                 alert("不存在该股票");
+                $("#stock-name").val("");
                 return;
             }
             data = data.replace("v_hint=\"", "").replace(" ", "");
@@ -840,6 +857,9 @@ function searchFundByName(name) {
                     fundName = fundsArr[i][2];
                     break;
                 }
+            }
+            if (fundCode == "" || fundCode == null) {
+                alert("未搜索到该基金");
             }
             $("#fund-code").val(fundCode);
             $("#fund-name").val(fundName);
