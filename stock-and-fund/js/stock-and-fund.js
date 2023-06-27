@@ -291,6 +291,11 @@ document.addEventListener(
                 saveFund();
             }
         );
+        let helpDocumentButton = document.getElementById('help-document-button');
+        helpDocumentButton.addEventListener('click', function () {
+              chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
+            }
+        );
     }
 );
 function A2U(str) {
