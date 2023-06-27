@@ -250,7 +250,17 @@ document.addEventListener(
                 var stocksArr = searchStockByName(stockName);
                 for (var k in stocksArr) {
                     var values = stocksArr[k].split("~");
-                    var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]));
+                    var market = "";
+                    if (values[0] == 'sh') {
+                        market = "沪A"
+                    } else if (values[0] == 'sz') {
+                        market = "深A"
+                    } else if (values[0] == 'hk') {
+                        market = "港股"
+                    } else {
+                        market = "其他"
+                    }
+                    var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
                     $("#search-stock-select").append(option);
                 }
                 $("#search-stock-modal").modal();
@@ -259,7 +269,7 @@ document.addEventListener(
             if (fundName != "" && fundName != null) {
                 var fundsArr = searchFundByName(fundName);
                 for (var k in fundsArr) {
-                    var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName);
+                    var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName + " " + fundsArr[k].fundCode);
                     $("#search-fund-select").append(option);
                 }
                 $("#search-fund-modal").modal();
