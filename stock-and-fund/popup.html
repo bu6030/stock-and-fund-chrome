@@ -109,7 +109,7 @@
                     <div class="am-form-group am-cf">
                         <div class="zuo">持有份额（可选）：</div>
                         <div class="you">
-                            <input type="number" value="100" class="am-input-sm my-text" id="stock-bonds"
+                            <input type="number" class="am-input-sm my-text" id="stock-bonds"
                                    placeholder="请输入持有份额">
                         </div>
                     </div>
@@ -216,18 +216,45 @@
             </div>
         </div>
     </div>
+
+    <!-- 搜索股票模态框 -->
+    <div class="modal fade" id="search-stock-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框主体 -->
+                <div class="modal-body my-font">
+                    <div class="form-group">
+                        <label for="search-stock-select">选择您添加的股票</label>
+                        <select multiple class="form-control" id="search-stock-select"></select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 搜索基金模态框 -->
+    <div class="modal fade" id="search-fund-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框主体 -->
+                <div class="modal-body my-font">
+                    <div class="form-group">
+                        <label for="search-fund-select">选择您添加的基金</label>
+                        <select multiple class="form-control" id="search-fund-select"></select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!-- 股票基金主体页面 start -->
     <div>
         <div>
             <div>
                 <!--                <ul class="am-icon-users my-font"> 股票基金汇总</ul>-->
                 <dl>
-                    <button type="button" id="showFundDialog" class="btn btn-secondary btn-sm" data-toggle="modal">
-                        添加基金
-                    </button>
-                    <button type="button" id="showStockDialog" class="btn btn-secondary btn-sm" data-toggle="modal">
-                        添加股票
-                    </button>
                     <button type="button" id="showExportDataDialog" class="btn btn-secondary btn-sm"
                             data-toggle="modal">导出数据
                     </button>
@@ -243,7 +270,15 @@
                     单击具体股票/基金进入编辑页面，可以查看分时/日线/轴线/月线图了！！！
                 </dl>
             </div>
-
+            <div>
+                <div class="input-group my-input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="stock-fund-name-search-button">搜索股票/基金</span>
+                    </div>
+                    <input type="text" aria-label="First name" class="form-control my-form-input" id="input-stock-name-search" placeholder="请输入股票名称">
+                    <input type="text" aria-label="Last name" class="form-control my-form-input" id="input-fund-name-search" placeholder="请输入基金名称">
+                </div>
+            </div>
             <form>
                 <div class="stock-large-market" id="stock-large-market"></div>
                 <div class="my-div">

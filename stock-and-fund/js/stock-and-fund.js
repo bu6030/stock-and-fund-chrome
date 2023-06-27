@@ -68,32 +68,6 @@ function initHtml() {
 document.addEventListener(
     'DOMContentLoaded',
     function () {
-        let showFundDialog = document.getElementById('showFundDialog');
-        showFundDialog.addEventListener('click', function () {
-                $("#fund-name").val('');
-                $("#fund-name").removeAttr("disabled");
-                $("#fund-code").val('');
-                $("#fund-costPrise").val('');
-                $("#fund-bonds").val('');
-                $("#fund-delete-button")[0].style.display = "none";
-                $("#fund-search-button")[0].style.display  = 'inline';
-                $("#fund-show-time-image-button")[0].style.display  = 'none';
-                $("#fund-modal").modal();
-            }
-        );
-        let showStockDialog = document.getElementById('showStockDialog');
-        showStockDialog.addEventListener('click', function () {
-                $("#stock-name").val('');
-                $("#stock-name").removeAttr("disabled");
-                $("#stock-code").val('');
-                $("#stock-costPrise").val('');
-                $("#stock-bonds").val('100');
-                $("#stock-delete-button")[0].style.display = "none";
-                $("#stock-search-button")[0].style.display  = 'inline';
-                $("#stock-show-time-image-button")[0].style.display  = 'none';
-                $("#stock-modal").modal();
-            }
-        );
         let showImportDataDialog = document.getElementById('showImportDataDialog');
         showImportDataDialog.addEventListener('click', function () {
                 $("#data-import-modal").modal();
@@ -128,130 +102,12 @@ document.addEventListener(
         );
         let fundSaveButton = document.getElementById('fund-save-button');
         fundSaveButton.addEventListener('click', function () {
-                var costPrise = $("#fund-costPrise").val();
-                var bonds = $("#fund-bonds").val();
-                var fundName = $("#fund-name").val();
-                if (fundName != "" && fundName != null) {
-                    searchFundByName(fundName);
-                    fundName = $("#fund-name").val();
-                    if (fundName == null || fundName == '') {
-                        return;
-                    }
-                }
-                var code = $("#fund-code").val();
-                if (code == null || code == '') {
-                    alert("请添加基金编码或通过基金名称搜索");
-                    return;
-                }
-                if (costPrise == null || costPrise == '') {
-                    costPrise = "0";
-                }
-                if (bonds == null || bonds == '') {
-                    bonds = "0";
-                }
-                var fund = {
-                    "fundCode": code,
-                    "costPrise": costPrise,
-                    "bonds": bonds,
-                }
-                var funds = localStorage.getItem('funds');
-                if (funds == null) {
-                    funds = [];
-                } else {
-                    funds = jQuery.parseJSON(funds);
-                }
-                for (var k in funds) {
-                    if (funds[k].fundCode == fund.fundCode) {
-                        funds[k].fundCode = fund.fundCode;
-                        funds[k].costPrise = fund.costPrise;
-                        funds[k].bonds = fund.bonds;
-                        if (funds[k].addTimePrice == null || funds[k].addTimePrice == '') {
-                            let checkFundExsitReuslt = checkFundExsit(funds[k].fundCode);
-                            funds[k].addTimePrice = checkFundExsitReuslt.now;
-                            funds[k].addTime = getCurrentDate();
-                        }
-                        localStorage.setItem('funds', JSON.stringify(funds));
-                        $("#fund-modal").modal("hide");
-                        location.reload();
-                        return;
-                    }
-                }
-                let checkFundExsitReuslt = checkFundExsit(fund.fundCode);
-                if (!checkFundExsitReuslt.checkReuslt) {
-                    alert("不存在该基金");
-                    $("#fund-modal").modal("hide");
-                    return;
-                }
-                fund.addTimePrice = checkFundExsitReuslt.now;
-                fund.addTime = getCurrentDate();
-                funds.push(fund);
-                localStorage.setItem('funds', JSON.stringify(funds));
-                $("#fund-modal").modal("hide");
-                location.reload();
+                saveFund();
             }
         );
         let stockSaveButton = document.getElementById('stock-save-button');
         stockSaveButton.addEventListener('click', function () {
-                var costPrise = $("#stock-costPrise").val();
-                var stockName = $("#stock-name").val();
-                var bonds = $("#stock-bonds").val();
-                if (stockName != "" && stockName != null) {
-                    searchStockByName(stockName);
-                    stockName = $("#stock-name").val();
-                    if (stockName == null || stockName == '') {
-                        return;
-                    }
-                }
-                var code = $("#stock-code").val();
-                if (code == null || code == '') {
-                    alert("请添加股票编码或通过股票名称搜索");
-                    return;
-                }
-                if (costPrise == null || costPrise == '') {
-                    costPrise = "0";
-                }
-                if (bonds == null || bonds == '') {
-                    bonds = "0";
-                }
-                var stock = {
-                    "code": code,
-                    "costPrise": costPrise,
-                    "bonds": bonds,
-                }
-                var stocks = localStorage.getItem('stocks');
-                if (stocks == null) {
-                    stocks = [];
-                } else {
-                    stocks = jQuery.parseJSON(stocks);
-                }
-                for (var k in stocks) {
-                    if (stocks[k].code == stock.code) {
-                        stocks[k].code = stock.code;
-                        stocks[k].costPrise = stock.costPrise;
-                        stocks[k].bonds = stock.bonds;
-                        if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
-                            let checkStockExsitResult = checkStockExsit(stocks[k].code);
-                            stocks[k].addTimePrice = checkStockExsitResult.now;
-                            stocks[k].addTime = getCurrentDate();
-                        }
-                        localStorage.setItem('stocks', JSON.stringify(stocks));
-                        $("#stock-modal").modal("hide");
-                        location.reload();
-                        return;
-                    }
-                }
-                let checkStockExsitResult = checkStockExsit(stock.code);
-                if (!checkStockExsitResult.checkReuslt) {
-                    alert("不存在该股票");
-                    $("#stock-modal").modal("hide");
-                    return;
-                }
-                stock.addTimePrice = checkStockExsitResult.now;
-                stock.addTime = getCurrentDate();
-                stocks.push(stock);
-                localStorage.setItem('stocks', JSON.stringify(stocks));
-                $("#stock-modal").modal("hide");
-                location.reload();
+                saveStock();
             }
         );
         if (develop) {
@@ -314,11 +170,14 @@ document.addEventListener(
         let stockSearchButton = document.getElementById('stock-search-button');
         stockSearchButton.addEventListener('click', function () {
                 var stockName = $("#stock-name").val();
-                if(stockName == "" || stockName == null){
+                if(stockName == "" || stockName == null) {
                     alert("请输入股票名称");
                     return;
                 }
-                searchStockByName(stockName);
+                var stocksArr = searchStockByName(stockName);
+                var values = stocksArr[0].split("~");
+                var stockCode = values[0] + values[1];
+                $("#stock-code").val(stockCode);
             }
         );
         let fundSearchButton = document.getElementById('fund-search-button');
@@ -328,7 +187,9 @@ document.addEventListener(
                     alert("请输入基金名称");
                     return;
                 }
-                searchFundByName(fundName);
+                var fundsArr = searchFundByName(fundName);
+                $("#fund-code").val(fundsArr[0].fundCode);
+                $("#fund-name").val(fundsArr[0].fundName);
             }
         );
         let fundShowTimeImageButton = document.getElementById('fund-show-time-image-button');
@@ -339,7 +200,6 @@ document.addEventListener(
                 showMinuteImage();
             }
         );
-
         let stockShowTimeImageButton = document.getElementById('stock-show-time-image-button');
         stockShowTimeImageButton.addEventListener('click', function () {
                 let stockCode = $("#stock-code").val();
@@ -382,8 +242,48 @@ document.addEventListener(
                 location.reload();
             }
         );
+        //输入股票名称直接搜索
+        let stockFundNameSearchButton = document.getElementById('stock-fund-name-search-button');
+        stockFundNameSearchButton.addEventListener('click', function () {
+            let stockName = $("#input-stock-name-search").val();
+            if (stockName != "" && stockName != null) {
+                var stocksArr = searchStockByName(stockName);
+                for (var k in stocksArr) {
+                    var values = stocksArr[k].split("~");
+                    var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]));
+                    $("#search-stock-select").append(option);
+                }
+                $("#search-stock-modal").modal();
+            }
+            let fundName = $("#input-fund-name-search").val();
+            if (fundName != "" && fundName != null) {
+                var fundsArr = searchFundByName(fundName);
+                for (var k in fundsArr) {
+                    var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName);
+                    $("#search-fund-select").append(option);
+                }
+                $("#search-fund-modal").modal();
+            }
+        });
+        let searchStockSelect = document.getElementById('search-stock-select');
+        searchStockSelect.addEventListener('change', function () {
+                let stockCode = $("#search-stock-select").val();
+                $("#stock-code").val(stockCode);
+                saveStock();
+            }
+        );
+        let searchFundSelect = document.getElementById('search-fund-select');
+        searchFundSelect.addEventListener('change', function () {
+                let fundCode = $("#search-fund-select").val();
+                $("#fund-code").val(fundCode);
+                saveFund();
+            }
+        );
     }
 );
+function A2U(str) {
+    return unescape(str.replace(/\\u/gi, '%u'));
+}
 
 function initData() {
     var stocks = "";
@@ -509,7 +409,6 @@ function getFundBySelfService(fund) {
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            // alert(data.value.fundName+"");
             fund.name = data.value.fundName + "";
             fund.jzrq = data.value.jzrq + "";
             fund.dwjz = data.value.dwjz + "";
@@ -810,6 +709,7 @@ function getTotalTableHtml(totalMarketValueResult) {
 
 
 function searchStockByName(name) {
+    var stocksArr;
     $.ajax({
         url: Env.GET_STOCK_CODE_BY_NAME_FROM_GTIMG + "?v=2&t=all&c=1&q=" + name,
         type: "get",
@@ -824,10 +724,7 @@ function searchStockByName(name) {
                 return;
             }
             data = data.replace("v_hint=\"", "").replace(" ", "");
-            var stocksArr = data.split("^");
-            var values = stocksArr[0].split("~");
-            var stockCode = values[0] + values[1];
-            $("#stock-code").val(stockCode);
+            stocksArr = data.split("^");
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -835,9 +732,11 @@ function searchStockByName(name) {
             console.log(textStatus);
         }
     });
+    return stocksArr;
 }
 
 function searchFundByName(name) {
+    var fundsArrs = [];
     $.ajax({
         url: Env.GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN,
         type: "get",
@@ -852,16 +751,16 @@ function searchFundByName(name) {
             var fundName = "";
             for (var i = 0; i < fundsArr.length; i++) {
                 if (fundsArr[i][2].indexOf(name) != -1) {
-                    fundCode = fundsArr[i][0];
-                    fundName = fundsArr[i][2];
-                    break;
+                    var fund = {
+                        "fundCode":fundsArr[i][0],
+                        "fundName":fundsArr[i][2]
+                    };
+                    fundsArrs.push(fund);
                 }
             }
-            if (fundCode == "" || fundCode == null) {
+            if (fundsArrs.length == 0) {
                 alert("未搜索到该基金");
             }
-            $("#fund-code").val(fundCode);
-            $("#fund-name").val(fundName);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -869,4 +768,136 @@ function searchFundByName(name) {
             console.log(textStatus);
         }
     });
+    return fundsArrs;
+}
+
+function saveStock() {
+    var costPrise = $("#stock-costPrise").val();
+    var stockName = $("#stock-name").val();
+    var bonds = $("#stock-bonds").val();
+    if (stockName != "" && stockName != null) {
+        var stocksArr = searchStockByName(stockName);
+        var values = stocksArr[0].split("~");
+        var stockCode = values[0] + values[1];
+        $("#stock-code").val(stockCode);
+        stockName = $("#stock-name").val();
+        if (stockName == null || stockName == '') {
+            return;
+        }
+    }
+    var code = $("#stock-code").val();
+    if (code == null || code == '') {
+        alert("请添加股票编码或通过股票名称搜索");
+        return;
+    }
+    if (costPrise == null || costPrise == '') {
+        costPrise = "0";
+    }
+    if (bonds == null || bonds == '') {
+        bonds = "0";
+    }
+    var stock = {
+        "code": code,
+        "costPrise": costPrise,
+        "bonds": bonds,
+    }
+    var stocks = localStorage.getItem('stocks');
+    if (stocks == null) {
+        stocks = [];
+    } else {
+        stocks = jQuery.parseJSON(stocks);
+    }
+    for (var k in stocks) {
+        if (stocks[k].code == stock.code) {
+            stocks[k].code = stock.code;
+            stocks[k].costPrise = stock.costPrise;
+            stocks[k].bonds = stock.bonds;
+            if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
+                let checkStockExsitResult = checkStockExsit(stocks[k].code);
+                stocks[k].addTimePrice = checkStockExsitResult.now;
+                stocks[k].addTime = getCurrentDate();
+            }
+            localStorage.setItem('stocks', JSON.stringify(stocks));
+            $("#stock-modal").modal("hide");
+            location.reload();
+            return;
+        }
+    }
+    let checkStockExsitResult = checkStockExsit(stock.code);
+    if (!checkStockExsitResult.checkReuslt) {
+        alert("不存在该股票");
+        $("#stock-modal").modal("hide");
+        return;
+    }
+    stock.addTimePrice = checkStockExsitResult.now;
+    stock.addTime = getCurrentDate();
+    stocks.push(stock);
+    localStorage.setItem('stocks', JSON.stringify(stocks));
+    $("#stock-modal").modal("hide");
+    location.reload();
+}
+
+function saveFund() {
+    var costPrise = $("#fund-costPrise").val();
+    var bonds = $("#fund-bonds").val();
+    var fundName = $("#fund-name").val();
+    if (fundName != "" && fundName != null) {
+        var fundsArr = searchFundByName(fundName);
+        if (fundsArr.length == 0) {
+            return;
+        }
+        $("#fund-code").val(fundsArr[0].fundCode);
+        $("#fund-name").val(fundsArr[0].fundName);
+        fundName = $("#fund-name").val();
+    }
+    var code = $("#fund-code").val();
+    if (code == null || code == '') {
+        alert("请添加基金编码或通过基金名称搜索");
+        return;
+    }
+    if (costPrise == null || costPrise == '') {
+        costPrise = "0";
+    }
+    if (bonds == null || bonds == '') {
+        bonds = "0";
+    }
+    var fund = {
+        "fundCode": code,
+        "costPrise": costPrise,
+        "bonds": bonds,
+    }
+    var funds = localStorage.getItem('funds');
+    if (funds == null) {
+        funds = [];
+    } else {
+        funds = jQuery.parseJSON(funds);
+    }
+    for (var k in funds) {
+        if (funds[k].fundCode == fund.fundCode) {
+            funds[k].fundCode = fund.fundCode;
+            funds[k].costPrise = fund.costPrise;
+            funds[k].bonds = fund.bonds;
+            if (funds[k].addTimePrice == null || funds[k].addTimePrice == '') {
+                let checkFundExsitReuslt = checkFundExsit(funds[k].fundCode);
+                funds[k].addTimePrice = checkFundExsitReuslt.now;
+                funds[k].addTime = getCurrentDate();
+            }
+            localStorage.setItem('funds', JSON.stringify(funds));
+            $("#fund-modal").modal("hide");
+            location.reload();
+            return;
+        }
+    }
+    let checkFundExsitReuslt = checkFundExsit(fund.fundCode);
+    if (!checkFundExsitReuslt.checkReuslt) {
+        alert("不存在该基金");
+        $("#fund-modal").modal("hide");
+        return;
+    }
+    fund.addTimePrice = checkFundExsitReuslt.now;
+    fund.addTime = getCurrentDate();
+    funds.push(fund);
+    localStorage.setItem('funds', JSON.stringify(funds));
+    $("#fund-modal").modal("hide");
+    location.reload();
 }
