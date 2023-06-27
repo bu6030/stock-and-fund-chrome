@@ -735,6 +735,9 @@ function searchStockByName(name) {
                 $("#stock-name").val("");
                 return;
             }
+            if (data.indexOf("v_cate_hint") != -1) {
+                data = data.substring(data.indexOf("\n")+1);
+            }
             data = data.replace("v_hint=\"", "").replace(" ", "");
             stocksArr = data.split("^");
         },
