@@ -263,6 +263,7 @@ document.addEventListener(
                     var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
                     $("#search-stock-select").append(option);
                 }
+                $("#input-stock-name-search").val("");
                 $("#search-stock-modal").modal();
             }
             let fundName = $("#input-fund-name-search").val();
@@ -272,6 +273,7 @@ document.addEventListener(
                     var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName + " " + fundsArr[k].fundCode);
                     $("#search-fund-select").append(option);
                 }
+                $("#input-fund-name-search").val("");
                 $("#search-fund-modal").modal();
             }
         });
