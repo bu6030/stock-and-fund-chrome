@@ -245,6 +245,8 @@ document.addEventListener(
         //输入股票名称直接搜索
         let stockFundNameSearchButton = document.getElementById('stock-fund-name-search-button');
         stockFundNameSearchButton.addEventListener('click', function () {
+            $("#search-fund-select").find("option").remove();
+            $("#search-stock-select").find("option").remove();
             let stockName = $("#input-stock-name-search").val();
             if (stockName != "" && stockName != null) {
                 var stocksArr = searchStockByName(stockName);
@@ -264,7 +266,9 @@ document.addEventListener(
                     $("#search-stock-select").append(option);
                 }
                 $("#input-stock-name-search").val("");
-                $("#search-stock-modal").modal();
+                if (stocksArr.length > 0) {
+                    $("#search-stock-modal").modal();
+                }
             }
             let fundName = $("#input-fund-name-search").val();
             if (fundName != "" && fundName != null) {
@@ -274,7 +278,9 @@ document.addEventListener(
                     $("#search-fund-select").append(option);
                 }
                 $("#input-fund-name-search").val("");
-                $("#search-fund-modal").modal();
+                if (fundsArr.length > 0) {
+                    $("#search-fund-modal").modal();
+                }
             }
         });
         let searchStockSelect = document.getElementById('search-stock-select');

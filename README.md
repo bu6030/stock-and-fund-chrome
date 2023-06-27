@@ -37,6 +37,7 @@
 26. 优化搜索操作，输入名称可以直接点击保存 2023/6/26
 27. 增加搜索显示沪 A，深 A，港股， 其他以及基金/股票编码 2023/6/27
 28. 增加使用说明按钮 2023/6/27
+29. 未搜索到股票/基金不展示列表 2023/6/27
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
