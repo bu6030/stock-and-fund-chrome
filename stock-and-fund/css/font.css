@@ -12,6 +12,7 @@
     width:970px;
     height:500px;
     overflow-x:auto;
+    margin-bottom: 40px;
 }
 .my-input-group {
     width: 100%;
@@ -35,4 +36,5 @@
     font-family: Arial;
     font-size: 12px;
     letter-spacing: 1px;
+    background-color: white;
 }
