@@ -28,10 +28,18 @@ window.addEventListener("load", (event) => {
     initData();
     initLargeMarketData();
     // 20s刷新
-    setInterval(function () {
-        location.reload();
-    },20000);
+    setInterval(autoRefresh, 20000);
 });
+
+function autoRefresh () {
+    var date = new Date();
+    var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+        || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+    if (isTradingTime) {
+        initData();
+        initLargeMarketData();
+    }
+}
 
 function initHtml() {
     if (!develop) {
@@ -308,6 +316,7 @@ document.addEventListener(
         );
     }
 );
+
 function A2U(str) {
     return unescape(str.replace(/\\u/gi, '%u'));
 }
