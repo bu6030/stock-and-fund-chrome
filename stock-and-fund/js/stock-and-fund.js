@@ -27,6 +27,10 @@ window.addEventListener("load", (event) => {
     initHtml();
     initData();
     initLargeMarketData();
+    // 20s刷新
+    setInterval(function () {
+        location.reload();
+    },20000);
 });
 
 function initHtml() {
