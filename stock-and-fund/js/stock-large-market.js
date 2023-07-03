@@ -35,6 +35,7 @@ function initLargeMarketData() {
                 $("#time-image-day-button")[0].style.display  = 'block';
                 $("#time-image-week-button")[0].style.display  = 'block';
                 $("#time-image-month-button")[0].style.display  = 'block';
+                $("#update-stock-fund-button")[0].style.display  = 'none';
                 $("#time-image-modal").modal();
                 $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
             });
@@ -46,6 +47,7 @@ function initLargeMarketData() {
                 $("#time-image-day-button")[0].style.display  = 'block';
                 $("#time-image-week-button")[0].style.display  = 'block';
                 $("#time-image-month-button")[0].style.display  = 'block';
+                $("#update-stock-fund-button")[0].style.display  = 'none';
                 $("#time-image-modal").modal();
                 $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
             });
@@ -57,6 +59,7 @@ function initLargeMarketData() {
                 $("#time-image-day-button")[0].style.display  = 'block';
                 $("#time-image-week-button")[0].style.display  = 'block';
                 $("#time-image-month-button")[0].style.display  = 'block';
+                $("#update-stock-fund-button")[0].style.display  = 'none';
                 $("#time-image-modal").modal();
                 $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
             });

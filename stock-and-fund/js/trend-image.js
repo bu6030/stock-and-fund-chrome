@@ -17,6 +17,7 @@ function showMinuteImage() {
         $("#time-image-week-button")[0].style.display  = 'block';
         $("#time-image-month-button")[0].style.display  = 'block';
     }
+    $("#update-stock-fund-button")[0].style.display  = 'block';
     $("#time-image-modal").modal();
     $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
 }

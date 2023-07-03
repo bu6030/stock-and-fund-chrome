@@ -314,6 +314,16 @@ document.addEventListener(
               chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
             }
         );
+        let updateStockFundButton = document.getElementById('update-stock-fund-button');
+        updateStockFundButton.addEventListener('click', function () {
+            $("#time-image-modal").modal("hide");
+                if (timeImageType == "FUND") {
+                    $("#fund-modal").modal();
+                } else {
+                    $("#stock-modal").modal();
+                }
+            }
+        );
     }
 );
 
@@ -564,7 +574,11 @@ function initStockAndFundHtml() {
             $("#stock-delete-button")[0].style.display  = 'block';
             $("#stock-search-button")[0].style.display  = 'none';
             $("#stock-show-time-image-button")[0].style.display  = 'inline';
-            $("#stock-modal").modal();
+            // $("#stock-modal").modal();
+            let stockCode = $("#stock-code").val();
+            timeImageCode = stockCode;
+            timeImageType = "STOCK";
+            showMinuteImage();
         });
     }
 
@@ -579,7 +593,11 @@ function initStockAndFundHtml() {
             $("#fund-delete-button")[0].style.display  = 'block';
             $("#fund-search-button")[0].style.display  = 'none';
             $("#fund-show-time-image-button")[0].style.display  = 'inline';
-            $("#fund-modal").modal();
+            // $("#fund-modal").modal();
+            let fundCode = $("#fund-code").val();
+            timeImageCode = fundCode;
+            timeImageType = "FUND";
+            showMinuteImage();
         });
     }
 }
