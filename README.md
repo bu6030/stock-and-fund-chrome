@@ -40,6 +40,7 @@
 29. 未搜索到股票/基金不展示列表 2023/6/27
 30. 增加20s自动刷新 2023/6/28
 31. 点击默认打开趋势图，再次点击编辑才能进入编辑页面 2023/7/3
+32. 增加监控突破最高价格，当价格突破时显示角标 2023/7/11
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
