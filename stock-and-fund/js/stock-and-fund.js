@@ -45,6 +45,12 @@ function initHtml() {
     if (!develop) {
         $("#importFromLocalSpringBoot")[0].style.display = "none";
     }
+    // 在页面顶部显示一些监控信息，重要信息
+    getData('MONITOR_TEXT').then((text) => {
+        $("#monitor-text").html(text);
+        saveData('MONITOR_TEXT', '单击具体股票/基金进入编辑页面，可以查看分时/日线/轴线/月线图了！！！')
+        chrome.action.setBadgeText({ text: "" });
+    });
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
         " <th >当日盈利</th> " +
@@ -107,6 +113,7 @@ document.addEventListener(
                 var data = $("#import-data").val();
                 var json = jQuery.parseJSON(data);
                 localStorage.setItem('stocks', JSON.stringify(json.stocks));
+                saveData('stocks', JSON.stringify(json.stocks));
                 localStorage.setItem('funds', JSON.stringify(json.funds));
                 $("#data-import-modal").modal("hide");
                 location.reload();
@@ -133,6 +140,7 @@ document.addEventListener(
                         contentType: 'application/x-www-form-urlencoded',
                         success: function (data) {
                             localStorage.setItem('stocks', JSON.stringify(data.value.stocks));
+                            saveData('stocks', JSON.stringify(data.value.stocks));
                             localStorage.setItem('funds', JSON.stringify(data.value.funds));
                             location.reload();
                         },
@@ -159,6 +167,7 @@ document.addEventListener(
                     }
                 }
                 localStorage.setItem('stocks', JSON.stringify(stocks));
+                saveData('stocks', JSON.stringify(stocks));
                 $("#stock-modal").modal("hide");
                 location.reload();
             }
@@ -250,6 +259,7 @@ document.addEventListener(
                 let stocksRemove = [];
                 let fundsRemove = [];
                 localStorage.setItem('stocks', JSON.stringify(stocksRemove));
+                saveData('stocks', JSON.stringify(stocksRemove));
                 localStorage.setItem('funds', JSON.stringify(fundsRemove));
                 location.reload();
             }
@@ -571,6 +581,7 @@ function initStockAndFundHtml() {
             $("#stock-code").val(stockList[this.sectionRowIndex].code);
             $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
+            $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
             $("#stock-delete-button")[0].style.display  = 'block';
             $("#stock-search-button")[0].style.display  = 'none';
             $("#stock-show-time-image-button")[0].style.display  = 'inline';
@@ -832,6 +843,7 @@ function saveStock() {
     var costPrise = $("#stock-costPrise").val();
     var stockName = $("#stock-name").val();
     var bonds = $("#stock-bonds").val();
+    var monitorHighPrice = $("#stock-monitor-high-price").val();
     if (stockName != "" && stockName != null) {
         var stocksArr = searchStockByName(stockName);
         var values = stocksArr[0].split("~");
@@ -857,6 +869,7 @@ function saveStock() {
         "code": code,
         "costPrise": costPrise,
         "bonds": bonds,
+        "monitorHighPrice": monitorHighPrice,
     }
     var stocks = localStorage.getItem('stocks');
     if (stocks == null) {
@@ -869,12 +882,14 @@ function saveStock() {
             stocks[k].code = stock.code;
             stocks[k].costPrise = stock.costPrise;
             stocks[k].bonds = stock.bonds;
+            stocks[k].monitorHighPrice = stock.monitorHighPrice;
             if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stocks[k].code);
                 stocks[k].addTimePrice = checkStockExsitResult.now;
                 stocks[k].addTime = getCurrentDate();
             }
             localStorage.setItem('stocks', JSON.stringify(stocks));
+            saveData('stocks', JSON.stringify(stocks));
             $("#stock-modal").modal("hide");
             location.reload();
             return;
@@ -890,6 +905,7 @@ function saveStock() {
     stock.addTime = getCurrentDate();
     stocks.push(stock);
     localStorage.setItem('stocks', JSON.stringify(stocks));
+    saveData('stocks', JSON.stringify(stocks));
     $("#stock-modal").modal("hide");
     location.reload();
 }

@@ -11,6 +11,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/BigDecimal.js"></script>
     <script src="js/stock-large-market.js"></script>
+    <script src="js/background.js"></script>
     <script src="js/stock-and-fund.js"></script>
     <script src="js/trend-image.js"></script>
 
@@ -111,6 +112,13 @@
                         <div class="you">
                             <input type="number" class="am-input-sm my-text" id="stock-bonds"
                                    placeholder="请输入持有份额">
+                        </div>
+                    </div>
+                    <div class="am-form-group am-cf">
+                        <div class="zuo">监控突破最高价格（可选）：</div>
+                        <div class="you">
+                            <input type="number" class="am-input-sm my-text" id="stock-monitor-high-price"
+                                   placeholder="请输入监控突破最高价格">
                         </div>
                     </div>
                 </div>
@@ -271,7 +279,7 @@
                     <button type="button" id="importFromLocalSpringBoot" class="btn btn-secondary btn-sm"
                             data-toggle="modal">本地股基神器SpringBoot数据导入
                     </button>
-                    单击具体股票/基金进入编辑页面，可以查看分时/日线/轴线/月线图了！！！
+                    <div id="monitor-text" style="display:inline; color: red">单击具体股票/基金进入编辑页面，可以查看分时/日线/轴线/月线图了！！！</div>
                 </dl>
             </div>
             <div>

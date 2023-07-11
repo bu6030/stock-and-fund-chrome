@@ -8,6 +8,12 @@
     "default_popup": "popup.html",
     "default_icon" : "img/128.png"
   },
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "permissions": [
+    "storage"
+  ],
   "content_scripts": [
       {
           "matches": ["https://*.google.com/*", "https://google.com/*"],
