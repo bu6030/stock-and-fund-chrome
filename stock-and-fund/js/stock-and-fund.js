@@ -615,6 +615,7 @@ function initStockAndFundHtml() {
             $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
             $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
+            $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
             $("#stock-delete-button")[0].style.display  = 'block';
             // $("#stock-search-button")[0].style.display  = 'none';
             $("#stock-show-time-image-button")[0].style.display  = 'inline';
@@ -880,6 +881,7 @@ function saveStock() {
     var stockName = $("#stock-name").val();
     var bonds = $("#stock-bonds").val();
     var monitorHighPrice = $("#stock-monitor-high-price").val();
+    var monitorLowPrice = $("#stock-monitor-low-price").val();
     if (stockName != "" && stockName != null) {
         var stocksArr = searchStockByName(stockName);
         var values = stocksArr[0].split("~");
@@ -906,6 +908,7 @@ function saveStock() {
         "costPrise": costPrise,
         "bonds": bonds,
         "monitorHighPrice": monitorHighPrice,
+        "monitorLowPrice": monitorLowPrice,
     }
     var stocks = localStorage.getItem('stocks');
     if (stocks == null) {
@@ -919,6 +922,7 @@ function saveStock() {
             stocks[k].costPrise = stock.costPrise;
             stocks[k].bonds = stock.bonds;
             stocks[k].monitorHighPrice = stock.monitorHighPrice;
+            stocks[k].monitorLowPrice = stock.monitorLowPrice;
             if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stocks[k].code);
                 stocks[k].addTimePrice = checkStockExsitResult.now;

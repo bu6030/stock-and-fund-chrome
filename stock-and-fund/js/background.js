@@ -5,10 +5,13 @@ function scheduleTask() {
 }
 
 // 当扩展程序安装时触发的事件
-chrome.runtime.onInstalled.addListener(function () {
-    // 在扩展程序安装后立即执行一次任务
-    // performTask();
+chrome.runtime.onInstalled.addListener((details) => {
+    // 开始定时执行任务
+    scheduleTask();
+});
 
+// 当浏览器打开时触发的事件
+chrome.runtime.onStartup.addListener(function () {
     // 开始定时执行任务
     scheduleTask();
 });
@@ -38,10 +41,15 @@ function saveData(key, value) {
 function monitorStockPrice(stockList) {
     var stocks = "";
     for (var k in stockList) {
-        if (stockList[k].monitorHighPrice != '') {
+        if ((typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorHighPrice != '')
+            || (typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorLowPrice != '')) {
             stocks += stockList[k].code + ",";
         }
     }
+    if(stocks == "") {
+        return;
+    }
+
     fetch("http://qt.gtimg.cn/q=" + stocks)
         .then(response => response.text())
         .then(data => {
@@ -58,14 +66,27 @@ function monitorStockPrice(stockList) {
                 var values = dataStr.split("~");
                 var name = stockList[l].name;
                 var now = parseFloat(values[3]);
-                var highPrice = parseFloat(monitorStock.monitorHighPrice);
-                if (now > highPrice) {
-                    stockList[l].monitorHighPrice = '';
-                    chrome.action.setBadgeText({ text: "1" });
-                    var text = name + "突破监控价格" + highPrice +"，达到" + now;
-                    saveData("MONITOR_TEXT", text);
-                    saveData('stocks', JSON.stringify(stockList));
-                    console.log("================监控价格超过", highPrice, "============");
+                if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
+                    var highPrice = parseFloat(monitorStock.monitorHighPrice);
+                    if (now > highPrice) {
+                        stockList[l].monitorHighPrice = '';
+                        chrome.action.setBadgeText({ text: "1" });
+                        var text = name + "涨破监控价格" + highPrice +"，达到" + now;
+                        saveData("MONITOR_TEXT", text);
+                        saveData('stocks', JSON.stringify(stockList));
+                        console.log("================监控价格涨破", highPrice, "============");
+                    }
+                }
+                if (typeof monitorStock.monitorLowPrice != 'undefined' && monitorStock.monitorLowPrice != '') {
+                    var lowPrice = parseFloat(monitorStock.monitorLowPrice);
+                    if (now < lowPrice) {
+                        stockList[l].monitorLowPrice = '';
+                        chrome.action.setBadgeText({ text: "1" });
+                        var text = name + "跌破监控价格" + lowPrice +"，达到" + now;
+                        saveData("MONITOR_TEXT", text);
+                        saveData('stocks', JSON.stringify(stockList));
+                        console.log("================监控价格跌破", lowPrice, "============");
+                    }
                 }
             }
         })
