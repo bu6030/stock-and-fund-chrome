@@ -1,7 +1,7 @@
 // 定时执行任务的函数
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
-    setInterval(performTask, 60000); // 1 分钟，您可以根据需要进行调整
+    setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
 }
 
 // 当扩展程序安装时触发的事件
@@ -15,17 +15,11 @@ chrome.runtime.onInstalled.addListener(function () {
 
 // 后台定时执行任务的函数
 function performTask() {
-    // 在这里编写您的任务逻辑
     console.log("执行任务...");
-    var stocks;
     getData('stocks').then((stockArr) => {
-        stocks = stockArr;
-        if (stocks == null) {
-            stockList = [];
-        } else {
-            stockList = JSON.parse(stocks);
+        if (stockArr != null && stockArr != "[]") {
+            monitorStockPrice(JSON.parse(stockArr));
         }
-        monitorStockPrice(stockList);
     });
 }
 // 从 chrome 本地缓存获取数据
