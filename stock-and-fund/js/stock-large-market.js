@@ -1,3 +1,4 @@
+// 初始化首页大盘股数据
 function initLargeMarketData() {
     var stocks = "sh000001,sz399001,sz399006"
     $.ajax({

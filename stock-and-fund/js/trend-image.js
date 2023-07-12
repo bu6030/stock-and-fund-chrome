@@ -1,7 +1,7 @@
 //分时图/日线/周线/月线使用
 let timeImageCode;
 let timeImageType;
-
+// 展示分时图
 function showMinuteImage() {
     let path = "";
     if (timeImageType == "FUND") {
@@ -23,7 +23,7 @@ function showMinuteImage() {
     $("#time-image-modal").modal();
     $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
 }
-
+// 展示日线图
 function showDayImage() {
     let path = "";
     if (timeImageType == "FUND") {
@@ -34,7 +34,7 @@ function showDayImage() {
     $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }
-
+// 展示周线图
 function showWeekImage() {
     let path = "";
     if (timeImageType == "FUND") {
@@ -45,7 +45,7 @@ function showWeekImage() {
     // $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }
-
+// 展示月线图
 function showMonthImage() {
     let path = "";
     if (timeImageType == "FUND") {
@@ -56,7 +56,7 @@ function showMonthImage() {
     // $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }
-
+// 获取当前日期，年-月-日格式
 function getCurrentDate() {
     var date = new Date();
     var year= date.getFullYear() ; // 得到当前年份
@@ -65,17 +65,4 @@ function getCurrentDate() {
     var day = date.getDate(); // 得到当前天数
     day = day >= 10 ? day :'0' + day; // 补零
     return year + '-' + month + '-' + day; // 这里传入的是字符串
-}
-
-function downloadJsonOrTxt(filename, text) {
-    var pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    pom.setAttribute('download', filename);
-    if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
-        event.initEvent('click', true, true);
-        pom.dispatchEvent(event);
-    } else {
-        pom.click();
-    }
 }

@@ -35,8 +35,8 @@
                     <div class="am-form-group am-cf">
                         <div class="zuo">基金名称（可选）：</div>
                         <div class="you">
-                            <input type="text" disabled="disabled" class="am-input-sm my-text" id="fund-name" placeholder="可以输入部分名字搜索出基金编码">
-                            <button type="button" class="btn btn-primary" id="fund-search-button">搜索</button>
+                            <input type="text" disabled="disabled" class="am-input-sm my-text" id="fund-name" placeholder="基金名称">
+<!--                            <button type="button" class="btn btn-primary" id="fund-search-button">搜索</button>-->
                         </div>
                     </div>
                     <div class="am-form-group am-cf">
@@ -89,8 +89,8 @@
                     <div class="am-form-group am-cf">
                         <div class="zuo">股票名称（可选）：</div>
                         <div class="you">
-                            <input type="text" disabled="disabled" class="am-input-sm my-text" id="stock-name" placeholder="可以输入部分名字搜索出股票编码">
-                            <button type="button" class="btn btn-primary" id="stock-search-button">搜索</button>
+                            <input type="text" disabled="disabled" class="am-input-sm my-text" id="stock-name" placeholder="股票名称">
+<!--                            <button type="button" class="btn btn-primary" id="stock-search-button">搜索</button>-->
                         </div>
                     </div>
                     <div class="am-form-group am-cf">
@@ -178,16 +178,16 @@
                 <!-- 模态框主体 -->
                 <div class="modal-body my-font">
                     <div class="am-form-group am-cf">
-                        <div class="zuo">导入数据文本（导出txt文件的文本内容粘贴到此处）：</div>
+                        <div class="zuo">导入数据文件：</div>
                         <div class="you">
-                            <input type="text" class="am-input-sm my-text" id="import-data">
+                            <input type="file" id="file-input">
                         </div>
                     </div>
                 </div>
 
                 <!-- 模态框底部 -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-sm" id="data-import-button">导入</button>
+<!--                    <button type="button" class="btn btn-primary btn-sm" id="data-import-button">导入</button>-->
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">关闭</button>
                 </div>
 
@@ -196,35 +196,35 @@
     </div>
 
     <!-- 导出数据模态框 -->
-    <div class="modal fade" id="data-export-modal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+<!--    <div class="modal fade" id="data-export-modal">-->
+<!--        <div class="modal-dialog modal-lg">-->
+<!--            <div class="modal-content">-->
 
-                <!-- 模态框头部 -->
-                <div class="modal-header">
-                    <h4 class="modal-title">导出数据</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+<!--                &lt;!&ndash; 模态框头部 &ndash;&gt;-->
+<!--                <div class="modal-header">-->
+<!--                    <h4 class="modal-title">导出数据</h4>-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                </div>-->
 
-                <!-- 模态框主体 -->
-                <div class="modal-body my-font">
-                    <div class="am-form-group am-cf">
-                        <div class="zuo">导出数据文本：</div>
-                        <div class="you">
-                            <input type="text" class="my-text" id="export-data">
-                        </div>
-                    </div>
-                </div>
+<!--                &lt;!&ndash; 模态框主体 &ndash;&gt;-->
+<!--                <div class="modal-body my-font">-->
+<!--                    <div class="am-form-group am-cf">-->
+<!--                        <div class="zuo">导出数据文本：</div>-->
+<!--                        <div class="you">-->
+<!--                            <input type="text" class="my-text" id="export-data">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <!-- 模态框底部 -->
-                <div class="modal-footer">
-                    <button type="button" id="data-export-button" class="btn btn-secondary btn-sm">导出txt文件</button>
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">关闭</button>
-                </div>
+<!--                &lt;!&ndash; 模态框底部 &ndash;&gt;-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" id="data-export-button" class="btn btn-secondary btn-sm">导出txt文件</button>-->
+<!--                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">关闭</button>-->
+<!--                </div>-->
 
-            </div>
-        </div>
-    </div>
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <!-- 搜索股票模态框 -->
     <div class="modal fade" id="search-stock-modal">
@@ -264,7 +264,7 @@
             <div>
                 <!--                <ul class="am-icon-users my-font"> 股票基金汇总</ul>-->
                 <dl>
-                    <button type="button" id="showExportDataDialog" class="btn btn-secondary btn-sm"
+                    <button type="button" id="data-export-button" class="btn btn-secondary btn-sm"
                             data-toggle="modal">导出数据
                     </button>
                     <button type="button" id="showImportDataDialog" class="btn btn-secondary btn-sm"

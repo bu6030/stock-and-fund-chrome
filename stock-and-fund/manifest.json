@@ -12,7 +12,8 @@
     "service_worker": "js/background.js"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "fileSystem"
   ],
   "content_scripts": [
       {
