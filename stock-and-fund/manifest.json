@@ -22,12 +22,6 @@
           "run_at": "document_start"
       }
   ],
-  "web_accessible_resources": [
-    {
-      "resources": ["js/*","css/*"],
-      "matches": ["<all_urls>"]
-    }
-  ],
   "host_permissions": [
     "http://*/*",
     "https://*/*"
