@@ -401,7 +401,7 @@ function initData() {
                         stockList[l].time = values[30] + "";
                         stockList[l].max = values[33] + "";
                         stockList[l].min = values[34] + "";
-                        stockList[l].buyOrSellStockRequestList = [];
+                        // stockList[l].buyOrSellStockRequestList = [];
 
                         var now = new BigDecimal(stockList[l].now + "");
                         var costPrise = new BigDecimal(stockList[l].costPrise + "")
