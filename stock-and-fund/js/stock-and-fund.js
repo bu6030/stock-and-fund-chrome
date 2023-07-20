@@ -841,37 +841,66 @@ function searchStockByName(name) {
 // 通过基金名称搜索基金列表
 function searchFundByName(name) {
     var fundsArrs = [];
-    $.ajax({
-        url: Env.GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN,
-        type: "get",
-        data: {},
-        async: false,
-        dataType: 'text',
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data) {
-            data = data.replace("var r = ", "").replace(";", "");
-            var fundsArr = jQuery.parseJSON(data);
-            var fundCode = "";
-            var fundName = "";
-            for (var i = 0; i < fundsArr.length; i++) {
-                if (fundsArr[i][2].indexOf(name) != -1) {
-                    var fund = {
-                        "fundCode":fundsArr[i][0],
-                        "fundName":fundsArr[i][2]
-                    };
-                    fundsArrs.push(fund);
-                }
+    var allFundArr = localStorage.getItem('all_fund_arr');
+    var timeCached = localStorage.getItem('all_fund_arr_time_cached');
+    var nowTimestamp = Date.now();
+    if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_DAY) {
+        console.log("缓存超过 1 天，重新调用接口");
+        allFundArr = null;
+    }
+    if (allFundArr != null) {
+        var fundsArr = jQuery.parseJSON(allFundArr);
+        for (var i = 0; i < fundsArr.length; i++) {
+            if (fundsArr[i][2].indexOf(name) != -1) {
+                var fund = {
+                    "fundCode": fundsArr[i][0],
+                    "fundName": fundsArr[i][2]
+                };
+                fundsArrs.push(fund);
             }
-            if (fundsArrs.length == 0) {
-                alert("未搜索到该基金");
-            }
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
         }
-    });
+        if (fundsArrs.length == 0) {
+            alert("未搜索到该基金");
+        }
+    } else {
+        $.ajax({
+            url: Env.GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN,
+            type: "get",
+            data: {},
+            async: false,
+            dataType: 'text',
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (data) {
+                data = data.replace("var r = ", "").replace(";", "");
+                var fundsArr = jQuery.parseJSON(data);
+                var timestamp = Date.now();
+                // 减少所有基金的搜索频率，缓存数据
+                localStorage.setItem('all_fund_arr', JSON.stringify(fundsArr));
+                saveData('all_fund_arr', JSON.stringify(fundsArr));
+                localStorage.setItem('all_fund_arr_time_cached', timestamp);
+                saveData('all_fund_arr_time_cached', timestamp);
+                var fundCode = "";
+                var fundName = "";
+                for (var i = 0; i < fundsArr.length; i++) {
+                    if (fundsArr[i][2].indexOf(name) != -1) {
+                        var fund = {
+                            "fundCode": fundsArr[i][0],
+                            "fundName": fundsArr[i][2]
+                        };
+                        fundsArrs.push(fund);
+                    }
+                }
+                if (fundsArrs.length == 0) {
+                    alert("未搜索到该基金");
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+            }
+        });
+    }
     return fundsArrs;
 }
 
@@ -930,8 +959,9 @@ function saveStock() {
             }
             localStorage.setItem('stocks', JSON.stringify(stocks));
             saveData('stocks', JSON.stringify(stocks));
+            stockList = stocks;
             $("#stock-modal").modal("hide");
-            location.reload();
+            initData();
             return;
         }
     }
@@ -946,8 +976,9 @@ function saveStock() {
     stocks.push(stock);
     localStorage.setItem('stocks', JSON.stringify(stocks));
     saveData('stocks', JSON.stringify(stocks));
+    stockList = stocks;
     $("#stock-modal").modal("hide");
-    location.reload();
+    initData();
 }
 // 保存基金
 function saveFund() {
@@ -996,8 +1027,9 @@ function saveFund() {
                 funds[k].addTime = getCurrentDate();
             }
             localStorage.setItem('funds', JSON.stringify(funds));
+            fundList = funds;
             $("#fund-modal").modal("hide");
-            location.reload();
+            initData();
             return;
         }
     }
@@ -1011,8 +1043,9 @@ function saveFund() {
     fund.addTime = getCurrentDate();
     funds.push(fund);
     localStorage.setItem('funds', JSON.stringify(funds));
+    fundList = funds;
     $("#fund-modal").modal("hide");
-    location.reload();
+    initData();
 }
 
 // 导出文件方法

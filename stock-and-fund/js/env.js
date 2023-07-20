@@ -11,8 +11,9 @@ let Env = {
     // 下面这两个地址可以通过本地启动stock-and-fund项目
     // github地址为：https://github.com/bu6030/stock-and-fund
     // GET_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/fund",
-    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/stockAndFund",
     GET_HELP_DOCUMENT: "https://zhuanlan.zhihu.com/p/640002036",
+    TIME_CACHED_ONE_DAY : 24 * 60 * 60 * 1000,
+    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/stockAndFund",
 }
 
 let develop = false;
