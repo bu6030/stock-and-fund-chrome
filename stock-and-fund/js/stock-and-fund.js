@@ -961,6 +961,7 @@ function saveStock() {
             saveData('stocks', JSON.stringify(stocks));
             stockList = stocks;
             $("#stock-modal").modal("hide");
+            $("#search-stock-modal").modal("hide");
             initData();
             return;
         }
@@ -969,6 +970,7 @@ function saveStock() {
     if (!checkStockExsitResult.checkReuslt) {
         alert("不存在该股票");
         $("#stock-modal").modal("hide");
+        $("#search-stock-modal").modal("hide");
         return;
     }
     stock.addTimePrice = checkStockExsitResult.now;
@@ -978,6 +980,7 @@ function saveStock() {
     saveData('stocks', JSON.stringify(stocks));
     stockList = stocks;
     $("#stock-modal").modal("hide");
+    $("#search-stock-modal").modal("hide");
     initData();
 }
 // 保存基金
@@ -1029,6 +1032,7 @@ function saveFund() {
             localStorage.setItem('funds', JSON.stringify(funds));
             fundList = funds;
             $("#fund-modal").modal("hide");
+            $("#search-fund-modal").modal("hide");
             initData();
             return;
         }
@@ -1037,6 +1041,7 @@ function saveFund() {
     if (!checkFundExsitReuslt.checkReuslt) {
         alert("不存在该基金");
         $("#fund-modal").modal("hide");
+        $("#search-fund-modal").modal("hide");
         return;
     }
     fund.addTimePrice = checkFundExsitReuslt.now;
@@ -1045,6 +1050,7 @@ function saveFund() {
     localStorage.setItem('funds', JSON.stringify(funds));
     fundList = funds;
     $("#fund-modal").modal("hide");
+    $("#search-fund-modal").modal("hide");
     initData();
 }
 

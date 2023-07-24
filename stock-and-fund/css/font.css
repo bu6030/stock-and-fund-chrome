@@ -10,8 +10,8 @@
 }
 .my-div {
     width:970px;
-    height:500px;
-    overflow-x:auto;
+    height: 100%;
+    /*overflow-x:auto;*/
     margin-bottom: 40px;
 }
 .my-input-group {
