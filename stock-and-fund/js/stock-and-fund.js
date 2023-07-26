@@ -94,15 +94,6 @@ document.addEventListener(
                 $("#data-import-modal").modal();
             }
         );
-        // let showExportDataDialog = document.getElementById('showExportDataDialog');
-        // showExportDataDialog.addEventListener('click', function () {
-        //         $("#data-export-modal").modal();
-        //         var data = {};
-        //         data.stocks = stockList;
-        //         data.funds = fundList;
-        //         $("#export-data").val(JSON.stringify(data));
-        //     }
-        // );
         // 首页，导出数据按钮点击展导出 txt 文件
         let dataExportButton = document.getElementById('data-export-button');
         dataExportButton.addEventListener('click', function () {
@@ -112,17 +103,6 @@ document.addEventListener(
                 downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
             }
         );
-        // let dataImportButton = document.getElementById('data-import-button');
-        // dataImportButton.addEventListener('click', function () {
-        //         var data = $("#import-data").val();
-        //         var json = jQuery.parseJSON(data);
-        //         localStorage.setItem('stocks', JSON.stringify(json.stocks));
-        //         saveData('stocks', JSON.stringify(json.stocks));
-        //         localStorage.setItem('funds', JSON.stringify(json.funds));
-        //         $("#data-import-modal").modal("hide");
-        //         location.reload();
-        //     }
-        // );
         // 导入数据页面，导入文件选择 txt 文件导入数据
         var fileInput = document.getElementById('file-input');
         fileInput.addEventListener('change', async function(e) {
@@ -214,32 +194,6 @@ document.addEventListener(
                 location.reload();
             }
         );
-
-        // let stockSearchButton = document.getElementById('stock-search-button');
-        // stockSearchButton.addEventListener('click', function () {
-        //         var stockName = $("#stock-name").val();
-        //         if(stockName == "" || stockName == null) {
-        //             alert("请输入股票名称");
-        //             return;
-        //         }
-        //         var stocksArr = searchStockByName(stockName);
-        //         var values = stocksArr[0].split("~");
-        //         var stockCode = values[0] + values[1];
-        //         $("#stock-code").val(stockCode);
-        //     }
-        // );
-        // let fundSearchButton = document.getElementById('fund-search-button');
-        // fundSearchButton.addEventListener('click', function () {
-        //         var fundName = $("#fund-name").val();
-        //         if(fundName == "" || fundName == null){
-        //             alert("请输入基金名称");
-        //             return;
-        //         }
-        //         var fundsArr = searchFundByName(fundName);
-        //         $("#fund-code").val(fundsArr[0].fundCode);
-        //         $("#fund-name").val(fundsArr[0].fundName);
-        //     }
-        // );
         // 基金编辑页面，点击走势图按钮
         let fundShowTimeImageButton = document.getElementById('fund-show-time-image-button');
         fundShowTimeImageButton.addEventListener('click', function () {
@@ -486,32 +440,6 @@ function initFund() {
     }
     initStockAndFundHtml();
 }
-
-// function getFundBySelfService(fund) {
-//     $.ajax({
-//         url: Env.GET_FUND_FROM_LOCAL_SERVICE + "?fundCode=" + fund.fundCode + "&costPrise=" + fund.costPrise + "&bonds=" + fund.bonds + "&app=" + fund.app,
-//         type: "get",
-//         data: {},
-//         async: false,
-//         dataType: 'json',
-//         contentType: 'application/x-www-form-urlencoded',
-//         success: function (data) {
-//             fund.name = data.value.fundName + "";
-//             fund.jzrq = data.value.jzrq + "";
-//             fund.dwjz = data.value.dwjz + "";
-//             fund.gsz = data.value.gsz + "";
-//             fund.gszzl = data.value.gszzl + "";
-//             fund.gztime = data.value.gztime + "";
-//             fund.incomePercent = data.value.incomePercent + "";
-//             fund.income = data.value.income + "";
-//         },
-//         error: function (XMLHttpRequest, textStatus, errorThrown) {
-//             console.log(XMLHttpRequest.status);
-//             console.log(XMLHttpRequest.readyState);
-//             console.log(textStatus);
-//         }
-//     });
-// }
 
 // 检查基金是否存在
 function checkFundExsit(code) {

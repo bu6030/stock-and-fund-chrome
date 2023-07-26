@@ -27,7 +27,7 @@ function initLargeMarketData() {
                 str += "<a " + style + aId +" >" + name + " " + now + "（" + change + "&nbsp;&nbsp;" + changePercent +"%）   </a>";
             }
             $("#stock-large-market").html(str);
-
+            // 点击上证指数
             let largeMarketSh000001 = document.getElementById('large-market-sh000001');
             largeMarketSh000001.addEventListener('click', function () {
                 timeImageCode = "sh000001";
@@ -40,6 +40,7 @@ function initLargeMarketData() {
                 $("#time-image-modal").modal();
                 $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
             });
+            // 点击深证成指
             let largeMarketSz399001 = document.getElementById('large-market-sz399001');
             largeMarketSz399001.addEventListener('click', function () {
                 timeImageCode = "sz399001";
@@ -52,6 +53,7 @@ function initLargeMarketData() {
                 $("#time-image-modal").modal();
                 $("#time-image").html('<img src="'+path+'" width="100%" length="100%" />');
             });
+            // 点击创业板指
             let largeMarketSz399006 = document.getElementById('large-market-sz399006');
             largeMarketSz399006.addEventListener('click', function () {
                 timeImageCode = "sz399006";
