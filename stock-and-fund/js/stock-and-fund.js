@@ -321,6 +321,14 @@ document.addEventListener(
                 }
             }
         );
+        // 首页，点击加入微信群
+        let showWechatGroupButton = document.getElementById('show-wechat-group-button');
+        showWechatGroupButton.addEventListener('click', function () {
+                let path = Env.WECHAT_GROUP_QR_CODE;
+                $("#wechat-group-qr-code-image").html('<img src="'+path+'" width="60%" length="60%" />');
+                $("#wechat-group-modal").modal();
+            }
+        );
     }
 );
 // 股票搜索后，接口返回为 unicode 编码，转换为中文

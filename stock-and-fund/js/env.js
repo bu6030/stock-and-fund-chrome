@@ -12,6 +12,7 @@ let Env = {
     // github地址为：https://github.com/bu6030/stock-and-fund
     // GET_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/fund",
     GET_HELP_DOCUMENT: "https://zhuanlan.zhihu.com/p/640002036",
+    WECHAT_GROUP_QR_CODE: "https://bu6030.github.io/images/wechat-group-qr-code.png",
     TIME_CACHED_ONE_DAY : 24 * 60 * 60 * 1000,
     GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/stockAndFund",
 }

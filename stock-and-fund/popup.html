@@ -230,6 +230,30 @@
             </div>
         </div>
     </div>
+    <!-- 加入微信群模态框 -->
+    <div class="modal fade" id="wechat-group-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">扫码加入微信群 </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <div align="center" id="wechat-group-qr-code-image" ></div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!-- 股票基金主体页面 start -->
     <div>
         <div>
@@ -244,6 +268,9 @@
                     </button>
                     <button type="button" id="remove-all-data-button" class="btn btn-secondary btn-sm"
                             data-toggle="modal">清空数据
+                    </button>
+                    <button type="button" id="show-wechat-group-button" class="btn btn-secondary btn-sm"
+                            data-toggle="modal">加入微信群
                     </button>
                     <button type="button" id="help-document-button" class="btn btn-secondary btn-sm"
                             data-toggle="modal">使用说明
