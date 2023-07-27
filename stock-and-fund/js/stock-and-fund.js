@@ -324,7 +324,8 @@ document.addEventListener(
         // 首页，点击加入微信群
         let showWechatGroupButton = document.getElementById('show-wechat-group-button');
         showWechatGroupButton.addEventListener('click', function () {
-                let path = Env.WECHAT_GROUP_QR_CODE;
+                let timestamp = Date.now();
+                let path = Env.WECHAT_GROUP_QR_CODE + "?date=" + timestamp;
                 $("#wechat-group-qr-code-image").html('<img src="'+path+'" width="60%" length="60%" />');
                 $("#wechat-group-modal").modal();
             }
