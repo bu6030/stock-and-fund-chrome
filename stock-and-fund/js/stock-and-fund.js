@@ -50,7 +50,7 @@ function initHtml() {
     // 在页面顶部显示一些监控信息，重要信息
     getData('MONITOR_TEXT').then((text) => {
         $("#monitor-text").html(text);
-        saveData('MONITOR_TEXT', '单击具体股票/基金进入编辑页面，可以查看分时/日线/轴线/月线图了！！！')
+        saveData('MONITOR_TEXT', '编辑股票页面增加监控最高/最低价格突破角标提醒了！！！')
         chrome.action.setBadgeText({ text: "" });
     });
     var stockHead = " <tr > " +
