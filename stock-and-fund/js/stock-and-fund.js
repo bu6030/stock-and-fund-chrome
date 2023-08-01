@@ -436,6 +436,27 @@ function initFund() {
                             var income = incomeDiff.multiply(bonds)
                                 .setScale(2, MathContext.ROUND_HALF_UP);
                             fundList[k].income = income + "";
+                        } else {
+                            let fund = checkFundExsitFromEastMoney(fundCode);
+                            fundList[k].dwjz = fund.dwjz;
+                            fundList[k].gsz = fund.dwjz;
+                            fundList[k].gszzl = "0";
+                            fundList[k].income = "0";
+                            fundList[k].incomePercent = "0";
+                            fundList[k].name = fund.name;
+                            var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                            var now = new BigDecimal(fund.dwjz + "");
+                            var incomeDiff = now.add(costPrice.negate());
+                            if (costPrice <= 0) {
+                                fundList[k].incomePercent = "0";
+                            } else {
+                                var incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
+                                    .multiply(BigDecimal.TEN)
+                                    .multiply(BigDecimal.TEN)
+                                    .setScale(3, MathContext.ROUND_HALF_UP);
+                                fundList[k].incomePercent = incomePercent + "";
+                            }
+
                         }
                     }
                 }
@@ -484,6 +505,40 @@ function checkFundExsit(code) {
     });
     return fund;
 }
+function checkFundExsitFromEastMoney(code) {
+    var fund = {};
+    fund.checkReuslt = false;
+    $.ajax({
+        url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            var json = data.JJXQ.Datas;
+            fund.name = json.SHORTNAME + "";
+            fund.dwjz = json.DWJZ + "";
+            fund.now = json.DWJZ + "";
+            // fund.jzrq = json.jzrq + "";
+            // fund.gsz = json.gsz + "";
+            // fund.gztime = json.gztime + "";
+            // var gsz = new BigDecimal(json.gsz + "");
+            // var dwjz = new BigDecimal(json.dwjz + "");
+            // fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
+            // var now = new BigDecimal(json.gsz + "");
+            fund.checkReuslt = true;
+            // fund.now = now + "";
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return fund;
+}
+
 // 检查股票是否存在
 function checkStockExsit(code) {
     var stock = {};
@@ -976,10 +1031,12 @@ function saveFund() {
     }
     let checkFundExsitReuslt = checkFundExsit(fund.fundCode);
     if (!checkFundExsitReuslt.checkReuslt) {
-        alert("不存在该基金");
-        $("#fund-modal").modal("hide");
-        $("#search-fund-modal").modal("hide");
-        return;
+        checkFundExsitReuslt = checkFundExsitFromEastMoney(fund.fundCode);
+        if (!checkFundExsitReuslt.checkReuslt) {
+            $("#fund-modal").modal("hide");
+            $("#search-fund-modal").modal("hide");
+            return;
+        }
     }
     fund.addTimePrice = checkFundExsitReuslt.now;
     fund.addTime = getCurrentDate();
