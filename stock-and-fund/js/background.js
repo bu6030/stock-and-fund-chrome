@@ -18,12 +18,19 @@ chrome.runtime.onStartup.addListener(function () {
 
 // 后台定时执行任务的函数
 function performTask() {
-    console.log("执行任务...");
-    getData('stocks').then((stockArr) => {
-        if (stockArr != null && stockArr != "[]") {
-            monitorStockPrice(JSON.parse(stockArr));
-        }
-    });
+    var date = new Date();
+    var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+        || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+    if (isTradingTime) {
+        console.log("交易时间，执行任务...");
+        getData('stocks').then((stockArr) => {
+            if (stockArr != null && stockArr != "[]") {
+                monitorStockPrice(JSON.parse(stockArr));
+            }
+        });
+    } else {
+        console.log("非交易时间，停止执行任务...");
+    }
 }
 // 从 chrome 本地缓存获取数据
 function getData(key) {
