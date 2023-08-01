@@ -45,6 +45,8 @@
 34. 优化缓存时间，基金名称搜索接口缓存 1 天 2023/7/20
 35. 选择股票基金后自动关闭选择页面 2023/7/24
 36. 增加加入微信群功能 2023/7/26
+37. 后台定时监控价格突破/跌破价格修改为开盘交易时间查询 2023/8/1
+38. 增加QDII基金 2023/8/1
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
