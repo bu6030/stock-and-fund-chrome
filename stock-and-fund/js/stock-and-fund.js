@@ -801,6 +801,10 @@ function getTotalTableHtml(totalMarketValueResult) {
 
 // 通过股票名称搜索股票列表
 function searchStockByName(name) {
+    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1
+        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1) {
+        name = name.substring(2, name.length);
+    }
     var stocksArr;
     $.ajax({
         url: Env.GET_STOCK_CODE_BY_NAME_FROM_GTIMG + "?v=2&t=all&c=1&q=" + name,
@@ -843,7 +847,8 @@ function searchFundByName(name) {
     if (allFundArr != null) {
         var fundsArr = jQuery.parseJSON(allFundArr);
         for (var i = 0; i < fundsArr.length; i++) {
-            if (fundsArr[i][2].indexOf(name) != -1) {
+            // 通过名字或者基金编码查询
+            if (fundsArr[i][2].indexOf(name) != -1 || fundsArr[i][0].indexOf(name) != -1) {
                 var fund = {
                     "fundCode": fundsArr[i][0],
                     "fundName": fundsArr[i][2]
@@ -874,7 +879,8 @@ function searchFundByName(name) {
                 var fundCode = "";
                 var fundName = "";
                 for (var i = 0; i < fundsArr.length; i++) {
-                    if (fundsArr[i][2].indexOf(name) != -1) {
+                    // 通过名字或者基金编码查询
+                    if (fundsArr[i][2].indexOf(name) != -1 || fundsArr[i][0].indexOf(name) != -1) {
                         var fund = {
                             "fundCode": fundsArr[i][0],
                             "fundName": fundsArr[i][2]
