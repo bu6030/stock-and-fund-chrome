@@ -450,10 +450,14 @@ function initFund() {
                             if (costPrice <= 0) {
                                 fundList[k].incomePercent = "0";
                             } else {
-                                var incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
+                                let incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
                                     .multiply(BigDecimal.TEN)
                                     .multiply(BigDecimal.TEN)
                                     .setScale(3, MathContext.ROUND_HALF_UP);
+                                let bonds = new BigDecimal(fundList[k].bonds + "");
+                                let income = incomeDiff.multiply(bonds)
+                                    .setScale(2, MathContext.ROUND_HALF_UP);
+                                fundList[k].income = income + "";
                                 fundList[k].incomePercent = incomePercent + "";
                             }
 
