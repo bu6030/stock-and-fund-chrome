@@ -49,6 +49,7 @@
 38. 增加QDII基金 2023/8/1
 39. 支持股票基金编码以及名称搜索 2023/8/2
 40. QDII 基金收益计算错误 2023/8/4
+41. 后台监控股票价格突破执行时间优化 2023/8/4
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
