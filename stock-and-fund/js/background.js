@@ -1,7 +1,7 @@
 // 定时执行任务的函数
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
-    setInterval(performTask, 60000); // 60s，您可以根据需要进行调整
+    setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
 }
 
 // 当扩展程序安装时触发的事件
