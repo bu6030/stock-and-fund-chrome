@@ -40,8 +40,8 @@ function saveData(key, value) {
 }
 // 后台监控突破价格并提示
 function monitorStockPrice(stockList) {
-    console.log("执行任务...");
     var date = new Date();
+    console.log("执行任务...", date.toLocaleString());
     var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
         || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
     if (isTradingTime) {
