@@ -631,6 +631,11 @@ function initStockAndFundHtml() {
             $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
             $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
             $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
+//            $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
+//            $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
+//            $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
+//            $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
+
             $("#fund-delete-button")[0].style.display  = 'block';
             // $("#fund-search-button")[0].style.display  = 'none';
             $("#fund-show-time-image-button")[0].style.display  = 'inline';
@@ -990,6 +995,11 @@ function saveFund() {
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     var fundName = $("#fund-name").val();
+//    var fundCycleInvestType = $("#fund-cycle-invest-type").val();
+//    var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
+//    var fundCycleInvestValue = $("#fund-cycle-invest-value").val();
+//    var fundCycleInvestRate = $("#fund-cycle-invest-rate").val();
+
     if (fundName != "" && fundName != null) {
         var fundsArr = searchFundByName(fundName);
         if (fundsArr.length == 0) {
@@ -1014,6 +1024,10 @@ function saveFund() {
         "fundCode": code,
         "costPrise": costPrise,
         "bonds": bonds,
+//        "fundCycleInvestType": fundCycleInvestType,
+//        "fundCycleInvestDate": fundCycleInvestDate,
+//        "fundCycleInvestValue": fundCycleInvestValue,
+//        "fundCycleInvestRate": fundCycleInvestRate
     }
     var funds = localStorage.getItem('funds');
     if (funds == null) {
@@ -1026,12 +1040,17 @@ function saveFund() {
             funds[k].fundCode = fund.fundCode;
             funds[k].costPrise = fund.costPrise;
             funds[k].bonds = fund.bonds;
+//            funds[k].fundCycleInvestType = fund.fundCycleInvestType;
+//            funds[k].fundCycleInvestDate = fund.fundCycleInvestDate;
+//            funds[k].fundCycleInvestValue = fund.fundCycleInvestValue;
+//            funds[k].fundCycleInvestRate = fund.fundCycleInvestRate;
             if (funds[k].addTimePrice == null || funds[k].addTimePrice == '') {
                 let checkFundExsitReuslt = checkFundExsit(funds[k].fundCode);
                 funds[k].addTimePrice = checkFundExsitReuslt.now;
                 funds[k].addTime = getCurrentDate();
             }
             localStorage.setItem('funds', JSON.stringify(funds));
+            saveData('funds', JSON.stringify(funds));
             fundList = funds;
             $("#fund-modal").modal("hide");
             $("#search-fund-modal").modal("hide");
@@ -1052,6 +1071,7 @@ function saveFund() {
     fund.addTime = getCurrentDate();
     funds.push(fund);
     localStorage.setItem('funds', JSON.stringify(funds));
+    saveData('funds', JSON.stringify(funds));
     fundList = funds;
     $("#fund-modal").modal("hide");
     $("#search-fund-modal").modal("hide");
