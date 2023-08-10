@@ -47,12 +47,6 @@ function initHtml() {
     if (!develop) {
         $("#importFromLocalSpringBoot")[0].style.display = "none";
     }
-    // 在页面顶部显示一些监控信息，重要信息
-    getData('MONITOR_TEXT').then((text) => {
-        $("#monitor-text").html(text);
-        saveCacheData('MONITOR_TEXT', '编辑股票页面增加监控最高/最低价格突破角标提醒了！！！')
-        chrome.action.setBadgeText({ text: "" });
-    });
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
         " <th >当日盈利</th> " +
@@ -83,6 +77,8 @@ function initHtml() {
         " </tr>";
     $("#fund-head").html(fundHead);
     $("#stock-head").html(stockHead);
+    // 在页面顶部显示一些监控信息，重要信息
+    initNotice();
 }
 // 按钮监听事件
 document.addEventListener(
@@ -465,6 +461,34 @@ function initFund() {
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
+                // 有些基金找不到会 404 报错，调用另外一个接口
+                for (var k in fundList) {
+                    if (fundList[k].fundCode == fundCode) {
+                        let fund = checkFundExsitFromEastMoney(fundCode);
+                        fundList[k].dwjz = fund.dwjz;
+                        fundList[k].gsz = fund.dwjz;
+                        fundList[k].gszzl = "0";
+                        fundList[k].income = "0";
+                        fundList[k].incomePercent = "0";
+                        fundList[k].name = fund.name;
+                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                        var now = new BigDecimal(fund.dwjz + "");
+                        var incomeDiff = now.add(costPrice.negate());
+                        if (costPrice <= 0) {
+                            fundList[k].incomePercent = "0";
+                        } else {
+                            let incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
+                                .multiply(BigDecimal.TEN)
+                                .multiply(BigDecimal.TEN)
+                                .setScale(3, MathContext.ROUND_HALF_UP);
+                            let bonds = new BigDecimal(fundList[k].bonds + "");
+                            let income = incomeDiff.multiply(bonds)
+                                .setScale(2, MathContext.ROUND_HALF_UP);
+                            fundList[k].income = income + "";
+                            fundList[k].incomePercent = incomePercent + "";
+                        }
+                    }
+                }
             }
         });
     }
@@ -1093,4 +1117,11 @@ async function readCacheData(key) {
     var result = await getData(key);
     console.log("result === " + result);
     return result;
+}
+
+async function initNotice(){
+    var text = await readCacheData('MONITOR_TEXT');
+    $("#monitor-text").html(text);
+    saveCacheData('MONITOR_TEXT', '编辑股票页面增加监控最高/最低价格突破角标提醒了！！！')
+    chrome.action.setBadgeText({ text: "" });
 }
