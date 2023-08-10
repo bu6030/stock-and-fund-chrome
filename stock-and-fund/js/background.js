@@ -120,7 +120,7 @@ function monitorFundCycleInvest(fundList) {
     console.log("执行定投任务...", date.toLocaleString());
     var isCycleInvestTime = date.toLocaleTimeString() >= "16:45:00" && date.toLocaleTimeString() < "16:45:20";
     if (isCycleInvestTime) {
-        for (var k in fundList) {
+        for (let k in fundList) {
             if (typeof fundList[k].fundCycleInvestType != 'undefined' && fundList[k].fundCycleInvestType != ''
                 && fundList[k].fundCycleInvestType != 'no') {
                 // 获取 date 的星期，与配置中的星期不同，则当日不定投
@@ -136,16 +136,15 @@ function monitorFundCycleInvest(fundList) {
                     continue;
                 }
                 console.log("执行定投任务基金编码", fundList[k].fundCode);
-                var newK = k;
                 var fundListNew = fundList;
-                fetch("http://fundgz.1234567.com.cn/js/" + fundListNew[newK].fundCode + ".js")
+                fetch("http://fundgz.1234567.com.cn/js/" + fundListNew[k].fundCode + ".js")
                     .then(response => response.text())
                     .then(data => {
-                        console.log("定投1" + fundListNew[newK].fundCode + fundListNew[newK].fundCycleInvestType + fundListNew[newK].bonds + fundListNew[newK].costPrise);
+                        console.log("定投1" + fundListNew[k].fundCode + fundListNew[k].fundCycleInvestType + fundListNew[k].bonds + fundListNew[k].costPrise);
                         var json = JSON.parse(data.substring(8, data.length - 2));
                         var gsz = parseFloat(json.gsz);
-                        var fundCycleInvestValue = parseFloat(fundListNew[newK].fundCycleInvestValue);
-                        var fundCycleInvestRate = parseFloat(fundListNew[newK].fundCycleInvestRate);
+                        var fundCycleInvestValue = parseFloat(fundListNew[k].fundCycleInvestValue);
+                        var fundCycleInvestRate = parseFloat(fundListNew[k].fundCycleInvestRate);
                         // 手续费
                         var fundCycleInvestFee = fundCycleInvestValue * fundCycleInvestRate / 100;
                         console.log("手续费" + fundCycleInvestFee.toFixed(2));
@@ -153,12 +152,12 @@ function monitorFundCycleInvest(fundList) {
                         console.log("新买入金额" + newInvestValue.toFixed(2));
                         var newBonds = newInvestValue / gsz;
                         console.log("新增持仓" + newBonds.toFixed(2));
-                        var totalPrise = parseFloat(fundListNew[newK].costPrise) * parseFloat(fundListNew[newK].bonds);
+                        var totalPrise = parseFloat(fundListNew[k].costPrise) * parseFloat(fundListNew[k].bonds);
                         console.log("总金额:" +totalPrise);
-                        console.log("旧持仓:" +fundListNew[newK].bonds +";旧成本:"+ fundListNew[newK].costPrise);
-                        fundListNew[newK].bonds = parseFloat(parseFloat(fundListNew[newK].bonds) + parseFloat(newBonds)).toFixed(2);
-                        fundListNew[newK].costPrise = ((parseFloat(totalPrise) + parseFloat(newInvestValue)) / parseFloat(fundListNew[newK].bonds)).toFixed(4);
-                        console.log("新持仓:" +fundListNew[newK].bonds +";新成本:"+ fundListNew[newK].costPrise);
+                        console.log("旧持仓:" +fundListNew[k].bonds +";旧成本:"+ fundListNew[k].costPrise);
+                        fundListNew[k].bonds = parseFloat(parseFloat(fundListNew[k].bonds) + parseFloat(newBonds)).toFixed(2);
+                        fundListNew[k].costPrise = ((parseFloat(totalPrise) + parseFloat(newInvestValue)) / parseFloat(fundListNew[k].bonds)).toFixed(4);
+                        console.log("新持仓:" +fundListNew[k].bonds +";新成本:"+ fundListNew[k].costPrise);
                         saveData('funds', JSON.stringify(fundListNew));
                     })
                 .catch(error => {
