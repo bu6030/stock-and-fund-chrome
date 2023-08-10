@@ -50,7 +50,7 @@ function initHtml() {
     // 在页面顶部显示一些监控信息，重要信息
     getData('MONITOR_TEXT').then((text) => {
         $("#monitor-text").html(text);
-        saveData('MONITOR_TEXT', '编辑股票页面增加监控最高/最低价格突破角标提醒了！！！')
+        saveCacheData('MONITOR_TEXT', '编辑股票页面增加监控最高/最低价格突破角标提醒了！！！')
         chrome.action.setBadgeText({ text: "" });
     });
     var stockHead = " <tr > " +
@@ -1089,7 +1089,6 @@ function saveCacheData(key, value) {
 }
 
 // 统一读取缓存，写一个异步方法
-
 async function readCacheData(key) {
     var result = await getData(key);
     console.log("result === " + result);
