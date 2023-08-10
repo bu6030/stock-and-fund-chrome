@@ -11,15 +11,15 @@ var fundList;
 var stockList;
 
 // 整个程序的初始化
-window.addEventListener("load", (event) => {
-    var funds = localStorage.getItem('funds');
+window.addEventListener("load", async (event) => {
+    var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
     } else {
         fundList = jQuery.parseJSON(funds);
     }
 
-    var stocks = localStorage.getItem('stocks');
+    var stocks = await readCacheData('stocks');
     if (stocks == null) {
         stockList = [];
     } else {
@@ -112,9 +112,8 @@ document.addEventListener(
                 var contents = e.target.result;
                 var json = JSON.parse(contents);
                 // 在这里处理您的 JSON 数据
-                localStorage.setItem('stocks', JSON.stringify(json.stocks));
-                saveData('stocks', JSON.stringify(json.stocks));
-                localStorage.setItem('funds', JSON.stringify(json.funds));
+                saveCacheData('stocks', JSON.stringify(json.stocks));
+                saveCacheData('funds', JSON.stringify(json.funds));
                 $("#data-import-modal").modal("hide");
                 location.reload();
             };
@@ -143,9 +142,8 @@ document.addEventListener(
                         dataType: 'json',
                         contentType: 'application/x-www-form-urlencoded',
                         success: function (data) {
-                            localStorage.setItem('stocks', JSON.stringify(data.value.stocks));
-                            saveData('stocks', JSON.stringify(data.value.stocks));
-                            localStorage.setItem('funds', JSON.stringify(data.value.funds));
+                            saveCacheData('stocks', JSON.stringify(data.value.stocks));
+                            saveCacheData('funds', JSON.stringify(data.value.funds));
                             location.reload();
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -160,8 +158,8 @@ document.addEventListener(
         }
         // 股票编辑页面，点击删除按钮
         let stockDeleteButton = document.getElementById('stock-delete-button');
-        stockDeleteButton.addEventListener('click', function () {
-                var stocks = localStorage.getItem('stocks');
+        stockDeleteButton.addEventListener('click', async function () {
+                var stocks = await readCacheData('stocks');
                 stocks = jQuery.parseJSON(stocks);
                 var code = $("#stock-code").val();
                 for (var k in stocks) {
@@ -171,16 +169,15 @@ document.addEventListener(
                         break;
                     }
                 }
-                localStorage.setItem('stocks', JSON.stringify(stocks));
-                saveData('stocks', JSON.stringify(stocks));
+                saveCacheData('stocks', JSON.stringify(stocks));
                 $("#stock-modal").modal("hide");
                 location.reload();
             }
         );
         // 基金编辑页面，点击删除按钮
         let fundDeleteButton = document.getElementById('fund-delete-button');
-        fundDeleteButton.addEventListener('click', function () {
-                var funds = localStorage.getItem('funds');
+        fundDeleteButton.addEventListener('click', async function () {
+                var funds = await readCacheData('funds');
                 funds = jQuery.parseJSON(funds);
                 var code = $("#fund-code").val();
                 for (var k in funds) {
@@ -189,7 +186,7 @@ document.addEventListener(
                         break;
                     }
                 }
-                localStorage.setItem('funds', JSON.stringify(funds));
+                saveCacheData('funds', JSON.stringify(funds));
                 $("#fund-modal").modal("hide");
                 location.reload();
             }
@@ -241,15 +238,14 @@ document.addEventListener(
         removeAllDataButton.addEventListener('click', function () {
                 let stocksRemove = [];
                 let fundsRemove = [];
-                localStorage.setItem('stocks', JSON.stringify(stocksRemove));
-                saveData('stocks', JSON.stringify(stocksRemove));
-                localStorage.setItem('funds', JSON.stringify(fundsRemove));
+                saveCacheData('stocks', JSON.stringify(stocksRemove));
+                saveCacheData('funds', JSON.stringify(fundsRemove));
                 location.reload();
             }
         );
         // 首页，输入股票名称后点击搜索股票/基金按钮
         let stockFundNameSearchButton = document.getElementById('stock-fund-name-search-button');
-        stockFundNameSearchButton.addEventListener('click', function () {
+        stockFundNameSearchButton.addEventListener('click', async function () {
             $("#search-fund-select").find("option").remove();
             $("#search-stock-select").find("option").remove();
             let stockName = $("#input-stock-name-search").val();
@@ -277,7 +273,7 @@ document.addEventListener(
             }
             let fundName = $("#input-fund-name-search").val();
             if (fundName != "" && fundName != null) {
-                var fundsArr = searchFundByName(fundName);
+                var fundsArr = await searchFundByName(fundName);
                 for (var k in fundsArr) {
                     var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName + " " + fundsArr[k].fundCode);
                     $("#search-fund-select").append(option);
@@ -589,7 +585,7 @@ function initStockAndFundHtml() {
     }
 
     for (var k = fundList.length - 1; k >= 0; k--) {
-        marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds))).toFixed(2));
+        marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
         totalMarketValue = totalMarketValue.add(marketValue);
     }
 
@@ -631,10 +627,10 @@ function initStockAndFundHtml() {
             $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
             $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
             $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
-//            $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
-//            $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
-//            $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
-//            $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
+            $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
+            $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
+            $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
+            $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
 
             $("#fund-delete-button")[0].style.display  = 'block';
             // $("#fund-search-button")[0].style.display  = 'none';
@@ -738,8 +734,8 @@ function getFundTableHtml(result, totalMarketValueResult) {
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
-        dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds)).divide(new BigDecimal("100"))).toFixed(2));
-        marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+        marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
@@ -748,7 +744,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
         let addTimePrice =  !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" +result[k].addTime + ")";
         // 计算基金总成本
         var costPrice = new BigDecimal(result[k].costPrise+"");
-        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
         fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
 
         str += "<tr id=\"fund-tr-" + k + "\">"
@@ -844,10 +840,10 @@ function searchStockByName(name) {
 }
 
 // 通过基金名称搜索基金列表
-function searchFundByName(name) {
+async function searchFundByName(name) {
     var fundsArrs = [];
-    var allFundArr = localStorage.getItem('all_fund_arr');
-    var timeCached = localStorage.getItem('all_fund_arr_time_cached');
+    var allFundArr = await readCacheData('all_fund_arr');
+    var timeCached = await readCacheData('all_fund_arr_time_cached');
     var nowTimestamp = Date.now();
     if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_DAY) {
         console.log("缓存超过 1 天，重新调用接口");
@@ -881,10 +877,8 @@ function searchFundByName(name) {
                 var fundsArr = jQuery.parseJSON(data);
                 var timestamp = Date.now();
                 // 减少所有基金的搜索频率，缓存数据
-                localStorage.setItem('all_fund_arr', JSON.stringify(fundsArr));
-                saveData('all_fund_arr', JSON.stringify(fundsArr));
-                localStorage.setItem('all_fund_arr_time_cached', timestamp);
-                saveData('all_fund_arr_time_cached', timestamp);
+                saveCacheData('all_fund_arr', JSON.stringify(fundsArr));
+                saveCacheData('all_fund_arr_time_cached', timestamp);
                 var fundCode = "";
                 var fundName = "";
                 for (var i = 0; i < fundsArr.length; i++) {
@@ -912,7 +906,7 @@ function searchFundByName(name) {
 }
 
 // 保存股票
-function saveStock() {
+async function saveStock() {
     var costPrise = $("#stock-costPrise").val();
     var stockName = $("#stock-name").val();
     var bonds = $("#stock-bonds").val();
@@ -946,7 +940,7 @@ function saveStock() {
         "monitorHighPrice": monitorHighPrice,
         "monitorLowPrice": monitorLowPrice,
     }
-    var stocks = localStorage.getItem('stocks');
+    var stocks = await readCacheData('stocks');
     if (stocks == null) {
         stocks = [];
     } else {
@@ -964,8 +958,7 @@ function saveStock() {
                 stocks[k].addTimePrice = checkStockExsitResult.now;
                 stocks[k].addTime = getCurrentDate();
             }
-            localStorage.setItem('stocks', JSON.stringify(stocks));
-            saveData('stocks', JSON.stringify(stocks));
+            saveCacheData('stocks', JSON.stringify(stocks));
             stockList = stocks;
             $("#stock-modal").modal("hide");
             $("#search-stock-modal").modal("hide");
@@ -983,25 +976,24 @@ function saveStock() {
     stock.addTimePrice = checkStockExsitResult.now;
     stock.addTime = getCurrentDate();
     stocks.push(stock);
-    localStorage.setItem('stocks', JSON.stringify(stocks));
-    saveData('stocks', JSON.stringify(stocks));
+    saveCacheData('stocks', JSON.stringify(stocks));
     stockList = stocks;
     $("#stock-modal").modal("hide");
     $("#search-stock-modal").modal("hide");
     initData();
 }
 // 保存基金
-function saveFund() {
+async function saveFund() {
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     var fundName = $("#fund-name").val();
-//    var fundCycleInvestType = $("#fund-cycle-invest-type").val();
-//    var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
-//    var fundCycleInvestValue = $("#fund-cycle-invest-value").val();
-//    var fundCycleInvestRate = $("#fund-cycle-invest-rate").val();
+    var fundCycleInvestType = $("#fund-cycle-invest-type").val();
+    var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
+    var fundCycleInvestValue = $("#fund-cycle-invest-value").val();
+    var fundCycleInvestRate = $("#fund-cycle-invest-rate").val();
 
     if (fundName != "" && fundName != null) {
-        var fundsArr = searchFundByName(fundName);
+        var fundsArr = await searchFundByName(fundName);
         if (fundsArr.length == 0) {
             return;
         }
@@ -1024,12 +1016,12 @@ function saveFund() {
         "fundCode": code,
         "costPrise": costPrise,
         "bonds": bonds,
-//        "fundCycleInvestType": fundCycleInvestType,
-//        "fundCycleInvestDate": fundCycleInvestDate,
-//        "fundCycleInvestValue": fundCycleInvestValue,
-//        "fundCycleInvestRate": fundCycleInvestRate
+        "fundCycleInvestType": fundCycleInvestType,
+        "fundCycleInvestDate": fundCycleInvestDate,
+        "fundCycleInvestValue": fundCycleInvestValue,
+        "fundCycleInvestRate": fundCycleInvestRate,
     }
-    var funds = localStorage.getItem('funds');
+    var funds = await readCacheData('funds');
     if (funds == null) {
         funds = [];
     } else {
@@ -1040,17 +1032,16 @@ function saveFund() {
             funds[k].fundCode = fund.fundCode;
             funds[k].costPrise = fund.costPrise;
             funds[k].bonds = fund.bonds;
-//            funds[k].fundCycleInvestType = fund.fundCycleInvestType;
-//            funds[k].fundCycleInvestDate = fund.fundCycleInvestDate;
-//            funds[k].fundCycleInvestValue = fund.fundCycleInvestValue;
-//            funds[k].fundCycleInvestRate = fund.fundCycleInvestRate;
+            funds[k].fundCycleInvestType = fund.fundCycleInvestType;
+            funds[k].fundCycleInvestDate = fund.fundCycleInvestDate;
+            funds[k].fundCycleInvestValue = fund.fundCycleInvestValue;
+            funds[k].fundCycleInvestRate = fund.fundCycleInvestRate;
             if (funds[k].addTimePrice == null || funds[k].addTimePrice == '') {
                 let checkFundExsitReuslt = checkFundExsit(funds[k].fundCode);
                 funds[k].addTimePrice = checkFundExsitReuslt.now;
                 funds[k].addTime = getCurrentDate();
             }
-            localStorage.setItem('funds', JSON.stringify(funds));
-            saveData('funds', JSON.stringify(funds));
+            saveCacheData('funds', JSON.stringify(funds));
             fundList = funds;
             $("#fund-modal").modal("hide");
             $("#search-fund-modal").modal("hide");
@@ -1070,8 +1061,7 @@ function saveFund() {
     fund.addTimePrice = checkFundExsitReuslt.now;
     fund.addTime = getCurrentDate();
     funds.push(fund);
-    localStorage.setItem('funds', JSON.stringify(funds));
-    saveData('funds', JSON.stringify(funds));
+    saveCacheData('funds', JSON.stringify(funds));
     fundList = funds;
     $("#fund-modal").modal("hide");
     $("#search-fund-modal").modal("hide");
@@ -1090,4 +1080,18 @@ function downloadJsonOrTxt(filename, text) {
     } else {
         pom.click();
     }
+}
+
+// 统一存储缓存
+function saveCacheData(key, value) {
+    localStorage.setItem(key, value);
+    saveData(key, value);
+}
+
+// 统一读取缓存，写一个异步方法
+
+async function readCacheData(key) {
+    var result = await getData(key);
+    console.log("result === " + result);
+    return result;
 }
