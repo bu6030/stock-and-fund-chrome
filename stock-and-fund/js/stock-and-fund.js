@@ -1015,6 +1015,21 @@ async function saveFund() {
     var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
     var fundCycleInvestValue = $("#fund-cycle-invest-value").val();
     var fundCycleInvestRate = $("#fund-cycle-invest-rate").val();
+    // 当fundCycleInvestType存在时检测fundCycleInvestDate，fundCycleInvestValue，fundCycleInvestRate不能为空
+    if (fundCycleInvestType != '' && fundCycleInvestType != 'no') {
+        if (fundCycleInvestDate == null || fundCycleInvestDate == '') {
+            alert("请选择基金周期投资日期");
+            return;
+        }
+        if (fundCycleInvestValue == null || fundCycleInvestValue == '') {
+            alert("请选择基金周期投资金额");
+            return;
+        }
+        if (fundCycleInvestRate == null || fundCycleInvestRate == '') {
+            alert("请选择基金周期投资收益率");
+            return;
+        }
+    }
 
     if (fundName != "" && fundName != null) {
         var fundsArr = await searchFundByName(fundName);
