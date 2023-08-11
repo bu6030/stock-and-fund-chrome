@@ -117,7 +117,7 @@ function monitorStockPrice(stockList) {
 // 后台监控突破价格并提示
 function monitorFundCycleInvest(fundList) {
     var date = new Date();
-    console.log("执行定投任务...", date.toLocaleString());
+    // console.log("执行定投任务...", date.toLocaleString());
     // var isCycleInvestTime = date.toLocaleTimeString() >= "16:45:00" && date.toLocaleTimeString() < "16:45:20";
     // if (isCycleInvestTime) {
     //     for (let k in fundList) {
