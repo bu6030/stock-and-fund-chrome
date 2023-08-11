@@ -1145,7 +1145,7 @@ async function readCacheData(key) {
 async function initNotice(){
     var text = await readCacheData('MONITOR_TEXT');
     $("#monitor-text").html(text);
-    saveCacheData('MONITOR_TEXT', '编辑股票页面增加监控最高/最低价格突破角标提醒了！！！')
+    saveCacheData('MONITOR_TEXT', '搜索输入股票基金编码或名称后点击回车即可搜索！！！')
     chrome.action.setBadgeText({ text: "" });
 }
 // 首页点击股票基金搜索或者在股票基金名称输入框点击回车
