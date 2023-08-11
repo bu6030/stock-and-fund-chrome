@@ -1158,8 +1158,9 @@ function saveCacheData(key, value) {
 
 // 统一读取缓存，写一个异步方法
 async function readCacheData(key) {
-    var result = await getData(key);
-    console.log("result === " + result);
+    var result = localStorage.getItem(key);
+    // var result = await getData(key);
+    console.log("readCacheData key = " + key + ", value = " + result);
     return result;
 }
 
