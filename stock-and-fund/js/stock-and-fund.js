@@ -187,6 +187,36 @@ document.addEventListener(
                 location.reload();
             }
         );
+        // 走势图页面，点击股票基金按钮
+        document.getElementById('stock-fund-delete-button').addEventListener('click', async function () {
+            if (timeImageType == "FUND") {
+                var funds = await readCacheData('funds');
+                funds = jQuery.parseJSON(funds);
+                for (var k in funds) {
+                    if (funds[k].fundCode == timeImageCode) {
+                        // delete funds[k];
+                        funds.splice(k, 1)
+                        break;
+                    }
+                }
+                saveCacheData('funds', JSON.stringify(funds));
+                $("#time-image-modal").modal("hide");
+                location.reload();
+            } else {
+                var stocks = await readCacheData('stocks');
+                stocks = jQuery.parseJSON(stocks);
+                for (var k in stocks) {
+                    if (stocks[k].code == timeImageCode) {
+                        // delete stocks[k];
+                        stocks.splice(k, 1)
+                        break;
+                    }
+                }
+                saveCacheData('stocks', JSON.stringify(stocks));
+                $("#time-image-modal").modal("hide");
+                location.reload();
+            }
+        })
         // 基金编辑页面，点击走势图按钮
         let fundShowTimeImageButton = document.getElementById('fund-show-time-image-button');
         fundShowTimeImageButton.addEventListener('click', function () {
@@ -632,7 +662,7 @@ function initStockAndFundHtml() {
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
             $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
             $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
-            $("#stock-delete-button")[0].style.display  = 'block';
+            // $("#stock-delete-button")[0].style.display  = 'block';
             // $("#stock-search-button")[0].style.display  = 'none';
             $("#stock-show-time-image-button")[0].style.display  = 'inline';
             // $("#stock-modal").modal();
@@ -656,7 +686,7 @@ function initStockAndFundHtml() {
             $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
             $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
 
-            $("#fund-delete-button")[0].style.display  = 'block';
+            // $("#fund-delete-button")[0].style.display  = 'block';
             // $("#fund-search-button")[0].style.display  = 'none';
             $("#fund-show-time-image-button")[0].style.display  = 'inline';
             // $("#fund-modal").modal();
