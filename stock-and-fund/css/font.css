@@ -15,7 +15,7 @@
     margin-bottom: 40px;
 }
 .my-input-group {
-    width: 100%;
+    width: 800px;
     height: 30px;
     bottom: 5px;
 }
@@ -24,13 +24,14 @@
 }
 .stock-large-market{
     text-align: center;
+    width: 800px;
 }
 #footer {
     height: 40px;
     line-height: 40px;
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: 800px;
     text-align: center;
     color: #000000;
     font-family: Arial;

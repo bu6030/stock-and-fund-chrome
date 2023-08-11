@@ -330,6 +330,10 @@ document.addEventListener(
                 $("#wechat-group-modal").modal();
             }
         );
+        // 首页，点击全屏按钮
+        document.getElementById('full-screen-button').addEventListener('click', async function () {
+            chrome.tabs.create({url : "popup.html"});
+        })
     }
 );
 // 股票搜索后，接口返回为 unicode 编码，转换为中文
@@ -1136,9 +1140,11 @@ function saveCacheData(key, value) {
 
 // 统一读取缓存，写一个异步方法
 async function readCacheData(key) {
+    console.log("开始读取" + new Date());
     var result = localStorage.getItem(key);
     // var result = await getData(key);
     console.log("readCacheData key = " + key + ", value = " + result);
+    console.log("读取完毕" + new Date());
     return result;
 }
 
@@ -1188,3 +1194,5 @@ async function searchFundAndStock () {
         }
     }
 }
+
+
