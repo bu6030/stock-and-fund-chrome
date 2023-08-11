@@ -269,46 +269,24 @@ document.addEventListener(
                 location.reload();
             }
         );
+        // 首页，在股票搜索名称输入框中点击回车
+        document.getElementById('input-stock-name-search').addEventListener('keydown', async function () {
+            if (event.key === 'Enter') {
+                console.log("我在input-stock-name-search按了回车");
+                searchFundAndStock();
+            }
+        });
+        // 首页，在基金搜索名称输入框中点击回车
+        document.getElementById('input-fund-name-search').addEventListener('keydown', async function () {
+            if (event.key === 'Enter') {
+                console.log("我在input-fund-name-search按了回车");
+                searchFundAndStock();
+            }
+        });
         // 首页，输入股票名称后点击搜索股票/基金按钮
         let stockFundNameSearchButton = document.getElementById('stock-fund-name-search-button');
         stockFundNameSearchButton.addEventListener('click', async function () {
-            $("#search-fund-select").find("option").remove();
-            $("#search-stock-select").find("option").remove();
-            let stockName = $("#input-stock-name-search").val();
-            if (stockName != "" && stockName != null) {
-                var stocksArr = searchStockByName(stockName);
-                for (var k in stocksArr) {
-                    var values = stocksArr[k].split("~");
-                    var market = "";
-                    if (values[0] == 'sh') {
-                        market = "沪A"
-                    } else if (values[0] == 'sz') {
-                        market = "深A"
-                    } else if (values[0] == 'hk') {
-                        market = "港股"
-                    } else {
-                        market = "其他"
-                    }
-                    var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
-                    $("#search-stock-select").append(option);
-                }
-                $("#input-stock-name-search").val("");
-                if (stocksArr.length > 0) {
-                    $("#search-stock-modal").modal();
-                }
-            }
-            let fundName = $("#input-fund-name-search").val();
-            if (fundName != "" && fundName != null) {
-                var fundsArr = await searchFundByName(fundName);
-                for (var k in fundsArr) {
-                    var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName + " " + fundsArr[k].fundCode);
-                    $("#search-fund-select").append(option);
-                }
-                $("#input-fund-name-search").val("");
-                if (fundsArr.length > 0) {
-                    $("#search-fund-modal").modal();
-                }
-            }
+            searchFundAndStock();
         });
         // 搜索股票页面，股票列表点击选择
         let searchStockSelect = document.getElementById('search-stock-select');
@@ -1169,4 +1147,44 @@ async function initNotice(){
     $("#monitor-text").html(text);
     saveCacheData('MONITOR_TEXT', '编辑股票页面增加监控最高/最低价格突破角标提醒了！！！')
     chrome.action.setBadgeText({ text: "" });
+}
+// 首页点击股票基金搜索或者在股票基金名称输入框点击回车
+async function searchFundAndStock () {
+    $("#search-fund-select").find("option").remove();
+    $("#search-stock-select").find("option").remove();
+    let stockName = $("#input-stock-name-search").val();
+    if (stockName != "" && stockName != null) {
+        var stocksArr = searchStockByName(stockName);
+        for (var k in stocksArr) {
+            var values = stocksArr[k].split("~");
+            var market = "";
+            if (values[0] == 'sh') {
+                market = "沪A"
+            } else if (values[0] == 'sz') {
+                market = "深A"
+            } else if (values[0] == 'hk') {
+                market = "港股"
+            } else {
+                market = "其他"
+            }
+            var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
+            $("#search-stock-select").append(option);
+        }
+        $("#input-stock-name-search").val("");
+        if (stocksArr.length > 0) {
+            $("#search-stock-modal").modal();
+        }
+    }
+    let fundName = $("#input-fund-name-search").val();
+    if (fundName != "" && fundName != null) {
+        var fundsArr = await searchFundByName(fundName);
+        for (var k in fundsArr) {
+            var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName + " " + fundsArr[k].fundCode);
+            $("#search-fund-select").append(option);
+        }
+        $("#input-fund-name-search").val("");
+        if (fundsArr.length > 0) {
+            $("#search-fund-modal").modal();
+        }
+    }
 }
