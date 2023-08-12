@@ -79,6 +79,7 @@ function initHtml() {
     $("#stock-head").html(stockHead);
     // 在页面顶部显示一些监控信息，重要信息
     initNotice();
+    initFontStyle();
 }
 // 按钮监听事件
 document.addEventListener(
@@ -333,6 +334,10 @@ document.addEventListener(
         // 首页，点击全屏按钮
         document.getElementById('full-screen-button').addEventListener('click', async function () {
             chrome.tabs.create({url : "popup.html"});
+        })
+        // 首页，点击样式切换
+        document.getElementById('font-change-button').addEventListener('click', async function () {
+            changeFontStyle();
         })
     }
 );
@@ -1195,4 +1200,30 @@ async function searchFundAndStock () {
     }
 }
 
+async function initFontStyle(){
+    let fontChangeStyle = await readCacheData('font-change-style');
+    var stockNr = document.getElementById('stock-nr');
+    var fundNr = document.getElementById('fund-nr');
+    var totalNr = document.getElementById('total-nr');
+    if ('bolder' == fontChangeStyle) {
+        stockNr.classList.add('my-table-tbody-font');
+        fundNr.classList.add('my-table-tbody-font');
+        totalNr.classList.add('my-table-tbody-font');
+    } else {
+        stockNr.classList.remove('my-table-tbody-font');
+        fundNr.classList.remove('my-table-tbody-font');
+        totalNr.classList.remove('my-table-tbody-font');
+    }
+}
 
+async function changeFontStyle() {
+    var stockNr = document.getElementById('stock-nr');
+    // 添加class样式
+    if (stockNr.classList.contains('my-table-tbody-font')) {
+        saveCacheData('font-change-style', 'normal');
+    } else {
+        saveCacheData('font-change-style', 'bolder');
+    }
+    console.log('样式切换');
+    initFontStyle();
+}

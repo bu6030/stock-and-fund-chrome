@@ -39,3 +39,7 @@
     letter-spacing: 1px;
     background-color: white;
 }
+.my-table-tbody-font{
+    font-weight: bolder;
+    font-size: small;
+}
