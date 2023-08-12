@@ -12,6 +12,22 @@ var stockList;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
+    let password = await readCacheData('password');
+    // 如果 password 存在，需要验证密码
+    if (password != null && password != '') {
+        // 展示password-check-modal
+        $('#password-check-modal').modal('show');
+        // 隐藏密码保护按钮
+        $("#show-password-protect-button")[0].style.display  = 'none';
+        $("#data-export-button")[0].style.display  = 'none';
+        $("#importFromLocalSpringBoot")[0].style.display  = 'none';
+    } else {
+        // 没有密码直接展示
+        initLoad();
+    }
+});
+
+async function initLoad() {
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -25,12 +41,15 @@ window.addEventListener("load", async (event) => {
     } else {
         stockList = jQuery.parseJSON(stocks);
     }
+    // 展示密码保护按钮
+    $("#show-password-protect-button")[0].style.display  = 'inline';
+    $("#data-export-button")[0].style.display  = 'inline';
     initHtml();
     initData();
     initLargeMarketData();
     // 20s刷新
     setInterval(autoRefresh, 20000);
-});
+}
 
 // 20s自动刷新
 function autoRefresh () {
@@ -46,6 +65,8 @@ function autoRefresh () {
 function initHtml() {
     if (!develop) {
         $("#importFromLocalSpringBoot")[0].style.display = "none";
+    } else {
+        $("#importFromLocalSpringBoot")[0].style.display  = 'inline';
     }
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
@@ -338,6 +359,22 @@ document.addEventListener(
         // 首页，点击样式切换
         document.getElementById('font-change-button').addEventListener('click', async function () {
             changeFontStyle();
+        })
+        // 首页，show-passwrod-protect-button点击，展示password-protect-modal
+        document.getElementById('show-password-protect-button').addEventListener('click', async function () {
+            $("#password-protect-modal").modal();
+        })
+        // 密码保护页面，password-save-button点击，缓存密码
+        document.getElementById('password-save-button').addEventListener('click', async function () {
+            saveCacheData('password', $("#password").val());
+            $("#password-protect-modal").modal("hide");
+        })
+        // 验证密码页面，password-check-button点击，验证密码
+        document.getElementById('password-check-button').addEventListener('click', async function () {
+            if ($("#password-check").val() == await readCacheData('password')) {
+                $("#password-check-modal").modal("hide");
+                initLoad();
+            }
         })
     }
 );
