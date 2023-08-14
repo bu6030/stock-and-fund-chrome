@@ -1112,7 +1112,7 @@ function downloadJsonOrTxt(filename, text) {
 // 统一存储缓存
 function saveCacheData(key, value) {
     localStorage.setItem(key, value);
-    saveData(key, value);
+    // saveData(key, value);
 }
 
 // 统一读取缓存，写一个异步方法
