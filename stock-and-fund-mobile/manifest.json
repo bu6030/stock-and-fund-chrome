@@ -1,31 +1,23 @@
 {
   "manifest_version": 3,
-  "version": "1.1",
+  "version": "1.6.15",
   "name": "股票基金神器手机版",
-  "description": "上班族必备，专为上班族编写，股票基金神器，添加股票基金，实时盯盘，实时计算盈亏，添加股票基金。",
+  "description": "上班族必备，专为上班族编写，无需登录，终身免费，股票基金神器，实时盯盘，实时计算盈亏。",
   "action": {
-    "default_title": "股票基金神器手机版",
-    "default_popup": "popup.html"
+    "default_title": "股票基金神器",
+    "default_popup": "popup.html",
+    "default_icon" : "img/128.png"
   },
   "permissions": [
-    "bookmarks",
-    "background",
-    "storage",
-    "tabs"
+    "storage"
   ],
   "content_scripts": [
       {
           "matches": ["https://*.google.com/*", "https://google.com/*"],
-          "js": ["js/jquery.min.js", "js/BigDecimal.js", "js/bootstrap.min.js", "js/stockAndFund.js"],
+          "js": ["js/jquery.min.js", "js/BigDecimal.js", "js/bootstrap.min.js", "js/stock-and-fund.js"],
           "css": ["css/bootstrap.min.css"],
           "run_at": "document_start"
       }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["js/*","css/*"],
-      "matches": ["<all_urls>"]
-    }
   ],
   "host_permissions": [
     "http://*/*",
