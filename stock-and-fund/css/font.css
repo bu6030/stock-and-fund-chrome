@@ -9,7 +9,7 @@
     width:400px;
 }
 .my-div {
-    width:970px;
+    width: 970px;
     height: 100%;
     /*overflow-x:auto;*/
     margin-bottom: 40px;
@@ -42,4 +42,7 @@
 .my-table-tbody-font{
     font-weight: bolder;
     font-size: small;
+}
+.no-wrap {
+    white-space: nowrap;
 }
