@@ -54,6 +54,9 @@
 43. 走势图页面增加删除按钮 2023/8/11
 44. 股票基金名称搜索输入框中点击回车触发搜索事件 2023/8/11
 45. 增加全屏展示按钮 2023/8/11
+46. 增加样式切换，普通模式和粗体字体变大模式 2023/8/12
+47. 增加密码保护，设定密码后，每次打开都验证密码 2023/8/12
+48. 文本过长时候，文字不换行 2023/8/15
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
