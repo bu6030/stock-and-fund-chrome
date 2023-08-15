@@ -153,26 +153,11 @@ document.addEventListener(
         if (develop) {
             let importFromLocalSpringBoot = document.getElementById('importFromLocalSpringBoot');
             importFromLocalSpringBoot.addEventListener('click', function () {
-                    $.ajax({
-                        url: Env.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
-                        type: "get",
-                        data: {},
-                        dataType: 'json',
-                        contentType: 'application/x-www-form-urlencoded',
-                        success: function (data) {
-                            saveCacheData('stocks', JSON.stringify(data.value.stocks));
-                            saveCacheData('funds', JSON.stringify(data.value.funds));
-                            location.reload();
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            console.log(XMLHttpRequest.status);
-                            console.log(XMLHttpRequest.readyState);
-                            console.log(textStatus);
-                        }
-                    });
-
-                }
-            );
+                let result = ajaxGetStockAndFundFromLocalService();
+                saveCacheData('stocks', JSON.stringify(result.stocks));
+                saveCacheData('funds', JSON.stringify(result.funds));
+                location.reload();
+            });
         }
         // 股票编辑页面，点击删除按钮
         let stockDeleteButton = document.getElementById('stock-delete-button');
@@ -584,37 +569,42 @@ function checkFundExsit(code) {
     return fund;
 }
 function checkFundExsitFromEastMoney(code) {
-    var fund = {};
-    fund.checkReuslt = false;
-    $.ajax({
-        url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
-        type: "get",
-        data: {},
-        async: false,
-        dataType: 'json',
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data) {
-            var json = data.JJXQ.Datas;
-            fund.name = json.SHORTNAME + "";
-            fund.dwjz = json.DWJZ + "";
-            fund.now = json.DWJZ + "";
-            // fund.jzrq = json.jzrq + "";
-            // fund.gsz = json.gsz + "";
-            // fund.gztime = json.gztime + "";
-            // var gsz = new BigDecimal(json.gsz + "");
-            // var dwjz = new BigDecimal(json.dwjz + "");
-            // fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
-            // var now = new BigDecimal(json.gsz + "");
-            fund.checkReuslt = true;
-            // fund.now = now + "";
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-        }
-    });
+    let fund = ajaxGetFundFromEastMoney(code);
+    if(fund.name != '' && fund.name != undefined) {
+        fund.checkReuslt = true;
+    } else {
+        fund.checkReuslt = false;
+    }
     return fund;
+    // $.ajax({
+    //     url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
+    //     type: "get",
+    //     data: {},
+    //     async: false,
+    //     dataType: 'json',
+    //     contentType: 'application/x-www-form-urlencoded',
+    //     success: function (data) {
+    //         var json = data.JJXQ.Datas;
+    //         fund.name = json.SHORTNAME + "";
+    //         fund.dwjz = json.DWJZ + "";
+    //         fund.now = json.DWJZ + "";
+    //         // fund.jzrq = json.jzrq + "";
+    //         // fund.gsz = json.gsz + "";
+    //         // fund.gztime = json.gztime + "";
+    //         // var gsz = new BigDecimal(json.gsz + "");
+    //         // var dwjz = new BigDecimal(json.dwjz + "");
+    //         // fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
+    //         // var now = new BigDecimal(json.gsz + "");
+    //         fund.checkReuslt = true;
+    //         // fund.now = now + "";
+    //     },
+    //     error: function (XMLHttpRequest, textStatus, errorThrown) {
+    //         console.log(XMLHttpRequest.status);
+    //         console.log(XMLHttpRequest.readyState);
+    //         console.log(textStatus);
+    //     }
+    // });
+
 }
 
 // 检查股票是否存在
@@ -1263,4 +1253,58 @@ async function changeFontStyle() {
     }
     console.log('样式切换');
     initFontStyle();
+}
+
+function ajaxGetStockAndFundFromLocalService(){
+    var result;
+    $.ajax({
+        url: Env.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.value;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+function ajaxGetFundFromEastMoney(code) {
+    let fund = {};
+    $.ajax({
+        url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            var json = data.JJXQ.Datas;
+            fund.name = json.SHORTNAME + "";
+            fund.dwjz = json.DWJZ + "";
+            fund.now = json.DWJZ + "";
+            // fund.jzrq = json.jzrq + "";
+            // fund.gsz = json.gsz + "";
+            // fund.gztime = json.gztime + "";
+            // var gsz = new BigDecimal(json.gsz + "");
+            // var dwjz = new BigDecimal(json.dwjz + "");
+            // fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
+            // var now = new BigDecimal(json.gsz + "");
+            // fund.checkReuslt = true;
+            // fund.now = now + "";
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return fund;
 }
