@@ -576,35 +576,6 @@ function checkFundExsitFromEastMoney(code) {
         fund.checkReuslt = false;
     }
     return fund;
-    // $.ajax({
-    //     url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
-    //     type: "get",
-    //     data: {},
-    //     async: false,
-    //     dataType: 'json',
-    //     contentType: 'application/x-www-form-urlencoded',
-    //     success: function (data) {
-    //         var json = data.JJXQ.Datas;
-    //         fund.name = json.SHORTNAME + "";
-    //         fund.dwjz = json.DWJZ + "";
-    //         fund.now = json.DWJZ + "";
-    //         // fund.jzrq = json.jzrq + "";
-    //         // fund.gsz = json.gsz + "";
-    //         // fund.gztime = json.gztime + "";
-    //         // var gsz = new BigDecimal(json.gsz + "");
-    //         // var dwjz = new BigDecimal(json.dwjz + "");
-    //         // fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
-    //         // var now = new BigDecimal(json.gsz + "");
-    //         fund.checkReuslt = true;
-    //         // fund.now = now + "";
-    //     },
-    //     error: function (XMLHttpRequest, textStatus, errorThrown) {
-    //         console.log(XMLHttpRequest.status);
-    //         console.log(XMLHttpRequest.readyState);
-    //         console.log(textStatus);
-    //     }
-    // });
-
 }
 
 // 检查股票是否存在
@@ -878,31 +849,17 @@ function searchStockByName(name) {
         name = name.substring(2, name.length);
     }
     var stocksArr;
-    $.ajax({
-        url: Env.GET_STOCK_CODE_BY_NAME_FROM_GTIMG + "?v=2&t=all&c=1&q=" + name,
-        type: "get",
-        data: {},
-        async: false,
-        dataType: 'text',
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data) {
-            if (data.indexOf("v_hint=\"N\";") != -1) {
-                alert("不存在该股票");
-                $("#stock-name").val("");
-                return;
-            }
-            if (data.indexOf("v_cate_hint") != -1) {
-                data = data.substring(data.indexOf("\n")+1);
-            }
-            data = data.replace("v_hint=\"", "").replace(" ", "");
-            stocksArr = data.split("^");
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-        }
-    });
+    let result = ajaxGetStockCodeByNameFromGtimg(name);
+    if (result.indexOf("v_hint=\"N\";") != -1) {
+        alert("不存在该股票");
+        $("#stock-name").val("");
+        return;
+    }
+    if (result.indexOf("v_cate_hint") != -1) {
+        result = result.substring(result.indexOf("\n")+1);
+    }
+    result = result.replace("v_hint=\"", "").replace(" ", "");
+    stocksArr = result.split("^");
     return stocksArr;
 }
 
@@ -932,42 +889,25 @@ async function searchFundByName(name) {
             alert("未搜索到该基金");
         }
     } else {
-        $.ajax({
-            url: Env.GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN,
-            type: "get",
-            data: {},
-            async: false,
-            dataType: 'text',
-            contentType: 'application/x-www-form-urlencoded',
-            success: function (data) {
-                data = data.replace("var r = ", "").replace(";", "");
-                var fundsArr = jQuery.parseJSON(data);
-                var timestamp = Date.now();
-                // 减少所有基金的搜索频率，缓存数据
-                saveCacheData('all_fund_arr', JSON.stringify(fundsArr));
-                saveCacheData('all_fund_arr_time_cached', timestamp);
-                var fundCode = "";
-                var fundName = "";
-                for (var i = 0; i < fundsArr.length; i++) {
-                    // 通过名字或者基金编码查询
-                    if (fundsArr[i][2].indexOf(name) != -1 || fundsArr[i][0].indexOf(name) != -1) {
-                        var fund = {
-                            "fundCode": fundsArr[i][0],
-                            "fundName": fundsArr[i][2]
-                        };
-                        fundsArrs.push(fund);
-                    }
-                }
-                if (fundsArrs.length == 0) {
-                    alert("未搜索到该基金");
-                }
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(XMLHttpRequest.status);
-                console.log(XMLHttpRequest.readyState);
-                console.log(textStatus);
+        let result = ajaxGetFundCodeFromTiantianjijin();
+        var fundsArr = jQuery.parseJSON(result);
+        var timestamp = Date.now();
+        // 减少所有基金的搜索频率，缓存数据
+        saveCacheData('all_fund_arr', JSON.stringify(fundsArr));
+        saveCacheData('all_fund_arr_time_cached', timestamp);
+        for (var i = 0; i < fundsArr.length; i++) {
+            // 通过名字或者基金编码查询
+            if (fundsArr[i][2].indexOf(name) != -1 || fundsArr[i][0].indexOf(name) != -1) {
+                var fund = {
+                    "fundCode": fundsArr[i][0],
+                    "fundName": fundsArr[i][2]
+                };
+                fundsArrs.push(fund);
             }
-        });
+        }
+        if (fundsArrs.length == 0) {
+            alert("未搜索到该基金");
+        }
     }
     return fundsArrs;
 }
@@ -1307,4 +1247,46 @@ function ajaxGetFundFromEastMoney(code) {
         }
     });
     return fund;
+}
+
+function ajaxGetFundCodeFromTiantianjijin() {
+    let result;
+    $.ajax({
+        url: Env.GET_FUND_CODE_FROM_TIANTIANJIJIN,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.replace("var r = ", "").replace(";", "");
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+function ajaxGetStockCodeByNameFromGtimg(name) {
+    let result;
+    $.ajax({
+        url: Env.GET_STOCK_CODE_BY_NAME_FROM_GTIMG + "?v=2&t=all&c=1&q=" + name,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
 }
