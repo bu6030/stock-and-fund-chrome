@@ -60,7 +60,7 @@ function monitorStockPrice(stockList) {
                 stocks += stockList[k].code + ",";
             }
         }
-        if(stocks == "") {
+        if (stocks == "") {
             console.log("没有监控的股票，返回...");
             return;
         }
@@ -86,7 +86,7 @@ function monitorStockPrice(stockList) {
                         if (now > highPrice) {
                             stockList[l].monitorHighPrice = '';
                             chrome.action.setBadgeText({ text: "1" });
-                            var text = name + "涨破监控价格" + highPrice +"，达到" + now;
+                            var text = name + "涨破监控价格" + highPrice + "，达到" + now;
                             saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             console.log("================监控价格涨破", highPrice, "============");
@@ -97,7 +97,7 @@ function monitorStockPrice(stockList) {
                         if (now < lowPrice) {
                             stockList[l].monitorLowPrice = '';
                             chrome.action.setBadgeText({ text: "1" });
-                            var text = name + "跌破监控价格" + lowPrice +"，达到" + now;
+                            var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
                             saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             console.log("================监控价格跌破", lowPrice, "============");
