@@ -7,6 +7,7 @@ let Env = {
     GET_STOCK_TIME_IMAGE_MONTH_FROM_SINA: "http://image.sinajs.cn/newchart/monthly/n/",
     GET_FUND_FROM_TIANTIANJIJIN: "http://fundgz.1234567.com.cn/js/",
     GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN: "http://fund.eastmoney.com/js/fundcode_search.js",
+    GET_FUND_TIME_IMAGE_FROM_DFCFW: "http://webquoteklinepic.eastmoney.com/GetPic.aspx",
     GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW: "http://j4.dfcfw.com/charts/pic7/",
     GET_FUND_FROM_EAST_MONEY: "https://j5.fund.eastmoney.com/sc/tfs/qt/v2.0.1/",
     // 下面这两个地址可以通过本地启动stock-and-fund项目
