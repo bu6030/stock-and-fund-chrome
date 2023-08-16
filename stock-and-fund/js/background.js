@@ -16,6 +16,8 @@ chrome.runtime.onStartup.addListener(function () {
     scheduleTask();
 });
 
+chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/640002036");
+
 // 后台定时执行任务的函数
 function performTask() {
     getData('stocks').then((stockArr) => {
