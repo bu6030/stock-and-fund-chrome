@@ -46,3 +46,10 @@
 .no-wrap {
     white-space: nowrap;
 }
+/* div 居中显示 */
+.my-center {
+    display: flex;
+}
+.my-center-child {
+    margin: auto;
+}
