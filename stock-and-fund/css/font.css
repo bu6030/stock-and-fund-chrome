@@ -15,7 +15,7 @@
     width: 970px;
     height: 100%;
     /*overflow-x:auto;*/
-    margin-bottom: 5px;
+    margin-bottom: 40px;
 }
 
 .my-input-group {
@@ -63,4 +63,11 @@
 
 .my-center-child {
     margin: auto;
+}
+
+.my-monitor-text {
+    text-align: center;
+    font-weight: bolder;
+    color: red;
+    width: 800px;
 }
