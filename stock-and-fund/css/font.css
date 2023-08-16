@@ -1,31 +1,38 @@
 .my-font {
-	font-size: 10px
+    font-size: 10px
 }
+
 .my-scroll {
-	width:900px;
-	overflow-x:auto;
+    width: 900px;
+    overflow-x: auto;
 }
+
 .my-text {
-    width:400px;
+    width: 400px;
 }
+
 .my-div {
     width: 970px;
     height: 100%;
     /*overflow-x:auto;*/
     margin-bottom: 5px;
 }
+
 .my-input-group {
     width: 800px;
     height: 30px;
     bottom: 5px;
 }
+
 .my-form-input {
     height: 30px;
 }
-.stock-large-market{
+
+.stock-large-market {
     text-align: center;
     width: 800px;
 }
+
 #footer {
     height: 40px;
     line-height: 40px;
@@ -39,17 +46,21 @@
     letter-spacing: 1px;
     background-color: white;
 }
-.my-table-tbody-font{
+
+.my-table-tbody-font {
     font-weight: bolder;
     font-size: small;
 }
+
 .no-wrap {
     white-space: nowrap;
 }
+
 /* div 居中显示 */
 .my-center {
     display: flex;
 }
+
 .my-center-child {
     margin: auto;
 }
