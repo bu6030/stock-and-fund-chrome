@@ -13,6 +13,7 @@
 
 .my-div {
     width: 970px;
+    min-height: 550px;
     height: 100%;
     /*overflow-x:auto;*/
     margin-bottom: 40px;
