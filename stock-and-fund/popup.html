@@ -379,12 +379,6 @@
                             data-toggle="modal">本地股基神器SpringBoot数据导入
                         </button>
                         <div id="monitor-text" class="my-monitor-text">搜索输入股票基金编码或名称后点击回车即可搜索！！！</div>
-                        <div id="alert-container" style="display: none;">
-                            <div class="alert alert-danger my-alert" id="alert-content" aria-hidden="true">
-                                A simple danger alert—check it out!
-                            </div>
-                        </div>
-
                     </dl>
                 </div>
                 <div>
@@ -397,6 +391,11 @@
                         <input type="text" aria-label="Last name" class="form-control my-form-input"
                             id="input-fund-name-search" placeholder="请输入基金编码或基金名称">
                     </div>
+                    <div id="alert-container" style="display: none;">
+                        <div class="alert alert-danger my-alert" id="alert-content" aria-hidden="true">
+                            警告文本
+                        </div>
+                    </div>
                 </div>
                 <form>
                     <div class="stock-large-market" id="stock-large-market"></div>
@@ -406,7 +405,7 @@
                             <tbody id="stock-nr" />
                             <thead id="fund-head" />
                             <tbody id="fund-nr" />
-                            <tbody id="total-nr" />
+                            <tfoot id="total-nr" />
                         </table>
                     </div>
                     <div id="page"></div>

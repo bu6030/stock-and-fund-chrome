@@ -671,7 +671,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
-        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
         let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
         // 计算股票总成本
@@ -680,18 +680,18 @@ function getStockTableHtml(result, totalMarketValueResult) {
         stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
 
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td style=\"width: 170px;\">" + result[k].name
+            + "<td >" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
-            + "</td><td style=\"width: 60px;\">" + result[k].costPrise
+            + "</td><td >" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td style=\"width: 70px;\">" + marketValue.setScale(2)
-            + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
-            + "</td><td style=\"width: 70px;\">" + costPriceValue
+            + "</td><td >" + marketValue.setScale(2)
+            + "</td><td >" + marketValuePercent + "%"
+            + "</td><td >" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td style=\"width: 140px;\">" + addTimePrice
+            + "</td><td >" + addTimePrice
             + "</td></tr>";
         stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
         stockDayIncome = stockDayIncome.add(dayIncome);
@@ -727,7 +727,7 @@ function getFundTableHtml(result, totalMarketValueResult) {
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
-        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a;width: 65px;\"" : "style=\"color:#3e8f3e;width: 65px;\"");
+        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
         let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
         // 计算基金总成本
@@ -736,18 +736,18 @@ function getFundTableHtml(result, totalMarketValueResult) {
         fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
 
         str += "<tr id=\"fund-tr-" + k + "\">"
-            + "<td style=\"width: 170px;\">" + result[k].name
+            + "<td >" + result[k].name
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].gszzl + "%"
             + "</td><td>" + result[k].gsz
-            + "</td><td style=\"width: 60px;\">" + result[k].costPrise
+            + "</td><td >" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td style=\"width: 70px;\">" + marketValue
-            + "</td><td style=\"width: 65px;\">" + marketValuePercent + "%"
-            + "</td><td style=\"width: 70px;\">" + costPriceValue
+            + "</td><td >" + marketValue
+            + "</td><td >" + marketValuePercent + "%"
+            + "</td><td >" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td style=\"width: 140px;\">" + addTimePrice
+            + "</td><td >" + addTimePrice
             + "</td></tr>";
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);
