@@ -801,7 +801,7 @@ function searchStockByName(name) {
     var stocksArr;
     let result = ajaxGetStockCodeByNameFromGtimg(name);
     if (result.indexOf("v_hint=\"N\";") != -1) {
-        alert("不存在该股票");
+        alertMessage("不存在该股票");
         $("#stock-name").val("");
         return;
     }
@@ -836,7 +836,8 @@ async function searchFundByName(name) {
             }
         }
         if (fundsArrs.length == 0) {
-            alert("未搜索到该基金");
+            // alert("未搜索到该基金");
+            alertMessage("未搜索到该基金");
         }
     } else {
         let result = ajaxGetFundCodeFromTiantianjijin();
@@ -856,7 +857,8 @@ async function searchFundByName(name) {
             }
         }
         if (fundsArrs.length == 0) {
-            alert("未搜索到该基金");
+            // alert("未搜索到该基金");
+            alertMessage("未搜索到该基金");
         }
     }
     return fundsArrs;
@@ -881,7 +883,8 @@ async function saveStock() {
     }
     var code = $("#stock-code").val();
     if (code == null || code == '') {
-        alert("请添加股票编码或通过股票名称搜索");
+        // alert("请添加股票编码或通过股票名称搜索");
+        alertMessage("请添加股票编码或通过股票名称搜索");
         return;
     }
     if (costPrise == null || costPrise == '') {
@@ -925,7 +928,8 @@ async function saveStock() {
     }
     let checkStockExsitResult = checkStockExsit(stock.code);
     if (!checkStockExsitResult.checkReuslt) {
-        alert("不存在该股票");
+        // alert("不存在该股票");
+        alertMessage("不存在该股票");
         $("#stock-modal").modal("hide");
         $("#search-stock-modal").modal("hide");
         return;
@@ -975,7 +979,7 @@ async function saveFund() {
     }
     var code = $("#fund-code").val();
     if (code == null || code == '') {
-        alert("请添加基金编码或通过基金名称搜索");
+        alertMessage("请添加基金编码或通过基金名称搜索");
         return;
     }
     if (costPrise == null || costPrise == '') {
@@ -1281,4 +1285,12 @@ function ajaxGetFundFromTiantianjijin(code) {
         }
     });
     return result;
+}
+
+function alertMessage(message) {
+    $("#alert-content").html(message);
+    $("#alert-container").show();
+    setTimeout(function() {
+        $("#alert-container").hide();
+    }, 2000);
 }

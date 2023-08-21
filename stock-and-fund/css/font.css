@@ -71,6 +71,7 @@
     font-weight: bolder;
     color: red;
     width: 800px;
+    margin-top: 3px;
 }
 
 /* 自己修改的样式 */
@@ -86,3 +87,8 @@
 .btn-my-style:not(:disabled):not(.disabled).active,
 .btn-my-style:not(:disabled):not(.disabled):active,.show>
 .btn-my-style.dropdown-toggle{color:#fff;background-color:#1e7e34;border-color:#1c7430}
+
+.my-alert {
+    width: 800px;
+    margin-top: 5px;
+}
