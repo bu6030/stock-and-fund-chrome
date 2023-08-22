@@ -597,10 +597,7 @@ function initStockAndFundHtml() {
             $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
             $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
             $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
-            // $("#stock-delete-button")[0].style.display  = 'block';
-            // $("#stock-search-button")[0].style.display  = 'none';
             $("#stock-show-time-image-button")[0].style.display = 'inline';
-            // $("#stock-modal").modal();
             let stockCode = $("#stock-code").val();
             timeImageCode = stockCode;
             timeImageType = "STOCK";
@@ -616,14 +613,16 @@ function initStockAndFundHtml() {
             $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
             $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
             $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
-            // $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
-            // $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
-            // $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
-            // $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
-            // $("#fund-delete-button")[0].style.display  = 'block';
-            // $("#fund-search-button")[0].style.display  = 'none';
+            if (isCycleInvest) {
+                $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
+                $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
+                $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
+                $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
+                $("#fund-cycle-invest")[0].style.display = "block";
+            } else {
+                $("#fund-cycle-invest")[0].style.display = "none";
+            }
             $("#fund-show-time-image-button")[0].style.display = 'inline';
-            // $("#fund-modal").modal();
             let fundCode = $("#fund-code").val();
             timeImageCode = fundCode;
             timeImageType = "FUND";
@@ -948,25 +947,27 @@ async function saveFund() {
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     var fundName = $("#fund-name").val();
-    // var fundCycleInvestType = $("#fund-cycle-invest-type").val();
-    // var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
-    // var fundCycleInvestValue = $("#fund-cycle-invest-value").val();
-    // var fundCycleInvestRate = $("#fund-cycle-invest-rate").val();
-    // 当fundCycleInvestType存在时检测fundCycleInvestDate，fundCycleInvestValue，fundCycleInvestRate不能为空
-    // if (fundCycleInvestType != '' && fundCycleInvestType != 'no') {
-    //     if (fundCycleInvestDate == null || fundCycleInvestDate == '') {
-    //         alert("请选择基金周期投资日期");
-    //         return;
-    //     }
-    //     if (fundCycleInvestValue == null || fundCycleInvestValue == '') {
-    //         alert("请选择基金周期投资金额");
-    //         return;
-    //     }
-    //     if (fundCycleInvestRate == null || fundCycleInvestRate == '') {
-    //         alert("请选择基金周期投资收益率");
-    //         return;
-    //     }
-    // }
+    if (isCycleInvest) {
+        var fundCycleInvestType = $("#fund-cycle-invest-type").val();
+        var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
+        var fundCycleInvestValue = $("#fund-cycle-invest-value").val();
+        var fundCycleInvestRate = $("#fund-cycle-invest-rate").val();
+        // 当fundCycleInvestType存在时检测fundCycleInvestDate，fundCycleInvestValue，fundCycleInvestRate不能为空
+        if (fundCycleInvestType != '' && fundCycleInvestType != 'no') {
+            if (fundCycleInvestDate == null || fundCycleInvestDate == '') {
+                alert("请选择基金周期投资日期");
+                return;
+            }
+            if (fundCycleInvestValue == null || fundCycleInvestValue == '') {
+                alert("请选择基金周期投资金额");
+                return;
+            }
+            if (fundCycleInvestRate == null || fundCycleInvestRate == '') {
+                alert("请选择基金周期投资收益率");
+                return;
+            }
+        }
+    }
 
     if (fundName != "" && fundName != null) {
         var fundsArr = await searchFundByName(fundName);
@@ -988,14 +989,23 @@ async function saveFund() {
     if (bonds == null || bonds == '') {
         bonds = "0";
     }
-    var fund = {
-        "fundCode": code,
-        "costPrise": costPrise,
-        "bonds": bonds,
-        // "fundCycleInvestType": fundCycleInvestType,
-        // "fundCycleInvestDate": fundCycleInvestDate,
-        // "fundCycleInvestValue": fundCycleInvestValue,
-        // "fundCycleInvestRate": fundCycleInvestRate,
+    var fund;
+    if (isCycleInvest) {
+        fund = {
+            "fundCode": code,
+            "costPrise": costPrise,
+            "bonds": bonds,
+            "fundCycleInvestType": fundCycleInvestType,
+            "fundCycleInvestDate": fundCycleInvestDate,
+            "fundCycleInvestValue": fundCycleInvestValue,
+            "fundCycleInvestRate": fundCycleInvestRate,
+        }
+    } else {
+        fund = {
+            "fundCode": code,
+            "costPrise": costPrise,
+            "bonds": bonds,
+        }
     }
     var funds = await readCacheData('funds');
     if (funds == null) {
@@ -1008,10 +1018,12 @@ async function saveFund() {
             funds[k].fundCode = fund.fundCode;
             funds[k].costPrise = fund.costPrise;
             funds[k].bonds = fund.bonds;
-            // funds[k].fundCycleInvestType = fund.fundCycleInvestType;
-            // funds[k].fundCycleInvestDate = fund.fundCycleInvestDate;
-            // funds[k].fundCycleInvestValue = fund.fundCycleInvestValue;
-            // funds[k].fundCycleInvestRate = fund.fundCycleInvestRate;
+            if (isCycleInvest) {
+                funds[k].fundCycleInvestType = fund.fundCycleInvestType;
+                funds[k].fundCycleInvestDate = fund.fundCycleInvestDate;
+                funds[k].fundCycleInvestValue = fund.fundCycleInvestValue;
+                funds[k].fundCycleInvestRate = fund.fundCycleInvestRate;
+            }
             if (funds[k].addTimePrice == null || funds[k].addTimePrice == '') {
                 let checkFundExsitReuslt = checkFundExsit(funds[k].fundCode);
                 funds[k].addTimePrice = checkFundExsitReuslt.now;
