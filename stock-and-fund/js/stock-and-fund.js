@@ -63,10 +63,8 @@ function autoRefresh() {
 }
 // 初始化 Html 页面
 function initHtml() {
-    if (!develop) {
-        $("#importFromLocalSpringBoot")[0].style.display = "none";
-    } else {
-        $("#importFromLocalSpringBoot")[0].style.display = 'inline';
+    if (develop) {
+        document.getElementById('importFromLocalSpringBoot').classList.remove('fade');
     }
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
@@ -101,6 +99,7 @@ function initHtml() {
     // 在页面顶部显示一些监控信息，重要信息
     initNotice();
     initFontStyle();
+    initFirstInstall();
 }
 // 按钮监听事件
 document.addEventListener(
@@ -315,8 +314,10 @@ document.addEventListener(
         let helpDocumentButton = document.getElementById('help-document-button');
         helpDocumentButton.addEventListener('click', function () {
             chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
-        }
-        );
+        });
+        document.getElementById('help-document-alert').addEventListener('click', function () {
+            chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
+        });
         // 走势图页面，点击编辑按钮
         let updateStockFundButton = document.getElementById('update-stock-fund-button');
         updateStockFundButton.addEventListener('click', function () {
@@ -1302,7 +1303,13 @@ function ajaxGetFundFromTiantianjijin(code) {
 function alertMessage(message) {
     $("#alert-content").html(message);
     $("#alert-container").show();
-    setTimeout(function() {
+    setTimeout(function () {
         $("#alert-container").hide();
     }, 2000);
+}
+
+function initFirstInstall() {
+    if (stockList.length == 0 && fundList.length == 0) {
+        $("#help-document-alert")[0].style.display = 'block';
+    }
 }

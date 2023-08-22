@@ -378,7 +378,7 @@
                         <button type="button" id="help-document-button" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">使用说明
                         </button>
-                        <button type="button" id="importFromLocalSpringBoot" class="btn btn-outline-primary btn-sm"
+                        <button type="button" id="importFromLocalSpringBoot" class="btn btn-outline-primary btn-sm fade"
                             data-toggle="modal">本地股基神器SpringBoot数据导入
                         </button>
                         <div id="monitor-text" class="my-monitor-text">搜索输入股票基金编码或名称后点击回车即可搜索！！！</div>
@@ -402,6 +402,9 @@
                 </div>
                 <form>
                     <div class="stock-large-market" id="stock-large-market"></div>
+                    <div class="alert alert-primary my-large-alert" id="help-document-alert" role="alert">
+                        <a href="#" class="alert-link">股票基金神器使用说明（新手必看）</a>
+                    </div>
                     <div class="my-div">
                         <table class="table table-hover my-font no-wrap table-striped">
                             <thead id="stock-head" />
@@ -411,7 +414,8 @@
                             <tfoot id="total-nr" />
                         </table>
                     </div>
-                    <div id="page"></div>
+                    <div id="page">
+                    </div>
                 </form>
             </div>
         </div>

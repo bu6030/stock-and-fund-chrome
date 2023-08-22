@@ -92,3 +92,11 @@
     width: 800px;
     margin-top: 3px;
 }
+
+.my-large-alert {
+    width: 800px;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 3px;
+    display: none;
+}
