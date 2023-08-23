@@ -284,6 +284,7 @@ document.addEventListener(
         document.getElementById('search-stock-select').addEventListener('change', function () {
             let stockCode = $("#search-stock-select").val();
             $("#stock-code").val(stockCode);
+            $("#stock-name").val('');
             saveStock();
         }
         );
@@ -291,6 +292,7 @@ document.addEventListener(
         document.getElementById('search-fund-select').addEventListener('change', function () {
             let fundCode = $("#search-fund-select").val();
             $("#fund-code").val(fundCode);
+            $("#fund-name").val('');
             saveFund();
         }
         );
@@ -855,20 +857,9 @@ async function searchFundByName(name) {
 // 保存股票
 async function saveStock() {
     var costPrise = $("#stock-costPrise").val();
-    var stockName = $("#stock-name").val();
     var bonds = $("#stock-bonds").val();
     var monitorHighPrice = $("#stock-monitor-high-price").val();
     var monitorLowPrice = $("#stock-monitor-low-price").val();
-    if (stockName != "" && stockName != null) {
-        var stocksArr = searchStockByName(stockName);
-        var values = stocksArr[0].split("~");
-        var stockCode = values[0] + values[1];
-        $("#stock-code").val(stockCode);
-        stockName = $("#stock-name").val();
-        if (stockName == null || stockName == '') {
-            return;
-        }
-    }
     var code = $("#stock-code").val();
     if (code == null || code == '') {
         // alert("请添加股票编码或通过股票名称搜索");
@@ -936,7 +927,6 @@ async function saveStock() {
 async function saveFund() {
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
-    var fundName = $("#fund-name").val();
     if (isCycleInvest) {
         var fundCycleInvestType = $("#fund-cycle-invest-type").val();
         var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
@@ -959,15 +949,6 @@ async function saveFund() {
         }
     }
 
-    if (fundName != "" && fundName != null) {
-        var fundsArr = await searchFundByName(fundName);
-        if (fundsArr.length == 0) {
-            return;
-        }
-        $("#fund-code").val(fundsArr[0].fundCode);
-        $("#fund-name").val(fundsArr[0].fundName);
-        fundName = $("#fund-name").val();
-    }
     var code = $("#fund-code").val();
     if (code == null || code == '') {
         alertMessage("请添加基金编码或通过基金名称搜索");
