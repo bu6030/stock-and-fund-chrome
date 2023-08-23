@@ -27,6 +27,7 @@ window.addEventListener("load", async (event) => {
     }
 });
 
+// 初始化加载基金股票缓存
 async function initLoad() {
     var funds = await readCacheData('funds');
     if (funds == null) {
@@ -61,6 +62,7 @@ function autoRefresh() {
         initLargeMarketData();
     }
 }
+
 // 初始化 Html 页面
 function initHtml() {
     if (develop) {
@@ -99,21 +101,19 @@ function initHtml() {
     // 在页面顶部显示一些监控信息，重要信息
     initNotice();
     initFontStyle();
-    initFirstInstall();
 }
+
 // 按钮监听事件
 document.addEventListener(
     'DOMContentLoaded',
     function () {
         // 首页，导入数据按钮点击展示导入数据页面
-        let showImportDataDialog = document.getElementById('showImportDataDialog');
-        showImportDataDialog.addEventListener('click', function () {
+        document.getElementById('showImportDataDialog').addEventListener('click', function () {
             $("#data-import-modal").modal();
         }
         );
         // 首页，导出数据按钮点击展导出 txt 文件
-        let dataExportButton = document.getElementById('data-export-button');
-        dataExportButton.addEventListener('click', function () {
+        document.getElementById('data-export-button').addEventListener('click', function () {
             var data = {};
             data.stocks = stockList;
             data.funds = fundList;
@@ -121,8 +121,7 @@ document.addEventListener(
         }
         );
         // 导入数据页面，导入文件选择 txt 文件导入数据
-        var fileInput = document.getElementById('file-input');
-        fileInput.addEventListener('change', async function (e) {
+        document.getElementById('file-input').addEventListener('change', async function (e) {
             var file = e.target.files[0];
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -137,21 +136,18 @@ document.addEventListener(
             reader.readAsText(file);
         });
         // 基金编辑页面，点击保存按钮
-        let fundSaveButton = document.getElementById('fund-save-button');
-        fundSaveButton.addEventListener('click', function () {
+        document.getElementById('fund-save-button').addEventListener('click', function () {
             saveFund();
         }
         );
         // 股票编辑页面，点击保存按钮
-        let stockSaveButton = document.getElementById('stock-save-button');
-        stockSaveButton.addEventListener('click', function () {
+        document.getElementById('stock-save-button').addEventListener('click', function () {
             saveStock();
         }
         );
         // 首页，自己开发时方便从 SpringBoot 项目直接导入数据
         if (develop) {
-            let importFromLocalSpringBoot = document.getElementById('importFromLocalSpringBoot');
-            importFromLocalSpringBoot.addEventListener('click', function () {
+            document.getElementById('importFromLocalSpringBoot').addEventListener('click', function () {
                 let result = ajaxGetStockAndFundFromLocalService();
                 saveCacheData('stocks', JSON.stringify(result.stocks));
                 saveCacheData('funds', JSON.stringify(result.funds));
@@ -159,8 +155,7 @@ document.addEventListener(
             });
         }
         // 股票编辑页面，点击删除按钮
-        let stockDeleteButton = document.getElementById('stock-delete-button');
-        stockDeleteButton.addEventListener('click', async function () {
+        document.getElementById('stock-delete-button').addEventListener('click', async function () {
             var stocks = await readCacheData('stocks');
             stocks = jQuery.parseJSON(stocks);
             var code = $("#stock-code").val();
@@ -177,8 +172,7 @@ document.addEventListener(
         }
         );
         // 基金编辑页面，点击删除按钮
-        let fundDeleteButton = document.getElementById('fund-delete-button');
-        fundDeleteButton.addEventListener('click', async function () {
+        document.getElementById('fund-delete-button').addEventListener('click', async function () {
             var funds = await readCacheData('funds');
             funds = jQuery.parseJSON(funds);
             var code = $("#fund-code").val();
@@ -224,8 +218,7 @@ document.addEventListener(
             }
         })
         // 基金编辑页面，点击走势图按钮
-        let fundShowTimeImageButton = document.getElementById('fund-show-time-image-button');
-        fundShowTimeImageButton.addEventListener('click', function () {
+        document.getElementById('fund-show-time-image-button').addEventListener('click', function () {
             let fundCode = $("#fund-code").val();
             timeImageCode = fundCode;
             timeImageType = "FUND";
@@ -233,8 +226,7 @@ document.addEventListener(
         }
         );
         // 股票编辑页面，点击走势图按钮
-        let stockShowTimeImageButton = document.getElementById('stock-show-time-image-button');
-        stockShowTimeImageButton.addEventListener('click', function () {
+        document.getElementById('stock-show-time-image-button').addEventListener('click', function () {
             let stockCode = $("#stock-code").val();
             timeImageCode = stockCode;
             timeImageType = "STOCK";
@@ -242,32 +234,27 @@ document.addEventListener(
         }
         );
         // 走势图页面，点击分时图按钮
-        let timeImageMinuteButton = document.getElementById('time-image-minute-button');
-        timeImageMinuteButton.addEventListener('click', function () {
+        document.getElementById('time-image-minute-button').addEventListener('click', function () {
             showMinuteImage();
         }
         );
         // 走势图页面，日线图按钮点击
-        let timeImageDayButton = document.getElementById('time-image-day-button');
-        timeImageDayButton.addEventListener('click', function () {
+        document.getElementById('time-image-day-button').addEventListener('click', function () {
             showDayImage();
         }
         );
         // 走势图页面，周线图按钮点击
-        let timeImageWeekButton = document.getElementById('time-image-week-button');
-        timeImageWeekButton.addEventListener('click', function () {
+        document.getElementById('time-image-week-button').addEventListener('click', function () {
             showWeekImage();
         }
         );
         // 走势图页面，月线图按钮点击
-        let timeImageMonthButton = document.getElementById('time-image-month-button');
-        timeImageMonthButton.addEventListener('click', function () {
+        document.getElementById('time-image-month-button').addEventListener('click', function () {
             showMonthImage();
         }
         );
         // 首页，清理数据按钮点击
-        let removeAllDataButton = document.getElementById('remove-all-data-button');
-        removeAllDataButton.addEventListener('click', function () {
+        document.getElementById('remove-all-data-button').addEventListener('click', function () {
             let stocksRemove = [];
             let fundsRemove = [];
             saveCacheData('stocks', JSON.stringify(stocksRemove));
@@ -290,37 +277,32 @@ document.addEventListener(
             }
         });
         // 首页，输入股票名称后点击搜索股票/基金按钮
-        let stockFundNameSearchButton = document.getElementById('stock-fund-name-search-button');
-        stockFundNameSearchButton.addEventListener('click', async function () {
+        document.getElementById('stock-fund-name-search-button').addEventListener('click', async function () {
             searchFundAndStock();
         });
         // 搜索股票页面，股票列表点击选择
-        let searchStockSelect = document.getElementById('search-stock-select');
-        searchStockSelect.addEventListener('change', function () {
+        document.getElementById('search-stock-select').addEventListener('change', function () {
             let stockCode = $("#search-stock-select").val();
             $("#stock-code").val(stockCode);
             saveStock();
         }
         );
         // 搜索基金页面，基金列表点击选择
-        let searchFundSelect = document.getElementById('search-fund-select');
-        searchFundSelect.addEventListener('change', function () {
+        document.getElementById('search-fund-select').addEventListener('change', function () {
             let fundCode = $("#search-fund-select").val();
             $("#fund-code").val(fundCode);
             saveFund();
         }
         );
         // 首页，使用说明按钮点击
-        let helpDocumentButton = document.getElementById('help-document-button');
-        helpDocumentButton.addEventListener('click', function () {
+        document.getElementById('help-document-button').addEventListener('click', function () {
             chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
         });
         document.getElementById('help-document-alert').addEventListener('click', function () {
             chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
         });
         // 走势图页面，点击编辑按钮
-        let updateStockFundButton = document.getElementById('update-stock-fund-button');
-        updateStockFundButton.addEventListener('click', function () {
+        document.getElementById('update-stock-fund-button').addEventListener('click', function () {
             $("#time-image-modal").modal("hide");
             if (timeImageType == "FUND") {
                 $("#fund-modal").modal();
@@ -330,8 +312,7 @@ document.addEventListener(
         }
         );
         // 首页，点击加入微信群
-        let showWechatGroupButton = document.getElementById('show-wechat-group-button');
-        showWechatGroupButton.addEventListener('click', function () {
+        document.getElementById('show-wechat-group-button').addEventListener('click', function () {
             let timestamp = Date.now();
             let path = Env.WECHAT_GROUP_QR_CODE + "?date=" + timestamp;
             $("#wechat-group-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
@@ -364,12 +345,15 @@ document.addEventListener(
         })
     }
 );
+
 // 股票搜索后，接口返回为 unicode 编码，转换为中文
 function A2U(str) {
     return unescape(str.replace(/\\u/gi, '%u'));
 }
+
 // 初始化首页股票列表数据
 function initData() {
+    initFirstInstall();
     var stocks = "";
     for (var k in stockList) {
         stocks += stockList[k].code + ",";
@@ -411,8 +395,8 @@ function initData() {
         }
     }
     initFund();
-
 }
+
 // 初始化首页基金列表数据
 function initFund() {
     for (var l in fundList) {
@@ -532,6 +516,8 @@ function checkFundExsit(code) {
     }
     return fund;
 }
+
+// 调用接口或缓存检查基金是否存在
 function checkFundExsitFromEastMoney(code) {
     let fund = ajaxGetFundFromEastMoney(code);
     if (fund.name != '' && fund.name != undefined) {
@@ -631,6 +617,7 @@ function initStockAndFundHtml() {
         });
     }
 }
+
 // 拼接股票 html
 function getStockTableHtml(result, totalMarketValueResult) {
     var str = "";
@@ -711,6 +698,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
         + "</td><td></td></tr>";
     return str;
 }
+
 // 拼接基金 html
 function getFundTableHtml(result, totalMarketValueResult) {
     var str = "";
@@ -943,6 +931,7 @@ async function saveStock() {
     $("#search-stock-modal").modal("hide");
     initData();
 }
+
 // 保存基金
 async function saveFund() {
     var costPrise = $("#fund-costPrise").val();
@@ -1087,12 +1076,14 @@ async function readCacheData(key) {
     return result;
 }
 
+// 首页通知展示
 async function initNotice() {
     var text = await readCacheData('MONITOR_TEXT');
     $("#monitor-text").html(text);
     saveCacheData('MONITOR_TEXT', '搜索输入股票基金编码或名称后点击回车即可搜索！！！')
     chrome.action.setBadgeText({ text: "" });
 }
+
 // 首页点击股票基金搜索或者在股票基金名称输入框点击回车
 async function searchFundAndStock() {
     $("#search-fund-select").find("option").remove();
@@ -1134,6 +1125,7 @@ async function searchFundAndStock() {
     }
 }
 
+// 初始化页面是，股票基金数据字体样式设定
 async function initFontStyle() {
     let fontChangeStyle = await readCacheData('font-change-style');
     var stockNr = document.getElementById('stock-nr');
@@ -1150,6 +1142,7 @@ async function initFontStyle() {
     }
 }
 
+// 样式切换，股票基金数据字体加粗加大
 async function changeFontStyle() {
     var stockNr = document.getElementById('stock-nr');
     // 添加class样式
@@ -1162,6 +1155,25 @@ async function changeFontStyle() {
     initFontStyle();
 }
 
+// 各种告警提示
+function alertMessage(message) {
+    $("#alert-content").html(message);
+    $("#alert-container").show();
+    setTimeout(function () {
+        $("#alert-container").hide();
+    }, 2000);
+}
+
+// 第一次安装后没有数据，展示使用说明
+function initFirstInstall() {
+    if (stockList.length == 0 && fundList.length == 0) {
+        $("#help-document-alert")[0].style.display = 'block';
+    } else {
+        $("#help-document-alert")[0].style.display = 'none';
+    }
+}
+
+// 接口调用
 function ajaxGetStockAndFundFromLocalService() {
     var result;
     $.ajax({
@@ -1183,6 +1195,7 @@ function ajaxGetStockAndFundFromLocalService() {
     return result;
 }
 
+// 接口调用
 function ajaxGetFundFromEastMoney(code) {
     let fund = {};
     $.ajax({
@@ -1216,6 +1229,7 @@ function ajaxGetFundFromEastMoney(code) {
     return fund;
 }
 
+// 接口调用
 function ajaxGetFundCodeFromTiantianjijin() {
     let result;
     $.ajax({
@@ -1237,6 +1251,7 @@ function ajaxGetFundCodeFromTiantianjijin() {
     return result;
 }
 
+// 接口调用
 function ajaxGetStockCodeByNameFromGtimg(name) {
     let result;
     $.ajax({
@@ -1258,6 +1273,7 @@ function ajaxGetStockCodeByNameFromGtimg(name) {
     return result;
 }
 
+// 接口调用
 function ajaxGetStockFromGtimg(code) {
     let result;
     $.ajax({
@@ -1279,6 +1295,7 @@ function ajaxGetStockFromGtimg(code) {
     return result;
 }
 
+// 接口调用
 function ajaxGetFundFromTiantianjijin(code) {
     let result;
     $.ajax({
@@ -1298,18 +1315,4 @@ function ajaxGetFundFromTiantianjijin(code) {
         }
     });
     return result;
-}
-
-function alertMessage(message) {
-    $("#alert-content").html(message);
-    $("#alert-container").show();
-    setTimeout(function () {
-        $("#alert-container").hide();
-    }, 2000);
-}
-
-function initFirstInstall() {
-    if (stockList.length == 0 && fundList.length == 0) {
-        $("#help-document-alert")[0].style.display = 'block';
-    }
 }
