@@ -149,9 +149,11 @@ document.addEventListener(
         if (develop) {
             document.getElementById('importFromLocalSpringBoot').addEventListener('click', function () {
                 let result = ajaxGetStockAndFundFromLocalService();
-                saveCacheData('stocks', JSON.stringify(result.stocks));
-                saveCacheData('funds', JSON.stringify(result.funds));
-                location.reload();
+                if (result != null && result != '' && result != undefined) {
+                    saveCacheData('stocks', JSON.stringify(result.stocks));
+                    saveCacheData('funds', JSON.stringify(result.funds));
+                    location.reload();
+                }
             });
         }
         // 股票编辑页面，点击删除按钮
@@ -1088,7 +1090,7 @@ async function searchFundAndStock() {
             $("#search-stock-select").append(option);
         }
         $("#input-stock-name-search").val("");
-        if (stocksArr.length > 0) {
+        if (stocksArr != null && stocksArr != '' && stocksArr != undefined && stocksArr.length > 0) {
             $("#search-stock-modal").modal();
         }
     }
