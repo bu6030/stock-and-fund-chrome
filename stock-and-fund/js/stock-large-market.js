@@ -31,6 +31,7 @@ function initLargeMarketData() {
             let largeMarketSh000001 = document.getElementById('large-market-sh000001');
             largeMarketSh000001.addEventListener('click', function () {
                 timeImageCode = "sh000001";
+                timeImageType = "STOCK";
                 let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
                 $("#stock-modal").modal("hide");
                 $("#time-image-day-button")[0].style.display = 'block';
@@ -44,6 +45,7 @@ function initLargeMarketData() {
             let largeMarketSz399001 = document.getElementById('large-market-sz399001');
             largeMarketSz399001.addEventListener('click', function () {
                 timeImageCode = "sz399001";
+                timeImageType = "STOCK";
                 let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
                 $("#stock-modal").modal("hide");
                 $("#time-image-day-button")[0].style.display = 'block';
@@ -57,6 +59,7 @@ function initLargeMarketData() {
             let largeMarketSz399006 = document.getElementById('large-market-sz399006');
             largeMarketSz399006.addEventListener('click', function () {
                 timeImageCode = "sz399006";
+                timeImageType = "STOCK";
                 let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
                 $("#stock-modal").modal("hide");
                 $("#time-image-day-button")[0].style.display = 'block';
