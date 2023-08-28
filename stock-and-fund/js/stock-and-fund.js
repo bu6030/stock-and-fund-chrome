@@ -589,6 +589,7 @@ function initStockAndFundHtml() {
             $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
             $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
             $("#stock-show-time-image-button")[0].style.display = 'inline';
+            $("#stock-fund-delete-button")[0].style.display = 'inline';
             let stockCode = $("#stock-code").val();
             timeImageCode = stockCode;
             timeImageType = "STOCK";
@@ -614,6 +615,7 @@ function initStockAndFundHtml() {
                 $("#fund-cycle-invest")[0].style.display = "none";
             }
             $("#fund-show-time-image-button")[0].style.display = 'inline';
+            $("#stock-fund-delete-button")[0].style.display = 'inline';
             let fundCode = $("#fund-code").val();
             timeImageCode = fundCode;
             timeImageType = "FUND";
