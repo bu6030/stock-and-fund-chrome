@@ -30,49 +30,19 @@ function initLargeMarketData() {
             setTimeout(function() {
                 // html 渲染完毕后 1s 执行
                 // 点击上证指数
-                let largeMarketSh000001 = document.getElementById('large-market-sh000001');
-                largeMarketSh000001.addEventListener('click', function () {
+                document.getElementById('large-market-sh000001').addEventListener('click', function () {
                     timeImageCode = "sh000001";
-                    timeImageType = "STOCK";
-                    let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
-                    $("#stock-modal").modal("hide");
-                    $("#time-image-day-button")[0].style.display = 'block';
-                    $("#time-image-week-button")[0].style.display = 'block';
-                    $("#time-image-month-button")[0].style.display = 'block';
-                    $("#update-stock-fund-button")[0].style.display = 'none';
-                    $("#stock-fund-delete-button")[0].style.display = 'none';
-                    $("#time-image-modal").modal();
-                    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+                    initLargeMarketClick();
                 });
                 // 点击深证成指
-                let largeMarketSz399001 = document.getElementById('large-market-sz399001');
-                largeMarketSz399001.addEventListener('click', function () {
+                document.getElementById('large-market-sz399001').addEventListener('click', function () {
                     timeImageCode = "sz399001";
-                    timeImageType = "STOCK";
-                    let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
-                    $("#stock-modal").modal("hide");
-                    $("#time-image-day-button")[0].style.display = 'block';
-                    $("#time-image-week-button")[0].style.display = 'block';
-                    $("#time-image-month-button")[0].style.display = 'block';
-                    $("#update-stock-fund-button")[0].style.display = 'none';
-                    $("#stock-fund-delete-button")[0].style.display = 'none';
-                    $("#time-image-modal").modal();
-                    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+                    initLargeMarketClick();
                 });
                 // 点击创业板指
-                let largeMarketSz399006 = document.getElementById('large-market-sz399006');
-                largeMarketSz399006.addEventListener('click', function () {
+                document.getElementById('large-market-sz399006').addEventListener('click', function () {
                     timeImageCode = "sz399006";
-                    timeImageType = "STOCK";
-                    let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
-                    $("#stock-modal").modal("hide");
-                    $("#time-image-day-button")[0].style.display = 'block';
-                    $("#time-image-week-button")[0].style.display = 'block';
-                    $("#time-image-month-button")[0].style.display = 'block';
-                    $("#update-stock-fund-button")[0].style.display = 'none';
-                    $("#stock-fund-delete-button")[0].style.display = 'none';
-                    $("#time-image-modal").modal();
-                    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+                    initLargeMarketClick();
                 });     
             }, 300);
         },
@@ -82,4 +52,18 @@ function initLargeMarketData() {
             console.log(textStatus);
         }
     });
+}
+
+// 初始化大盘指数 onclick 具体方法
+function initLargeMarketClick(){
+    timeImageType = "STOCK";
+    let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
+    $("#stock-modal").modal("hide");
+    $("#time-image-day-button")[0].style.display = 'block';
+    $("#time-image-week-button")[0].style.display = 'block';
+    $("#time-image-month-button")[0].style.display = 'block';
+    $("#update-stock-fund-button")[0].style.display = 'none';
+    $("#stock-fund-delete-button")[0].style.display = 'none';
+    $("#time-image-modal").modal();
+    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }
