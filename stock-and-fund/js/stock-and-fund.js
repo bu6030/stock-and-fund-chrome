@@ -20,7 +20,7 @@ window.addEventListener("load", async (event) => {
         // 隐藏密码保护按钮
         $("#show-password-protect-button")[0].style.display = 'none';
         $("#data-export-button")[0].style.display = 'none';
-        $("#importFromLocalSpringBoot")[0].style.display = 'none';
+        $("#import-from-local-springboot")[0].style.display = 'none';
     } else {
         // 没有密码直接展示
         initLoad();
@@ -66,7 +66,7 @@ function autoRefresh() {
 // 初始化 Html 页面
 function initHtml() {
     if (develop) {
-        document.getElementById('importFromLocalSpringBoot').classList.remove('fade');
+        document.getElementById('import-from-local-springboot').classList.remove('fade');
     }
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
@@ -108,7 +108,7 @@ document.addEventListener(
     'DOMContentLoaded',
     function () {
         // 首页，导入数据按钮点击展示导入数据页面
-        document.getElementById('showImportDataDialog').addEventListener('click', function () {
+        document.getElementById('show-import-data').addEventListener('click', function () {
             $("#data-import-modal").modal();
         }
         );
@@ -147,7 +147,7 @@ document.addEventListener(
         );
         // 首页，自己开发时方便从 SpringBoot 项目直接导入数据
         if (develop) {
-            document.getElementById('importFromLocalSpringBoot').addEventListener('click', function () {
+            document.getElementById('import-from-local-springboot').addEventListener('click', function () {
                 let result = ajaxGetStockAndFundFromLocalService();
                 if (result != null && result != '' && result != undefined) {
                     saveCacheData('stocks', JSON.stringify(result.stocks));
