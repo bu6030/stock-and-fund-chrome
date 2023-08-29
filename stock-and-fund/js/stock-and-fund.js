@@ -267,14 +267,12 @@ document.addEventListener(
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', async function () {
             if (event.key === 'Enter') {
-                console.log("我在input-stock-name-search按了回车");
                 searchFundAndStock();
             }
         });
         // 首页，在基金搜索名称输入框中点击回车
         document.getElementById('input-fund-name-search').addEventListener('keydown', async function () {
             if (event.key === 'Enter') {
-                console.log("我在input-fund-name-search按了回车");
                 searchFundAndStock();
             }
         });
@@ -1053,11 +1051,9 @@ function saveCacheData(key, value) {
 
 // 统一读取缓存，写一个异步方法
 async function readCacheData(key) {
-    console.log("开始读取" + new Date());
     var result = localStorage.getItem(key);
     // var result = await getData(key);
     console.log("readCacheData key = " + key + ", value = " + result);
-    console.log("读取完毕" + new Date());
     return result;
 }
 
@@ -1136,7 +1132,6 @@ async function changeFontStyle() {
     } else {
         saveCacheData('font-change-style', 'bolder');
     }
-    console.log('样式切换');
     initFontStyle();
 }
 
