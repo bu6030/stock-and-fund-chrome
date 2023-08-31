@@ -5,6 +5,7 @@ let Env = {
     GET_STOCK_TIME_IMAGE_DAY_FROM_SINA: "http://image.sinajs.cn/newchart/daily/n/",
     GET_STOCK_TIME_IMAGE_WEEK_FROM_SINA: "http://image.sinajs.cn/newchart/weekly/n/",
     GET_STOCK_TIME_IMAGE_MONTH_FROM_SINA: "http://image.sinajs.cn/newchart/monthly/n/",
+    GET_STOCK_TIME_IMAGE_MINUTE_MINI: "https://push2.eastmoney.com/api/qt/stock/trends2/get",
     GET_FUND_FROM_TIANTIANJIJIN: "http://fundgz.1234567.com.cn/js/",
     GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN: "http://fund.eastmoney.com/js/fundcode_search.js",
     GET_FUND_TIME_IMAGE_FROM_DFCFW: "http://webquoteklinepic.eastmoney.com/GetPic.aspx",

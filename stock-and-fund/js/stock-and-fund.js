@@ -345,6 +345,11 @@ document.addEventListener(
                 initLoad();
             }
         })
+        // 首页，点击展示隐藏迷你分时图
+        document.getElementById('show-minute-image-mini').addEventListener('click', async function () {
+            setMinuteImageMini();
+        })
+        
     }
 );
 
@@ -554,7 +559,7 @@ function checkStockExsit(code) {
 }
 
 // 股票基金列表获取完毕后，初始化 html 页面
-function initStockAndFundHtml() {
+async function initStockAndFundHtml() {
     var marketValue = new BigDecimal("0");
     totalMarketValue = new BigDecimal("0");
     for (var k = stockList.length - 1; k >= 0; k--) {
@@ -567,13 +572,13 @@ function initStockAndFundHtml() {
         totalMarketValue = totalMarketValue.add(marketValue);
     }
 
-    var str1 = getStockTableHtml(stockList, totalMarketValue);
+    var str1 = await getStockTableHtml(stockList, totalMarketValue);
     $("#stock-nr").html(str1);
 
-    var str2 = getFundTableHtml(fundList, totalMarketValue);
+    var str2 = await getFundTableHtml(fundList, totalMarketValue);
     $("#fund-nr").html(str2);
 
-    var str3 = getTotalTableHtml(totalMarketValue);
+    var str3 = await getTotalTableHtml(totalMarketValue);
     $("#total-nr").html(str3);
 
     for (k in stockList) {
@@ -620,10 +625,18 @@ function initStockAndFundHtml() {
             showMinuteImage();
         });
     }
+
+    // 初始化迷你走势图
+    let showMinuteImageMini = await readCacheData('show-minute-image-mini');
+    console.log("showMinuteImageMini == 'open'", showMinuteImageMini == 'open', showMinuteImageMini);
+    if (showMinuteImageMini == 'open') {
+        setStockMinitesImageMini();
+        setFundMinitesImageMini();
+    }
 }
 
 // 拼接股票 html
-function getStockTableHtml(result, totalMarketValueResult) {
+async function getStockTableHtml(result, totalMarketValueResult) {
     var str = "";
     stockTotalIncome = new BigDecimal("0");
     stockDayIncome = new BigDecimal("0");
@@ -669,9 +682,14 @@ function getStockTableHtml(result, totalMarketValueResult) {
         var costPrice = new BigDecimal(result[k].costPrise + "");
         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
-
+        
+        let showMinuteImageMini = await readCacheData('show-minute-image-mini');
+        let minuteImageMiniDiv = "";
+        if (showMinuteImageMini == 'open') {
+            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].code + "\" style=\"width:200px;height:40px;\"></div>"
+        }
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td >" + result[k].name
+            + "<td >" + result[k].name + minuteImageMiniDiv
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
@@ -704,7 +722,7 @@ function getStockTableHtml(result, totalMarketValueResult) {
 }
 
 // 拼接基金 html
-function getFundTableHtml(result, totalMarketValueResult) {
+async function getFundTableHtml(result, totalMarketValueResult) {
     var str = "";
     fundTotalIncome = new BigDecimal("0");
     fundDayIncome = new BigDecimal("0");
@@ -727,8 +745,13 @@ function getFundTableHtml(result, totalMarketValueResult) {
         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
         fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
 
+        let showMinuteImageMini = await readCacheData('show-minute-image-mini');
+        let minuteImageMiniDiv = "";
+        if (showMinuteImageMini == 'open') {
+            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" style=\"width:200px;height:40px;\"></div>"
+        }
         str += "<tr id=\"fund-tr-" + k + "\">"
-            + "<td >" + result[k].name
+            + "<td >" + result[k].name + minuteImageMiniDiv
             + "</td><td " + dayIncomeStyle + ">" + dayIncome
             + "</td><td " + dayIncomeStyle + ">" + result[k].gszzl + "%"
             + "</td><td>" + result[k].gsz
@@ -1135,6 +1158,20 @@ async function changeFontStyle() {
     initFontStyle();
 }
 
+// 展示隐藏分时图
+async function setMinuteImageMini() {
+    let showMinuteImageMini = await readCacheData('show-minute-image-mini');
+    console.log("showMinuteImageMini==", showMinuteImageMini);
+    if (showMinuteImageMini == 'open') {
+        console.log("showMinuteImageMini==close");
+        saveCacheData('show-minute-image-mini', 'close');
+    } else {
+        console.log("showMinuteImageMini==open");
+        saveCacheData('show-minute-image-mini', 'open');
+    }
+    initData();
+}
+
 // 各种告警提示
 function alertMessage(message) {
     $("#alert-content").html(message);
@@ -1153,3 +1190,119 @@ function initFirstInstall() {
     }
 }
 
+// 遍历股票，获取主页迷你分时图
+function setStockMinitesImageMini(){
+    console.log('sfasdfadsfadsfdasfadsfdf=========');
+    for (k in stockList) {
+        let elementId = 'minute-image-mini-' + stockList[k].code;
+        let result = ajaxGetStockTimeImageMinuteMini(stockList[k].code);
+        let dataStr = [];
+        let now;
+        if (result.data == null){
+            return;
+        }
+        for (var k = 0; k < result.data.trends.length; k++) {
+            let str = result.data.trends[k];
+            dataStr.push(parseFloat(str.split(",")[1]));
+            if (k == result.data.trends.length - 1) {
+                now = dataStr[k];
+            }
+        }
+        if(dataStr.length == 0){
+            return;
+        }
+        let color;
+        if (parseFloat(now) >= parseFloat(result.data.preClose)) {
+            color = "red";
+        } else {
+            color = "green";
+        }
+        setDetailChart(elementId, dataStr, color);
+    }
+}
+
+// 遍历股票，获取主页迷你分时图
+function setFundMinitesImageMini(){
+    for (k in fundList) {
+        let elementId = 'minute-image-mini-' + fundList[k].fundCode;
+        let result = ajaxGetFundTimeImageMinuteMini(fundList[k].fundCode);
+        console.log("==============",fundList[k].fundCode + "=====" + result);
+        let dataStr = [];
+        let now;
+        if (result.data == null){
+            return;
+        }
+        for (var k = 0; k < result.data.trends.length; k++) {
+            let str = result.data.trends[k];
+            dataStr.push(parseFloat(str.split(",")[1]));
+            if (k == result.data.trends.length - 1) {
+                now = dataStr[k];
+            }
+        }
+        let color;
+        if (parseFloat(now) >= parseFloat(result.data.preClose)) {
+            color = "red";
+        } else {
+            color = "green";
+        }
+        setDetailChart(elementId, dataStr, color);
+    }
+}
+
+
+function setDetailChart(elementId, dataStr, color) {
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById(elementId));
+    option = {
+        resize: true,
+        lineStyle: {
+            color: color, // 设置线的颜色
+            // 其他样式配置
+        },
+        xAxis: {
+            axisLabel: {
+                show: false // 隐藏x轴坐标标签
+              },
+              axisTick: {
+                show: false // 隐藏x轴刻度线
+              },
+              axisLine: {
+                show: false // 隐藏x轴轴线
+            },
+            type: 'category',
+        //   data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            scale: true,
+            type: 'value',
+            axisLabel: {
+                show: false // 隐藏x轴坐标标签
+            },
+            axisTick: {
+                show: false // 隐藏x轴刻度线
+            },
+            axisLine: {
+                show: false // 隐藏x轴轴线
+            },
+            splitLine: {
+                show: false // 隐藏背景的横隔线
+            }
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            top: '10%',
+            bottom: '10%',
+            width: '100%',
+            height: '100%'
+          },
+        series: [
+            {
+                data: dataStr,
+                type: 'line',
+                smooth: true
+            }
+        ]
+    };
+    myChart.setOption(option);
+}
