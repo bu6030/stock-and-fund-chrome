@@ -628,7 +628,6 @@ async function initStockAndFundHtml() {
 
     // 初始化迷你走势图
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
-    console.log("showMinuteImageMini == 'open'", showMinuteImageMini == 'open', showMinuteImageMini);
     if (showMinuteImageMini == 'open') {
         setStockMinitesImageMini();
         setFundMinitesImageMini();
@@ -1161,12 +1160,9 @@ async function changeFontStyle() {
 // 展示隐藏分时图
 async function setMinuteImageMini() {
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
-    console.log("showMinuteImageMini==", showMinuteImageMini);
     if (showMinuteImageMini == 'open') {
-        console.log("showMinuteImageMini==close");
         saveCacheData('show-minute-image-mini', 'close');
     } else {
-        console.log("showMinuteImageMini==open");
         saveCacheData('show-minute-image-mini', 'open');
     }
     initData();
@@ -1192,7 +1188,6 @@ function initFirstInstall() {
 
 // 遍历股票，获取主页迷你分时图
 function setStockMinitesImageMini(){
-    console.log('sfasdfadsfadsfdasfadsfdf=========');
     for (k in stockList) {
         let elementId = 'minute-image-mini-' + stockList[k].code;
         let result = ajaxGetStockTimeImageMinuteMini(stockList[k].code);
@@ -1226,7 +1221,6 @@ function setFundMinitesImageMini(){
     for (k in fundList) {
         let elementId = 'minute-image-mini-' + fundList[k].fundCode;
         let result = ajaxGetFundTimeImageMinuteMini(fundList[k].fundCode);
-        console.log("==============",fundList[k].fundCode + "=====" + result);
         let dataStr = [];
         let now;
         if (result.data == null){
