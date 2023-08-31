@@ -100,3 +100,8 @@
     margin-top: 3px;
     display: none;
 }
+
+.my-echart {
+    width: 200px;
+    height: 30px;
+}

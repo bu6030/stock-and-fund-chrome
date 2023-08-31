@@ -685,7 +685,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         let showMinuteImageMini = await readCacheData('show-minute-image-mini');
         let minuteImageMiniDiv = "";
         if (showMinuteImageMini == 'open') {
-            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].code + "\" style=\"width:200px;height:40px;\"></div>"
+            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].code + "\" class=\"my-echart\"></div>"
         }
         str += "<tr id=\"stock-tr-" + k + "\">"
             + "<td >" + result[k].name + minuteImageMiniDiv
@@ -747,7 +747,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         let showMinuteImageMini = await readCacheData('show-minute-image-mini');
         let minuteImageMiniDiv = "";
         if (showMinuteImageMini == 'open') {
-            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" style=\"width:200px;height:40px;\"></div>"
+            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
         }
         str += "<tr id=\"fund-tr-" + k + "\">"
             + "<td >" + result[k].name + minuteImageMiniDiv
@@ -1239,12 +1239,12 @@ function setFundMinitesImageMini(){
         } else {
             color = "green";
         }
-        setDetailChart(elementId, dataStr, color);
+        setDetailChart(elementId, dataStr, color, result.data.preClose);
     }
 }
 
 
-function setDetailChart(elementId, dataStr, color) {
+function setDetailChart(elementId, dataStr, color, preClose) {
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById(elementId));
     option = {
@@ -1264,7 +1264,6 @@ function setDetailChart(elementId, dataStr, color) {
                 show: false // 隐藏x轴轴线
             },
             type: 'category',
-        //   data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
         yAxis: {
             scale: true,
@@ -1283,10 +1282,10 @@ function setDetailChart(elementId, dataStr, color) {
             }
         },
         grid: {
-            left: '10%',
-            right: '10%',
-            top: '10%',
-            bottom: '10%',
+            left: '0%',
+            right: '0%',
+            top: '0%',
+            bottom: '0%',
             width: '100%',
             height: '100%'
           },
@@ -1294,7 +1293,7 @@ function setDetailChart(elementId, dataStr, color) {
             {
                 data: dataStr,
                 type: 'line',
-                smooth: true
+                smooth: true,
             }
         ]
     };
