@@ -1248,10 +1248,12 @@ function setDetailChart(elementId, dataStr, color, preClose) {
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById(elementId));
     option = {
-        resize: true,
+        // resize: true,
         lineStyle: {
             color: color, // 设置线的颜色
             // 其他样式配置
+            width: 1,
+            opacity: 0.5
         },
         xAxis: {
             axisLabel: {
@@ -1288,7 +1290,7 @@ function setDetailChart(elementId, dataStr, color, preClose) {
             bottom: '0%',
             width: '100%',
             height: '100%'
-          },
+        },
         series: [
             {
                 data: dataStr,

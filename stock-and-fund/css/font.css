@@ -102,6 +102,8 @@
 }
 
 .my-echart {
+    margin-top: 1%;
+    margin-bottom: 1%;
     width: 200px;
     height: 30px;
 }
