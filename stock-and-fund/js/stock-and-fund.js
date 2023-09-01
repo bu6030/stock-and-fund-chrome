@@ -674,7 +674,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
-        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
+        // var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome >= 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
+        let changePercent = parseFloat(result[k].changePercent);
+        var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
         let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
         // 计算股票总成本
@@ -736,7 +738,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
         }
-        var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
+        // var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
+        let gszzl = parseFloat(result[k].gszzl);
+        var dayIncomeStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:#c12e2a;\"" : "style=\"color:#3e8f3e;\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:#c12e2a\"" : "style=\"color:#3e8f3e\"");
         let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
         // 计算基金总成本
