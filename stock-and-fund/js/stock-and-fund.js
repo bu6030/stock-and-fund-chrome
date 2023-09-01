@@ -349,7 +349,10 @@ document.addEventListener(
         document.getElementById('show-minute-image-mini').addEventListener('click', async function () {
             setMinuteImageMini();
         })
-        
+        // 首页，点击刷新按钮
+        document.getElementById('refresh-button').addEventListener('click', async function (){
+            initData();
+        })
     }
 );
 
