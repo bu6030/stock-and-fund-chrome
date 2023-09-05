@@ -1,5 +1,6 @@
 # 股票基金神器chrome扩展程序版本
 
+[加入股票基金神器群](#attend-wechat-group)  
 [版本更新历史记录](#develop-history)  
 [Chrome应用市场安装](#chrome-plugin-stock-and-fund)  
 [chrome安装步骤](#chrome-stock-and-fund)  
@@ -9,7 +10,7 @@
 [添加/编辑基金步骤](#add-fund-step)  
 [导入导出数据步骤](#import-export-stock-and-fund-step)
 
-## <span id="develop-history">加入股票基金神器群</span>
+## <span id="attend-wechat-group">加入股票基金神器群</span>
 ![image](https://bu6030.github.io/images/wechat-group-qr-code.png?date=1693894190905)  
 您有任何问题，任何需求  
 都可以提处理  
