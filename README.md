@@ -11,7 +11,7 @@
 [导入导出数据步骤](#import-export-stock-and-fund-step)
 
 ## <span id="attend-wechat-group">加入股票基金神器群</span>
-![image](https://bu6030.github.io/images/wechat-group-qr-code.png?date=1693894190905)  
+![image](https://bu6030.github.io/images/wechat-group-qr-code.png)  
 您有任何问题，任何需求  
 都可以提处理  
 我会立刻修改  
