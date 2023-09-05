@@ -150,14 +150,19 @@
 ![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/00a2331e-c6cb-4b60-97de-812272a6bc90)  
 
 
-## <span id="import-export-stock-and-fund-step">股基神器导入导出数据步骤</span>
+## <span id="import-export-stock-and-fund-step">导入导出数据步骤</span>
  1. 由于数据是存储在浏览器本地的，因此增加导出导入数据功能，方便在不同的电脑复制数据。
- 2. 点击导出数据，从表单中手动copy后，手动粘贴到文本编辑器保存成文件即可。
- ![image](https://user-images.githubusercontent.com/11482988/221103317-9f654c7a-c4bb-45bd-ad2b-04066d3e830c.png)
- 3. 点击导入数据，可以选择刚才保存的文本，粘贴到输入框中，点击导入，即可导入数据。
- ![image](https://user-images.githubusercontent.com/11482988/221103612-504eae56-0763-4776-a19e-5a684b10171d.png)
- 4. 导入数据成功后，页面如下：
-![image](https://user-images.githubusercontent.com/11482988/222343280-b2bdc709-5f8f-40bd-a60e-4eb1ff7a24d5.png)
+ 2. 点击导出数据，自动下载 txt 文件到本地。
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/874af57c-0eb3-4c98-924c-5faec3cda3b4)  
+ 3. 点击导入数据，进入导入数据页面。
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/b75b8b95-c237-4a53-b546-c729463a2da8)  
+ 4. 点击选择文件
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/bb57b780-98c5-48b4-b960-eef98c94a66a)  
+ 5. 选择之前下载的文件，自动导入
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/c4992844-7ebd-4f9c-bd8a-d1a5c12514ee)  
+ 7. 导入数据成功后，页面如下：
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/45735a75-d9df-4ea7-80e9-2e5480a13548)  
+
 
 
 
