@@ -1,7 +1,4 @@
 # 股基神器chrome扩展程序版本
-开发不易，希望大家多多支持  
-![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/a9b1dded-bbde-4936-975e-92d7ff5a910f)
-![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/78e14c3d-3757-4061-a0c6-acfb6e6b99cf)
 
 [版本更新历史记录](#develop-history)  
 [Chrome应用市场安装](#chrome-plugin-stock-and-fund)  
@@ -166,6 +163,12 @@
  7. 导入数据成功后，页面如下：
 ![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/45735a75-d9df-4ea7-80e9-2e5480a13548)  
 
+## 捐赠开发者
+开发不易，如果您非常喜欢
+支付宝  
+<img width="339" alt="image" src="https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/f0d02ea7-a846-4de5-9d6f-c2c8a2a524e3">  
+微信  
+<img width="319" alt="image" src="https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/a881d8a8-e0ff-4cc3-918c-180df68b4d88">
 
 
 
