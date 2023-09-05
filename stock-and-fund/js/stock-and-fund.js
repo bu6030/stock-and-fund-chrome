@@ -1193,7 +1193,7 @@ function initFirstInstall() {
     }
 }
 
-// 遍历股票，获取主页迷你分时图
+// 遍历股票，展示主页迷你分时图
 function setStockMinitesImageMini(){
     for (k in stockList) {
         let elementId = 'minute-image-mini-' + stockList[k].code;
@@ -1223,7 +1223,7 @@ function setStockMinitesImageMini(){
     }
 }
 
-// 遍历股票，获取主页迷你分时图
+// 遍历基金，展示主页迷你分时图
 function setFundMinitesImageMini(){
     for (k in fundList) {
         let elementId = 'minute-image-mini-' + fundList[k].fundCode;
@@ -1250,8 +1250,14 @@ function setFundMinitesImageMini(){
     }
 }
 
-
+// 展示首页迷你分时图
 function setDetailChart(elementId, dataStr, color, preClose) {
+    // 如果分时数据长度小于240填充空值
+    if (dataStr.length < 240) {
+        const diffLength = 240 - dataStr.length;
+        const emptyData = Array(diffLength).fill(null); // 使用 null 填充空数据
+        dataStr = dataStr.concat(emptyData);
+    }
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById(elementId));
     option = {

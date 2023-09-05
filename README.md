@@ -70,6 +70,7 @@
 59. 首页增加迷你分时图 2023/8/31 (微信群友 Laughing_Lz 提供建议)
 60. 未持仓时当日上涨，当日盈利涨跌幅变色 2023/9/1 (微信群友 Laughing_Lz 提供建议)
 61. 增加手动刷新按钮 2023/9/1 (微信群友 Laughing_Lz 提供建议) -- version 1.6.19 -- end
+62. 首页迷你分时图数据较少时拼接空数据 2023/9/5
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
