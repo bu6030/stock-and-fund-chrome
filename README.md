@@ -1,4 +1,7 @@
 # 股基神器chrome扩展程序版本
+开发不易，希望大家多多支持  
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/a9b1dded-bbde-4936-975e-92d7ff5a910f)
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/78e14c3d-3757-4061-a0c6-acfb6e6b99cf)
 
 [版本更新历史记录](#develop-history)  
 [Chrome应用市场安装](#chrome-plugin-stock-and-fund)  
