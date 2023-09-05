@@ -88,7 +88,7 @@
  5. 扩展程序快捷键可以看到股基神器，也可以固定到扩展程序快捷栏中。  
  ![image](https://user-images.githubusercontent.com/11482988/220875081-3e9ca2d5-21a5-43f1-8d82-695954c3c35f.png)  
  6. 添加后点击股基神器按钮，可以进入主页。
-![image](https://user-images.githubusercontent.com/11482988/221104210-3a98e680-fc61-4f48-8fa3-b07d41bc318a.png)
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/ff894aed-f786-4362-b871-2aa8e643afea)  
 
 ## <span id="edge-stock-and-fund">股基神器Edge安装步骤</span>
  1. 代码下载完成后，在Edge浏览器中选择扩展程序进入扩展程序页面    
@@ -102,7 +102,7 @@
  4. 添加成功后，可以看到该内容，扩展程序快捷键可以看到股基神器，也可以固定到扩展程序快捷栏中。     
 ![image](https://user-images.githubusercontent.com/11482988/221106273-d099ad89-6393-4cfc-a164-8390586fb516.png)
  5. 击股基神器按钮，可以进入主页。  
-![image](https://user-images.githubusercontent.com/11482988/221106457-9013f243-99be-481f-b603-3ab31deb2c73.png)
+![image](https://github.com/bu6030/stock-and-fund-chrome/assets/11482988/ff894aed-f786-4362-b871-2aa8e643afea)  
 
 ## <span id="huhou-stock-and-fund">股基神器狐猴浏览器安装步骤</span>
 手机使用请在右侧的[Release链接](https://github.com/bu6030/stock-and-fund-chrome/releases)中下载stock-and-fund-for-mobile.crx文件下载安装
