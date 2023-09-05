@@ -1253,8 +1253,8 @@ function setFundMinitesImageMini(){
 // 展示首页迷你分时图
 function setDetailChart(elementId, dataStr, color, preClose) {
     // 如果分时数据长度小于240填充空值
-    if (dataStr.length < 240) {
-        const diffLength = 240 - dataStr.length;
+    if (dataStr.length < 241) {
+        const diffLength = 241 - dataStr.length;
         const emptyData = Array(diffLength).fill(null); // 使用 null 填充空数据
         dataStr = dataStr.concat(emptyData);
     }
