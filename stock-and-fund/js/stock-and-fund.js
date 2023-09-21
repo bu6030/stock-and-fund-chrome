@@ -9,8 +9,8 @@ var fundTotalCostValue;
 var totalMarketValue;
 var fundList;
 var stockList;
-let blueColor = '#c12e2a';
-let redColor = '#3e8f3e';
+var blueColor = '#3e8f3e';
+var redColor = '#c12e2a';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -31,6 +31,15 @@ window.addEventListener("load", async (event) => {
 
 // 初始化加载基金股票缓存
 async function initLoad() {
+    blueColor = await readCacheData('blueColor');
+    if (blueColor == null) {
+        blueColor = '#3e8f3e';
+    }
+    redColor = await readCacheData('redColor');
+    if (redColor == null) {
+        redColor = '#3e8f3e';
+    }
+    console.log('blueColor=',blueColor,';redColor=',redColor);
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -352,8 +361,11 @@ document.addEventListener(
             setMinuteImageMini();
         })
         // 首页，点击刷新按钮
-        document.getElementById('refresh-button').addEventListener('click', async function (){
+        document.getElementById('refresh-button').addEventListener('click', async function () {
             initData();
+        })
+        document.getElementById('change-blue-red-button').addEventListener('click', async function () {
+            changeBlueRed();
         })
     }
 );
@@ -1313,4 +1325,23 @@ function setDetailChart(elementId, dataStr, color, preClose) {
         ]
     };
     myChart.setOption(option);
+}
+
+async function changeBlueRed(){
+    blueColor = await readCacheData('blueColor');
+    if (blueColor == null || blueColor != '#3e8f3e') {
+        blueColor = '#3e8f3e';
+    } else {
+        blueColor = '#c12e2a';
+    }
+    redColor = await readCacheData('redColor');
+    if (redColor == null || redColor != '#c12e2a') {
+        redColor = '#c12e2a';
+    } else {
+        redColor = '#3e8f3e';
+    }
+    saveCacheData('redColor', redColor);
+    saveCacheData('blueColor', blueColor);
+    initData();
+    initLargeMarketData();
 }
