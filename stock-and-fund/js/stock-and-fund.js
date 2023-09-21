@@ -11,6 +11,7 @@ var fundList;
 var stockList;
 var blueColor = '#3e8f3e';
 var redColor = '#c12e2a';
+var cheatMeFlag = false;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -39,7 +40,14 @@ async function initLoad() {
     if (redColor == null) {
         redColor = '#3e8f3e';
     }
-    console.log('blueColor=',blueColor,';redColor=',redColor);
+    cheatMeFlag = await readCacheData('cheatMeFlag');
+    if (cheatMeFlag == null) {
+        cheatMeFlag = false;
+    } else if(cheatMeFlag == "true") {
+        cheatMeFlag = true;
+    } else {
+        cheatMeFlag = false;
+    }
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -367,6 +375,9 @@ document.addEventListener(
         document.getElementById('change-blue-red-button').addEventListener('click', async function () {
             changeBlueRed();
         })
+        document.getElementById('cheat-me-button').addEventListener('click', async function () {
+            cheatMe();
+        })
     }
 );
 
@@ -391,8 +402,16 @@ function initData() {
                 var values = dataStr.split("~");
                 stockList[l].name = values[1] + "";
                 stockList[l].now = values[3] + "";
-                stockList[l].change = values[31] + "";
-                stockList[l].changePercent = values[32] + "";
+                if (cheatMeFlag && parseFloat(values[31]) < 0) {
+                    var change = 0 - parseFloat(values[31]);
+                    var changePercent = 0 - parseFloat(values[32]);
+                    stockList[l].change = change + "";
+                    stockList[l].changePercent = changePercent + "";
+                } else {
+                    stockList[l].change = values[31] + "";
+                    stockList[l].changePercent = values[32] + "";
+                }
+
                 stockList[l].time = values[30] + "";
                 stockList[l].max = values[33] + "";
                 stockList[l].min = values[34] + "";
@@ -467,7 +486,13 @@ function initFund() {
                         fundList[k].gztime = json.gztime + "";
                         var gsz = new BigDecimal(json.gsz + "");
                         var dwjz = new BigDecimal(json.dwjz + "");
-                        fundList[k].gszzl = json.gszzl + "";
+
+                        if (cheatMeFlag && parseFloat(json.gszzl) < 0) {
+                            var gszzl = 0 - parseFloat(json.gszzl);
+                            fundList[k].gszzl = gszzl + "";
+                        } else {
+                            fundList[k].gszzl = json.gszzl + "";
+                        }
 
                         var now = new BigDecimal(json.gsz + "");
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");
@@ -1327,7 +1352,7 @@ function setDetailChart(elementId, dataStr, color, preClose) {
     myChart.setOption(option);
 }
 
-async function changeBlueRed(){
+async function changeBlueRed() {
     blueColor = await readCacheData('blueColor');
     if (blueColor == null || blueColor != '#3e8f3e') {
         blueColor = '#3e8f3e';
@@ -1344,4 +1369,17 @@ async function changeBlueRed(){
     saveCacheData('blueColor', blueColor);
     initData();
     initLargeMarketData();
+}
+
+async function cheatMe() {
+    cheatMeFlag = await readCacheData('cheatMeFlag');
+    if (cheatMeFlag == null) {
+        cheatMeFlag = false;
+    } else if(cheatMeFlag == "true") {
+        cheatMeFlag = false;
+    } else {
+        cheatMeFlag = true;
+    }
+    await saveCacheData('cheatMeFlag', cheatMeFlag);
+    initData();
 }
