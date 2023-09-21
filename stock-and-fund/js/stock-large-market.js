@@ -23,7 +23,7 @@ function initLargeMarketData() {
                 var changePercent = values[32] + "";
                 var aId = "id = 'large-market-" + stockCode + "'";
                 var style = "style=\"font-size: 9px;font-weight:600;"
-                    + (change == 0 ? "" : (change >= 0 ? "color:#c12e2a;\"" : "color:#3e8f3e;\""));
+                    + (change == 0 ? "" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
                 str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;&nbsp;" + changePercent + "%）   </a>";
             }
             $("#stock-large-market").html(str);
