@@ -349,6 +349,107 @@
                 </div>
             </div>
         </div>
+        <!-- 设置页面模态框 -->
+        <div class="modal fade" id="setting-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">设置</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="import-from-local-springboot" class="btn btn-outline-primary btn-sm fade" 
+                                    data-toggle="modal">本地股基神器SpringBoot数据导入
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="change-blue-red-button" class="btn btn-outline-primary btn-sm"
+                                data-toggle="modal">涨跌红绿颜色切换
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="cheat-me-button" class="btn btn-outline-primary btn-sm"
+                                data-toggle="modal">忽悠自己把亏损展示成盈利
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="remove-all-data-button" class="btn btn-outline-danger btn-sm"
+                                    data-toggle="modal">清空数据
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="data-export-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">导出数据
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="show-import-data" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">导入数据
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="show-minute-image-mini" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">展示/隐藏分时图
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="show-password-protect-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">密码保护
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="font-change-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">样式切换
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="full-screen-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">全屏展示
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 股票基金主体页面 start -->
         <div class="my-center-child">
             <div>
@@ -358,41 +459,14 @@
                         <button type="button" id="refresh-button" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">刷新
                         </button>
-                        <button type="button" id="remove-all-data-button" class="btn btn-outline-danger btn-sm"
-                            data-toggle="modal">清空数据
-                        </button>
-                        <button type="button" id="data-export-button" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">导出数据
-                        </button>
-                        <button type="button" id="show-import-data" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">导入数据
-                        </button>
-                        <button type="button" id="show-minute-image-mini" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">展示/隐藏分时图
-                        </button>
-                        <button type="button" id="show-password-protect-button" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">密码保护
-                        </button>
-                        <button type="button" id="font-change-button" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">样式切换
-                        </button>
-                        <button type="button" id="full-screen-button" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">全屏展示
-                        </button>
                         <button type="button" id="show-wechat-group-button" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">加入微信群
                         </button>
                         <button type="button" id="help-document-button" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">使用说明
                         </button>
-                        <button type="button" id="change-blue-red-button" class="btn btn-outline-primary btn-sm"
-                        data-toggle="modal">颜色切换
-                        </button>
-                        <button type="button" id="cheat-me-button" class="btn btn-outline-primary btn-sm"
-                        data-toggle="modal">忽悠自己
-                        </button>
-                        <button type="button" id="import-from-local-springboot" class="btn btn-outline-primary btn-sm fade"
-                            data-toggle="modal">本地股基神器SpringBoot数据导入
+                        <button type="button" id="show-setting-button" class="btn btn-outline-primary btn-sm"
+                            data-toggle="modal">设置
                         </button>
                         <div id="monitor-text" class="my-monitor-text">搜索输入股票基金编码或名称后点击回车即可搜索！！！</div>
                     </dl>

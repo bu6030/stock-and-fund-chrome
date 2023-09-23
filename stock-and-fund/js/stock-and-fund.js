@@ -378,6 +378,9 @@ document.addEventListener(
         document.getElementById('cheat-me-button').addEventListener('click', async function () {
             cheatMe();
         })
+        document.getElementById('show-setting-button').addEventListener('click', async function () {
+            $("#setting-modal").modal();
+        })
     }
 );
 
