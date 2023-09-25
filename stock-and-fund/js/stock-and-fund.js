@@ -12,6 +12,7 @@ var stockList;
 var blueColor = '#3e8f3e';
 var redColor = '#c12e2a';
 var cheatMeFlag = false;
+var showStockOrFundOrAll = 'all';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -48,6 +49,10 @@ async function initLoad() {
     } else {
         cheatMeFlag = false;
     }
+    showStockOrFundOrAll = await readCacheData('showStockOrFundOrAll');
+    if (showStockOrFundOrAll == null) {
+        showStockOrFundOrAll = 'all';
+    }
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -83,7 +88,7 @@ function autoRefresh() {
 }
 
 // 初始化 Html 页面
-function initHtml() {
+async function initHtml() {
     if (develop) {
         document.getElementById('import-from-local-springboot').classList.remove('fade');
     }
@@ -115,8 +120,12 @@ function initHtml() {
         " <th >收益</th>" +
         " <th >自选价格</th> " +
         " </tr>";
-    $("#fund-head").html(fundHead);
-    $("#stock-head").html(stockHead);
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        $("#fund-head").html(fundHead);
+    }
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+        $("#stock-head").html(stockHead);
+    }
     // 在页面顶部显示一些监控信息，重要信息
     initNotice();
     initFontStyle();
@@ -370,6 +379,15 @@ document.addEventListener(
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
         });
+        document.getElementById('show-all-button').addEventListener('click', async function () {
+            changeShowStockOrFundOrAll('all');
+        });
+        document.getElementById('show-stock-button').addEventListener('click', async function () {
+            changeShowStockOrFundOrAll('stock');
+        });
+        document.getElementById('show-fund-button').addEventListener('click', async function () {
+            changeShowStockOrFundOrAll('fund');
+        });
     }
 );
 
@@ -381,51 +399,53 @@ function A2U(str) {
 // 初始化首页股票列表数据
 function initData() {
     initFirstInstall();
-    var stocks = "";
-    for (var k in stockList) {
-        stocks += stockList[k].code + ",";
-    }
-    let result = ajaxGetStockFromGtimg(stocks);
-    var stoksArr = result.split("\n");
-    for (var k in stoksArr) {
-        for (var l in stockList) {
-            if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
-                var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                var values = dataStr.split("~");
-                stockList[l].name = values[1] + "";
-                stockList[l].now = values[3] + "";
-                if (cheatMeFlag && parseFloat(values[31]) < 0) {
-                    var change = 0 - parseFloat(values[31]);
-                    var changePercent = 0 - parseFloat(values[32]);
-                    stockList[l].change = change + "";
-                    stockList[l].changePercent = changePercent + "";
-                } else {
-                    stockList[l].change = values[31] + "";
-                    stockList[l].changePercent = values[32] + "";
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+        var stocks = "";
+        for (var k in stockList) {
+            stocks += stockList[k].code + ",";
+        }
+        let result = ajaxGetStockFromGtimg(stocks);
+        var stoksArr = result.split("\n");
+        for (var k in stoksArr) {
+            for (var l in stockList) {
+                if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
+                    var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
+                    var values = dataStr.split("~");
+                    stockList[l].name = values[1] + "";
+                    stockList[l].now = values[3] + "";
+                    if (cheatMeFlag && parseFloat(values[31]) < 0) {
+                        var change = 0 - parseFloat(values[31]);
+                        var changePercent = 0 - parseFloat(values[32]);
+                        stockList[l].change = change + "";
+                        stockList[l].changePercent = changePercent + "";
+                    } else {
+                        stockList[l].change = values[31] + "";
+                        stockList[l].changePercent = values[32] + "";
+                    }
+
+                    stockList[l].time = values[30] + "";
+                    stockList[l].max = values[33] + "";
+                    stockList[l].min = values[34] + "";
+                    // stockList[l].buyOrSellStockRequestList = [];
+
+                    var now = new BigDecimal(stockList[l].now + "");
+                    var costPrise = new BigDecimal(stockList[l].costPrise + "")
+                    var incomeDiff = now.add(costPrise.negate());
+                    if (costPrise <= 0) {
+                        stockList[l].incomePercent = 0 + "";
+                    } else {
+                        var incomePercent = incomeDiff.divide(costPrise, 5, 4)
+                            .multiply(BigDecimal.TEN)
+                            .multiply(BigDecimal.TEN)
+                            .setScale(3);
+                        stockList[l].incomePercent = incomePercent + "";
+                    }
+
+                    var bonds = new BigDecimal(stockList[l].bonds);
+                    var income = incomeDiff.multiply(bonds)
+                        .setScale(2);
+                    stockList[l].income = income + "";
                 }
-
-                stockList[l].time = values[30] + "";
-                stockList[l].max = values[33] + "";
-                stockList[l].min = values[34] + "";
-                // stockList[l].buyOrSellStockRequestList = [];
-
-                var now = new BigDecimal(stockList[l].now + "");
-                var costPrise = new BigDecimal(stockList[l].costPrise + "")
-                var incomeDiff = now.add(costPrise.negate());
-                if (costPrise <= 0) {
-                    stockList[l].incomePercent = 0 + "";
-                } else {
-                    var incomePercent = incomeDiff.divide(costPrise, 5, 4)
-                        .multiply(BigDecimal.TEN)
-                        .multiply(BigDecimal.TEN)
-                        .setScale(3);
-                    stockList[l].incomePercent = incomePercent + "";
-                }
-
-                var bonds = new BigDecimal(stockList[l].bonds);
-                var income = incomeDiff.multiply(bonds)
-                    .setScale(2);
-                stockList[l].income = income + "";
             }
         }
     }
@@ -434,75 +454,14 @@ function initData() {
 
 // 初始化首页基金列表数据
 function initFund() {
-    for (var l in fundList) {
-        var fundCode = fundList[l].fundCode;
-        let result = ajaxGetFundFromTiantianjijin(fundList[l].fundCode);
-        if (result == "" || result == null || result == undefined) {
-            // 有些基金找不到接口会报 404 报错，调用另外一个接口
-            for (var k in fundList) {
-                if (fundList[k].fundCode == fundCode) {
-                    let fund = checkFundExsitFromEastMoney(fundCode);
-                    fundList[k].dwjz = fund.dwjz;
-                    fundList[k].gsz = fund.dwjz;
-                    fundList[k].gszzl = "0";
-                    fundList[k].income = "0";
-                    fundList[k].incomePercent = "0";
-                    fundList[k].name = fund.name;
-                    var costPrice = new BigDecimal(fundList[k].costPrise + "");
-                    var now = new BigDecimal(fund.dwjz + "");
-                    var incomeDiff = now.add(costPrice.negate());
-                    if (costPrice <= 0) {
-                        fundList[k].incomePercent = "0";
-                    } else {
-                        let incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
-                            .multiply(BigDecimal.TEN)
-                            .multiply(BigDecimal.TEN)
-                            .setScale(3, MathContext.ROUND_HALF_UP);
-                        let bonds = new BigDecimal(fundList[k].bonds + "");
-                        let income = incomeDiff.multiply(bonds)
-                            .setScale(2, MathContext.ROUND_HALF_UP);
-                        fundList[k].income = income + "";
-                        fundList[k].incomePercent = incomePercent + "";
-                    }
-                }
-            }
-        } else {
-            for (var k in fundList) {
-                if (fundList[k].fundCode == fundCode) {
-                    if (result != "jsonpgz();") {
-                        var json = jQuery.parseJSON(result.substring(8, result.length - 2));
-                        fundList[k].name = json.name + "";
-                        fundList[k].dwjz = json.dwjz + "";
-                        fundList[k].jzrq = json.jzrq + "";
-                        fundList[k].gsz = json.gsz + "";
-                        fundList[k].gztime = json.gztime + "";
-                        var gsz = new BigDecimal(json.gsz + "");
-                        var dwjz = new BigDecimal(json.dwjz + "");
-
-                        if (cheatMeFlag && parseFloat(json.gszzl) < 0) {
-                            var gszzl = 0 - parseFloat(json.gszzl);
-                            fundList[k].gszzl = gszzl + "";
-                        } else {
-                            fundList[k].gszzl = json.gszzl + "";
-                        }
-
-                        var now = new BigDecimal(json.gsz + "");
-                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
-                        var incomeDiff = now.add(costPrice.negate());
-                        if (costPrice <= 0) {
-                            fundList[k].incomePercent = "0";
-                        } else {
-                            var incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
-                                .multiply(BigDecimal.TEN)
-                                .multiply(BigDecimal.TEN)
-                                .setScale(3, MathContext.ROUND_HALF_UP);
-                            fundList[k].incomePercent = incomePercent + "";
-                        }
-                        var bonds = new BigDecimal(fundList[k].bonds + "");
-                        var income = incomeDiff.multiply(bonds)
-                            .setScale(2, MathContext.ROUND_HALF_UP);
-                        fundList[k].income = income + "";
-                    } else {
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        for (var l in fundList) {
+            var fundCode = fundList[l].fundCode;
+            let result = ajaxGetFundFromTiantianjijin(fundList[l].fundCode);
+            if (result == "" || result == null || result == undefined) {
+                // 有些基金找不到接口会报 404 报错，调用另外一个接口
+                for (var k in fundList) {
+                    if (fundList[k].fundCode == fundCode) {
                         let fund = checkFundExsitFromEastMoney(fundCode);
                         fundList[k].dwjz = fund.dwjz;
                         fundList[k].gsz = fund.dwjz;
@@ -526,7 +485,70 @@ function initFund() {
                             fundList[k].income = income + "";
                             fundList[k].incomePercent = incomePercent + "";
                         }
+                    }
+                }
+            } else {
+                for (var k in fundList) {
+                    if (fundList[k].fundCode == fundCode) {
+                        if (result != "jsonpgz();") {
+                            var json = jQuery.parseJSON(result.substring(8, result.length - 2));
+                            fundList[k].name = json.name + "";
+                            fundList[k].dwjz = json.dwjz + "";
+                            fundList[k].jzrq = json.jzrq + "";
+                            fundList[k].gsz = json.gsz + "";
+                            fundList[k].gztime = json.gztime + "";
+                            var gsz = new BigDecimal(json.gsz + "");
+                            var dwjz = new BigDecimal(json.dwjz + "");
 
+                            if (cheatMeFlag && parseFloat(json.gszzl) < 0) {
+                                var gszzl = 0 - parseFloat(json.gszzl);
+                                fundList[k].gszzl = gszzl + "";
+                            } else {
+                                fundList[k].gszzl = json.gszzl + "";
+                            }
+
+                            var now = new BigDecimal(json.gsz + "");
+                            var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                            var incomeDiff = now.add(costPrice.negate());
+                            if (costPrice <= 0) {
+                                fundList[k].incomePercent = "0";
+                            } else {
+                                var incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
+                                    .multiply(BigDecimal.TEN)
+                                    .multiply(BigDecimal.TEN)
+                                    .setScale(3, MathContext.ROUND_HALF_UP);
+                                fundList[k].incomePercent = incomePercent + "";
+                            }
+                            var bonds = new BigDecimal(fundList[k].bonds + "");
+                            var income = incomeDiff.multiply(bonds)
+                                .setScale(2, MathContext.ROUND_HALF_UP);
+                            fundList[k].income = income + "";
+                        } else {
+                            let fund = checkFundExsitFromEastMoney(fundCode);
+                            fundList[k].dwjz = fund.dwjz;
+                            fundList[k].gsz = fund.dwjz;
+                            fundList[k].gszzl = "0";
+                            fundList[k].income = "0";
+                            fundList[k].incomePercent = "0";
+                            fundList[k].name = fund.name;
+                            var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                            var now = new BigDecimal(fund.dwjz + "");
+                            var incomeDiff = now.add(costPrice.negate());
+                            if (costPrice <= 0) {
+                                fundList[k].incomePercent = "0";
+                            } else {
+                                let incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
+                                    .multiply(BigDecimal.TEN)
+                                    .multiply(BigDecimal.TEN)
+                                    .setScale(3, MathContext.ROUND_HALF_UP);
+                                let bonds = new BigDecimal(fundList[k].bonds + "");
+                                let income = incomeDiff.multiply(bonds)
+                                    .setScale(2, MathContext.ROUND_HALF_UP);
+                                fundList[k].income = income + "";
+                                fundList[k].incomePercent = incomePercent + "";
+                            }
+
+                        }
                     }
                 }
             }
@@ -596,75 +618,87 @@ function checkStockExsit(code) {
 async function initStockAndFundHtml() {
     var marketValue = new BigDecimal("0");
     totalMarketValue = new BigDecimal("0");
-    for (var k = stockList.length - 1; k >= 0; k--) {
-        marketValue = (new BigDecimal(stockList[k].now)).multiply(new BigDecimal(stockList[k].bonds));
-        totalMarketValue = totalMarketValue.add(marketValue);
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+        for (var k = stockList.length - 1; k >= 0; k--) {
+            marketValue = (new BigDecimal(stockList[k].now)).multiply(new BigDecimal(stockList[k].bonds));
+            totalMarketValue = totalMarketValue.add(marketValue);
+        }
     }
-
-    for (var k = fundList.length - 1; k >= 0; k--) {
-        marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
-        totalMarketValue = totalMarketValue.add(marketValue);
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        for (var k = fundList.length - 1; k >= 0; k--) {
+            marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+            totalMarketValue = totalMarketValue.add(marketValue);
+        }
     }
-
-    var str1 = await getStockTableHtml(stockList, totalMarketValue);
-    $("#stock-nr").html(str1);
-
-    var str2 = await getFundTableHtml(fundList, totalMarketValue);
-    $("#fund-nr").html(str2);
-
-    var str3 = await getTotalTableHtml(totalMarketValue);
-    $("#total-nr").html(str3);
-
-    for (k in stockList) {
-        let stockTr = document.getElementById('stock-tr-' + k);
-        stockTr.addEventListener('click', function () {
-            $("#stock-name").val(stockList[this.sectionRowIndex].name);
-            $("#stock-name").attr("disabled", "disabled");
-            $("#stock-code").val(stockList[this.sectionRowIndex].code);
-            $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
-            $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
-            $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
-            $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
-            $("#stock-show-time-image-button")[0].style.display = 'inline';
-            $("#stock-fund-delete-button")[0].style.display = 'inline';
-            let stockCode = $("#stock-code").val();
-            timeImageCode = stockCode;
-            timeImageType = "STOCK";
-            showMinuteImage();
-        });
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+        var str1 = await getStockTableHtml(stockList, totalMarketValue);
+        $("#stock-nr").html(str1);
     }
-
-    for (k in fundList) {
-        let fundTr = document.getElementById('fund-tr-' + k);
-        fundTr.addEventListener('click', function () {
-            $("#fund-name").val(fundList[this.sectionRowIndex].name);
-            $("#fund-name").attr("disabled", "disabled");
-            $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
-            $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
-            $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
-            if (isCycleInvest) {
-                $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
-                $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
-                $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
-                $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
-                $("#fund-cycle-invest")[0].style.display = "block";
-            } else {
-                $("#fund-cycle-invest")[0].style.display = "none";
-            }
-            $("#fund-show-time-image-button")[0].style.display = 'inline';
-            $("#stock-fund-delete-button")[0].style.display = 'inline';
-            let fundCode = $("#fund-code").val();
-            timeImageCode = fundCode;
-            timeImageType = "FUND";
-            showMinuteImage();
-        });
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        var str2 = await getFundTableHtml(fundList, totalMarketValue);
+        $("#fund-nr").html(str2);
+    }
+    if (showStockOrFundOrAll == 'all') {
+        var str3 = await getTotalTableHtml(totalMarketValue);
+        $("#total-nr").html(str3);
+    }
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+        for (k in stockList) {
+            let stockTr = document.getElementById('stock-tr-' + k);
+            stockTr.addEventListener('click', function () {
+                $("#stock-name").val(stockList[this.sectionRowIndex].name);
+                $("#stock-name").attr("disabled", "disabled");
+                $("#stock-code").val(stockList[this.sectionRowIndex].code);
+                $("#stock-costPrise").val(stockList[this.sectionRowIndex].costPrise);
+                $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
+                $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
+                $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
+                $("#stock-show-time-image-button")[0].style.display = 'inline';
+                $("#stock-fund-delete-button")[0].style.display = 'inline';
+                let stockCode = $("#stock-code").val();
+                timeImageCode = stockCode;
+                timeImageType = "STOCK";
+                showMinuteImage();
+            });
+        }
+    }
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        for (k in fundList) {
+            let fundTr = document.getElementById('fund-tr-' + k);
+            fundTr.addEventListener('click', function () {
+                $("#fund-name").val(fundList[this.sectionRowIndex].name);
+                $("#fund-name").attr("disabled", "disabled");
+                $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
+                $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
+                $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
+                if (isCycleInvest) {
+                    $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
+                    $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
+                    $("#fund-cycle-invest-value").val(fundList[this.sectionRowIndex].fundCycleInvestValue);
+                    $("#fund-cycle-invest-rate").val(fundList[this.sectionRowIndex].fundCycleInvestRate);
+                    $("#fund-cycle-invest")[0].style.display = "block";
+                } else {
+                    $("#fund-cycle-invest")[0].style.display = "none";
+                }
+                $("#fund-show-time-image-button")[0].style.display = 'inline';
+                $("#stock-fund-delete-button")[0].style.display = 'inline';
+                let fundCode = $("#fund-code").val();
+                timeImageCode = fundCode;
+                timeImageType = "FUND";
+                showMinuteImage();
+            });
+        }
     }
 
     // 初始化迷你走势图
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
-        setStockMinitesImageMini();
-        setFundMinitesImageMini();
+        if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+            setStockMinitesImageMini();
+        }
+        if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+            setFundMinitesImageMini();
+        }
     }
 }
 
@@ -1195,6 +1229,7 @@ async function changeFontStyle() {
 
 // 展示隐藏分时图
 async function setMinuteImageMini() {
+    $("#setting-modal").modal("hide");
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
         saveCacheData('show-minute-image-mini', 'close');
@@ -1376,4 +1411,10 @@ async function cheatMe() {
     }
     await saveCacheData('cheatMeFlag', cheatMeFlag);
     initData();
+}
+
+async function changeShowStockOrFundOrAll(type) {
+    await saveCacheData('showStockOrFundOrAll', type);
+    showStockOrFundOrAll = type;
+    location.reload();
 }
