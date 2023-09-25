@@ -1140,6 +1140,15 @@ async function searchFundAndStock() {
     $("#search-fund-select").find("option").remove();
     $("#search-stock-select").find("option").remove();
     let stockName = $("#input-stock-name-search").val();
+    let fundName = $("#input-fund-name-search").val();
+    if (showStockOrFundOrAll == 'stock' && (stockName == "" || stockName == null)) {
+        stockName = fundName;
+        fundName = "";
+    }
+    if (showStockOrFundOrAll == 'fund' && (fundName == "" || fundName == null)) {
+        fundName = stockName;
+        stockName = "";
+    }
     if (stockName != "" && stockName != null) {
         var stocksArr = searchStockByName(stockName);
         for (var k in stocksArr) {
@@ -1157,23 +1166,23 @@ async function searchFundAndStock() {
             var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
             $("#search-stock-select").append(option);
         }
-        $("#input-stock-name-search").val("");
         if (stocksArr != null && stocksArr != '' && stocksArr != undefined && stocksArr.length > 0) {
             $("#search-stock-modal").modal();
         }
     }
-    let fundName = $("#input-fund-name-search").val();
+
     if (fundName != "" && fundName != null) {
         var fundsArr = await searchFundByName(fundName);
         for (var k in fundsArr) {
             var option = $("<option></option>").val(fundsArr[k].fundCode).text(fundsArr[k].fundName + " " + fundsArr[k].fundCode);
             $("#search-fund-select").append(option);
         }
-        $("#input-fund-name-search").val("");
         if (fundsArr.length > 0) {
             $("#search-fund-modal").modal();
         }
     }
+    $("#input-fund-name-search").val("");
+    $("#input-stock-name-search").val("");
 }
 
 // 初始化页面是，股票基金数据字体样式设定
