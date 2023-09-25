@@ -128,6 +128,7 @@ document.addEventListener(
     function () {
         // 首页，导入数据按钮点击展示导入数据页面
         document.getElementById('show-import-data').addEventListener('click', function () {
+            $("#setting-modal").modal("hide");
             $("#data-import-modal").modal();
         }
         );
@@ -350,6 +351,7 @@ document.addEventListener(
         })
         // 首页，show-passwrod-protect-button点击，展示password-protect-modal
         document.getElementById('show-password-protect-button').addEventListener('click', async function () {
+            $("#setting-modal").modal("hide");
             $("#password-protect-modal").modal();
         })
         // 密码保护页面，password-save-button点击，缓存密码
