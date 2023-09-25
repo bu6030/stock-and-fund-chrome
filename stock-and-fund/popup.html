@@ -448,17 +448,29 @@
                 <div class="my-header">
                     <!--                <ul class="am-icon-users my-font"> 股票基金汇总</ul>-->
                     <dl>
-                        <button type="button" id="show-all-button" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">全部
-                        </button>
-                        <button type="button" id="show-stock-button" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">股票
-                        </button>
-                        <button type="button" id="show-fund-button" class="btn btn-outline-primary btn-sm"
-                            data-toggle="modal">基金
-                        </button>
                         <button type="button" id="refresh-button" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">刷新
+                        </button>
+                        <button type="button" id="remove-all-data-button-2" class="btn btn-outline-danger btn-sm"
+                            data-toggle="modal">清空数据
+                        </button>
+                        <button type="button" id="data-export-button-2" class="btn btn-outline-primary btn-sm"
+                            data-toggle="modal">导出数据
+                        </button>
+                        <button type="button" id="show-import-data-2" class="btn btn-outline-primary btn-sm"
+                            data-toggle="modal">导入数据
+                        </button>
+                        <button type="button" id="show-minute-image-mini-2" class="btn btn-outline-primary btn-sm"
+                            data-toggle="modal">展示/隐藏分时图
+                        </button>
+                        <button type="button" id="show-password-protect-button-2" class="btn btn-outline-primary btn-sm"
+                            data-toggle="modal">密码保护
+                        </button>
+                        <button type="button" id="font-change-button-2" class="btn btn-outline-primary btn-sm"
+                            data-toggle="modal">样式切换
+                        </button>
+                        <button type="button" id="full-screen-button-2" class="btn btn-outline-primary btn-sm"
+                            data-toggle="modal">全屏展示
                         </button>
                         <button type="button" id="show-wechat-group-button" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">加入微信群
@@ -470,7 +482,7 @@
                             data-toggle="modal">设置
                         </button>
                         <button type="button" id="import-from-local-springboot" class="btn btn-outline-primary btn-sm fade" 
-                            data-toggle="modal">本地股基神器数据导入
+                            data-toggle="modal">本地数据导入
                         </button>
                         <div id="monitor-text" class="my-monitor-text">搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！</div>
                     </dl>
@@ -512,7 +524,22 @@
         </div>
         <!-- 股票基金主体页面 end -->
     </div>
-    <div id="footer">CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com Version 1.6.20</div>
+    <div id="footer">
+        <div>
+            <button type="button" id="show-all-button" class="btn btn-outline-primary btn-sm"
+                data-toggle="modal">全部
+            </button>
+            <button type="button" id="show-stock-button" class="btn btn-outline-primary btn-sm"
+                data-toggle="modal">股票
+            </button>
+            <button type="button" id="show-fund-button" class="btn btn-outline-primary btn-sm"
+                data-toggle="modal">基金
+            </button>
+        </div>
+        <div>
+            CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com Version 1.6.20
+        </div>
+    </div>
 </body>
 
 </html>

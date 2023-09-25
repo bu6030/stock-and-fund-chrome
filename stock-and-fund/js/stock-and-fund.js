@@ -136,19 +136,13 @@ document.addEventListener(
     'DOMContentLoaded',
     function () {
         // 首页，导入数据按钮点击展示导入数据页面
-        document.getElementById('show-import-data').addEventListener('click', function () {
-            $("#setting-modal").modal("hide");
-            $("#data-import-modal").modal();
-        });
+        document.getElementById('show-import-data').addEventListener('click', showImportData);
+        document.getElementById('show-import-data-2').addEventListener('click', showImportData);
         // 首页，导出数据按钮点击展导出 txt 文件
-        document.getElementById('data-export-button').addEventListener('click', function () {
-            var data = {};
-            data.stocks = stockList;
-            data.funds = fundList;
-            downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
-        });
+        document.getElementById('data-export-button').addEventListener('click', dataExport);
+        document.getElementById('data-export-button-2').addEventListener('click', dataExport);
         // 导入数据页面，导入文件选择 txt 文件导入数据
-        document.getElementById('file-input').addEventListener('change', async function (e) {
+        document.getElementById('file-input').addEventListener('change', async function fileInput (e) {
             var file = e.target.files[0];
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -273,13 +267,8 @@ document.addEventListener(
             showMonthImage();
         });
         // 首页，清理数据按钮点击
-        document.getElementById('remove-all-data-button').addEventListener('click', function () {
-            let stocksRemove = [];
-            let fundsRemove = [];
-            saveCacheData('stocks', JSON.stringify(stocksRemove));
-            saveCacheData('funds', JSON.stringify(fundsRemove));
-            location.reload();
-        });
+        document.getElementById('remove-all-data-button').addEventListener('click', removeAllData);
+        document.getElementById('remove-all-data-button-2').addEventListener('click', removeAllData);
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', async function () {
             if (event.key === 'Enter') {
@@ -311,12 +300,8 @@ document.addEventListener(
             saveFund();
         });
         // 首页，使用说明按钮点击
-        document.getElementById('help-document-button').addEventListener('click', function () {
-            chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
-        });
-        document.getElementById('help-document-alert').addEventListener('click', function () {
-            chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
-        });
+        document.getElementById('help-document-button').addEventListener('click', helpDocument);
+        document.getElementById('help-document-alert').addEventListener('click', helpDocument);
         // 走势图页面，点击编辑按钮
         document.getElementById('update-stock-fund-button').addEventListener('click', function () {
             $("#time-image-modal").modal("hide");
@@ -334,20 +319,14 @@ document.addEventListener(
             $("#wechat-group-modal").modal();
         });
         // 首页，点击全屏按钮
-        document.getElementById('full-screen-button').addEventListener('click', async function () {
-            $("#setting-modal").modal("hide");
-            chrome.tabs.create({ url: "popup.html" });
-        });
+        document.getElementById('full-screen-button').addEventListener('click', fullScreen);
+        document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
         // 首页，点击样式切换
-        document.getElementById('font-change-button').addEventListener('click', async function () {
-            $("#setting-modal").modal("hide");
-            changeFontStyle();
-        });
+        document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
+        document.getElementById('font-change-button-2').addEventListener('click', changeFontStyle);
         // 首页，show-passwrod-protect-button点击，展示password-protect-modal
-        document.getElementById('show-password-protect-button').addEventListener('click', async function () {
-            $("#setting-modal").modal("hide");
-            $("#password-protect-modal").modal();
-        });
+        document.getElementById('show-password-protect-button').addEventListener('click', showPasswordProtect);
+        document.getElementById('show-password-protect-button-2').addEventListener('click', showPasswordProtect);
         // 密码保护页面，password-save-button点击，缓存密码
         document.getElementById('password-save-button').addEventListener('click', async function () {
             saveCacheData('password', $("#password").val());
@@ -361,9 +340,8 @@ document.addEventListener(
             }
         });
         // 首页，点击展示隐藏迷你分时图
-        document.getElementById('show-minute-image-mini').addEventListener('click', async function () {
-            setMinuteImageMini();
-        });
+        document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
+        document.getElementById('show-minute-image-mini-2').addEventListener('click', setMinuteImageMini);
         // 首页，点击刷新按钮
         document.getElementById('refresh-button').addEventListener('click', async function () {
             initData();
@@ -1217,6 +1195,7 @@ async function initFontStyle() {
 
 // 样式切换，股票基金数据字体加粗加大
 async function changeFontStyle() {
+    $("#setting-modal").modal("hide");
     var stockNr = document.getElementById('stock-nr');
     // 添加class样式
     if (stockNr.classList.contains('my-table-tbody-font')) {
@@ -1417,4 +1396,38 @@ async function changeShowStockOrFundOrAll(type) {
     await saveCacheData('showStockOrFundOrAll', type);
     showStockOrFundOrAll = type;
     location.reload();
+}
+
+function showImportData() {
+    $("#setting-modal").modal("hide");
+    $("#data-import-modal").modal();
+}
+
+function dataExport() {
+    var data = {};
+    data.stocks = stockList;
+    data.funds = fundList;
+    downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
+}
+
+function removeAllData() {
+    let stocksRemove = [];
+    let fundsRemove = [];
+    saveCacheData('stocks', JSON.stringify(stocksRemove));
+    saveCacheData('funds', JSON.stringify(fundsRemove));
+    location.reload();
+}
+
+function helpDocument () {
+    chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
+}
+
+async function fullScreen() {
+    $("#setting-modal").modal("hide");
+    chrome.tabs.create({ url: "popup.html" });
+}
+
+async function showPasswordProtect () {
+    $("#setting-modal").modal("hide");
+    $("#password-protect-modal").modal();
 }
