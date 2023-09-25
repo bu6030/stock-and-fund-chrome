@@ -48,6 +48,25 @@
     background-color: white;
 }
 
+.my-header {
+    height: 90px;
+    /* line-height: 90px; */
+    position: fixed;
+    top: 0;
+    width: 800px;
+    text-align: center;
+    color: #000000;
+    font-family: Arial;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-color: white;
+    z-index: 999;
+}
+
+.my-body {
+    margin-top: 90px;
+}
+
 .my-table-tbody-font {
     font-weight: bolder;
     font-size: small;

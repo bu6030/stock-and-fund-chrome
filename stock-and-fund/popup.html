@@ -453,7 +453,7 @@
         <!-- 股票基金主体页面 start -->
         <div class="my-center-child">
             <div>
-                <div>
+                <div class="my-header">
                     <!--                <ul class="am-icon-users my-font"> 股票基金汇总</ul>-->
                     <dl>
                         <button type="button" id="refresh-button" class="btn btn-outline-primary btn-sm"
@@ -468,10 +468,8 @@
                         <button type="button" id="show-setting-button" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">设置
                         </button>
-                        <div id="monitor-text" class="my-monitor-text">搜索输入股票基金编码或名称后点击回车即可搜索！！！</div>
+                        <div id="monitor-text" class="my-monitor-text">搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！</div>
                     </dl>
-                </div>
-                <div>
                     <div class="input-group my-input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="stock-fund-name-search-button">搜索股票/基金</span>
@@ -487,23 +485,25 @@
                         </div>
                     </div>
                 </div>
-                <form>
-                    <div class="stock-large-market" id="stock-large-market"></div>
-                    <div class="alert alert-primary my-large-alert" id="help-document-alert" role="alert">
-                        <a href="#" class="alert-link">股票基金神器使用说明（新手必看）</a>
-                    </div>
-                    <div class="my-div">
-                        <table class="table table-hover my-font no-wrap table-striped">
-                            <thead id="stock-head" />
-                            <tbody id="stock-nr" />
-                            <thead id="fund-head" />
-                            <tbody id="fund-nr" />
-                            <tfoot id="total-nr" />
-                        </table>
-                    </div>
-                    <div id="page">
-                    </div>
-                </form>
+                <div class="my-body">
+                    <form>
+                        <div class="stock-large-market" id="stock-large-market"></div>
+                        <div class="alert alert-primary my-large-alert" id="help-document-alert" role="alert">
+                            <a href="#" class="alert-link">股票基金神器使用说明（新手必看）</a>
+                        </div>
+                        <div class="my-div">
+                            <table class="table table-hover my-font no-wrap table-striped">
+                                <thead id="stock-head" />
+                                <tbody id="stock-nr" />
+                                <thead id="fund-head" />
+                                <tbody id="fund-nr" />
+                                <tfoot id="total-nr" />
+                            </table>
+                        </div>
+                        <div id="page">
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <!-- 股票基金主体页面 end -->
