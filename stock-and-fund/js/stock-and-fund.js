@@ -127,7 +127,7 @@ async function initHtml() {
         $("#stock-head").html(stockHead);
     }
     // 在页面顶部显示一些监控信息，重要信息
-    initNotice();
+    // initNotice();
     initFontStyle();
 }
 
@@ -734,8 +734,20 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         if (showMinuteImageMini == 'open') {
             minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].code + "\" class=\"my-echart\"></div>"
         }
+        let nowTimestamp = Date.now();
+        let monitorAlertDate = result[k].monitorAlertDate;
+        let alertStyle = "";
+        if ((nowTimestamp - monitorAlertDate) <= Env.TIME_CACHED_ONE_DAY) {
+            if (result[k].monitorAlert == '1') {
+                alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破最高价格提醒" + result[k].monitorHighPrice + ")</span>";
+            } else if(result[k].monitorAlert == '2') {
+                alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
+            }
+        }
+        console.log("alertStyle="+alertStyle + ";monitorAlertDate = " + monitorAlertDate+";nowTimestamp="+ nowTimestamp +";result[k].monitorAlert="+result[k].monitorAlert);
+
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td >" + result[k].name + minuteImageMiniDiv
+            + "<td >" + result[k].name + alertStyle + minuteImageMiniDiv
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
@@ -964,6 +976,7 @@ async function saveStock() {
             stocks[k].bonds = stock.bonds;
             stocks[k].monitorHighPrice = stock.monitorHighPrice;
             stocks[k].monitorLowPrice = stock.monitorLowPrice;
+            stocks[k].monitorAlert = '';
             if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stocks[k].code);
                 stocks[k].addTimePrice = checkStockExsitResult.now;
@@ -1121,19 +1134,28 @@ function saveCacheData(key, value) {
 
 // 统一读取缓存，写一个异步方法
 async function readCacheData(key) {
-    var result = localStorage.getItem(key);
-    // var result = await getData(key);
+    var result = await getData(key);
+    if (result == null) {
+        result = localStorage.getItem(key);
+    }
     console.log("readCacheData key = " + key + ", value = " + result);
     return result;
 }
 
+// 统一读取缓存新方法，直接从chrome.storage.local读取
+// async function readCacheDataNew(key) {
+//     var result = await getData(key);
+//     console.log("readCacheData key = " + key + ", value = " + result);
+//     return result;
+// }
+
 // 首页通知展示
-async function initNotice() {
-    var text = await readCacheData('MONITOR_TEXT');
-    $("#monitor-text").html(text);
-    saveCacheData('MONITOR_TEXT', '搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！')
-    chrome.action.setBadgeText({ text: "" });
-}
+// async function initNotice() {
+//     // var text = await readCacheData('MONITOR_TEXT');
+//     // $("#monitor-text").html(text);
+//     // saveCacheData('MONITOR_TEXT', '搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！')
+//     // chrome.action.setBadgeText({ text: "" });
+// }
 
 // 首页点击股票基金搜索或者在股票基金名称输入框点击回车
 async function searchFundAndStock() {
