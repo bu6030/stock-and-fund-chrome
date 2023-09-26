@@ -39,7 +39,7 @@ async function initLoad() {
     }
     redColor = await readCacheData('redColor');
     if (redColor == null) {
-        redColor = '#3e8f3e';
+        redColor = '#c12e2a';
     }
     cheatMeFlag = await readCacheData('cheatMeFlag');
     if (cheatMeFlag == null) {
