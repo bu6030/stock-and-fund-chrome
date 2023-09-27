@@ -370,6 +370,9 @@ document.addEventListener(
         document.getElementById('stock-fund-monitor-button').addEventListener('click', stockMonitor);
         // 股票编辑页面，点击监控股票价格
         document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
+        // 首页，点击清除角标
+        document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
+        
     }
 );
 
@@ -1473,4 +1476,9 @@ async function stockMonitor () {
     chrome.action.setBadgeBackgroundColor({ color: 'blue' });
     chrome.action.setBadgeText({ text: "" + stock.now });
     saveCacheData("MONITOR_STOCK_CODE", code);
+}
+
+// 清理角标
+async function removeBadgeText() {
+    chrome.action.setBadgeText({ text: '' });
 }
