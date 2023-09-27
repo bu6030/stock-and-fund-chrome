@@ -744,7 +744,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
             }
         }
-        console.log("alertStyle="+alertStyle + ";monitorAlertDate = " + monitorAlertDate+";nowTimestamp="+ nowTimestamp +";result[k].monitorAlert="+result[k].monitorAlert);
+        // console.log("alertStyle="+alertStyle + ";monitorAlertDate = " + monitorAlertDate+";nowTimestamp="+ nowTimestamp +";result[k].monitorAlert="+result[k].monitorAlert);
 
         str += "<tr id=\"stock-tr-" + k + "\">"
             + "<td >" + result[k].name + alertStyle + minuteImageMiniDiv
@@ -1135,27 +1135,13 @@ function saveCacheData(key, value) {
 // 统一读取缓存，写一个异步方法
 async function readCacheData(key) {
     var result = await getData(key);
-    if (result == null) {
+    // 对于老版本，getData 没有获取到则从 localStorage 中获取
+    if (result == null || result == undefined || result == 'undefined' || result == '[]') {
         result = localStorage.getItem(key);
     }
     console.log("readCacheData key = " + key + ", value = " + result);
     return result;
 }
-
-// 统一读取缓存新方法，直接从chrome.storage.local读取
-// async function readCacheDataNew(key) {
-//     var result = await getData(key);
-//     console.log("readCacheData key = " + key + ", value = " + result);
-//     return result;
-// }
-
-// 首页通知展示
-// async function initNotice() {
-//     // var text = await readCacheData('MONITOR_TEXT');
-//     // $("#monitor-text").html(text);
-//     // saveCacheData('MONITOR_TEXT', '搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！')
-//     // chrome.action.setBadgeText({ text: "" });
-// }
 
 // 首页点击股票基金搜索或者在股票基金名称输入框点击回车
 async function searchFundAndStock() {
@@ -1423,17 +1409,20 @@ async function cheatMe() {
     initData();
 }
 
+// 切换展示股票/基金/全部
 async function changeShowStockOrFundOrAll(type) {
     await saveCacheData('showStockOrFundOrAll', type);
     showStockOrFundOrAll = type;
     location.reload();
 }
 
+// 展示数据导入页面
 function showImportData() {
     $("#setting-modal").modal("hide");
     $("#data-import-modal").modal();
 }
 
+// 数据导出
 function dataExport() {
     var data = {};
     data.stocks = stockList;
@@ -1441,6 +1430,7 @@ function dataExport() {
     downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
 }
 
+// 清除所有数据
 function removeAllData() {
     let stocksRemove = [];
     let fundsRemove = [];
@@ -1449,15 +1439,18 @@ function removeAllData() {
     location.reload();
 }
 
+// 打开使用说明文档
 function helpDocument () {
     chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
 }
 
+// 全屏展示
 async function fullScreen() {
     $("#setting-modal").modal("hide");
     chrome.tabs.create({ url: "popup.html" });
 }
 
+// 展示密码保护页面
 async function showPasswordProtect () {
     $("#setting-modal").modal("hide");
     $("#password-protect-modal").modal();
