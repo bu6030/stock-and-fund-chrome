@@ -1458,8 +1458,16 @@ async function showPasswordProtect () {
     $("#password-protect-modal").modal();
 }
 
+// 第一次点击监控股价设定角标，再次点击取消角标
 async function stockMonitor () {
     let code = $("#stock-code").val();
+    let monitorStockCode = await readCacheData("MONITOR_STOCK_CODE");
+    if (monitorStockCode != null && monitorStockCode != '' 
+    && monitorStockCode != undefined && monitorStockCode != 'undefined' && monitorStockCode == code) {
+        saveCacheData("MONITOR_STOCK_CODE", '');
+        chrome.action.setBadgeText({ text: '' });
+        return;
+    }
     let stock = checkStockExsit(code);
     chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
     chrome.action.setBadgeBackgroundColor({ color: 'blue' });
