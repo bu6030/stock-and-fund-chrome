@@ -56,10 +56,10 @@ function saveData(key, value) {
 // 后台监控突破价格并提示
 function monitorStockPrice(stockList) {
     var date = new Date();
-    console.log("执行任务...", date.toLocaleString());
-    var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-        || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
-    if (isTradingTime) {
+    console.log("执行突破价格监控任务...", date.toLocaleString());
+    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+    if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         var stocks = "";
         for (var k in stockList) {
@@ -198,9 +198,9 @@ function monitorFundCycleInvest(fundList) {
 function monitorStock(code) {
     var date = new Date();
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
-    var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-        || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
-    if (isTradingTime) {
+    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+    if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
 
         fetch("http://qt.gtimg.cn/q=" + code)
@@ -208,14 +208,12 @@ function monitorStock(code) {
             .then(data => {
                 // 在这里处理返回的数据
                 var stoksArr = data.split("\n");
-                for (var k in stoksArr) {
-                    var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
-                    var values = dataStr.split("~");
-                    var now = parseFloat(values[3]);
-                    chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                    chrome.action.setBadgeBackgroundColor({ color: 'blue' });
-                    chrome.action.setBadgeText({ text: "" + now });
-                }
+                var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
+                var values = dataStr.split("~");
+                var now = parseFloat(values[3]);
+                chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                chrome.action.setBadgeBackgroundColor({ color: 'blue' });
+                chrome.action.setBadgeText({ text: "" + now });
             })
             .catch(error => {
                 // 处理请求错误
@@ -224,4 +222,9 @@ function monitorStock(code) {
     } else {
         console.log("非交易时间，停止执行任务...");
     }
+}
+// 是否交易时间
+function isTradingTime(date) {
+    return (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+    || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= " 15:01:00");
 }

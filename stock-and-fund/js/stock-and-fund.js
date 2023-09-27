@@ -79,9 +79,9 @@ async function initLoad() {
 // 20s自动刷新
 function autoRefresh() {
     var date = new Date();
-    var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-        || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
-    if (isTradingTime) {
+    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+    if (isTradingTime(date)) {
         initData();
         initLargeMarketData();
     }
