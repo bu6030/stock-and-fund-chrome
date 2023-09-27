@@ -1377,17 +1377,15 @@ function setDetailChart(elementId, dataStr, color, preClose) {
 
 // 修改涨跌蓝绿颜色
 async function changeBlueRed() {
-    blueColor = await readCacheData('blueColor');
-    if (blueColor == null || blueColor != '#3e8f3e') {
-        blueColor = '#3e8f3e';
-    } else {
+    if (blueColor == '#3e8f3e') {
         blueColor = '#c12e2a';
+    } else if (blueColor == '#c12e2a') {
+        blueColor = '#3e8f3e';
     }
-    redColor = await readCacheData('redColor');
-    if (redColor == null || redColor != '#c12e2a') {
-        redColor = '#c12e2a';
-    } else {
+    if (redColor == '#c12e2a') {
         redColor = '#3e8f3e';
+    } else if (redColor == '#3e8f3e') {
+        redColor = '#c12e2a';
     }
     saveCacheData('redColor', redColor);
     saveCacheData('blueColor', blueColor);
@@ -1397,12 +1395,10 @@ async function changeBlueRed() {
 
 // 欺骗自己，愣是把当日亏损变成盈利
 async function cheatMe() {
-    cheatMeFlag = await readCacheData('cheatMeFlag');
-    if (cheatMeFlag == null) {
+    // cheatMeFlag = await readCacheData('cheatMeFlag');
+    if(cheatMeFlag) {
         cheatMeFlag = false;
-    } else if(cheatMeFlag == "true") {
-        cheatMeFlag = false;
-    } else {
+    } else if(!cheatMeFlag) {
         cheatMeFlag = true;
     }
     await saveCacheData('cheatMeFlag', cheatMeFlag);
