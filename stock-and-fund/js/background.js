@@ -21,6 +21,11 @@ chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/640002036");
 
 // 后台定时执行任务的函数
 function performTask() {
+    getData('MONITOR_STOCK_CODE').then((monitorStockCode) => {
+        if (monitorStockCode != null && monitorStockCode != '') {
+            monitorStock(monitorStockCode);
+        }
+    });
     getData('stocks').then((stockArr) => {
         if (stockArr != null && stockArr != "[]") {
             monitorStockPrice(JSON.parse(stockArr));
@@ -99,6 +104,7 @@ function monitorStockPrice(stockList) {
                             // var text = name + "涨破监控价格" + highPrice + "，达到" + now;
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
+                            saveData("MONITOR_STOCK_CODE", '');
                             console.log("================监控价格涨破", highPrice, "============");
                         }
                     }
@@ -114,6 +120,7 @@ function monitorStockPrice(stockList) {
                             // var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
+                            saveData("MONITOR_STOCK_CODE", '');
                             console.log("================监控价格跌破", lowPrice, "============");
                         }
                     }
@@ -184,5 +191,37 @@ function monitorFundCycleInvest(fundList) {
         } else {
             console.log("没到定投时间16:45:00-16:45:20,停止执行任务...");
         }
+    }
+}
+
+// 后台监控突破价格并提示
+function monitorStock(code) {
+    var date = new Date();
+    console.log("执行监控股票实时价格任务...", date.toLocaleString());
+    var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+        || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+    if (isTradingTime) {
+        console.log("交易时间，执行任务...");
+
+        fetch("http://qt.gtimg.cn/q=" + code)
+            .then(response => response.text())
+            .then(data => {
+                // 在这里处理返回的数据
+                var stoksArr = data.split("\n");
+                for (var k in stoksArr) {
+                    var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
+                    var values = dataStr.split("~");
+                    var now = parseFloat(values[3]);
+                    chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                    chrome.action.setBadgeBackgroundColor({ color: 'blue' });
+                    chrome.action.setBadgeText({ text: "" + now });
+                }
+            })
+            .catch(error => {
+                // 处理请求错误
+                console.error(error);
+            });
+    } else {
+        console.log("非交易时间，停止执行任务...");
     }
 }

@@ -366,6 +366,10 @@ document.addEventListener(
         document.getElementById('show-fund-button').addEventListener('click', async function () {
             changeShowStockOrFundOrAll('fund');
         });
+        // 分时图页面，点击监控股票价格
+        document.getElementById('stock-fund-monitor-button').addEventListener('click', stockMonitor);
+        // 股票编辑页面，点击监控股票价格
+        document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
     }
 );
 
@@ -633,6 +637,7 @@ async function initStockAndFundHtml() {
                 $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
+                $("#stock-fund-monitor-button")[0].style.display = 'inline';
                 let stockCode = $("#stock-code").val();
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
@@ -660,6 +665,7 @@ async function initStockAndFundHtml() {
                 }
                 $("#fund-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
+                $("#stock-fund-monitor-button")[0].style.display = 'none';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -1450,4 +1456,14 @@ async function fullScreen() {
 async function showPasswordProtect () {
     $("#setting-modal").modal("hide");
     $("#password-protect-modal").modal();
+}
+
+async function stockMonitor () {
+    let code = $("#stock-code").val();
+    let stock = checkStockExsit(code);
+    chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+    chrome.action.setBadgeBackgroundColor({ color: 'blue' });
+    chrome.action.setBadgeText({ text: "" + stock.now });
+    saveCacheData("MONITOR_STOCK_CODE", code);
+    console.log("============",stock.now);
 }

@@ -87,6 +87,7 @@
 67. 底部增加基金/股票/全部展示切换按钮 2023/9/25
 68. 刷新修改到底部 2023/9/25
 69. 价格监控优化 2023/9/26
+70. 增加股票实时价格监控角标 2023/9/27
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
