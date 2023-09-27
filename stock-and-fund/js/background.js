@@ -101,10 +101,11 @@ function monitorStockPrice(stockList) {
                             chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
                             chrome.action.setBadgeBackgroundColor({ color: 'red' });
                             chrome.action.setBadgeText({ text: "" + now });
-                            // var text = name + "涨破监控价格" + highPrice + "，达到" + now;
+                            var text = name + "涨破监控价格" + highPrice + "，达到" + now;
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
+                            showNotification("通知", text);
                             console.log("================监控价格涨破", highPrice, "============");
                         }
                     }
@@ -117,10 +118,11 @@ function monitorStockPrice(stockList) {
                             chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
                             chrome.action.setBadgeBackgroundColor({ color: 'green' });
                             chrome.action.setBadgeText({ text: "" + now });
-                            // var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
+                            var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
+                            showNotification("通知", text);
                             console.log("================监控价格跌破", lowPrice, "============");
                         }
                     }
@@ -226,5 +228,21 @@ function monitorStock(code) {
 // 是否交易时间
 function isTradingTime(date) {
     return (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-    || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= " 15:01:00");
+    || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+}
+// 发送 chrome 通知
+function showNotification(title, body) {
+    chrome.notifications.create({
+        type: "basic",
+        title: title,
+        message: body,
+        iconUrl: "/img/128.png"
+    }, function(notificationId) {
+        // 通知创建完成后的回调函数
+        if (chrome.runtime.lastError) {
+            console.log("创建通知失败: " + chrome.runtime.lastError.message);
+        } else {
+            console.log("通知已创建，ID: " + notificationId);
+        }
+    });
 }

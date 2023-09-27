@@ -1465,5 +1465,4 @@ async function stockMonitor () {
     chrome.action.setBadgeBackgroundColor({ color: 'blue' });
     chrome.action.setBadgeText({ text: "" + stock.now });
     saveCacheData("MONITOR_STOCK_CODE", code);
-    console.log("============",stock.now);
 }
