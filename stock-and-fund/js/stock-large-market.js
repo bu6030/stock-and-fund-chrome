@@ -66,7 +66,8 @@ function initLargeMarketClick(){
     $("#stock-fund-delete-button")[0].style.display = 'none';
     $("#stock-fund-monitor-button")[0].style.display = 'none';
     $("#fund-invers-position-button-3")[0].style.display = 'none';
-    
+    $("#fund-net-diagram-button-3")[0].style.display = 'none';
+
     $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }

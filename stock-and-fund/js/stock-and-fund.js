@@ -676,7 +676,22 @@ async function initStockAndFundHtml() {
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
-                $("#fund-invers-position-button-3")[0].style.display = 'inline';
+                if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
+                (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
+                    $("#fund-invers-position-button-3")[0].style.display = 'inline';
+                    $("#fund-invers-position-button-2")[0].style.display = 'inline';
+                    $("#fund-invers-position-button-1")[0].style.display = 'inline';
+                    $("#fund-net-diagram-button-3")[0].style.display = 'inline';
+                    $("#fund-net-diagram-button-2")[0].style.display = 'inline';
+                    $("#fund-net-diagram-button-1")[0].style.display = 'inline';
+                } else {
+                    $("#fund-invers-position-button-3")[0].style.display = 'none';
+                    $("#fund-invers-position-button-2")[0].style.display = 'none';
+                    $("#fund-invers-position-button-1")[0].style.display = 'none';
+                    $("#fund-net-diagram-button-3")[0].style.display = 'none';
+                    $("#fund-net-diagram-button-2")[0].style.display = 'none';
+                    $("#fund-net-diagram-button-1")[0].style.display = 'none';
+                }
                 let stockCode = $("#stock-code").val();
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
@@ -706,6 +721,7 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'none';
                 $("#fund-invers-position-button-3")[0].style.display = 'inline';
+                $("#fund-net-diagram-button-3")[0].style.display = 'inline';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -1525,7 +1541,6 @@ async function getFundInversPosition() {
         code = $("#fund-code").val();
     }
     code = code.replace('sz','').replace('sh','');
-    console.log("===================3=",code);
     let fundStocks = ajaxGetFundInvesterPosition(code);
     if (fundStocks == null || fundStocks == '' || fundStocks == []) {
         return;
@@ -1590,7 +1605,6 @@ async function setFundNetDiagram(type) {
     } else if (type == 'ALLYEAR') {
         interval = Math.floor(fundNetDiagram.length / 4);
     }
-    console.log('interval====',interval);
 
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
