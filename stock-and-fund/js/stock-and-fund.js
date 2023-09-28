@@ -120,6 +120,13 @@ async function initHtml() {
         " <th >收益</th>" +
         " <th >自选价格</th> " +
         " </tr>";
+    var fundInversPositionHead = " <tr >" +
+        " <th >股票名称（代码）</th>" +
+        " <th >价格</th>" +
+        " <th >涨跌幅</th>" +
+        " <th >持仓占比</th>"
+        " </tr>";
+    $("#fund-invers-position-head").html(fundInversPositionHead);
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
         $("#fund-head").html(fundHead);
     }
@@ -372,7 +379,10 @@ document.addEventListener(
         document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
         // 首页，点击清除角标
         document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
-        
+        // 股票编辑页面，点击查看持仓明细
+        document.getElementById('fund-invers-position-button-1').addEventListener('click', getFundInversPosition);
+        document.getElementById('fund-invers-position-button-2').addEventListener('click', getFundInversPosition);
+        document.getElementById('fund-invers-position-button-3').addEventListener('click', getFundInversPosition);
     }
 );
 
@@ -641,6 +651,7 @@ async function initStockAndFundHtml() {
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
+                $("#fund-invers-position-button-3")[0].style.display = 'inline';
                 let stockCode = $("#stock-code").val();
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
@@ -669,6 +680,7 @@ async function initStockAndFundHtml() {
                 $("#fund-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'none';
+                $("#fund-invers-position-button-3")[0].style.display = 'inline';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -1479,4 +1491,43 @@ async function stockMonitor () {
 // 清理角标
 async function removeBadgeText() {
     chrome.action.setBadgeText({ text: '' });
+}
+
+// 获取基金持仓明细
+async function getFundInversPosition() {
+    let code = $("#stock-code").val();
+    if (code == '' || code == null) {
+        code = $("#fund-code").val();
+    }
+    code = code.replace('sz','').replace('sh','');
+    let fundStocks = ajaxGetFundInvesterPosition(code);
+    if (fundStocks == null || fundStocks == '' || fundStocks == []) {
+        return;
+    }
+    let fundStocksArr;
+    for (k in fundStocks) {
+        fundStocksArr = fundStocksArr + fundStocks[k].NEWTEXCH + "." + fundStocks[k].GPDM + ",";
+    }
+    let fundStocksDetail = ajaxGetFundInvesterPositionDetail(fundStocksArr);
+    let str = "";
+    for(k in fundStocksDetail) {
+        let currentStock;
+        for(l in fundStocks) {
+            if (fundStocksDetail[k].f12 == fundStocks[l].GPDM) {
+                currentStock = fundStocks[l];
+                break;
+            }
+        }
+        str += "<tr>"
+        + "<td >" + fundStocksDetail[k].f14 + "(" + fundStocksDetail[k].f12 + ")" 
+        + "</td><td>" + fundStocksDetail[k].f2
+        + "</td><td>" + fundStocksDetail[k].f3 + "%"
+        + "</td><td>" + currentStock.JZBL + "%"
+        + "</td></tr>";
+    }
+    $("#fund-invers-position-nr").html(str);
+    $("#fund-invers-position-modal").modal();
+    $("#stock-modal").modal("hide");
+    $("#fund-modal").modal("hide");
+    $("#time-image-modal").modal("hide");
 }

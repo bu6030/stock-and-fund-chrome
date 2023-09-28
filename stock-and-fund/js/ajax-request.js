@@ -195,3 +195,47 @@ function ajaxGetFundTimeImageMinuteMini(code) {
     });
     return result;
 }
+
+// 接口调用
+function ajaxGetFundInvesterPosition(code) {
+    let result;
+    $.ajax({
+        url: Env.GET_FUND_INVERST_POSITION + "?FCODE="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=&_=1695880707206",
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.Datas.fundStocks;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
+function ajaxGetFundInvesterPositionDetail(code) {
+    let result;
+    $.ajax({
+        url: Env.GET_FUND_INVERST_POSITION_DETAIL + "?fields=f1,f2,f3,f4,f12,f13,f14,f292&fltt=2&secids="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=",
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.data.diff;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}

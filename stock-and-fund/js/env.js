@@ -11,6 +11,8 @@ let Env = {
     GET_FUND_TIME_IMAGE_FROM_DFCFW: "http://webquoteklinepic.eastmoney.com/GetPic.aspx",
     GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW: "http://j4.dfcfw.com/charts/pic7/",
     GET_FUND_FROM_EAST_MONEY: "https://j5.fund.eastmoney.com/sc/tfs/qt/v2.0.1/",
+    GET_FUND_INVERST_POSITION: "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNInverstPosition",
+    GET_FUND_INVERST_POSITION_DETAIL: "https://push2.eastmoney.com/api/qt/ulist.np/get",
     // 下面这两个地址可以通过本地启动stock-and-fund项目
     // github地址为：https://github.com/bu6030/stock-and-fund
     // GET_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/fund",
