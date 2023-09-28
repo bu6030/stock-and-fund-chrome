@@ -19,6 +19,13 @@
     margin-bottom: 40px;
 }
 
+.fund-net-diagram-div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 500px;
+    height: 300px;
+}
+
 .my-input-group {
     width: 800px;
     height: 30px;

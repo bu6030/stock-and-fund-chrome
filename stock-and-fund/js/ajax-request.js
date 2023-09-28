@@ -200,7 +200,7 @@ function ajaxGetFundTimeImageMinuteMini(code) {
 function ajaxGetFundInvesterPosition(code) {
     let result;
     $.ajax({
-        url: Env.GET_FUND_INVERST_POSITION + "?FCODE="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=&_=1695880707206",
+        url: Env.GET_FUND_INVERST_POSITION + "?FCODE="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=&_=",
         type: "get",
         data: {},
         async: false,
@@ -239,3 +239,43 @@ function ajaxGetFundInvesterPositionDetail(code) {
     });
     return result;
 }
+
+// 接口调用
+function ajaxGetFundNetDiagram(code, type) {
+    let result;
+    let range;
+    if (type == "MONTH") {
+        range = "y";
+    } else if(type == "3MONTH") {
+        range = "3y";
+    } else if(type == "6MONTH") {
+        range = "6y";
+    } else if(type == "YEAR") {
+        range = "n";
+    } else if(type == "3YEAR") {
+        range = "3n";
+    } else if(type == "5YEAR") {
+        range = "5n";
+    } else if(type == "ALLYEAR") {
+        range = "ln";
+    }
+    $.ajax({
+        url: Env.GET_FUND_NET_DIAGRAM + "?FCODE=" + code + "&RANGE=" + range + "&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=",
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.Datas;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+

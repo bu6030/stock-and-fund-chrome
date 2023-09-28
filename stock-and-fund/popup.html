@@ -203,6 +203,7 @@
                         <button type="button" class="btn btn-primary" id="time-image-month-button">月线</button>
                         <button type="button" class="btn btn-primary" id="stock-fund-monitor-button">监控股价</button>
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-3">持仓明细</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-button-3">历史净值</button>
                         <button type="button" class="btn btn-primary" id="update-stock-fund-button">编辑</button>
                         <button type="button" class="btn btn-secondary" id="stock-fund-delete-button">删除</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
@@ -465,6 +466,22 @@
                 </div>
             </div>
         </div>
+        <!-- 历史净值模态框 -->
+        <div class="modal fade" id="fund-net-diagram-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">历史净值</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div id="fund-net-diagram" class="fund-net-diagram-div"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
         <!-- 股票基金主体页面 start -->
         <div class="my-center-child">

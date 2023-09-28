@@ -379,10 +379,13 @@ document.addEventListener(
         document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
         // 首页，点击清除角标
         document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
-        // 股票编辑页面，点击查看持仓明细
+        // 分时图页面，股票/基金编辑页面，点击查看持仓明细
         document.getElementById('fund-invers-position-button-1').addEventListener('click', getFundInversPosition);
         document.getElementById('fund-invers-position-button-2').addEventListener('click', getFundInversPosition);
         document.getElementById('fund-invers-position-button-3').addEventListener('click', getFundInversPosition);
+        // 分时图页面，股票/基金编辑页面，点击查看历史净值
+        document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
+        
     }
 );
 
@@ -1527,6 +1530,58 @@ async function getFundInversPosition() {
     }
     $("#fund-invers-position-nr").html(str);
     $("#fund-invers-position-modal").modal();
+    $("#stock-modal").modal("hide");
+    $("#fund-modal").modal("hide");
+    $("#time-image-modal").modal("hide");
+}
+
+// 展示历史净值
+function setFundNetDiagram() {
+    let code = $("#stock-code").val();
+    if (code == '' || code == null) {
+        code = $("#fund-code").val();
+    }
+    code = code.replace('sz','').replace('sh','');
+    let fundNetDiagram = ajaxGetFundNetDiagram(code);
+    let dataStr = [];
+    let dataAxis = [];
+    for (let k = 0; k < fundNetDiagram.length; k++) {
+        dataStr.push(parseFloat(fundNetDiagram[k].DWJZ));
+        dataAxis.push(fundNetDiagram[k].FSRQ);
+    }
+
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById("fund-net-diagram"));
+    option = {
+        // resize: true,
+        // lineStyle: {
+        //     color: redColor, // 设置线的颜色
+        //     // 其他样式配置
+        //     width: 1,
+        //     opacity: 0.5
+        // },
+        xAxis: {
+            data: dataAxis,
+            type: 'category',
+            axisLabel: {
+                interval: 6 // 调整刻度显示间隔
+            },
+        },
+        yAxis: {
+            scale: true,
+            type: 'value',
+        },
+
+        series: [
+            {
+                data: dataStr,
+                type: 'line',
+                smooth: true,
+            }
+        ]
+    };
+    myChart.setOption(option);
+    $("#fund-net-diagram-modal").modal();
     $("#stock-modal").modal("hide");
     $("#fund-modal").modal("hide");
     $("#time-image-modal").modal("hide");
