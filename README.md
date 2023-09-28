@@ -90,6 +90,7 @@
 70. 增加股票实时价格监控角标 2023/9/27 -- version 1.6.20 -- end
 71. 价格监控失效修改 2023/9/27
 72. 增加清理角标 2023/9/27 -- version 1.6.21 -- end
+73. 修改同时监控两个股票只显示一个的问题 2023/9/28
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

@@ -62,7 +62,7 @@ function monitorStockPrice(stockList) {
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         var stocks = "";
-        for (var k in stockList) {
+        for (let k in stockList) {
             if (stockList[k].monitorAlert == '1' || stockList[k].monitorAlert == '2') {
                 continue;
             }
@@ -81,23 +81,23 @@ function monitorStockPrice(stockList) {
             .then(data => {
                 // 在这里处理返回的数据
                 var stoksArr = data.split("\n");
-                for (var k in stoksArr) {
+                for (let k in stoksArr) {
                     var monitorStock;
-                    for (var l in stockList) {
+                    for (let l in stockList) {
                         if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
                             monitorStock = stockList[l];
                         }
                     }
                     var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                     var values = dataStr.split("~");
-                    var name = stockList[l].name;
+                    var name = monitorStock.name;
                     var now = parseFloat(values[3]);
                     if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
                         var highPrice = parseFloat(monitorStock.monitorHighPrice);
                         if (now > highPrice) {
-                            // stockList[l].monitorHighPrice = '';
-                            stockList[l].monitorAlert = '1';
-                            stockList[l].monitorAlertDate = Date.now();
+                            // monitorStock.monitorHighPrice = '';
+                            monitorStock.monitorAlert = '1';
+                            monitorStock.monitorAlertDate = Date.now();
                             chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
                             chrome.action.setBadgeBackgroundColor({ color: 'red' });
                             chrome.action.setBadgeText({ text: "" + now });
@@ -112,9 +112,9 @@ function monitorStockPrice(stockList) {
                     if (typeof monitorStock.monitorLowPrice != 'undefined' && monitorStock.monitorLowPrice != '') {
                         var lowPrice = parseFloat(monitorStock.monitorLowPrice);
                         if (now < lowPrice) {
-                            // stockList[l].monitorLowPrice = '';
-                            stockList[l].monitorAlert = '2';
-                            stockList[l].monitorAlertDate = Date.now();
+                            // monitorStock.monitorLowPrice = '';
+                            monitorStock.monitorAlert = '2';
+                            monitorStock.monitorAlertDate = Date.now();
                             chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
                             chrome.action.setBadgeBackgroundColor({ color: 'green' });
                             chrome.action.setBadgeText({ text: "" + now });

@@ -753,8 +753,6 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
             }
         }
-        // console.log("alertStyle="+alertStyle + ";monitorAlertDate = " + monitorAlertDate+";nowTimestamp="+ nowTimestamp +";result[k].monitorAlert="+result[k].monitorAlert);
-
         str += "<tr id=\"stock-tr-" + k + "\">"
             + "<td >" + result[k].name + alertStyle + minuteImageMiniDiv
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
