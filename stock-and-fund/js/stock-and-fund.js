@@ -1636,12 +1636,14 @@ async function setFundNetDiagram(type) {
                 data: dataDwjz,
                 type: 'line',
                 smooth: true,
+                color: 'blue',
             },
             {
                 name: '累计净值',
                 data: dataLJJZ,
                 type: 'line',
                 smooth: true,
+                color: 'red',
             }
         ]
     };
