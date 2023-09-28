@@ -384,8 +384,30 @@ document.addEventListener(
         document.getElementById('fund-invers-position-button-2').addEventListener('click', getFundInversPosition);
         document.getElementById('fund-invers-position-button-3').addEventListener('click', getFundInversPosition);
         // 分时图页面，股票/基金编辑页面，点击查看历史净值
-        document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
-        
+        document.getElementById('fund-net-diagram-button-3').addEventListener('click', async function () {
+            setFundNetDiagram('MONTH');
+        });
+        document.getElementById('fund-net-diagram-month-button').addEventListener('click',  async function () {
+            setFundNetDiagram('MONTH');
+        });
+        document.getElementById('fund-net-diagram-3month-button').addEventListener('click',  async function () {
+            setFundNetDiagram('3MONTH');
+        });
+        document.getElementById('fund-net-diagram-6month-button').addEventListener('click',  async function () {
+            setFundNetDiagram('6MONTH');
+        });
+        document.getElementById('fund-net-diagram-year-button').addEventListener('click',  async function () {
+            setFundNetDiagram('YEAR');
+        });
+        document.getElementById('fund-net-diagram-3year-button').addEventListener('click',  async function () {
+            setFundNetDiagram('3YEAR');
+        });
+        document.getElementById('fund-net-diagram-5year-button').addEventListener('click',  async function () {
+            setFundNetDiagram('5YEAR');
+        });
+        document.getElementById('fund-net-diagram-allyear-button').addEventListener('click',  async function () {
+            setFundNetDiagram('ALLYEAR');
+        });
     }
 );
 
@@ -1503,6 +1525,7 @@ async function getFundInversPosition() {
         code = $("#fund-code").val();
     }
     code = code.replace('sz','').replace('sh','');
+    console.log("===================3=",code);
     let fundStocks = ajaxGetFundInvesterPosition(code);
     if (fundStocks == null || fundStocks == '' || fundStocks == []) {
         return;
@@ -1536,19 +1559,38 @@ async function getFundInversPosition() {
 }
 
 // 展示历史净值
-function setFundNetDiagram() {
+async function setFundNetDiagram(type) {
     let code = $("#stock-code").val();
     if (code == '' || code == null) {
         code = $("#fund-code").val();
     }
     code = code.replace('sz','').replace('sh','');
-    let fundNetDiagram = ajaxGetFundNetDiagram(code);
-    let dataStr = [];
+    let fundNetDiagram = ajaxGetFundNetDiagram(code, type);
+    let dataDwjz = [];
+    let dataLJJZ = [];
     let dataAxis = [];
     for (let k = 0; k < fundNetDiagram.length; k++) {
-        dataStr.push(parseFloat(fundNetDiagram[k].DWJZ));
+        dataDwjz.push(parseFloat(fundNetDiagram[k].DWJZ));
+        dataLJJZ.push(parseFloat(fundNetDiagram[k].LJJZ));
         dataAxis.push(fundNetDiagram[k].FSRQ);
     }
+    let interval = 6;
+    if (type == 'MONTH') {
+        interval = 6;
+    } else if (type == '3MONTH') {
+        interval = 18;
+    } else if (type == '6MONTH') {
+        interval = 36;
+    } else if (type == 'YEAR') {
+        interval = 72;
+    } else if (type == '3YEAR') {
+        interval = 216;
+    } else if (type == '5YEAR') {
+        interval = 360;
+    } else if (type == 'ALLYEAR') {
+        interval = Math.floor(fundNetDiagram.length / 4);
+    }
+    console.log('interval====',interval);
 
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
@@ -1560,21 +1602,30 @@ function setFundNetDiagram() {
         //     width: 1,
         //     opacity: 0.5
         // },
+        legend: {
+            data: ['单位净值', '累计净值']
+        },
         xAxis: {
             data: dataAxis,
             type: 'category',
             axisLabel: {
-                interval: 6 // 调整刻度显示间隔
+                interval: interval // 调整刻度显示间隔
             },
         },
         yAxis: {
             scale: true,
             type: 'value',
         },
-
         series: [
             {
-                data: dataStr,
+                name: '单位净值',
+                data: dataDwjz,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '累计净值',
+                data: dataLJJZ,
                 type: 'line',
                 smooth: true,
             }
