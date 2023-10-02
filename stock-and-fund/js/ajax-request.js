@@ -35,6 +35,7 @@ function ajaxGetFundFromEastMoney(code) {
             fund.name = json.SHORTNAME + "";
             fund.dwjz = json.DWJZ + "";
             fund.now = json.DWJZ + "";
+            fund.gszzl = json.RZDF + "";
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -113,27 +114,7 @@ function ajaxGetStockFromGtimg(code) {
 
 // 接口调用
 function ajaxGetFundFromTiantianjijin(code) {
-    let result;
-    // 这个不是js，这个是接口，返回格式为：
-    // This isn't javascript, this is an api, response is:
-    // jsonpgz({"fundcode":"160119","name":"南方中证500ETF联接A","jzrq":"2023-09-27","dwjz":"1.5714","gsz":"1.5757","gszzl":"0.28","gztime":"2023-09-28 15:00"});
-    $.ajax({
-        url: Env.GET_FUND_FROM_TIANTIANJIJIN + code + ".js",
-        type: "get",
-        data: {},
-        async: false,
-        dataType: 'text',
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data) {
-            result = data;
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-        }
-    });
-    return result;
+    return null;
 }
 
 // 接口调用

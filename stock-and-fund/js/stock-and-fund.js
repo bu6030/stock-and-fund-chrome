@@ -485,7 +485,7 @@ function initFund() {
                         let fund = checkFundExsitFromEastMoney(fundCode);
                         fundList[k].dwjz = fund.dwjz;
                         fundList[k].gsz = fund.dwjz;
-                        fundList[k].gszzl = "0";
+                        fundList[k].gszzl = fund.gszzl;
                         fundList[k].income = "0";
                         fundList[k].incomePercent = "0";
                         fundList[k].name = fund.name;
