@@ -92,6 +92,7 @@ async function initHtml() {
     if (develop) {
         document.getElementById('import-from-local-springboot').classList.remove('fade');
     }
+    // 股票标题
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
         " <th >当日盈利</th> " +
@@ -106,6 +107,7 @@ async function initHtml() {
         " <th >收益</th> " +
         " <th >自选价格</th> " +
         " </tr>";
+    // 基金标题
     var fundHead = " <tr >" +
         " <th >基金名称</th>" +
         " <th >当日盈利</th>" +
@@ -120,6 +122,7 @@ async function initHtml() {
         " <th >收益</th>" +
         " <th >自选价格</th> " +
         " </tr>";
+    // 持仓明细标题
     var fundInversPositionHead = " <tr >" +
         " <th >股票名称（代码）</th>" +
         " <th >价格</th>" +
@@ -353,23 +356,29 @@ document.addEventListener(
         document.getElementById('refresh-button').addEventListener('click', async function () {
             initData();
         });
+        // 设置页面，点击颜色切换按钮
         document.getElementById('change-blue-red-button').addEventListener('click', async function () {
             $("#setting-modal").modal("hide");
             changeBlueRed();
         });
+        // 设置页面，点击忽悠自己按钮
         document.getElementById('cheat-me-button').addEventListener('click', async function () {
             $("#setting-modal").modal("hide");
             cheatMe();
         });
+        // 首页，点击设置按钮
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
         });
+        // 首页，底部全部按钮，股票基金全部显示
         document.getElementById('show-all-button').addEventListener('click', async function () {
             changeShowStockOrFundOrAll('all');
         });
+        // 首页，底部股票按钮，只展示股票
         document.getElementById('show-stock-button').addEventListener('click', async function () {
             changeShowStockOrFundOrAll('stock');
         });
+        // 首页，底部基金按钮，只展示基金
         document.getElementById('show-fund-button').addEventListener('click', async function () {
             changeShowStockOrFundOrAll('fund');
         });
@@ -387,24 +396,31 @@ document.addEventListener(
         document.getElementById('fund-net-diagram-button-3').addEventListener('click', async function () {
             setFundNetDiagram('MONTH');
         });
+        // 历史净值页面，点击月
         document.getElementById('fund-net-diagram-month-button').addEventListener('click',  async function () {
             setFundNetDiagram('MONTH');
         });
+        // 历史净值页面，点击季
         document.getElementById('fund-net-diagram-3month-button').addEventListener('click',  async function () {
             setFundNetDiagram('3MONTH');
         });
+        // 历史净值页面，点击半年
         document.getElementById('fund-net-diagram-6month-button').addEventListener('click',  async function () {
             setFundNetDiagram('6MONTH');
         });
+        // 历史净值页面，点击年
         document.getElementById('fund-net-diagram-year-button').addEventListener('click',  async function () {
             setFundNetDiagram('YEAR');
         });
+        // 历史净值页面，点击三年
         document.getElementById('fund-net-diagram-3year-button').addEventListener('click',  async function () {
             setFundNetDiagram('3YEAR');
         });
+        // 历史净值页面，点击五年
         document.getElementById('fund-net-diagram-5year-button').addEventListener('click',  async function () {
             setFundNetDiagram('5YEAR');
         });
+        // 历史净值页面，点击上市以来
         document.getElementById('fund-net-diagram-allyear-button').addEventListener('click',  async function () {
             setFundNetDiagram('ALLYEAR');
         });
@@ -1559,11 +1575,12 @@ async function getFundInversPosition() {
                 break;
             }
         }
+        let fundStocksDetailStyle = parseFloat(fundStocksDetail[k].f3) == 0 ? "" : (parseFloat(fundStocksDetail[k].f3) > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
         str += "<tr>"
         + "<td >" + fundStocksDetail[k].f14 + "(" + fundStocksDetail[k].f12 + ")" 
-        + "</td><td>" + fundStocksDetail[k].f2
-        + "</td><td>" + fundStocksDetail[k].f3 + "%"
-        + "</td><td>" + currentStock.JZBL + "%"
+        + "</td><td>" + parseFloat(fundStocksDetail[k].f2).toFixed(2)
+        + "</td><td " + fundStocksDetailStyle + ">" + parseFloat(fundStocksDetail[k].f3).toFixed(2) + "%"
+        + "</td><td>" + parseFloat(currentStock.JZBL).toFixed(2) + "%"
         + "</td></tr>";
     }
     $("#fund-invers-position-nr").html(str);
@@ -1609,13 +1626,6 @@ async function setFundNetDiagram(type) {
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
     option = {
-        // resize: true,
-        // lineStyle: {
-        //     color: redColor, // 设置线的颜色
-        //     // 其他样式配置
-        //     width: 1,
-        //     opacity: 0.5
-        // },
         legend: {
             data: ['单位净值', '累计净值']
         },
