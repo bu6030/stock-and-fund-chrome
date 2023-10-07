@@ -822,8 +822,15 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
             }
         }
+        let stockName = result[k].name;
+        if (result[k].code.startsWith('us') || result[k].code.startsWith('US')) {
+            stockName = result[k].name + "(美股)";
+        }
+        if (result[k].code.startsWith('hk') || result[k].code.startsWith('HK')) {
+            stockName = result[k].name + "(港股)";
+        }
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td >" + result[k].name + alertStyle + minuteImageMiniDiv
+            + "<td >" + stockName + alertStyle + minuteImageMiniDiv
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
@@ -944,8 +951,8 @@ function getTotalTableHtml(totalMarketValueResult) {
 
 // 通过股票名称搜索股票列表
 function searchStockByName(name) {
-    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1
-        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1) {
+    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1 || name.indexOf("us") != -1
+        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1 || name.indexOf("US") != -1) {
         name = name.substring(2, name.length);
     }
     var stocksArr;
@@ -1244,10 +1251,12 @@ async function searchFundAndStock() {
                 market = "深A"
             } else if (values[0] == 'hk') {
                 market = "港股"
+            } else if (values[0] == 'us') {
+                market = "美股"
             } else {
                 market = "其他"
             }
-            var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
+            var option = $("<option></option>").val(values[0] + values[1].replace('.oq','').toUpperCase()).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
             $("#search-stock-select").append(option);
         }
         if (stocksArr != null && stocksArr != '' && stocksArr != undefined && stocksArr.length > 0) {
