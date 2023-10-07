@@ -15,6 +15,7 @@ var cheatMeFlag = false;
 var showStockOrFundOrAll = 'all';
 var windowSize = 'NORMAL'; // 窗口大小
 var marketValueDisplay = 'DISPLAY';
+var marketValuePercentDisplay = 'DISPLAY';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -67,6 +68,14 @@ async function initLoad() {
         marketValueDisplay = 'HIDDEN';
         $("#market-value-display-checkbox").prop("checked", false);
     }
+    marketValuePercentDisplay = await readCacheData('market-value-percent-display');
+    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
+        marketValuePercentDisplay = 'DISPLAY';
+        $("#market-value-percent-display-checkbox").prop("checked", true);
+    } else {
+        marketValuePercentDisplay = 'HIDDEN';
+        $("#market-value-percent-display-checkbox").prop("checked", false);
+    }
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -115,7 +124,7 @@ async function initHtml() {
         " <th >成本价</th> " +
         " <th >持仓</th> " +
         (marketValueDisplay == 'DISPLAY' ? " <th >市值/金额</th> " : "") + 
-        " <th >持仓占比</th> " +
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th >持仓占比</th> " : "") + 
         " <th >成本</th> " +
         " <th >收益率</th> " +
         " <th >收益</th> " +
@@ -130,7 +139,7 @@ async function initHtml() {
         " <th >持仓成本</th>" +
         " <th >持有份额</th>" +
         (marketValueDisplay == 'DISPLAY' ? " <th >市值/金额</th> " : "") + 
-        " <th >持仓占比</th>" +
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th >持仓占比</th>" : "") + 
         " <th >成本</th> " +
         " <th >收益率</th>" +
         " <th >收益</th>" +
@@ -447,6 +456,15 @@ document.addEventListener(
                 setDisplayTr('market-value-display-checkbox', 'DISPLAY');
               } else {
                 setDisplayTr('market-value-display-checkbox', 'HIDDEN');
+              }
+            
+        });
+        let marketValuePercentDisplayCheckbox = document.getElementById("market-value-percent-display-checkbox");
+        marketValuePercentDisplayCheckbox.addEventListener('change', async function () {
+            if (marketValuePercentDisplayCheckbox.checked) {
+                setDisplayTr('market-value-percent-display-checkbox', 'DISPLAY');
+              } else {
+                setDisplayTr('market-value-percent-display-checkbox', 'HIDDEN');
               }
             
         });
@@ -863,7 +881,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             + "</td><td >" + result[k].costPrise
             + "</td><td>" + result[k].bonds
             + (marketValueDisplay == 'DISPLAY' ? "</td><td >" + marketValue.setScale(2) : "")
-            + "</td><td >" + marketValuePercent + "%"
+            + (marketValuePercentDisplay == 'DISPLAY' ? "</td><td >" + marketValuePercent + "%" : "")
             + "</td><td >" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
@@ -883,7 +901,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td><td colspan='3'></td><td>" + (marketValueDisplay == 'DISPLAY' ? stockTotalmarketValue.setScale(2) + "</td><td>" : "") +"</td><td>" + stockTotalCostValue + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
+    str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td><td colspan='3'></td><td>"
+        + (marketValueDisplay == 'DISPLAY' ? stockTotalmarketValue.setScale(2) + "</td><td>" : "") + (marketValuePercentDisplay == 'DISPLAY' ? "</td><td>" : "" ) + stockTotalCostValue + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
         + "</td><td></td></tr>";
     return str;
 }
@@ -926,7 +945,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             + "</td><td >" + result[k].costPrise
             + "</td><td>" + result[k].bonds
             + (marketValueDisplay == 'DISPLAY' ? "</td><td >" + marketValue : "")
-            + "</td><td >" + marketValuePercent + "%"
+            + (marketValuePercentDisplay == 'DISPLAY' ? "</td><td >" + marketValuePercent + "%" : "")
             + "</td><td >" + costPriceValue
             + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
@@ -946,7 +965,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td>" + (marketValueDisplay == 'DISPLAY' ? fundTotalmarketValue + "</td><td>" : "") + "</td><td>" + fundTotalCostValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
+    str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td>"
+        + (marketValueDisplay == 'DISPLAY' ? fundTotalmarketValue + "</td><td>" : "") + (marketValuePercentDisplay == 'DISPLAY' ? "</td><td>" : "" ) + fundTotalCostValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
         + "</td><td></td></tr>";
 
     return str;
@@ -969,7 +989,8 @@ function getTotalTableHtml(totalMarketValueResult) {
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
 
-    str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td><td colspan='2'></td><td>" + (marketValueDisplay == 'DISPLAY' ? totalMarketValueResult.setScale(2) + "</td><td>" : "" ) + "</td><td>" + totalCostPrice + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
+    str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td><td colspan='2'></td><td>" 
+        + (marketValueDisplay == 'DISPLAY' ? totalMarketValueResult.setScale(2) + "</td><td>" : "" ) + (marketValuePercentDisplay == 'DISPLAY' ? "</td><td>" : "" ) + totalCostPrice + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
         + "</td><td></td></tr>";
 
     return str;
@@ -1775,6 +1796,9 @@ async function setDisplayTr(type, dispaly){
     if (type == 'market-value-display-checkbox') {
         marketValueDisplay = dispaly;
         saveCacheData('market-value-display', dispaly);
+    } else if(type == 'market-value-percent-display-checkbox') {
+        marketValuePercentDisplay = dispaly;
+        saveCacheData('market-value-percent-display', dispaly);
     }
     initHtml();
     initData();
