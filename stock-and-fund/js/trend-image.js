@@ -3,6 +3,11 @@ let timeImageCode;
 let timeImageType;
 // 展示分时图
 function showMinuteImage() {
+    if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US") ||
+        timeImageCode.startsWith("hk") || timeImageCode.startsWith("HK")) {
+            toEditPage();
+            return;
+    }
     let path = "";
     if (timeImageType == "FUND") {
         path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
@@ -62,4 +67,8 @@ function getCurrentDate() {
     var day = date.getDate(); // 得到当前天数
     day = day >= 10 ? day : '0' + day; // 补零
     return year + '-' + month + '-' + day; // 这里传入的是字符串
+}
+function toEditPage() {
+    $("#time-image-modal").modal("hide");
+    $("#stock-modal").modal();
 }

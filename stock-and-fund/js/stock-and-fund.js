@@ -802,6 +802,13 @@ async function initStockAndFundHtml() {
                     $("#fund-net-diagram-button-1")[0].style.display = 'none';
                 }
                 let stockCode = $("#stock-code").val();
+                if (stockCode.startsWith("us") || stockCode.startsWith("US") ||
+                    stockCode.startsWith("hk") || stockCode.startsWith("HK")) {
+                    $("#stock-show-time-image-button")[0].style.display = 'none';
+                } else {
+                    $("#stock-show-time-image-button")[0].style.display = 'inline';
+                }
+                
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
                 showMinuteImage();
