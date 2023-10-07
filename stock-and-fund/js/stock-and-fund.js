@@ -59,6 +59,14 @@ async function initLoad() {
     if (windowSize == null) {
         windowSize = 'NORMAL';
     }
+    marketValueDisplay = await readCacheData('market-value-display');
+    if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
+        marketValueDisplay = 'DISPLAY';
+        $("#market-value-display-checkbox").prop("checked", true);
+    } else {
+        marketValueDisplay = 'HIDDEN';
+        $("#market-value-display-checkbox").prop("checked", false);
+    }
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -1766,6 +1774,7 @@ async function setFundNetDiagram(type) {
 async function setDisplayTr(type, dispaly){
     if (type == 'market-value-display-checkbox') {
         marketValueDisplay = dispaly;
+        saveCacheData('market-value-display', dispaly);
     }
     initHtml();
     initData();
