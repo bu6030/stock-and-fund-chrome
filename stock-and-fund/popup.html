@@ -382,15 +382,7 @@
                             <div class="you">
                                 <button type="button" id="cheat-me-button" class="btn btn-outline-primary btn-sm"
                                 data-toggle="modal">忽悠自己
-                                </button>  纯属娱乐，就是把当日亏损的负值变成正的，把亏损展示成盈利，但是数据计算就不十分准确了
-                            </div>
-                        </div>
-                        <div class="am-form-group am-cf">
-                            <div class="zuo"></div>
-                            <div class="you">
-                                <button type="button" id="remove-all-data-button" class="btn btn-outline-danger btn-sm"
-                                    data-toggle="modal">清空数据
-                                </button>  一键清空所有数据，慎点
+                                </button>  纯属娱乐，就是把当日亏损的负值变成正的，把亏损展示成盈利，但数据计算不十分准确
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -399,14 +391,12 @@
                                 <button type="button" id="data-export-button" class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal">导出数据
                                 </button>
-                            </div>
-                        </div>
-                        <div class="am-form-group am-cf">
-                            <div class="zuo"></div>
-                            <div class="you">
                                 <button type="button" id="show-import-data" class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal">导入数据
                                 </button>
+                                <button type="button" id="remove-all-data-button" class="btn btn-outline-danger btn-sm"
+                                    data-toggle="modal">清空数据
+                                </button>  一键清空所有数据，慎点
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -431,6 +421,9 @@
                                 <button type="button" id="font-change-button" class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal">样式切换
                                 </button>  首页字体变粗变大切换
+                                <button type="button" id="window-size-change-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">页面大小
+                                </button>  首页大小切换
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -439,6 +432,39 @@
                                 <button type="button" id="full-screen-button" class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal">全屏展示
                                 </button>  点击后直接在浏览器展示，显示的更全
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">页面展示项</div>
+                            <div class="you">
+                                <label class="form-check-label" for="market-value-display-checkbox">
+                                    市值/金额
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="market-value-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="defaultCheck2">
+                                    持仓占比
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="defaultCheck3">
+                                    成本
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="defaultCheck4">
+                                    收益率
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="defaultCheck5">
+                                    自选价格
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck5">
                             </div>
                         </div>
                     </div>
@@ -504,10 +530,10 @@
         <!-- 股票基金主体页面 start -->
         <div class="my-center-child">
             <div>
-                <div class="my-header">
+                <div class="my-header" id="my-header">
                     <!--                <ul class="am-icon-users my-font"> 股票基金汇总</ul>-->
                     <dl>
-                        <button type="button" id="remove-all-data-button-2" class="btn btn-outline-danger btn-sm"
+                        <!-- <button type="button" id="remove-all-data-button-2" class="btn btn-outline-danger btn-sm"
                             data-toggle="modal">清空数据
                         </button>
                         <button type="button" id="data-export-button-2" class="btn btn-outline-primary btn-sm"
@@ -515,7 +541,7 @@
                         </button>
                         <button type="button" id="show-import-data-2" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">导入数据
-                        </button>
+                        </button> -->
                         <button type="button" id="show-minute-image-mini-2" class="btn btn-outline-primary btn-sm"
                             data-toggle="modal">展示/隐藏分时图
                         </button>
@@ -542,7 +568,7 @@
                         </button>
                         <div id="monitor-text" class="my-monitor-text">搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！</div>
                     </dl>
-                    <div class="input-group my-input-group">
+                    <div class="input-group my-input-group" id="my-input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="stock-fund-name-search-button">搜索股票/基金</span>
                         </div>
@@ -557,13 +583,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="my-body">
+                <div class="my-body" id="my-body">
                     <form>
                         <div class="stock-large-market" id="stock-large-market"></div>
                         <div class="alert alert-primary my-large-alert" id="help-document-alert" role="alert">
                             <a href="#" class="alert-link">股票基金神器使用说明（新手必看）</a>
                         </div>
-                        <div class="my-div">
+                        <div id="my-div" class="my-div">
                             <table class="table table-hover my-font no-wrap table-striped">
                                 <thead id="stock-head" />
                                 <tbody id="stock-nr" />
@@ -580,7 +606,7 @@
         </div>
         <!-- 股票基金主体页面 end -->
     </div>
-    <div id="footer">
+    <div id="footer" class="footer">
         <div>
             <button type="button" id="show-all-button" class="btn btn-info btn-sm"
                 data-toggle="modal">全部
