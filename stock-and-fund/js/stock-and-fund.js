@@ -1430,6 +1430,7 @@ async function initFontStyle() {
 
         myDiv.classList.remove('my-div');
         myDiv.classList.add('my-div-small');
+        myDiv.style.width = '600px';
         myInputGroup.classList.remove('my-input-group');
         myInputGroup.classList.add('my-input-group-small');
         stockLargeMarket.classList.remove('stock-large-market');
@@ -1447,6 +1448,26 @@ async function initFontStyle() {
         helpDocumentAlert.classList.remove('my-large-alert');
         helpDocumentAlert.classList.add('my-large-alert-small');
     } else {
+        let displaySize = 7;
+        if (marketValueDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (marketValuePercentDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (costPriceDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (incomePercentDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (addtimePriceDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        let myDivWidth = 80 * displaySize;
+        if (myDivWidth <= 800) {
+            myDivWidth = 800;
+        }
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
         let stockLargeMarket = document.getElementById('stock-large-market');
@@ -1459,6 +1480,7 @@ async function initFontStyle() {
 
         myDiv.classList.add('my-div');
         myDiv.classList.remove('my-div-small');
+        myDiv.style.width = myDivWidth + 'px';
         myInputGroup.classList.add('my-input-group');
         myInputGroup.classList.remove('my-input-group-small');
         stockLargeMarket.classList.add('stock-large-market');

@@ -43,7 +43,7 @@ function initLargeMarketData() {
                 document.getElementById('large-market-sz399006').addEventListener('click', function () {
                     timeImageCode = "sz399006";
                     initLargeMarketClick();
-                });     
+                });
             }, 300);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
