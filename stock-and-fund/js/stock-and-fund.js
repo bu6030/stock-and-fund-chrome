@@ -52,7 +52,7 @@ async function initLoad() {
         cheatMeFlag = false;
     } else if(cheatMeFlag == "true") {
         cheatMeFlag = true;
-    } else {
+    } else if(cheatMeFlag == "false") {
         cheatMeFlag = false;
     }
     showStockOrFundOrAll = await readCacheData('showStockOrFundOrAll');
@@ -200,24 +200,18 @@ document.addEventListener(
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
         // 基金编辑页面，点击保存按钮
-        document.getElementById('fund-save-button').addEventListener('click', function () {
-            saveFund();
-        });
+        document.getElementById('fund-save-button').addEventListener('click', saveFund);
         // 股票编辑页面，点击保存按钮
-        document.getElementById('stock-save-button').addEventListener('click', function () {
-            saveStock();
-        });
+        document.getElementById('stock-save-button').addEventListener('click', saveStock);
         // 首页，自己开发时方便从 SpringBoot 项目直接导入数据
-        if (develop) {
-            document.getElementById('import-from-local-springboot').addEventListener('click', function () {
-                let result = ajaxGetStockAndFundFromLocalService();
-                if (result != null && result != '' && result != undefined) {
-                    saveCacheData('stocks', JSON.stringify(result.stocks));
-                    saveCacheData('funds', JSON.stringify(result.funds));
-                    location.reload();
-                }
-            });
-        }
+        document.getElementById('import-from-local-springboot').addEventListener('click', function () {
+            let result = ajaxGetStockAndFundFromLocalService();
+            if (result != null && result != '' && result != undefined) {
+                saveCacheData('stocks', JSON.stringify(result.stocks));
+                saveCacheData('funds', JSON.stringify(result.funds));
+                location.reload();
+            }
+        });
         // 股票编辑页面，点击删除按钮
         document.getElementById('stock-delete-button').addEventListener('click', async function () {
             var stocks = await readCacheData('stocks');
@@ -385,19 +379,11 @@ document.addEventListener(
         document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
         document.getElementById('show-minute-image-mini-2').addEventListener('click', setMinuteImageMini);
         // 首页，点击刷新按钮
-        document.getElementById('refresh-button').addEventListener('click', async function () {
-            initData();
-        });
+        document.getElementById('refresh-button').addEventListener('click', initData);
         // 设置页面，点击颜色切换按钮
-        document.getElementById('change-blue-red-button').addEventListener('click', async function () {
-            $("#setting-modal").modal("hide");
-            changeBlueRed();
-        });
+        document.getElementById('change-blue-red-button').addEventListener('click', changeBlueRed);
         // 设置页面，点击忽悠自己按钮
-        document.getElementById('cheat-me-button').addEventListener('click', async function () {
-            $("#setting-modal").modal("hide");
-            cheatMe();
-        });
+        document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
         // 首页，点击设置按钮
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
@@ -545,7 +531,12 @@ function initFund() {
                         let fund = checkFundExsitFromEastMoney(fundCode);
                         fundList[k].dwjz = fund.dwjz;
                         fundList[k].gsz = fund.dwjz;
-                        fundList[k].gszzl = fund.gszzl;
+                        if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
+                            var gszzl = 0 - parseFloat(fund.gszzl);
+                            fundList[k].gszzl = gszzl + "";
+                        } else {
+                            fundList[k].gszzl = fund.gszzl + "";
+                        }
                         fundList[k].income = "0";
                         fundList[k].incomePercent = "0";
                         fundList[k].name = fund.name;
@@ -908,7 +899,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr>" +
+    str += "<tr>"
         + "<td>合计</td>"
         + "<td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td>"
         + "<td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td>"
@@ -1637,6 +1628,7 @@ function setDetailChart(elementId, dataStr, color, preClose) {
 
 // 修改涨跌蓝绿颜色
 async function changeBlueRed() {
+    $("#setting-modal").modal("hide");
     if (blueColor == '#3e8f3e') {
         blueColor = '#c12e2a';
     } else if (blueColor == '#c12e2a') {
@@ -1655,6 +1647,7 @@ async function changeBlueRed() {
 
 // 欺骗自己，愣是把当日亏损变成盈利
 async function cheatMe() {
+    $("#setting-modal").modal("hide");
     if(cheatMeFlag) {
         cheatMeFlag = false;
     } else if(!cheatMeFlag) {
