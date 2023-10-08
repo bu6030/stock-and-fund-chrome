@@ -212,53 +212,25 @@ document.addEventListener(
         // 走势图页面，点击股票基金按钮
         document.getElementById('stock-fund-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击走势图按钮
-        document.getElementById('fund-show-time-image-button').addEventListener('click', function () {
-            let fundCode = $("#fund-code").val();
-            timeImageCode = fundCode;
-            timeImageType = "FUND";
-            showMinuteImage();
-        });
+        document.getElementById('fund-show-time-image-button').addEventListener('click', showTimeImage);
         // 股票编辑页面，点击走势图按钮
-        document.getElementById('stock-show-time-image-button').addEventListener('click', function () {
-            let stockCode = $("#stock-code").val();
-            timeImageCode = stockCode;
-            timeImageType = "STOCK";
-            showMinuteImage();
-        });
+        document.getElementById('stock-show-time-image-button').addEventListener('click', showTimeImage);
         // 走势图页面，点击分时图按钮
-        document.getElementById('time-image-minute-button').addEventListener('click', function () {
-            showMinuteImage();
-        });
+        document.getElementById('time-image-minute-button').addEventListener('click', showMinuteImage);
         // 走势图页面，日线图按钮点击
-        document.getElementById('time-image-day-button').addEventListener('click', function () {
-            showDayImage();
-        });
+        document.getElementById('time-image-day-button').addEventListener('click', showDayImage);
         // 走势图页面，周线图按钮点击
-        document.getElementById('time-image-week-button').addEventListener('click', function () {
-            showWeekImage();
-        });
+        document.getElementById('time-image-week-button').addEventListener('click', showWeekImage);
         // 走势图页面，月线图按钮点击
-        document.getElementById('time-image-month-button').addEventListener('click', function () {
-            showMonthImage();
-        });
+        document.getElementById('time-image-month-button').addEventListener('click', showMonthImage);
         // 首页，清理数据按钮点击
         document.getElementById('remove-all-data-button').addEventListener('click', removeAllData);
         // 首页，在股票搜索名称输入框中点击回车
-        document.getElementById('input-stock-name-search').addEventListener('keydown', async function () {
-            if (event.key === 'Enter') {
-                searchFundAndStock();
-            }
-        });
+        document.getElementById('input-stock-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
         // 首页，在基金搜索名称输入框中点击回车
-        document.getElementById('input-fund-name-search').addEventListener('keydown', async function () {
-            if (event.key === 'Enter') {
-                searchFundAndStock();
-            }
-        });
+        document.getElementById('input-fund-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
         // 首页，输入股票名称后点击搜索股票/基金按钮
-        document.getElementById('stock-fund-name-search-button').addEventListener('click', async function () {
-            searchFundAndStock();
-        });
+        document.getElementById('stock-fund-name-search-button').addEventListener('click', searchFundAndStock);
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', function () {
             let stockCode = $("#search-stock-select").val();
@@ -1854,5 +1826,25 @@ async function deleteStockAndFund() {
         $("#time-image-modal").modal("hide");
         $("#stock-modal").modal("hide");
         location.reload();
+    }
+}
+
+// 展示分时图
+function showTimeImage(event) {
+    let targetId = event.target.id;
+    if (targetId == 'fund-show-time-image-button') {
+        timeImageCode = $("#fund-code").val();
+        timeImageType = "FUND";
+    } else {
+        timeImageCode = $("#stock-code").val();
+        timeImageType = "STOCK";
+    }
+    showMinuteImage();
+}
+
+// 搜索股票基金输入框，点击回车搜索股票基金
+async function clickSearchFundAndStockButton(event) {
+    if (event.key === 'Enter') {
+        searchFundAndStock();
     }
 }
