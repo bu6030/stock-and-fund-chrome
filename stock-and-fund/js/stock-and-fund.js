@@ -204,75 +204,13 @@ document.addEventListener(
         // 股票编辑页面，点击保存按钮
         document.getElementById('stock-save-button').addEventListener('click', saveStock);
         // 首页，自己开发时方便从 SpringBoot 项目直接导入数据
-        document.getElementById('import-from-local-springboot').addEventListener('click', function () {
-            let result = ajaxGetStockAndFundFromLocalService();
-            if (result != null && result != '' && result != undefined) {
-                saveCacheData('stocks', JSON.stringify(result.stocks));
-                saveCacheData('funds', JSON.stringify(result.funds));
-                location.reload();
-            }
-        });
+        document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
         // 股票编辑页面，点击删除按钮
-        document.getElementById('stock-delete-button').addEventListener('click', async function () {
-            var stocks = await readCacheData('stocks');
-            stocks = jQuery.parseJSON(stocks);
-            var code = $("#stock-code").val();
-            for (var k in stocks) {
-                if (stocks[k].code == code) {
-                    // delete stocks[k];
-                    stocks.splice(k, 1)
-                    break;
-                }
-            }
-            saveCacheData('stocks', JSON.stringify(stocks));
-            $("#stock-modal").modal("hide");
-            location.reload();
-        });
+        document.getElementById('stock-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击删除按钮
-        document.getElementById('fund-delete-button').addEventListener('click', async function () {
-            var funds = await readCacheData('funds');
-            funds = jQuery.parseJSON(funds);
-            var code = $("#fund-code").val();
-            for (var k in funds) {
-                if (funds[k].fundCode == code) {
-                    funds.splice(k, 1)
-                    break;
-                }
-            }
-            saveCacheData('funds', JSON.stringify(funds));
-            $("#fund-modal").modal("hide");
-            location.reload();
-        });
+        document.getElementById('fund-delete-button').addEventListener('click', deleteStockAndFund);
         // 走势图页面，点击股票基金按钮
-        document.getElementById('stock-fund-delete-button').addEventListener('click', async function () {
-            if (timeImageType == "FUND") {
-                var funds = await readCacheData('funds');
-                funds = jQuery.parseJSON(funds);
-                for (var k in funds) {
-                    if (funds[k].fundCode == timeImageCode) {
-                        // delete funds[k];
-                        funds.splice(k, 1)
-                        break;
-                    }
-                }
-                saveCacheData('funds', JSON.stringify(funds));
-                $("#time-image-modal").modal("hide");
-                location.reload();
-            } else {
-                var stocks = await readCacheData('stocks');
-                stocks = jQuery.parseJSON(stocks);
-                for (var k in stocks) {
-                    if (stocks[k].code == timeImageCode) {
-                        // delete stocks[k];
-                        stocks.splice(k, 1)
-                        break;
-                    }
-                }
-                saveCacheData('stocks', JSON.stringify(stocks));
-                $("#time-image-modal").modal("hide");
-                location.reload();
-            }
-        });
+        document.getElementById('stock-fund-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击走势图按钮
         document.getElementById('fund-show-time-image-button').addEventListener('click', function () {
             let fundCode = $("#fund-code").val();
@@ -389,17 +327,11 @@ document.addEventListener(
             $("#setting-modal").modal();
         });
         // 首页，底部全部按钮，股票基金全部显示
-        document.getElementById('show-all-button').addEventListener('click', async function () {
-            changeShowStockOrFundOrAll('all');
-        });
+        document.getElementById('show-all-button').addEventListener('click', changeShowStockOrFundOrAll);
         // 首页，底部股票按钮，只展示股票
-        document.getElementById('show-stock-button').addEventListener('click', async function () {
-            changeShowStockOrFundOrAll('stock');
-        });
+        document.getElementById('show-stock-button').addEventListener('click', changeShowStockOrFundOrAll);
         // 首页，底部基金按钮，只展示基金
-        document.getElementById('show-fund-button').addEventListener('click', async function () {
-            changeShowStockOrFundOrAll('fund');
-        });
+        document.getElementById('show-fund-button').addEventListener('click', changeShowStockOrFundOrAll);
         // 分时图页面，点击监控股票价格
         document.getElementById('stock-fund-monitor-button').addEventListener('click', stockMonitor);
         // 股票编辑页面，点击监控股票价格
@@ -411,37 +343,21 @@ document.addEventListener(
         document.getElementById('fund-invers-position-button-2').addEventListener('click', getFundInversPosition);
         document.getElementById('fund-invers-position-button-3').addEventListener('click', getFundInversPosition);
         // 分时图页面，股票/基金编辑页面，点击查看历史净值
-        document.getElementById('fund-net-diagram-button-3').addEventListener('click', async function () {
-            setFundNetDiagram('MONTH');
-        });
+        document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
         // 历史净值页面，点击月
-        document.getElementById('fund-net-diagram-month-button').addEventListener('click',  async function () {
-            setFundNetDiagram('MONTH');
-        });
+        document.getElementById('fund-net-diagram-month-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击季
-        document.getElementById('fund-net-diagram-3month-button').addEventListener('click',  async function () {
-            setFundNetDiagram('3MONTH');
-        });
+        document.getElementById('fund-net-diagram-3month-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击半年
-        document.getElementById('fund-net-diagram-6month-button').addEventListener('click',  async function () {
-            setFundNetDiagram('6MONTH');
-        });
+        document.getElementById('fund-net-diagram-6month-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击年
-        document.getElementById('fund-net-diagram-year-button').addEventListener('click',  async function () {
-            setFundNetDiagram('YEAR');
-        });
+        document.getElementById('fund-net-diagram-year-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击三年
-        document.getElementById('fund-net-diagram-3year-button').addEventListener('click',  async function () {
-            setFundNetDiagram('3YEAR');
-        });
+        document.getElementById('fund-net-diagram-3year-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击五年
-        document.getElementById('fund-net-diagram-5year-button').addEventListener('click',  async function () {
-            setFundNetDiagram('5YEAR');
-        });
+        document.getElementById('fund-net-diagram-5year-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击上市以来
-        document.getElementById('fund-net-diagram-allyear-button').addEventListener('click',  async function () {
-            setFundNetDiagram('ALLYEAR');
-        });
+        document.getElementById('fund-net-diagram-allyear-button').addEventListener('click',  setFundNetDiagram);
         // 设置页面，页面大小按钮点击
         document.getElementById('window-size-change-button').addEventListener('click',  changeWindowSize);
         // 设置页面，隐藏/展示页面展示项，市值/金额
@@ -1350,6 +1266,7 @@ async function searchFundAndStock() {
     $("#input-stock-name-search").val("");
 }
 
+// 修改窗口大小
 async function changeWindowSize() {
     $("#setting-modal").modal("hide");
     // 添加class样式
@@ -1658,7 +1575,15 @@ async function cheatMe() {
 }
 
 // 切换展示股票/基金/全部
-async function changeShowStockOrFundOrAll(type) {
+async function changeShowStockOrFundOrAll(event) {
+    let type;
+    if (event.target.id == 'show-all-button') {
+        type = 'all';
+    } else if (event.target.id == 'show-stock-button') {
+        type = 'stock';
+    } else if (event.target.id == 'show-fund-button') {
+        type = 'fund';
+    }
     await saveCacheData('showStockOrFundOrAll', type);
     showStockOrFundOrAll = type;
     location.reload();
@@ -1729,9 +1654,6 @@ async function removeBadgeText() {
 // 获取基金持仓明细
 async function getFundInversPosition() {
     let code = timeImageCode;
-    // if (code == '' || code == null) {
-    //     code = $("#fund-code").val();
-    // }
     code = code.replace('sz','').replace('sh','');
     let fundStocks = ajaxGetFundInvesterPosition(code);
     if (fundStocks == null || fundStocks == '' || fundStocks == []) {
@@ -1767,11 +1689,32 @@ async function getFundInversPosition() {
 }
 
 // 展示历史净值
-async function setFundNetDiagram(type) {
+async function setFundNetDiagram(event) {
+    let targetId = event.target.id;
+    let type = 'MONTH';
+    let interval = 6;
+    if (targetId == 'fund-net-diagram-month-button') {
+        type = 'MONTH';
+        interval = 6;
+    } else if (targetId == 'fund-net-diagram-3month-button') {
+        type = '3MONTH';
+        interval = 18;
+    } else if (targetId == 'fund-net-diagram-6month-button') {
+        type = '6MONTH';
+        interval = 36;
+    } else if (targetId == 'fund-net-diagram-year-button') {
+        type = 'YEAR';
+        interval = 72;
+    } else if (targetId == 'fund-net-diagram-3year-button') {
+        type = '3YEAR';
+        interval = 216;
+    } else if (targetId == 'fund-net-diagram-5year-button') {
+        type = '5YEAR';
+        interval = 360;
+    } else if (targetId == 'fund-net-diagram-allyear-button') {
+        type = 'ALLYEAR';
+    }
     let code = timeImageCode;
-    // if (code == '' || code == null) {
-    //     code = $("#fund-code").val();
-    // }
     code = code.replace('sz','').replace('sh','');
     let fundNetDiagram = ajaxGetFundNetDiagram(code, type);
     let dataDwjz = [];
@@ -1782,23 +1725,9 @@ async function setFundNetDiagram(type) {
         dataLJJZ.push(parseFloat(fundNetDiagram[k].LJJZ));
         dataAxis.push(fundNetDiagram[k].FSRQ);
     }
-    let interval = 6;
-    if (type == 'MONTH') {
-        interval = 6;
-    } else if (type == '3MONTH') {
-        interval = 18;
-    } else if (type == '6MONTH') {
-        interval = 36;
-    } else if (type == 'YEAR') {
-        interval = 72;
-    } else if (type == '3YEAR') {
-        interval = 216;
-    } else if (type == '5YEAR') {
-        interval = 360;
-    } else if (type == 'ALLYEAR') {
-        interval = Math.floor(fundNetDiagram.length / 4);
+    if (targetId == 'fund-net-diagram-allyear-button') {
+        interval = Math.floor(fundNetDiagram.length / 3);
     }
-
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
     option = {
@@ -1868,6 +1797,7 @@ async function setDisplayTr(event){
     initHtml();
     initData();
 }
+
 // 抽象文件导入方法
 async function fileInput (e) {
     var file = e.target.files[0];
@@ -1882,4 +1812,47 @@ async function fileInput (e) {
         location.reload();
     };
     reader.readAsText(file);
+}
+
+// 从本地 SpringBoot 项目获取数据
+function getStockAndFundFromLocalService () {
+    let result = ajaxGetStockAndFundFromLocalService();
+    if (result != null && result != '' && result != undefined) {
+        saveCacheData('stocks', JSON.stringify(result.stocks));
+        saveCacheData('funds', JSON.stringify(result.funds));
+        location.reload();
+    }
+}
+
+// 删除基金或股票
+async function deleteStockAndFund() {
+    if (timeImageType == "FUND") {
+        var funds = await readCacheData('funds');
+        funds = jQuery.parseJSON(funds);
+        for (var k in funds) {
+            if (funds[k].fundCode == timeImageCode) {
+                // delete funds[k];
+                funds.splice(k, 1)
+                break;
+            }
+        }
+        saveCacheData('funds', JSON.stringify(funds));
+        $("#time-image-modal").modal("hide");
+        $("#fund-modal").modal("hide");
+        location.reload();
+    } else {
+        var stocks = await readCacheData('stocks');
+        stocks = jQuery.parseJSON(stocks);
+        for (var k in stocks) {
+            if (stocks[k].code == timeImageCode) {
+                // delete stocks[k];
+                stocks.splice(k, 1)
+                break;
+            }
+        }
+        saveCacheData('stocks', JSON.stringify(stocks));
+        $("#time-image-modal").modal("hide");
+        $("#stock-modal").modal("hide");
+        location.reload();
+    }
 }
