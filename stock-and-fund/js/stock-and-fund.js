@@ -195,25 +195,10 @@ document.addEventListener(
     function () {
         // 首页，导入数据按钮点击展示导入数据页面
         document.getElementById('show-import-data').addEventListener('click', showImportData);
-        // document.getElementById('show-import-data-2').addEventListener('click', showImportData);
         // 首页，导出数据按钮点击展导出 txt 文件
         document.getElementById('data-export-button').addEventListener('click', dataExport);
-        // document.getElementById('data-export-button-2').addEventListener('click', dataExport);
         // 导入数据页面，导入文件选择 txt 文件导入数据
-        document.getElementById('file-input').addEventListener('change', async function fileInput (e) {
-            var file = e.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var contents = e.target.result;
-                var json = JSON.parse(contents);
-                // 在这里处理您的 JSON 数据
-                saveCacheData('stocks', JSON.stringify(json.stocks));
-                saveCacheData('funds', JSON.stringify(json.funds));
-                $("#data-import-modal").modal("hide");
-                location.reload();
-            };
-            reader.readAsText(file);
-        });
+        document.getElementById('file-input').addEventListener('change', fileInput);
         // 基金编辑页面，点击保存按钮
         document.getElementById('fund-save-button').addEventListener('click', function () {
             saveFund();
@@ -326,7 +311,6 @@ document.addEventListener(
         });
         // 首页，清理数据按钮点击
         document.getElementById('remove-all-data-button').addEventListener('click', removeAllData);
-        // document.getElementById('remove-all-data-button-2').addEventListener('click', removeAllData);
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', async function () {
             if (event.key === 'Enter') {
@@ -1890,4 +1874,19 @@ async function setDisplayTr(event){
     }
     initHtml();
     initData();
+}
+// 抽象文件导入方法
+async function fileInput (e) {
+    var file = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var contents = e.target.result;
+        var json = JSON.parse(contents);
+        // 在这里处理您的 JSON 数据
+        saveCacheData('stocks', JSON.stringify(json.stocks));
+        saveCacheData('funds', JSON.stringify(json.funds));
+        $("#data-import-modal").modal("hide");
+        location.reload();
+    };
+    reader.readAsText(file);
 }

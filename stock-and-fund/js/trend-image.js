@@ -43,7 +43,6 @@ function showWeekImage() {
     } else {
         path = Env.GET_STOCK_TIME_IMAGE_WEEK_FROM_SINA + timeImageCode + ".gif";
     }
-    // $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }
 // 展示月线图
@@ -55,7 +54,6 @@ function showMonthImage() {
     } else {
         path = Env.GET_STOCK_TIME_IMAGE_MONTH_FROM_SINA + timeImageCode + ".gif";
     }
-    // $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
 }
 // 获取当前日期，年-月-日格式
@@ -68,6 +66,7 @@ function getCurrentDate() {
     day = day >= 10 ? day : '0' + day; // 补零
     return year + '-' + month + '-' + day; // 这里传入的是字符串
 }
+// 美股/港股没有分时图，不展示分时图
 function toEditPage() {
     $("#time-image-modal").modal("hide");
     $("#stock-modal").modal();
