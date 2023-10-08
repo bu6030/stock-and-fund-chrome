@@ -4,17 +4,21 @@ function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
     setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
 }
+
 // 当扩展程序安装时触发的事件
 chrome.runtime.onInstalled.addListener((details) => {
     // 开始定时执行任务
     scheduleTask();
 });
+
 // 当浏览器打开时触发的事件
 chrome.runtime.onStartup.addListener(function () {
     // 开始定时执行任务
     scheduleTask();
 });
+
 chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/640002036");
+
 // 后台定时执行任务的函数
 function performTask() {
     getData('MONITOR_STOCK_CODE').then((monitorStockCode) => {
@@ -53,6 +57,8 @@ function saveData(key, value) {
 function monitorStockPrice(stockList) {
     var date = new Date();
     console.log("执行突破价格监控任务...", date.toLocaleString());
+    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         var stocks = "";
@@ -130,6 +136,7 @@ function monitorStockPrice(stockList) {
         console.log("非交易时间，停止执行任务...");
     }
 }
+
 // 基金定投
 function monitorFundCycleInvest(fundList) {
     var date = new Date();
@@ -188,12 +195,16 @@ function monitorFundCycleInvest(fundList) {
         }
     }
 }
+
 // 后台监控突破价格并提示
 function monitorStock(code) {
     var date = new Date();
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
+    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
+
         fetch("http://qt.gtimg.cn/q=" + code)
             .then(response => response.text())
             .then(data => {
