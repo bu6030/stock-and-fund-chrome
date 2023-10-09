@@ -33,7 +33,7 @@ window.addEventListener("load", async (event) => {
         // 隐藏密码保护按钮
         $("#show-password-protect-button")[0].style.display = 'none';
         $("#data-export-button")[0].style.display = 'none';
-        // document.getElementById('import-from-local-springboot').style.display = 'none';
+        document.getElementById('import-from-local-springboot-div').style.display = 'none';
     } else {
         // 没有密码直接展示
         initLoad();
@@ -172,9 +172,11 @@ function autoRefresh() {
 
 // 初始化 Html 页面
 async function initHtml() {
-    // if (develop) {
-    //     document.getElementById('import-from-local-springboot').classList.remove('fade');
-    // }
+    if (develop) {
+        document.getElementById('import-from-local-springboot-div').style.display = 'block';
+    } else {
+        document.getElementById('import-from-local-springboot-div').style.display = 'none';
+    }
     // 股票标题
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
@@ -240,7 +242,9 @@ document.addEventListener(
         // 股票编辑页面，点击保存按钮
         document.getElementById('stock-save-button').addEventListener('click', saveStock);
         // 首页，自己开发时方便从 SpringBoot 项目直接导入数据
-        // document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
+        if (develop) {
+            document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
+        }
         // 股票编辑页面，点击删除按钮
         document.getElementById('stock-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击删除按钮
