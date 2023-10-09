@@ -100,6 +100,7 @@
 80. 市值/金额，持仓占比，成本，收益率，自选价格设置隐藏展示 2023/10/7 -- version 1.6.22 -- end
 81. 美股/港股不展示分时图 2023/10/8
 82. 增加页面切换，正常/缩小/迷你 2023/10/9
+83. 股票价格监控优化 2023/10/9
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
