@@ -23,6 +23,7 @@ var dayIncomeDisplay = 'DISPLAY';
 var costPriceDisplay = 'DISPLAY';
 var bondsDisplay = 'DISPLAY';
 var incomeDisplay = 'DISPLAY';
+var allDisplay = 'DISPLAY';
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
     //启动时发送消息
@@ -139,6 +140,14 @@ async function initLoad() {
     } else {
         incomeDisplay = 'HIDDEN';
         $("#income-display-checkbox").prop("checked", false);
+    }
+    allDisplay = await readCacheData('all-display');
+    if (allDisplay == null || allDisplay == 'DISPLAY') {
+        allDisplay = 'DISPLAY';
+        $("#all-display-checkbox").prop("checked", true);
+    } else {
+        allDisplay = 'HIDDEN';
+        $("#all-display-checkbox").prop("checked", false);
     }
     var funds = await readCacheData('funds');
     if (funds == null) {
@@ -394,6 +403,8 @@ document.addEventListener(
         document.getElementById("bonds-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，收益
         document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
+        // 设置页面，隐藏/展示页面展示项，一键全选
+        document.getElementById("all-display-checkbox").addEventListener('change', setDisplayTr);
     }
 );
 
@@ -1880,6 +1891,50 @@ async function setDisplayTr(event){
     } else if(type == 'income-display-checkbox') {
         incomeDisplay = dispaly;
         saveCacheData('income-display', dispaly);
+    } else if(type == 'all-display-checkbox'){
+        $("#setting-modal").modal("hide");
+        marketValueDisplay = dispaly;
+        marketValuePercentDisplay = dispaly;
+        costPriceValueDisplay = dispaly;
+        incomePercentDisplay = dispaly;
+        addtimePriceDisplay = dispaly;
+        dayIncomeDisplay = dispaly;
+        costPriceDisplay = dispaly;
+        bondsDisplay = dispaly;
+        incomeDisplay = dispaly;
+        saveCacheData('all-display', dispaly);
+        saveCacheData('market-value-display', dispaly);
+        saveCacheData('market-value-percent-display', dispaly);
+        saveCacheData('cost-price-value-display', dispaly);
+        saveCacheData('income-percent-display', dispaly);
+        saveCacheData('addtime-price-display', dispaly);
+        saveCacheData('day-income-display', dispaly);
+        saveCacheData('cost-price-display', dispaly);
+        saveCacheData('bonds-display', dispaly);
+        saveCacheData('income-display', dispaly);
+        if(dispaly == 'DISPLAY') {
+            $("#all-display-checkbox").prop("checked", true);
+            $("#market-value-display-checkbox").prop("checked", true);
+            $("#market-value-percent-display-checkbox").prop("checked", true);
+            $("#cost-price-value-display-checkbox").prop("checked", true);
+            $("#income-percent-display-checkbox").prop("checked", true);
+            $("#addtime-price-display-checkbox").prop("checked", true);
+            $("#day-income-display-checkbox").prop("checked", true);
+            $("#cost-price-display-checkbox").prop("checked", true);
+            $("#bonds-display-checkbox").prop("checked", true);
+            $("#income-display-checkbox").prop("checked", true);
+        } else {
+            $("#all-display-checkbox").prop("checked", false);
+            $("#market-value-display-checkbox").prop("checked", false);
+            $("#market-value-percent-display-checkbox").prop("checked", false);
+            $("#cost-price-value-display-checkbox").prop("checked", false);
+            $("#income-percent-display-checkbox").prop("checked", false);
+            $("#addtime-price-display-checkbox").prop("checked", false);
+            $("#day-income-display-checkbox").prop("checked", false);
+            $("#cost-price-display-checkbox").prop("checked", false);
+            $("#bonds-display-checkbox").prop("checked", false);
+            $("#income-display-checkbox").prop("checked", false);
+        }
     }
     initHtml();
     initData();
