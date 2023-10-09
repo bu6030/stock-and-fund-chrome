@@ -26,6 +26,7 @@ function initLargeMarketData() {
                     + (change == 0 ? "" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
                 str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;&nbsp;" + changePercent + "%）   </a>";
             }
+            str = '<span>' + str + '</span>';
             $("#stock-large-market").html(str);
             setTimeout(function() {
                 // html 渲染完毕后 1s 执行

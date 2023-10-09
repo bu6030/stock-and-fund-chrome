@@ -33,7 +33,7 @@ window.addEventListener("load", async (event) => {
         // 隐藏密码保护按钮
         $("#show-password-protect-button")[0].style.display = 'none';
         $("#data-export-button")[0].style.display = 'none';
-        $("#import-from-local-springboot")[0].style.display = 'none';
+        // document.getElementById('import-from-local-springboot').style.display = 'none';
     } else {
         // 没有密码直接展示
         initLoad();
@@ -172,9 +172,9 @@ function autoRefresh() {
 
 // 初始化 Html 页面
 async function initHtml() {
-    if (develop) {
-        document.getElementById('import-from-local-springboot').classList.remove('fade');
-    }
+    // if (develop) {
+    //     document.getElementById('import-from-local-springboot').classList.remove('fade');
+    // }
     // 股票标题
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
@@ -222,6 +222,7 @@ async function initHtml() {
     // 在页面顶部显示一些监控信息，重要信息
     // initNotice();
     initFontStyle();
+    initWindowsSize();
 }
 
 // 按钮监听事件
@@ -239,7 +240,7 @@ document.addEventListener(
         // 股票编辑页面，点击保存按钮
         document.getElementById('stock-save-button').addEventListener('click', saveStock);
         // 首页，自己开发时方便从 SpringBoot 项目直接导入数据
-        document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
+        // document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
         // 股票编辑页面，点击删除按钮
         document.getElementById('stock-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击删除按钮
@@ -301,13 +302,13 @@ document.addEventListener(
         });
         // 首页，点击全屏按钮
         document.getElementById('full-screen-button').addEventListener('click', fullScreen);
-        document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
+        // document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
         // 首页，点击样式切换
         document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
-        document.getElementById('font-change-button-2').addEventListener('click', changeFontStyle);
+        // document.getElementById('font-change-button-2').addEventListener('click', changeFontStyle);
         // 首页，show-passwrod-protect-button点击，展示password-protect-modal
         document.getElementById('show-password-protect-button').addEventListener('click', showPasswordProtect);
-        document.getElementById('show-password-protect-button-2').addEventListener('click', showPasswordProtect);
+        // document.getElementById('show-password-protect-button-2').addEventListener('click', showPasswordProtect);
         // 密码保护页面，password-save-button点击，缓存密码
         document.getElementById('password-save-button').addEventListener('click', async function () {
             saveCacheData('password', $("#password").val());
@@ -322,7 +323,7 @@ document.addEventListener(
         });
         // 首页，点击展示隐藏迷你分时图
         document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
-        document.getElementById('show-minute-image-mini-2').addEventListener('click', setMinuteImageMini);
+        // document.getElementById('show-minute-image-mini-2').addEventListener('click', setMinuteImageMini);
         // 首页，点击刷新按钮
         document.getElementById('refresh-button').addEventListener('click', initData);
         // 设置页面，点击颜色切换按钮
@@ -366,7 +367,9 @@ document.addEventListener(
         // 历史净值页面，点击上市以来
         document.getElementById('fund-net-diagram-allyear-button').addEventListener('click',  setFundNetDiagram);
         // 设置页面，页面大小按钮点击
-        document.getElementById('window-size-change-button').addEventListener('click',  changeWindowSize);
+        document.getElementById('window-normal-size-change-button').addEventListener('click',  changeWindowSize);
+        document.getElementById('window-small-size-change-button').addEventListener('click',  changeWindowSize);
+        document.getElementById('window-mini-size-change-button').addEventListener('click',  changeWindowSize);
         // 设置页面，隐藏/展示页面展示项，市值/金额
         document.getElementById("market-value-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，持仓占比
@@ -1286,17 +1289,21 @@ async function searchFundAndStock() {
 }
 
 // 修改窗口大小
-async function changeWindowSize() {
+async function changeWindowSize(event) {
+    let targetId = event.target.id;
     $("#setting-modal").modal("hide");
     // 添加class样式
-    if (windowSize == "NORMAL") {
+    if (targetId == 'window-normal-size-change-button') {
+        saveCacheData('window-size', 'NORMAL');
+        windowSize = 'NORMAL';
+    } else if (targetId == 'window-small-size-change-button') {
         saveCacheData('window-size', 'SMALL');
         windowSize = 'SMALL';
     } else {
-        saveCacheData('window-size', 'NORMAL');
-        windowSize = 'NORMAL';
+        saveCacheData('window-size', 'MINI');
+        windowSize = 'MINI';
     }
-    initFontStyle();
+    initWindowsSize();
 }
 
 // 初始化页面是，股票基金数据字体样式设定
@@ -1314,88 +1321,99 @@ async function initFontStyle() {
         fundNr.classList.remove('my-table-tbody-font');
         totalNr.classList.remove('my-table-tbody-font');
     }
-    if (windowSize == 'SMALL') {
+}
+async function initWindowsSize() {
+    if (windowSize == 'NORMAL') {
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
         let stockLargeMarket = document.getElementById('stock-large-market');
         let footer = document.getElementById('footer');
         let myHeader = document.getElementById('my-header');
         let myBody = document.getElementById('my-body');
-        let monitorText = document.getElementById('monitor-text');
+        // let monitorText = document.getElementById('monitor-text');
         let alertContent = document.getElementById('alert-content');
         let helpDocumentAlert = document.getElementById('help-document-alert');
-
-        myDiv.classList.remove('my-div');
-        myDiv.classList.add('my-div-small');
+        let myMainContent = document.getElementById('my-main-content');
+        let myWindows = document.getElementById('my-widnwos');
+        let footerDesc = document.getElementById('footer-desc');
+        let helpDocumentButton = document.getElementById('help-document-button');
+        // 设置首页各项内容宽度 800px
+        myWindows.style.width = '800px';
+        myHeader.style.width = '800px';
+        footer.style.width = '800px';
+        stockLargeMarket.style.width = '800px';
+        myInputGroup.style.width = '800px';
+        myDiv.style.width = '800px';
+        footerDesc.style.display = "block";
+        helpDocumentButton.style.display = "inline";
+    } else if (windowSize == 'SMALL') {
+        let myDiv = document.getElementById('my-div');
+        let myInputGroup = document.getElementById('my-input-group');
+        let stockLargeMarket = document.getElementById('stock-large-market');
+        let footer = document.getElementById('footer');
+        let myHeader = document.getElementById('my-header');
+        let myBody = document.getElementById('my-body');
+        // let monitorText = document.getElementById('monitor-text');
+        let alertContent = document.getElementById('alert-content');
+        let helpDocumentAlert = document.getElementById('help-document-alert');
+        let myMainContent = document.getElementById('my-main-content');
+        let myWindows = document.getElementById('my-widnwos');
+        let footerDesc = document.getElementById('footer-desc');
+        let helpDocumentButton = document.getElementById('help-document-button');
+        // 设置首页各项内容宽度 600px
+        myWindows.style.width = '600px';
+        myHeader.style.width = '600px';
+        footer.style.width = '600px';
+        stockLargeMarket.style.width = '600px';
+        myInputGroup.style.width = '600px';
         myDiv.style.width = '600px';
-        myInputGroup.classList.remove('my-input-group');
-        myInputGroup.classList.add('my-input-group-small');
-        stockLargeMarket.classList.remove('stock-large-market');
-        stockLargeMarket.classList.add('stock-large-market-small');
-        footer.classList.remove('footer');
-        footer.classList.add('footer-small');
-        myHeader.classList.remove('my-header');
-        myHeader.classList.add('my-header-small');
-        myBody.classList.remove('my-body');
-        myBody.classList.add('my-body-small');
-        monitorText.classList.remove('my-monitor-text');
-        monitorText.classList.add('my-monitor-text-small');
-        alertContent.classList.remove('my-alert');
-        alertContent.classList.add('my-alert-small');
-        helpDocumentAlert.classList.remove('my-large-alert');
-        helpDocumentAlert.classList.add('my-large-alert-small');
-    } else {
-        let displaySize = 7;
-        if (marketValueDisplay == 'DISPLAY') {
-            displaySize++;
-        }
-        if (marketValuePercentDisplay == 'DISPLAY') {
-            displaySize++;
-        }
-        if (costPriceValueDisplay == 'DISPLAY') {
-            displaySize++;
-        }
-        if (incomePercentDisplay == 'DISPLAY') {
-            displaySize++;
-        }
-        if (addtimePriceDisplay == 'DISPLAY') {
-            displaySize++;
-        }
-        let myDivWidth = 80 * displaySize;
-        if (myDivWidth <= 800) {
-            myDivWidth = 800;
-        }
+        footerDesc.style.display = "block";
+        helpDocumentButton.style.display = "inline";
+    } else if (windowSize == 'MINI') {
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
         let stockLargeMarket = document.getElementById('stock-large-market');
         let footer = document.getElementById('footer');
         let myHeader = document.getElementById('my-header');
         let myBody = document.getElementById('my-body');
-        let monitorText = document.getElementById('monitor-text');
+        // let monitorText = document.getElementById('monitor-text');
         let alertContent = document.getElementById('alert-content');
         let helpDocumentAlert = document.getElementById('help-document-alert');
+        let footerDesc = document.getElementById('footer-desc');
+        // let showMinuteImageMini2 = document.getElementById('show-minute-image-mini-2');
+        // let showPasswordProtectButton2 = document.getElementById('show-password-protect-button-2');
+        // let fontChangeButton2 = document.getElementById('font-change-button-2');
+        // let fullScreenButton2 = document.getElementById('full-screen-button-2');
+        let showWechatGroupButton = document.getElementById('show-wechat-group-button');
+        let helpDocumentButton = document.getElementById('help-document-button');
+        let myMainContent = document.getElementById('my-main-content');
+        let myWindows = document.getElementById('my-widnwos');
+        // 设置首页各项内容宽度 400px
+        myWindows.style.width = '400px';
+        myHeader.style.width = '400px';
+        footer.style.width = '400px';
+        stockLargeMarket.style.width = '400px';
+        myInputGroup.style.width = '400px';
+        myDiv.style.width = '400px';
+        footerDesc.style.display = "none";
+        helpDocumentButton.style.display = "none";
+        // // monitorText.style.display = 'none';
 
-        myDiv.classList.add('my-div');
-        myDiv.classList.remove('my-div-small');
-        myDiv.style.width = myDivWidth + 'px';
-        myInputGroup.classList.add('my-input-group');
-        myInputGroup.classList.remove('my-input-group-small');
-        stockLargeMarket.classList.add('stock-large-market');
-        stockLargeMarket.classList.remove('stock-large-market-small');
-        footer.classList.add('footer');
-        footer.classList.remove('footer-small');
-        myHeader.classList.add('my-header');
-        myHeader.classList.remove('my-header-small');
-        myBody.classList.add('my-body');
-        myBody.classList.remove('my-body-small');
-        monitorText.classList.add('my-monitor-text');
-        monitorText.classList.remove('my-monitor-text-small');
-        alertContent.classList.add('my-alert');
-        alertContent.classList.remove('my-alert-small');
-        helpDocumentAlert.classList.add('my-large-alert');
-        helpDocumentAlert.classList.remove('my-large-alert-small');
+        // myDiv.style.height = '400px';
+        // // myHeader.style.height = '30px';
+        // myBody.style.marginTop = '30px';
+
+        // footer.style.height = '30px';
+        // stockLargeMarket.style.display = 'none';
+        // // showMinuteImageMini2.style.display = 'none';
+        // // showPasswordProtectButton2.style.display = 'none';
+        // // fontChangeButton2.style.display = 'none';
+        // // fullScreenButton2.style.display = 'none';
+        // showWechatGroupButton.style.display = 'none';
+        // helpDocumentButton.style.display = 'none';
     }
 }
+
 
 // 样式切换，股票基金数据字体加粗加大
 async function changeFontStyle() {
