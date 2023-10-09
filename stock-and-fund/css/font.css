@@ -10,7 +10,7 @@
 }
 
 .my-text {
-    width: 400px;
+    width: 80%;
 }
 
 .my-div {
@@ -161,4 +161,9 @@
     100% {
       transform: translateX(-100%);
     }
+}
+
+.setting-modal-style {
+    height: 400px;
+    overflow-y: auto;
 }

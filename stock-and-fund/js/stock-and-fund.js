@@ -684,7 +684,19 @@ async function initStockAndFundHtml() {
                 } else {
                     $("#stock-show-time-image-button")[0].style.display = 'inline';
                 }
-                
+                if (windowSize == 'MINI') {
+                    $("#time-image-minute-button")[0].style.display = 'none';
+                    $("#time-image-day-button")[0].style.display = 'none';
+                    $("#time-image-week-button")[0].style.display = 'none';
+                    $("#time-image-month-button")[0].style.display = 'none';
+                    $("#stock-show-time-image-button")[0].style.display = 'none';
+                } else {
+                    $("#time-image-minute-button")[0].style.display = 'inline';
+                    $("#time-image-day-button")[0].style.display = 'inline';
+                    $("#time-image-week-button")[0].style.display = 'inline';
+                    $("#time-image-month-button")[0].style.display = 'inline';
+                    $("#stock-show-time-image-button")[0].style.display = 'inline';
+                }
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
                 showMinuteImage();
@@ -717,6 +729,17 @@ async function initStockAndFundHtml() {
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
+                if (windowSize == 'MINI') {
+                    $("#time-image-minute-button")[0].style.display = 'none';
+                    $("#time-image-day-button")[0].style.display = 'none';
+                    $("#time-image-week-button")[0].style.display = 'none';
+                    $("#time-image-month-button")[0].style.display = 'none';
+                } else {
+                    $("#time-image-minute-button")[0].style.display = 'inline';
+                    $("#time-image-day-button")[0].style.display = 'inline';
+                    $("#time-image-week-button")[0].style.display = 'inline';
+                    $("#time-image-month-button")[0].style.display = 'inline';
+                }
                 showMinuteImage();
             });
         }
@@ -1337,6 +1360,7 @@ async function initWindowsSize() {
         let myWindows = document.getElementById('my-widnwos');
         let footerDesc = document.getElementById('footer-desc');
         let helpDocumentButton = document.getElementById('help-document-button');
+        let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
         myHeader.style.width = '800px';
@@ -1344,6 +1368,8 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '800px';
         myInputGroup.style.width = '800px';
         myDiv.style.width = '800px';
+        fundNetDiagramDiv.style.width = '540px';
+        fundNetDiagramDiv.style.height = '350px';
         footerDesc.style.display = "block";
         helpDocumentButton.style.display = "inline";
     } else if (windowSize == 'SMALL') {
@@ -1360,6 +1386,7 @@ async function initWindowsSize() {
         let myWindows = document.getElementById('my-widnwos');
         let footerDesc = document.getElementById('footer-desc');
         let helpDocumentButton = document.getElementById('help-document-button');
+        let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         // 设置首页各项内容宽度 600px
         myWindows.style.width = '600px';
         myHeader.style.width = '600px';
@@ -1367,6 +1394,8 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '600px';
         myInputGroup.style.width = '600px';
         myDiv.style.width = '600px';
+        fundNetDiagramDiv.style.width = '540px';
+        fundNetDiagramDiv.style.height = '350px';
         footerDesc.style.display = "block";
         helpDocumentButton.style.display = "inline";
     } else if (windowSize == 'MINI') {
@@ -1388,6 +1417,7 @@ async function initWindowsSize() {
         let helpDocumentButton = document.getElementById('help-document-button');
         let myMainContent = document.getElementById('my-main-content');
         let myWindows = document.getElementById('my-widnwos');
+        let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';
         myHeader.style.width = '400px';
@@ -1395,6 +1425,8 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '400px';
         myInputGroup.style.width = '400px';
         myDiv.style.width = '400px';
+        fundNetDiagramDiv.style.width = '400px';
+        fundNetDiagramDiv.style.height = '200px';
         footerDesc.style.display = "none";
         helpDocumentButton.style.display = "none";
         // // monitorText.style.display = 'none';
