@@ -95,6 +95,9 @@
 75. 增加单位净值，历史净值 2023/9/28
 76. 基金指数基金/ETF基金展示历史净值/持仓明细 2023/9/28
 77. 设定单位净值，累计净值颜色 2023/9/29 -- version 1.6.21 -- end
+78. 持仓明细增加涨跌颜色 2023/10/6
+79. 增加展示美股，港股 2023/10/7
+80. 市值/金额，持仓占比，成本，收益率，自选价格设置隐藏展示 2023/10/7 -- version 1.6.22 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

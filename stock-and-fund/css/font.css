@@ -1,10 +1,5 @@
 .my-font {
-    font-size: 10px
-}
-
-.my-scroll {
-    width: 900px;
-    overflow-x: auto;
+    font-size: 10px;
 }
 
 .my-text {
@@ -13,7 +8,7 @@
 
 .my-div {
     width: 970px;
-    min-height: 550px;
+    min-height: 560px;
     height: 100%;
     /*overflow-x:auto;*/
     margin-bottom: 40px;
@@ -41,7 +36,7 @@
     width: 800px;
 }
 
-#footer {
+.footer {
     height: 50px;
     line-height: 20px;
     position: fixed;
@@ -132,4 +127,76 @@
     margin-bottom: 1%;
     width: 150px;
     height: 30px;
+}
+.you {
+    margin-left: 10px;
+}
+/*
+ 窗口变小的 css 样式
+*/
+.my-div-small {
+    /* width: 600px; */
+    min-height: 350px;
+    height: 350px;
+    /* overflow-x: scroll; */
+    margin-bottom: 40px;
+}
+.my-input-group-small {
+    width: 600px;
+    height: 30px;
+    bottom: 5px;
+}
+.stock-large-market-small {
+    text-align: center;
+    width: 600px;
+}
+.footer-small {
+    height: 50px;
+    line-height: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 600px;
+    text-align: center;
+    color: #000000;
+    font-family: Arial;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-color: white;
+}
+.my-header-small {
+    height: 90px;
+    /* line-height: 90px; */
+    position: fixed;
+    top: 0;
+    width: 600px;
+    text-align: center;
+    color: #000000;
+    font-family: Arial;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-color: white;
+    z-index: 999;
+}
+.my-body-small {
+    width: 600px;
+    margin-top: 90px;
+    overflow-x: scroll;
+}
+.my-monitor-text-small {
+    text-align: center;
+    font-weight: bolder;
+    color: red;
+    width: 600px;
+    margin-top: 3px;
+}
+.my-alert-small {
+    width: 600px;
+    margin-top: 3px;
+}
+.my-large-alert-small {
+    width: 600px;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 3px;
+    display: none;
 }

@@ -22,7 +22,7 @@ function initLargeMarketData() {
                 var now = values[3] + "";
                 var changePercent = values[32] + "";
                 var aId = "id = 'large-market-" + stockCode + "'";
-                var style = "style=\"font-size: 9px;font-weight:600;"
+                var style = "style=\"font-size:9px;font-weight:600;"
                     + (change == 0 ? "" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
                 str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;&nbsp;" + changePercent + "%）   </a>";
             }
@@ -43,7 +43,7 @@ function initLargeMarketData() {
                 document.getElementById('large-market-sz399006').addEventListener('click', function () {
                     timeImageCode = "sz399006";
                     initLargeMarketClick();
-                });     
+                });
             }, 300);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

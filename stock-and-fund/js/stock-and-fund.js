@@ -13,6 +13,12 @@ var blueColor = '#3e8f3e';
 var redColor = '#c12e2a';
 var cheatMeFlag = false;
 var showStockOrFundOrAll = 'all';
+var windowSize = 'NORMAL'; // 窗口大小
+var marketValueDisplay = 'DISPLAY';
+var marketValuePercentDisplay = 'DISPLAY';
+var costPriceDisplay = 'DISPLAY';
+var incomePercentDisplay = 'DISPLAY';
+var addtimePriceDisplay = 'DISPLAY';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -53,6 +59,50 @@ async function initLoad() {
     if (showStockOrFundOrAll == null) {
         showStockOrFundOrAll = 'all';
     }
+    windowSize = await readCacheData('window-size');
+    if (windowSize == null) {
+        windowSize = 'NORMAL';
+    }
+    marketValueDisplay = await readCacheData('market-value-display');
+    if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
+        marketValueDisplay = 'DISPLAY';
+        $("#market-value-display-checkbox").prop("checked", true);
+    } else {
+        marketValueDisplay = 'HIDDEN';
+        $("#market-value-display-checkbox").prop("checked", false);
+    }
+    marketValuePercentDisplay = await readCacheData('market-value-percent-display');
+    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
+        marketValuePercentDisplay = 'DISPLAY';
+        $("#market-value-percent-display-checkbox").prop("checked", true);
+    } else {
+        marketValuePercentDisplay = 'HIDDEN';
+        $("#market-value-percent-display-checkbox").prop("checked", false);
+    }
+    costPriceDisplay = await readCacheData('cost-price-display');
+    if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
+        costPriceDisplay = 'DISPLAY';
+        $("#cost-price-display-checkbox").prop("checked", true);
+    } else {
+        costPriceDisplay = 'HIDDEN';
+        $("#cost-price-display-checkbox").prop("checked", false);
+    }
+    incomePercentDisplay = await readCacheData('income-percent-display');
+    if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
+        incomePercentDisplay = 'DISPLAY';
+        $("#income-percent-display-checkbox").prop("checked", true);
+    } else {
+        incomePercentDisplay = 'HIDDEN';
+        $("#income-percent-display-checkbox").prop("checked", false);
+    }
+    addtimePriceDisplay = await readCacheData('addtime-price-display');
+    if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
+        addtimePriceDisplay = 'DISPLAY';
+        $("#addtime-price-display-checkbox").prop("checked", true);
+    } else {
+        addtimePriceDisplay = 'HIDDEN';
+        $("#addtime-price-display-checkboxx").prop("checked", false);
+    }
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -92,6 +142,7 @@ async function initHtml() {
     if (develop) {
         document.getElementById('import-from-local-springboot').classList.remove('fade');
     }
+    // 股票标题
     var stockHead = " <tr > " +
         " <th >股票名称</th> " +
         " <th >当日盈利</th> " +
@@ -99,13 +150,14 @@ async function initHtml() {
         " <th >当前价</th> " +
         " <th >成本价</th> " +
         " <th >持仓</th> " +
-        " <th >市值/金额</th> " +
-        " <th >持仓占比</th> " +
-        " <th >成本</th> " +
-        " <th >收益率</th> " +
+        (marketValueDisplay == 'DISPLAY' ? " <th >市值/金额</th> " : "") + 
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th >持仓占比</th> " : "") + 
+        (costPriceDisplay == 'DISPLAY' ? " <th >成本</th> " : "") + 
+        (incomePercentDisplay == 'DISPLAY' ? " <th >收益率</th> " : "") + 
         " <th >收益</th> " +
-        " <th >自选价格</th> " +
+        (addtimePriceDisplay == 'DISPLAY' ? " <th >自选价格</th> " : "") + 
         " </tr>";
+    // 基金标题
     var fundHead = " <tr >" +
         " <th >基金名称</th>" +
         " <th >当日盈利</th>" +
@@ -113,13 +165,14 @@ async function initHtml() {
         " <th >估算净值</th>" +
         " <th >持仓成本</th>" +
         " <th >持有份额</th>" +
-        " <th >市值/金额</th>" +
-        " <th >持仓占比</th>" +
-        " <th >成本</th> " +
-        " <th >收益率</th>" +
-        " <th >收益</th>" +
-        " <th >自选价格</th> " +
+        (marketValueDisplay == 'DISPLAY' ? " <th >市值/金额</th> " : "") + 
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th >持仓占比</th> " : "") + 
+        (costPriceDisplay == 'DISPLAY' ? " <th >成本</th> " : "") + 
+        (incomePercentDisplay == 'DISPLAY' ? " <th >收益率</th> " : "") + 
+        " <th >收益</th> " +
+        (addtimePriceDisplay == 'DISPLAY' ? " <th >自选价格</th> " : "") + 
         " </tr>";
+    // 持仓明细标题
     var fundInversPositionHead = " <tr >" +
         " <th >股票名称（代码）</th>" +
         " <th >价格</th>" +
@@ -144,10 +197,10 @@ document.addEventListener(
     function () {
         // 首页，导入数据按钮点击展示导入数据页面
         document.getElementById('show-import-data').addEventListener('click', showImportData);
-        document.getElementById('show-import-data-2').addEventListener('click', showImportData);
+        // document.getElementById('show-import-data-2').addEventListener('click', showImportData);
         // 首页，导出数据按钮点击展导出 txt 文件
         document.getElementById('data-export-button').addEventListener('click', dataExport);
-        document.getElementById('data-export-button-2').addEventListener('click', dataExport);
+        // document.getElementById('data-export-button-2').addEventListener('click', dataExport);
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', async function fileInput (e) {
             var file = e.target.files[0];
@@ -275,7 +328,7 @@ document.addEventListener(
         });
         // 首页，清理数据按钮点击
         document.getElementById('remove-all-data-button').addEventListener('click', removeAllData);
-        document.getElementById('remove-all-data-button-2').addEventListener('click', removeAllData);
+        // document.getElementById('remove-all-data-button-2').addEventListener('click', removeAllData);
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', async function () {
             if (event.key === 'Enter') {
@@ -353,23 +406,29 @@ document.addEventListener(
         document.getElementById('refresh-button').addEventListener('click', async function () {
             initData();
         });
+        // 设置页面，点击颜色切换按钮
         document.getElementById('change-blue-red-button').addEventListener('click', async function () {
             $("#setting-modal").modal("hide");
             changeBlueRed();
         });
+        // 设置页面，点击忽悠自己按钮
         document.getElementById('cheat-me-button').addEventListener('click', async function () {
             $("#setting-modal").modal("hide");
             cheatMe();
         });
+        // 首页，点击设置按钮
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
         });
+        // 首页，底部全部按钮，股票基金全部显示
         document.getElementById('show-all-button').addEventListener('click', async function () {
             changeShowStockOrFundOrAll('all');
         });
+        // 首页，底部股票按钮，只展示股票
         document.getElementById('show-stock-button').addEventListener('click', async function () {
             changeShowStockOrFundOrAll('stock');
         });
+        // 首页，底部基金按钮，只展示基金
         document.getElementById('show-fund-button').addEventListener('click', async function () {
             changeShowStockOrFundOrAll('fund');
         });
@@ -387,26 +446,76 @@ document.addEventListener(
         document.getElementById('fund-net-diagram-button-3').addEventListener('click', async function () {
             setFundNetDiagram('MONTH');
         });
+        // 历史净值页面，点击月
         document.getElementById('fund-net-diagram-month-button').addEventListener('click',  async function () {
             setFundNetDiagram('MONTH');
         });
+        // 历史净值页面，点击季
         document.getElementById('fund-net-diagram-3month-button').addEventListener('click',  async function () {
             setFundNetDiagram('3MONTH');
         });
+        // 历史净值页面，点击半年
         document.getElementById('fund-net-diagram-6month-button').addEventListener('click',  async function () {
             setFundNetDiagram('6MONTH');
         });
+        // 历史净值页面，点击年
         document.getElementById('fund-net-diagram-year-button').addEventListener('click',  async function () {
             setFundNetDiagram('YEAR');
         });
+        // 历史净值页面，点击三年
         document.getElementById('fund-net-diagram-3year-button').addEventListener('click',  async function () {
             setFundNetDiagram('3YEAR');
         });
+        // 历史净值页面，点击五年
         document.getElementById('fund-net-diagram-5year-button').addEventListener('click',  async function () {
             setFundNetDiagram('5YEAR');
         });
+        // 历史净值页面，点击上市以来
         document.getElementById('fund-net-diagram-allyear-button').addEventListener('click',  async function () {
             setFundNetDiagram('ALLYEAR');
+        });
+        // 设置页面，页面大小按钮点击
+        document.getElementById('window-size-change-button').addEventListener('click',  changeWindowSize);
+        //
+        let marketValueDisplayCheckbox = document.getElementById("market-value-display-checkbox");
+        marketValueDisplayCheckbox.addEventListener('change', async function () {
+            if (marketValueDisplayCheckbox.checked) {
+                setDisplayTr('market-value-display-checkbox', 'DISPLAY');
+            } else {
+                setDisplayTr('market-value-display-checkbox', 'HIDDEN');
+            }
+        });
+        let marketValuePercentDisplayCheckbox = document.getElementById("market-value-percent-display-checkbox");
+        marketValuePercentDisplayCheckbox.addEventListener('change', async function () {
+            if (marketValuePercentDisplayCheckbox.checked) {
+                setDisplayTr('market-value-percent-display-checkbox', 'DISPLAY');
+            } else {
+                setDisplayTr('market-value-percent-display-checkbox', 'HIDDEN');
+            }
+        });
+        let costPriceDisplayCheckbox = document.getElementById("cost-price-display-checkbox");
+        costPriceDisplayCheckbox.addEventListener('change', async function () {
+            if (costPriceDisplayCheckbox.checked) {
+                setDisplayTr('cost-price-display-checkbox', 'DISPLAY');
+            } else {
+                setDisplayTr('cost-price-display-checkbox', 'HIDDEN');
+            }
+        });
+        let incomePercentDisplayCheckbox = document.getElementById("income-percent-display-checkbox");
+        incomePercentDisplayCheckbox.addEventListener('change', async function () {
+            if (incomePercentDisplayCheckbox.checked) {
+                setDisplayTr('income-percent-display-checkbox', 'DISPLAY');
+            } else {
+                setDisplayTr('income-percent-display-checkbox', 'HIDDEN');
+            }
+        });
+        let addTimePriceDisplayCheckbox = document.getElementById("addtime-price-display-checkbox");
+        addTimePriceDisplayCheckbox.addEventListener('change', async function () {
+            if (addTimePriceDisplayCheckbox.checked) {
+                setDisplayTr('addtime-price-display-checkbox', 'DISPLAY');
+            } else {
+                setDisplayTr('addtime-price-display-checkbox', 'HIDDEN');
+            }
         });
     }
 );
@@ -806,19 +915,26 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
             }
         }
+        let stockName = result[k].name;
+        if (result[k].code.startsWith('us') || result[k].code.startsWith('US')) {
+            stockName = result[k].name + "(美股)";
+        }
+        if (result[k].code.startsWith('hk') || result[k].code.startsWith('HK')) {
+            stockName = result[k].name + "(港股)";
+        }
         str += "<tr id=\"stock-tr-" + k + "\">"
-            + "<td >" + result[k].name + alertStyle + minuteImageMiniDiv
+            + "<td >" + stockName + alertStyle + minuteImageMiniDiv
             + "</td><td " + dayIncomeStyle + ">" + dayIncome.setScale(2)
             + "</td><td " + dayIncomeStyle + ">" + result[k].changePercent + "%"
             + "</td><td>" + result[k].now
             + "</td><td >" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td >" + marketValue.setScale(2)
-            + "</td><td >" + marketValuePercent + "%"
-            + "</td><td >" + costPriceValue
-            + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
+            + (marketValueDisplay == 'DISPLAY' ? "</td><td >" + marketValue.setScale(2) : "")
+            + (marketValuePercentDisplay == 'DISPLAY' ? "</td><td >" + marketValuePercent + "%" : "")
+            + (costPriceDisplay == 'DISPLAY' ? "</td><td >" + costPriceValue : "")
+            + (incomePercentDisplay == 'DISPLAY' ? "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%" : "")
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td >" + addTimePrice
+            + (addtimePriceDisplay == 'DISPLAY' ? "</td><td >" + addTimePrice : "")
             + "</td></tr>";
         stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
         stockDayIncome = stockDayIncome.add(dayIncome);
@@ -834,8 +950,14 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td><td colspan='3'></td><td colspan='2'>" + stockTotalmarketValue.setScale(2) + "</td><td>" + stockTotalCostValue + "</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td><td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome
-        + "</td><td></td></tr>";
+    str += "<tr><td>合计</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td><td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td><td colspan='3'></td>"
+        + (marketValueDisplay == 'DISPLAY' ? "<td>" + stockTotalmarketValue.setScale(2) + "</td>" : "") 
+        + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
+        + (costPriceDisplay == 'DISPLAY' ? "<td>" + stockTotalCostValue + "</td>" : "") 
+        + (incomePercentDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td>" : "") 
+        + "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome + "</td>" +
+        + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
+        + "</tr>";
     return str;
 }
 
@@ -876,12 +998,12 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             + "</td><td>" + result[k].gsz
             + "</td><td >" + result[k].costPrise
             + "</td><td>" + result[k].bonds
-            + "</td><td >" + marketValue
-            + "</td><td >" + marketValuePercent + "%"
-            + "</td><td >" + costPriceValue
-            + "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%"
+            + (marketValueDisplay == 'DISPLAY' ? "</td><td >" + marketValue : "")
+            + (marketValuePercentDisplay == 'DISPLAY' ? "</td><td >" + marketValuePercent + "%" : "")
+            + (costPriceDisplay == 'DISPLAY' ? "</td><td >" + costPriceValue : "")
+            + (incomePercentDisplay == 'DISPLAY' ? "</td><td " + totalIncomeStyle + ">" + result[k].incomePercent + "%" : "")
             + "</td><td " + totalIncomeStyle + ">" + result[k].income
-            + "</td><td >" + addTimePrice
+            + (addtimePriceDisplay == 'DISPLAY' ? "</td><td >" + addTimePrice : "")
             + "</td></tr>";
         fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
         fundDayIncome = fundDayIncome.add(dayIncome);
@@ -897,8 +1019,14 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td><td colspan='2'>" + fundTotalmarketValue + "</td><td>" + fundTotalCostValue + "</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td><td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome
-        + "</td><td></td></tr>";
+    str += "<tr><td>合计</td><td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td><td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td><td colspan='2'></td>"
+        + (marketValueDisplay == 'DISPLAY' ? "<td>" + fundTotalmarketValue + "</td>" : "") 
+        + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" )
+        + (costPriceDisplay == 'DISPLAY' ? "<td>" + fundTotalCostValue + "</td>" : "") 
+        + (incomePercentDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td>" : "") 
+        + "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>"
+        + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
+        + "</tr>";
 
     return str;
 }
@@ -920,16 +1048,22 @@ function getTotalTableHtml(totalMarketValueResult) {
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
 
-    str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td><td colspan='2'></td><td colspan='2'>" + totalMarketValueResult.setScale(2) + "</td><td>" + totalCostPrice + "</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td><td " + allTotalIncomePercentStyle + ">" + allTotalIncome
-        + "</td><td></td></tr>";
+    str += "<tr><td>汇总合计</td><td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td><td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td><td colspan='2'></td>" 
+        + (marketValueDisplay == 'DISPLAY' ? "<td>" + totalMarketValueResult.setScale(2) + "</td>" : "" )
+        + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
+        + (costPriceDisplay == 'DISPLAY' ? "<td>" + totalCostPrice + "</td>" : "" ) 
+        + (incomePercentDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td>" : "" ) 
+        + "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" 
+        + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
+        + "</tr>";
 
     return str;
 }
 
 // 通过股票名称搜索股票列表
 function searchStockByName(name) {
-    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1
-        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1) {
+    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1 || name.indexOf("us") != -1
+        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1 || name.indexOf("US") != -1) {
         name = name.substring(2, name.length);
     }
     var stocksArr;
@@ -1228,10 +1362,12 @@ async function searchFundAndStock() {
                 market = "深A"
             } else if (values[0] == 'hk') {
                 market = "港股"
+            } else if (values[0] == 'us') {
+                market = "美股"
             } else {
                 market = "其他"
             }
-            var option = $("<option></option>").val(values[0] + values[1]).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
+            var option = $("<option></option>").val(values[0] + values[1].replace('.oq','').toUpperCase()).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
             $("#search-stock-select").append(option);
         }
         if (stocksArr != null && stocksArr != '' && stocksArr != undefined && stocksArr.length > 0) {
@@ -1253,6 +1389,19 @@ async function searchFundAndStock() {
     $("#input-stock-name-search").val("");
 }
 
+async function changeWindowSize() {
+    $("#setting-modal").modal("hide");
+    // 添加class样式
+    if (windowSize == "NORMAL") {
+        saveCacheData('window-size', 'SMALL');
+        windowSize = 'SMALL';
+    } else {
+        saveCacheData('window-size', 'NORMAL');
+        windowSize = 'NORMAL';
+    }
+    initFontStyle();
+}
+
 // 初始化页面是，股票基金数据字体样式设定
 async function initFontStyle() {
     let fontChangeStyle = await readCacheData('font-change-style');
@@ -1267,6 +1416,87 @@ async function initFontStyle() {
         stockNr.classList.remove('my-table-tbody-font');
         fundNr.classList.remove('my-table-tbody-font');
         totalNr.classList.remove('my-table-tbody-font');
+    }
+    if (windowSize == 'SMALL') {
+        let myDiv = document.getElementById('my-div');
+        let myInputGroup = document.getElementById('my-input-group');
+        let stockLargeMarket = document.getElementById('stock-large-market');
+        let footer = document.getElementById('footer');
+        let myHeader = document.getElementById('my-header');
+        let myBody = document.getElementById('my-body');
+        let monitorText = document.getElementById('monitor-text');
+        let alertContent = document.getElementById('alert-content');
+        let helpDocumentAlert = document.getElementById('help-document-alert');
+
+        myDiv.classList.remove('my-div');
+        myDiv.classList.add('my-div-small');
+        myDiv.style.width = '600px';
+        myInputGroup.classList.remove('my-input-group');
+        myInputGroup.classList.add('my-input-group-small');
+        stockLargeMarket.classList.remove('stock-large-market');
+        stockLargeMarket.classList.add('stock-large-market-small');
+        footer.classList.remove('footer');
+        footer.classList.add('footer-small');
+        myHeader.classList.remove('my-header');
+        myHeader.classList.add('my-header-small');
+        myBody.classList.remove('my-body');
+        myBody.classList.add('my-body-small');
+        monitorText.classList.remove('my-monitor-text');
+        monitorText.classList.add('my-monitor-text-small');
+        alertContent.classList.remove('my-alert');
+        alertContent.classList.add('my-alert-small');
+        helpDocumentAlert.classList.remove('my-large-alert');
+        helpDocumentAlert.classList.add('my-large-alert-small');
+    } else {
+        let displaySize = 7;
+        if (marketValueDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (marketValuePercentDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (costPriceDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (incomePercentDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        if (addtimePriceDisplay == 'DISPLAY') {
+            displaySize++;
+        }
+        let myDivWidth = 80 * displaySize;
+        if (myDivWidth <= 800) {
+            myDivWidth = 800;
+        }
+        let myDiv = document.getElementById('my-div');
+        let myInputGroup = document.getElementById('my-input-group');
+        let stockLargeMarket = document.getElementById('stock-large-market');
+        let footer = document.getElementById('footer');
+        let myHeader = document.getElementById('my-header');
+        let myBody = document.getElementById('my-body');
+        let monitorText = document.getElementById('monitor-text');
+        let alertContent = document.getElementById('alert-content');
+        let helpDocumentAlert = document.getElementById('help-document-alert');
+
+        myDiv.classList.add('my-div');
+        myDiv.classList.remove('my-div-small');
+        myDiv.style.width = myDivWidth + 'px';
+        myInputGroup.classList.add('my-input-group');
+        myInputGroup.classList.remove('my-input-group-small');
+        stockLargeMarket.classList.add('stock-large-market');
+        stockLargeMarket.classList.remove('stock-large-market-small');
+        footer.classList.add('footer');
+        footer.classList.remove('footer-small');
+        myHeader.classList.add('my-header');
+        myHeader.classList.remove('my-header-small');
+        myBody.classList.add('my-body');
+        myBody.classList.remove('my-body-small');
+        monitorText.classList.add('my-monitor-text');
+        monitorText.classList.remove('my-monitor-text-small');
+        alertContent.classList.add('my-alert');
+        alertContent.classList.remove('my-alert-small');
+        helpDocumentAlert.classList.add('my-large-alert');
+        helpDocumentAlert.classList.remove('my-large-alert-small');
     }
 }
 
@@ -1559,11 +1789,12 @@ async function getFundInversPosition() {
                 break;
             }
         }
+        let fundStocksDetailStyle = parseFloat(fundStocksDetail[k].f3) == 0 ? "" : (parseFloat(fundStocksDetail[k].f3) > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
         str += "<tr>"
         + "<td >" + fundStocksDetail[k].f14 + "(" + fundStocksDetail[k].f12 + ")" 
-        + "</td><td>" + fundStocksDetail[k].f2
-        + "</td><td>" + fundStocksDetail[k].f3 + "%"
-        + "</td><td>" + currentStock.JZBL + "%"
+        + "</td><td>" + parseFloat(fundStocksDetail[k].f2).toFixed(2)
+        + "</td><td " + fundStocksDetailStyle + ">" + parseFloat(fundStocksDetail[k].f3).toFixed(2) + "%"
+        + "</td><td>" + parseFloat(currentStock.JZBL).toFixed(2) + "%"
         + "</td></tr>";
     }
     $("#fund-invers-position-nr").html(str);
@@ -1609,13 +1840,6 @@ async function setFundNetDiagram(type) {
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
     option = {
-        // resize: true,
-        // lineStyle: {
-        //     color: redColor, // 设置线的颜色
-        //     // 其他样式配置
-        //     width: 1,
-        //     opacity: 0.5
-        // },
         legend: {
             data: ['单位净值', '累计净值']
         },
@@ -1652,4 +1876,25 @@ async function setFundNetDiagram(type) {
     $("#stock-modal").modal("hide");
     $("#fund-modal").modal("hide");
     $("#time-image-modal").modal("hide");
+}
+
+async function setDisplayTr(type, dispaly){
+    if (type == 'market-value-display-checkbox') {
+        marketValueDisplay = dispaly;
+        saveCacheData('market-value-display', dispaly);
+    } else if(type == 'market-value-percent-display-checkbox') {
+        marketValuePercentDisplay = dispaly;
+        saveCacheData('market-value-percent-display', dispaly);
+    } else if(type == 'cost-price-display-checkbox') {
+        costPriceDisplay = dispaly;
+        saveCacheData('cost-price-display', dispaly);
+    } else if(type == 'income-percent-display-checkbox') {
+        incomePercentDisplay = dispaly;
+        saveCacheData('income-percent-display', dispaly);
+    } else if(type == 'addtime-price-display-checkbox') {
+        addtimePriceDisplay = dispaly;
+        saveCacheData('addtime-price-display', dispaly);
+    }
+    initHtml();
+    initData();
 }
