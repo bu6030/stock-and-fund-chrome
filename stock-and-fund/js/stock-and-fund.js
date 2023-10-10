@@ -1388,7 +1388,7 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '800px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
-        footerDesc.style.display = "block";
+        // footerDesc.style.display = "block";
         helpDocumentButton.style.display = "inline";
     } else if (windowSize == 'SMALL') {
         let myDiv = document.getElementById('my-div');
@@ -1415,7 +1415,7 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
-        footerDesc.style.display = "block";
+        // footerDesc.style.display = "block";
         helpDocumentButton.style.display = "inline";
     } else if (windowSize == 'MINI') {
         let myDiv = document.getElementById('my-div');
@@ -1447,8 +1447,9 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
-        footerDesc.style.display = "none";
+        // footerDesc.style.display = "none";
         helpDocumentButton.style.display = "none";
+        // footerDesc.html().replace("buxuesong@foxmail.com ", "");
         // // monitorText.style.display = 'none';
 
         // myDiv.style.height = '400px';
