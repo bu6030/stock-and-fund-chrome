@@ -63,8 +63,6 @@ function saveData(key, value) {
 function monitorStockPrice(stockList) {
     var date = new Date();
     console.log("执行突破价格监控任务...", date.toLocaleString());
-    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         var stocks = "";
@@ -206,8 +204,6 @@ function monitorFundCycleInvest(fundList) {
 function monitorStock(code) {
     var date = new Date();
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
-    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
 

@@ -242,9 +242,9 @@ async function initHtml() {
 document.addEventListener(
     'DOMContentLoaded',
     function () {
-        // 首页，导入数据按钮点击展示导入数据页面
+        // 设置页面，导入数据按钮点击展示导入数据页面
         document.getElementById('show-import-data').addEventListener('click', showImportData);
-        // 首页，导出数据按钮点击展导出 txt 文件
+        // 设置页面，导出数据按钮点击展导出 txt 文件
         document.getElementById('data-export-button').addEventListener('click', dataExport);
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
@@ -252,7 +252,7 @@ document.addEventListener(
         document.getElementById('fund-save-button').addEventListener('click', saveFund);
         // 股票编辑页面，点击保存按钮
         document.getElementById('stock-save-button').addEventListener('click', saveStock);
-        // 首页，自己开发时方便从 SpringBoot 项目直接导入数据
+        // 设置页面，自己开发时方便从 SpringBoot 项目直接导入数据
         if (develop) {
             document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
         }
@@ -274,7 +274,7 @@ document.addEventListener(
         document.getElementById('time-image-week-button').addEventListener('click', showWeekImage);
         // 走势图页面，月线图按钮点击
         document.getElementById('time-image-month-button').addEventListener('click', showMonthImage);
-        // 首页，清理数据按钮点击
+        // 设置页面，清理数据按钮点击
         document.getElementById('remove-all-data-button').addEventListener('click', removeAllData);
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
@@ -315,15 +315,12 @@ document.addEventListener(
             $("#wechat-group-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
             $("#wechat-group-modal").modal();
         });
-        // 首页，点击全屏按钮
+        // 设置页面，点击全屏按钮
         document.getElementById('full-screen-button').addEventListener('click', fullScreen);
-        // document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
-        // 首页，点击样式切换
+        // 设置页面，点击样式切换
         document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
-        // document.getElementById('font-change-button-2').addEventListener('click', changeFontStyle);
-        // 首页，show-passwrod-protect-button点击，展示password-protect-modal
+        // 设置页面，show-passwrod-protect-button点击，展示password-protect-modal
         document.getElementById('show-password-protect-button').addEventListener('click', showPasswordProtect);
-        // document.getElementById('show-password-protect-button-2').addEventListener('click', showPasswordProtect);
         // 密码保护页面，password-save-button点击，缓存密码
         document.getElementById('password-save-button').addEventListener('click', async function () {
             saveCacheData('password', $("#password").val());
@@ -336,9 +333,8 @@ document.addEventListener(
                 initLoad();
             }
         });
-        // 首页，点击展示隐藏迷你分时图
+        // 设置页面，点击分时图按钮
         document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
-        // document.getElementById('show-minute-image-mini-2').addEventListener('click', setMinuteImageMini);
         // 首页，点击刷新按钮
         document.getElementById('refresh-button').addEventListener('click', initData);
         // 设置页面，点击颜色切换按钮
@@ -1362,6 +1358,8 @@ async function initFontStyle() {
         totalNr.classList.remove('my-table-tbody-font');
     }
 }
+
+// 修改窗口大小，普通/缩小/迷你
 async function initWindowsSize() {
     if (windowSize == 'NORMAL') {
         let myDiv = document.getElementById('my-div');
@@ -1378,7 +1376,7 @@ async function initWindowsSize() {
         let footerDesc = document.getElementById('footer-desc');
         let helpDocumentButton = document.getElementById('help-document-button');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
-        // 设置首页各项内容宽度 800px
+        // 设置首页各项内容宽度 100%
         myWindows.style.width = '100%';
         myHeader.style.width = '100%';
         footer.style.width = '100%';
@@ -1390,7 +1388,6 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '100%';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
-        // footerDesc.style.display = "block";
         helpDocumentButton.style.display = "inline";
     } else if (windowSize == 'SMALL') {
         let myDiv = document.getElementById('my-div');
@@ -1419,7 +1416,6 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
-        // footerDesc.style.display = "block";
         helpDocumentButton.style.display = "inline";
     } else if (windowSize == 'MINI') {
         let myDiv = document.getElementById('my-div');
@@ -1432,10 +1428,6 @@ async function initWindowsSize() {
         let alertContent = document.getElementById('alert-content');
         let helpDocumentAlert = document.getElementById('help-document-alert');
         let footerDesc = document.getElementById('footer-desc');
-        // let showMinuteImageMini2 = document.getElementById('show-minute-image-mini-2');
-        // let showPasswordProtectButton2 = document.getElementById('show-password-protect-button-2');
-        // let fontChangeButton2 = document.getElementById('font-change-button-2');
-        // let fullScreenButton2 = document.getElementById('full-screen-button-2');
         let showWechatGroupButton = document.getElementById('show-wechat-group-button');
         let helpDocumentButton = document.getElementById('help-document-button');
         let myMainContent = document.getElementById('my-main-content');
@@ -1453,23 +1445,7 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
-        // footerDesc.style.display = "none";
         helpDocumentButton.style.display = "none";
-        // footerDesc.html().replace("buxuesong@foxmail.com ", "");
-        // // monitorText.style.display = 'none';
-
-        // myDiv.style.height = '400px';
-        // // myHeader.style.height = '30px';
-        // myBody.style.marginTop = '30px';
-
-        // footer.style.height = '30px';
-        // stockLargeMarket.style.display = 'none';
-        // // showMinuteImageMini2.style.display = 'none';
-        // // showPasswordProtectButton2.style.display = 'none';
-        // // fontChangeButton2.style.display = 'none';
-        // // fullScreenButton2.style.display = 'none';
-        // showWechatGroupButton.style.display = 'none';
-        // helpDocumentButton.style.display = 'none';
     }
 }
 
