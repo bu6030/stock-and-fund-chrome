@@ -1385,6 +1385,7 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '800px';
         myInputGroup.style.width = '800px';
         myDiv.style.width = '800px';
+        helpDocumentAlert.style.width = '800px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         footerDesc.style.display = "block";
@@ -1411,6 +1412,7 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '600px';
         myInputGroup.style.width = '600px';
         myDiv.style.width = '600px';
+        helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         footerDesc.style.display = "block";
@@ -1442,6 +1444,7 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '400px';
         myInputGroup.style.width = '400px';
         myDiv.style.width = '400px';
+        helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
         footerDesc.style.display = "none";
