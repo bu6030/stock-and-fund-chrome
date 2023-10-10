@@ -24,6 +24,7 @@ var costPriceDisplay = 'DISPLAY';
 var bondsDisplay = 'DISPLAY';
 var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
+
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
     //启动时发送消息
@@ -155,7 +156,6 @@ async function initLoad() {
     } else {
         fundList = jQuery.parseJSON(funds);
     }
-
     var stocks = await readCacheData('stocks');
     if (stocks == null) {
         stockList = [];
@@ -435,12 +435,10 @@ function initData() {
                         stockList[l].change = values[31] + "";
                         stockList[l].changePercent = values[32] + "";
                     }
-
                     stockList[l].time = values[30] + "";
                     stockList[l].max = values[33] + "";
                     stockList[l].min = values[34] + "";
                     // stockList[l].buyOrSellStockRequestList = [];
-
                     var now = new BigDecimal(stockList[l].now + "");
                     var costPrise = new BigDecimal(stockList[l].costPrise + "")
                     var incomeDiff = now.add(costPrise.negate());
@@ -453,7 +451,6 @@ function initData() {
                             .setScale(3);
                         stockList[l].incomePercent = incomePercent + "";
                     }
-
                     var bonds = new BigDecimal(stockList[l].bonds);
                     var income = incomeDiff.multiply(bonds)
                         .setScale(2);
@@ -524,7 +521,6 @@ function initFund() {
                             } else {
                                 fundList[k].gszzl = json.gszzl + "";
                             }
-
                             var now = new BigDecimal(json.gsz + "");
                             var costPrice = new BigDecimal(fundList[k].costPrise + "");
                             var incomeDiff = now.add(costPrice.negate());
@@ -565,7 +561,6 @@ function initFund() {
                                 fundList[k].income = income + "";
                                 fundList[k].incomePercent = incomePercent + "";
                             }
-
                         }
                     }
                 }
@@ -757,7 +752,6 @@ async function initStockAndFundHtml() {
             });
         }
     }
-
     // 初始化迷你走势图
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
@@ -818,7 +812,6 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         var costPrice = new BigDecimal(result[k].costPrise + "");
         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
         stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
-        
         let showMinuteImageMini = await readCacheData('show-minute-image-mini');
         let minuteImageMiniDiv = "";
         if (showMinuteImageMini == 'open') {
@@ -910,7 +903,6 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         var costPrice = new BigDecimal(result[k].costPrise + "");
         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
         fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
-
         let showMinuteImageMini = await readCacheData('show-minute-image-mini');
         let minuteImageMiniDiv = "";
         if (showMinuteImageMini == 'open') {
@@ -957,7 +949,6 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         + (incomeDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>" : "") 
         + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + "</tr>";
-
     return str;
 }
 
@@ -977,7 +968,6 @@ function getTotalTableHtml(totalMarketValueResult) {
     }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-
     str += "<tr>"
         + "<td>汇总合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td>" : "" )
@@ -991,7 +981,6 @@ function getTotalTableHtml(totalMarketValueResult) {
         + (incomeDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" : "" ) 
         + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
         + "</tr>";
-
     return str;
 }
 
@@ -1162,7 +1151,6 @@ async function saveFund() {
             }
         }
     }
-
     var code = $("#fund-code").val();
     if (code == null || code == '') {
         alertMessage("请添加基金编码或通过基金名称搜索");
@@ -1309,7 +1297,6 @@ async function searchFundAndStock() {
             $("#search-stock-modal").modal();
         }
     }
-
     if (fundName != "" && fundName != null) {
         var fundsArr = await searchFundByName(fundName);
         for (var k in fundsArr) {
@@ -1385,6 +1372,8 @@ async function initWindowsSize() {
         myDiv.style.width = '100%';
         myBody.style.width = '100%';
         myMainContent.style.width = '100%';
+        myMainContent.style.height = '100%';
+        myDiv.style.height = '100%';
         helpDocumentAlert.style.width = '100%';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
@@ -1413,6 +1402,8 @@ async function initWindowsSize() {
         myDiv.style.width = '600px';
         myBody.style.width = '600px';
         myMainContent.style.width = '600px';
+        myMainContent.style.height = '450px';
+        myDiv.style.height = '450px';
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
@@ -1442,13 +1433,14 @@ async function initWindowsSize() {
         myDiv.style.width = '400px';
         myBody.style.width = '400px';
         myMainContent.style.width = '400px';
+        myMainContent.style.height = '450px';
+        myDiv.style.height = '450px';
         helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
         helpDocumentButton.style.display = "none";
     }
 }
-
 
 // 样式切换，股票基金数据字体加粗加大
 async function changeFontStyle() {
