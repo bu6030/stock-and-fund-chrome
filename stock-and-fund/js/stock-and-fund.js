@@ -1379,13 +1379,15 @@ async function initWindowsSize() {
         let helpDocumentButton = document.getElementById('help-document-button');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         // 设置首页各项内容宽度 800px
-        myWindows.style.width = '800px';
-        myHeader.style.width = '800px';
-        footer.style.width = '800px';
-        stockLargeMarket.style.width = '800px';
-        myInputGroup.style.width = '800px';
-        myDiv.style.width = '800px';
-        helpDocumentAlert.style.width = '800px';
+        myWindows.style.width = '100%';
+        myHeader.style.width = '100%';
+        footer.style.width = '100%';
+        stockLargeMarket.style.width = '100%';
+        myInputGroup.style.width = '100%';
+        myDiv.style.width = '100%';
+        myBody.style.width = '100%';
+        myMainContent.style.width = '100%';
+        helpDocumentAlert.style.width = '100%';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         // footerDesc.style.display = "block";
@@ -1412,6 +1414,8 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '600px';
         myInputGroup.style.width = '600px';
         myDiv.style.width = '600px';
+        myBody.style.width = '600px';
+        myMainContent.style.width = '600px';
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
@@ -1444,6 +1448,8 @@ async function initWindowsSize() {
         stockLargeMarket.style.width = '400px';
         myInputGroup.style.width = '400px';
         myDiv.style.width = '400px';
+        myBody.style.width = '400px';
+        myMainContent.style.width = '400px';
         helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
