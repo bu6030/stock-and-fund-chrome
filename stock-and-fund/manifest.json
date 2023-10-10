@@ -14,14 +14,6 @@
   "permissions": [
     "storage"
   ],
-  "content_scripts": [
-      {
-          "matches": ["https://*.google.com/*", "https://google.com/*"],
-          "js": ["js/jquery.min.js", "js/BigDecimal.js", "js/bootstrap.min.js", "js/stock-and-fund.js"],
-          "css": ["css/bootstrap.min.css"],
-          "run_at": "document_start"
-      }
-  ],
   "host_permissions": [
     "http://*/*",
     "https://*/*"
