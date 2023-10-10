@@ -1,6 +1,6 @@
 // 初始化首页大盘股数据
 function initLargeMarketData() {
-    var stocks = "sh000001,sz399001,sz399006"
+    var stocks = "sh000001,sz399001,sz399006,hkHSI,hkHSTECH"
     $.ajax({
         url: Env.GET_STOCK_FROM_GTIMG + "q=" + stocks,
         type: "get",
@@ -26,9 +26,7 @@ function initLargeMarketData() {
                     + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
                 str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;&nbsp;" + changePercent + "%）   </a>";
             }
-            if (windowSize == 'SMALL' || windowSize == 'MINI') {
-                str = '<span>' + str + '</span>';
-            }
+            str = '<span>' + str + '</span>';
             $("#stock-large-market").html(str);
             setTimeout(function() {
                 // html 渲染完毕后 1s 执行
