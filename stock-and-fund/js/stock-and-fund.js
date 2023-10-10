@@ -1315,6 +1315,11 @@ async function searchFundAndStock() {
 async function changeWindowSize(event) {
     let targetId = event.target.id;
     $("#setting-modal").modal("hide");
+    var currentURL = window.location.href;
+    if (currentURL.indexOf('full-screen.html') > 0) {
+        alertMessage("当前在全屏，无法设置窗口大小");
+        return;
+    }
     // 添加class样式
     if (targetId == 'window-normal-size-change-button') {
         saveCacheData('window-size', 'NORMAL');
@@ -1348,6 +1353,10 @@ async function initFontStyle() {
 
 // 修改窗口大小，普通/缩小/迷你
 async function initWindowsSize() {
+    var currentURL = window.location.href;
+    if (currentURL.indexOf('full-screen.html') > 0) {
+        return;
+    }
     if (windowSize == 'NORMAL') {
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
@@ -1684,7 +1693,7 @@ function helpDocument () {
 // 全屏展示
 async function fullScreen() {
     $("#setting-modal").modal("hide");
-    chrome.tabs.create({ url: "popup.html" });
+    chrome.tabs.create({ url: "full-screen.html" });
 }
 
 // 展示密码保护页面
@@ -1834,7 +1843,7 @@ async function setFundNetDiagram(event) {
 }
 
 // 设定股票/基金详情隐藏/展示某些列
-async function setDisplayTr(event){
+async function setDisplayTr(event) {
     let type = event.target.id;
     let dispaly;
     if (event.target.checked) {

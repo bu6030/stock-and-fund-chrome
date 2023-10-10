@@ -1,0 +1,169 @@
+.my-windows {
+    overflow-x: auto;
+}
+.my-main-content {
+    width: 100%;
+    min-height: 560px;
+}
+.my-font {
+    font-size: 10px;
+}
+
+.my-text {
+    width: 80%;
+}
+
+.my-div {
+    /* width: 100%; */
+    min-height: 450px;
+    height: 100%;
+    overflow-x: auto;
+    margin-bottom: 40px;
+}
+
+.fund-net-diagram-div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 540px;
+    height: 350px;
+}
+
+.my-input-group {
+    width: 100%;
+    height: 30px;
+    bottom: 5px;
+    margin-top: 5px;
+}
+
+.my-form-input {
+    height: 30px;
+}
+
+.stock-large-market {
+    text-align: center;
+    width: 100%;
+}
+
+.footer {
+    height: 50px;
+    line-height: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: #000000;
+    font-family: Arial;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-color: white;
+}
+
+.my-header {
+    height: 30px;
+    /* line-height: 90px; */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    color: #000000;
+    font-family: Arial;
+    font-size: 12px;
+    letter-spacing: 1px;
+    background-color: white;
+    z-index: 999;
+}
+
+.my-body {
+    margin-top: 60px;
+}
+
+.my-table-tbody-font {
+    font-weight: bolder;
+    font-size: small;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+/* div 居中显示 */
+.my-center {
+    display: flex;
+}
+
+.my-center-child {
+    margin: auto;
+}
+
+.my-monitor-text {
+    text-align: center;
+    font-weight: bolder;
+    color: red;
+    width: 100%;
+    margin-top: 3px;
+}
+
+/* 自己修改的样式 */
+.btn-my-style {
+    color:#fff;background-color:#0eb0c9;
+    border-color:#0eb0c9
+}
+.btn-my-style:hover{color:#fff;background-color:#218838;border-color:#1e7e34}
+.btn-my-style.focus,
+.btn-my-style:focus{box-shadow:0 0 0 .2rem rgba(40,167,69,.5)}
+.btn-my-style.disabled,
+.btn-my-style:disabled{color:#fff;background-color:#0eb0c9;border-color:#0eb0c9}
+.btn-my-style:not(:disabled):not(.disabled).active,
+.btn-my-style:not(:disabled):not(.disabled):active,.show>
+.btn-my-style.dropdown-toggle{color:#fff;background-color:#1e7e34;border-color:#1c7430}
+
+.my-alert {
+    width: 100%;
+    margin-top: 3px;
+}
+
+.my-large-alert {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 3px;
+    display: none;
+}
+
+.my-echart {
+    margin-top: 1%;
+    margin-bottom: 1%;
+    width: 150px;
+    height: 30px;
+}
+.you {
+    margin-left: 10px;
+}
+
+/*
+大盘指数滚动效果
+*/
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee span {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+    0% {
+      transform: translateX(30%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+}
+
+.setting-modal-style {
+    height: 400px;
+    overflow-y: auto;
+}

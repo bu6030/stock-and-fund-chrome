@@ -1,0 +1,650 @@
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>股票基金神器</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/font-full-screen.css" />
+
+    <script src="js/env.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/BigDecimal.js"></script>
+    <script src="js/stock-large-market.js"></script>
+    <script src="js/background.js"></script>
+    <script src="js/stock-and-fund.js"></script>
+    <script src="js/trend-image.js"></script>
+    <script src="js/ajax-request.js"></script>
+    <script src="js/echarts.min.js"></script>
+</head>
+
+<body>
+    <div class="am-cf admin-main my-center" id="my-widnwos">
+        <!-- 添加基金模态框 -->
+        <div class="modal fade" id="fund-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">编辑基金</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body my-font">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">基金名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="fund-name"
+                                    placeholder="基金名称">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">基金编码：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm my-text" id="fund-code" placeholder="请输入6位基金编码" disabled="disabled">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">持仓成本（可选）：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="fund-costPrise"
+                                    placeholder="请输入持仓成本">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">持有份额（可选）：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="fund-bonds" placeholder="请输入持有份额">
+                            </div>
+                        </div>
+                        <div id="fund-cycle-invest" style="display: none;">
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">定投周期（可选）：</div>
+                                <div class="you">
+                                    <select data-am-selected="{btnSize: 'sm'}" id="fund-cycle-invest-type">
+                                        <option value="no">不定投</option>
+                                        <option value="week">周</option>
+                                        <option value="month">月</option>
+                                        <option value="day">日</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">定投日（可选）周定投选择（1-5），月定投（1-31）：</div>
+                                <div class="you">
+                                    <input type="number" class="am-input-sm my-text" id="fund-cycle-invest-date"
+                                        placeholder="请输入定投日，日定投不需要输入">
+                                </div>
+                            </div>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">定投金额（可选）：</div>
+                                <div class="you">
+                                    <input type="number" class="am-input-sm my-text" id="fund-cycle-invest-value"
+                                        placeholder="请输入定投金额">
+                                </div>
+                            </div>
+                            <div class="am-form-group am-cf">
+                                <div class="zuo">定投手续费率 %（可选）：</div>
+                                <div class="you">
+                                    <input type="number" class="am-input-sm my-text" id="fund-cycle-invest-rate"
+                                        placeholder="请输入定投手续费率">
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm"
+                            id="fund-show-time-image-button">走势图</button>
+                        <button type="button" class="btn btn-primary" id="fund-invers-position-button-2">持仓明细</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-button-2">历史净值</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="fund-save-button">保存</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="fund-delete-button">删除</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 添加股票模态框 -->
+        <div class="modal fade" id="stock-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">编辑股票</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">股票名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="stock-name"
+                                    placeholder="股票名称">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">股票编码：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm my-text" id="stock-code" disabled="disabled"
+                                    placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">持仓成本（可选）：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="stock-costPrise"
+                                    placeholder="请输入持仓成本">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">持有份额（可选）：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="stock-bonds" placeholder="请输入持有份额">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">监控涨破最高价格（可选）：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="stock-monitor-high-price"
+                                    placeholder="请输入监控突破最高价格">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">监控跌破最低价格（可选）：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="stock-monitor-low-price"
+                                    placeholder="请输入监控跌破最低价格">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm"
+                            id="stock-show-time-image-button">走势图</button>
+                        <button type="button" class="btn btn-primary" id="stock-monitor-button">监控价格</button>
+                        <button type="button" class="btn btn-primary" id="fund-invers-position-button-1">持仓明细</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-button-1">历史净值</button>
+                        <button type="button" class="btn btn-primary" id="stock-save-button">保存</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="stock-delete-button">删除</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 分时图模态框 -->
+        <div class="modal fade" id="time-image-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">走势图 </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div id="time-image"></div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="time-image-minute-button">分时线</button>
+                        <button type="button" class="btn btn-primary" id="time-image-day-button">日线</button>
+                        <button type="button" class="btn btn-primary" id="time-image-week-button">周线</button>
+                        <button type="button" class="btn btn-primary" id="time-image-month-button">月线</button>
+                        <button type="button" class="btn btn-primary" id="stock-fund-monitor-button">监控价格</button>
+                        <button type="button" class="btn btn-primary" id="fund-invers-position-button-3">持仓明细</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-button-3">历史净值</button>
+                        <button type="button" class="btn btn-primary" id="update-stock-fund-button">编辑</button>
+                        <button type="button" class="btn btn-secondary" id="stock-fund-delete-button">删除</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 导入数据模态框 -->
+        <div class="modal fade" id="data-import-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">导入数据</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body my-font">
+                        <div class="am-form-group am-cf">
+                            <div class="you">
+                                <input type="file" id="file-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">关闭</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索股票模态框 -->
+        <div class="modal fade" id="search-stock-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="search-stock-select">选择您添加的股票</label>
+                            <select multiple size="10" class="form-control" id="search-stock-select"></select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 搜索基金模态框 -->
+        <div class="modal fade" id="search-fund-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="search-fund-select">选择您添加的基金</label>
+                            <select multiple size="10" class="form-control" id="search-fund-select"></select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 加入微信群模态框 -->
+        <div class="modal fade" id="wechat-group-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">扫码加入微信群 </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        为您解决使用中的各种问题，甚至可以提出您的需求，如何合理我会尽快实现
+                        <div align="center" id="wechat-group-qr-code-image"></div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- 密码保护模态框 -->
+        <div class="modal fade" id="password-protect-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">密码保护</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">密码：</div>
+                            <div class="you">
+                                <input type="password" class="am-input-sm my-text" id="password" placeholder="密码">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="password-save-button">保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 验证密码模态框 -->
+        <div class="modal fade" id="password-check-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">验证密码</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">密码：</div>
+                            <div class="you">
+                                <input type="password" class="am-input-sm my-text" id="password-check" placeholder="密码">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="password-check-button">查看数据</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 设置页面模态框 -->
+        <div class="modal fade" id="setting-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">设置</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body setting-modal-style">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="change-blue-red-button" class="btn btn-outline-primary btn-sm"
+                                data-toggle="modal">颜色切换
+                                </button>  就是把涨跌红色/绿色互换下，涨红色跌绿色换成涨绿色跌红色
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="cheat-me-button" class="btn btn-outline-primary btn-sm"
+                                data-toggle="modal">忽悠自己
+                                </button>  纯属娱乐，就是把当日亏损的负值变成正的，把亏损展示成盈利，但数据计算不十分准
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="data-export-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">导出数据
+                                </button>
+                                <button type="button" id="show-import-data" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">导入数据
+                                </button>
+                                <button type="button" id="remove-all-data-button" class="btn btn-outline-danger btn-sm"
+                                    data-toggle="modal">清空数据
+                                </button>  一键清空所有数据，慎点
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="show-minute-image-mini" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">分时图
+                                </button>  展示/隐藏首页的迷你分时图
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="show-password-protect-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">密码保护
+                                </button>  针对不在自己单独用的电脑中，提供密码验证保护
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="font-change-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">样式切换
+                                </button>  首页字体变粗变大切换
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <button type="button" id="window-normal-size-change-button" class="btn btn-outline-primary btn-sm">正常</button>
+                                    <button type="button" id="window-small-size-change-button" class="btn btn-outline-primary btn-sm">缩小</button>
+                                    <button type="button" id="window-mini-size-change-button" class="btn btn-outline-primary btn-sm">迷你</button>
+                                </div>  首页大小切换
+
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="full-screen-button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal">全屏展示
+                                </button>  点击后直接在浏览器展示，显示的更全
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf" id="import-from-local-springboot-div">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <button type="button" id="import-from-local-springboot" class="btn btn-outline-primary btn-sm" 
+                                    data-toggle="modal">本地数据导入
+                                </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"><h5 class="modal-title">隐藏/展示页面展示项</h5></div>
+                            <div class="you">
+                                <label class="form-check-label" for="all-display-checkbox">
+                                    一键全选
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="all-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="market-value-display-checkbox">
+                                    市值/金额
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="market-value-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="market-value-percent-display-checkbox">
+                                    持仓占比
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="market-value-percent-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="cost-price-value-display-checkbox">
+                                    成本
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="cost-price-value-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="income-percent-display-checkbox">
+                                    收益率
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="income-percent-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="addtime-price-display-checkbox">
+                                    自选价格
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="addtime-price-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="day-income-display-checkbox">
+                                    当日盈利
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="day-income-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="cost-price-display-checkbox">
+                                    成本价/持仓成本
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="cost-price-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="bonds-display-checkbox">
+                                    持仓/持有份额
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="bonds-display-checkbox">
+                            </div>
+                            <div class="you">
+                                <label class="form-check-label" for="income-display-checkbox">
+                                    收益
+                                </label>
+                                <input class="form-check-input" type="checkbox" value="" id="income-display-checkbox">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 持仓明细模态框 -->
+        <div class="modal fade" id="fund-invers-position-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">持仓明细</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <table class="table table-hover my-font no-wrap table-striped">
+                            <thead id="fund-invers-position-head" />
+                            <tbody id="fund-invers-position-nr" />
+                        </table>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 历史净值模态框 -->
+        <div class="modal fade" id="fund-net-diagram-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">历史净值</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div id="fund-net-diagram" class="fund-net-diagram-div"></div>
+                    </div>
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-month-button">月</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-3month-button">季度</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-6month-button">半年</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-year-button">一年</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-3year-button">三年</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-5year-button">五年</button>
+                        <button type="button" class="btn btn-primary" id="fund-net-diagram-allyear-button">上市以来</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 股票基金主体页面 start -->
+        <div class="my-center-child my-main-content" id="my-main-content">
+            <div>
+                <div class="my-header no-wrap" id="my-header">
+                    <dl>
+                        <!-- <div id="monitor-text" class="my-monitor-text no-wrap">搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！</div> -->
+                    </dl>
+                    <div class="stock-large-market marquee" id="stock-large-market">上证指数  深证成指  创业版指</div>
+                    <div class="input-group my-input-group" id="my-input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="stock-fund-name-search-button">搜索股票/基金</span>
+                        </div>
+                        <input type="text" aria-label="First name" class="form-control my-form-input"
+                            id="input-stock-name-search" placeholder="请输入股票编码或股票名称后直接回车搜索">
+                        <input type="text" aria-label="Last name" class="form-control my-form-input"
+                            id="input-fund-name-search" placeholder="请输入基金编码或基金名称后直接回车搜索">
+                    </div>
+                    <div id="alert-container" style="display: none;">
+                        <div class="alert alert-danger my-alert" id="alert-content" aria-hidden="true">
+                            警告文本
+                        </div>
+                    </div>
+
+                </div>
+                <div class="my-body" id="my-body">
+                    <form>
+                        <div class="alert alert-primary my-large-alert" id="help-document-alert" role="alert">
+                            <a href="#" class="alert-link">股票基金神器使用说明（新手必看）</a>
+                        </div>
+                        <div id="my-div" class="my-div">
+                            <table class="table table-hover my-font no-wrap table-striped">
+                                <thead id="stock-head" />
+                                <tbody id="stock-nr" />
+                                <thead id="fund-head" />
+                                <tbody id="fund-nr" />
+                                <tfoot id="total-nr" />
+                            </table>
+                        </div>
+                        <div id="page">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- 股票基金主体页面 end -->
+    </div>
+    <div id="footer" class="footer">
+        <div>
+            <button type="button" id="show-all-button" class="btn btn-info btn-sm"
+                data-toggle="modal">全部
+            </button>
+            <button type="button" id="show-stock-button" class="btn btn-info btn-sm"
+                data-toggle="modal">股票
+            </button>
+            <button type="button" id="show-fund-button" class="btn btn-info btn-sm"
+                data-toggle="modal">基金
+            </button>
+            <button type="button" id="refresh-button" class="btn btn-info btn-sm"
+                data-toggle="modal">刷新
+            </button>
+            <button type="button" id="remove-badgetext-button" class="btn btn-info btn-sm"
+                data-toggle="modal">清理角标
+            </button>
+            <button type="button" id="show-setting-button" class="btn btn-outline-primary btn-sm"
+                data-toggle="modal">设置
+            </button>
+            <button type="button" id="show-wechat-group-button" class="btn btn-outline-primary btn-sm"
+                data-toggle="modal">加入微信群
+            </button>
+            <button type="button" id="help-document-button" class="btn btn-outline-primary btn-sm"
+                data-toggle="modal">使用说明
+            </button>
+        </div>
+        <div id="footer-desc">
+            CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com Version 1.7.1
+        </div>
+    </div>
+</body>
+
+</html>
