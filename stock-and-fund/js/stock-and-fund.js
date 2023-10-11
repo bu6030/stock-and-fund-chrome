@@ -27,8 +27,8 @@ var allDisplay = 'DISPLAY';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
-    //启动时发送消息
-    chrome.runtime.sendMessage({ 'message' : 'scheduleTask' });
+    // //启动时发送消息
+    // chrome.runtime.sendMessage({ 'message' : 'scheduleTask' });
     let password = await readCacheData('password');
     // 如果 password 存在，需要验证密码
     if (password != null && password != '') {
@@ -287,6 +287,11 @@ document.addEventListener(
             let stockCode = $("#search-stock-select").val();
             $("#stock-code").val(stockCode);
             $("#stock-name").val('');
+            // 清理之前表单记录
+            $("#stock-costPrise").val('');
+            $("#stock-bonds").val('');
+            $("#stock-monitor-high-price").val('');
+            $("#stock-monitor-low-price").val('');
             saveStock();
         });
         // 搜索基金页面，基金列表点击选择
@@ -294,6 +299,13 @@ document.addEventListener(
             let fundCode = $("#search-fund-select").val();
             $("#fund-code").val(fundCode);
             $("#fund-name").val('');
+            // 清理之前表单记录
+            $("#fund-costPrise").val('');
+            $("#fund-bonds").val('');
+            $("#fund-cycle-invest-type").val('');
+            $("#fund-cycle-invest-date").val('');
+            $("#fund-cycle-invest-value").val('');
+            $("#fund-cycle-invest-rate").val('');
             saveFund();
         });
         // 首页，使用说明按钮点击
