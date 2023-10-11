@@ -1,20 +1,26 @@
 let isCycleInvest = false;
+let performTaskId;
 // 定时执行任务的函数
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
-    setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
+    let performTaskId = setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
+    saveData("performTaskId", performTaskId);
 }
 
 // 当扩展程序安装时触发的事件
-chrome.runtime.onInstalled.addListener((details) => {
-    // 开始定时执行任务
-    scheduleTask();
-});
-
+chrome.runtime.onInstalled.addListener(scheduleTask);
 // 当浏览器打开时触发的事件
-chrome.runtime.onStartup.addListener(function () {
-    // 开始定时执行任务
+chrome.runtime.onStartup.addListener(scheduleTask);
+// 在扩展程序的 background.js 文件中使用 chrome.runtime.onMessage 监听函数
+chrome.runtime.onMessage.addListener(async function(message, sender, sendResponse) {
+    // 在接收到消息时执行的操作
+    console.log('收到消息:', message);
+    let performTaskId = await getData("performTaskId");
+    console.log('清理performTaskId:', performTaskId);
+    clearInterval(performTaskId);
     scheduleTask();
+    // 可选：发送响应消息给消息发送方
+    sendResponse('已收到消息');
 });
 
 chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/640002036");
@@ -57,8 +63,6 @@ function saveData(key, value) {
 function monitorStockPrice(stockList) {
     var date = new Date();
     console.log("执行突破价格监控任务...", date.toLocaleString());
-    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         var stocks = "";
@@ -200,8 +204,6 @@ function monitorFundCycleInvest(fundList) {
 function monitorStock(code) {
     var date = new Date();
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
-    // var isTradingTime = (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-    //     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
 

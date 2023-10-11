@@ -2,7 +2,7 @@
     overflow-x: auto;
 }
 .my-main-content {
-    width: 800px;
+    width: 100%;
     min-height: 560px;
 }
 .my-font {
@@ -16,7 +16,7 @@
 .my-div {
     /* width: 100%; */
     min-height: 450px;
-    height: 450px;
+    height: 100%;
     overflow-x: auto;
     margin-bottom: 40px;
 }
@@ -29,7 +29,7 @@
 }
 
 .my-input-group {
-    width: 800px;
+    width: 100%;
     height: 30px;
     bottom: 5px;
     margin-top: 5px;
@@ -41,7 +41,7 @@
 
 .stock-large-market {
     text-align: center;
-    width: 800px;
+    width: 100%;
 }
 
 .footer {
@@ -49,7 +49,7 @@
     line-height: 20px;
     position: fixed;
     bottom: 0;
-    width: 800px;
+    width: 100%;
     text-align: center;
     color: #000000;
     font-family: Arial;
@@ -63,7 +63,7 @@
     /* line-height: 90px; */
     position: fixed;
     top: 0;
-    width: 800px;
+    width: 100%;
     text-align: center;
     color: #000000;
     font-family: Arial;
@@ -99,7 +99,7 @@
     text-align: center;
     font-weight: bolder;
     color: red;
-    width: 800px;
+    width: 100%;
     margin-top: 3px;
 }
 
@@ -118,12 +118,12 @@
 .btn-my-style.dropdown-toggle{color:#fff;background-color:#1e7e34;border-color:#1c7430}
 
 .my-alert {
-    width: 800px;
+    width: 100%;
     margin-top: 3px;
 }
 
 .my-large-alert {
-    width: 800px;
+    width: 100%;
     text-align: center;
     font-size: 16px;
     margin-top: 3px;
