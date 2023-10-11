@@ -692,7 +692,8 @@ async function initStockAndFundHtml() {
                 } else {
                     $("#stock-show-time-image-button")[0].style.display = 'inline';
                 }
-                if (windowSize == 'MINI') {
+                let currentURL = window.location.href;
+                if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) {
                     $("#time-image-minute-button")[0].style.display = 'none';
                     $("#time-image-day-button")[0].style.display = 'none';
                     $("#time-image-week-button")[0].style.display = 'none';
@@ -737,7 +738,8 @@ async function initStockAndFundHtml() {
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
-                if (windowSize == 'MINI') {
+                let currentURL = window.location.href;
+                if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) {
                     $("#time-image-minute-button")[0].style.display = 'none';
                     $("#time-image-day-button")[0].style.display = 'none';
                     $("#time-image-week-button")[0].style.display = 'none';

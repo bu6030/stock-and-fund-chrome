@@ -108,6 +108,7 @@
 88. 增加恒生指数，恒生科技指数，优化大盘股指数滚动效果 2023/10/10
 89. 修改正常大小时影响全屏展示的大小 2023/10/10
 90. 增加全屏独立页面 2023/10/10
+91. 全屏模式下不在隐藏按钮 2023/10/11
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
