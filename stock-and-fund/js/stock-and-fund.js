@@ -1042,7 +1042,6 @@ async function searchFundByName(name) {
             }
         }
         if (fundsArrs.length == 0) {
-            // alert("未搜索到该基金");
             alertMessage("未搜索到该基金");
         }
     } else {
@@ -1063,7 +1062,6 @@ async function searchFundByName(name) {
             }
         }
         if (fundsArrs.length == 0) {
-            // alert("未搜索到该基金");
             alertMessage("未搜索到该基金");
         }
     }
@@ -1078,7 +1076,6 @@ async function saveStock() {
     var monitorLowPrice = $("#stock-monitor-low-price").val();
     var code = $("#stock-code").val();
     if (code == null || code == '') {
-        // alert("请添加股票编码或通过股票名称搜索");
         alertMessage("请添加股票编码或通过股票名称搜索");
         return;
     }
@@ -1124,7 +1121,6 @@ async function saveStock() {
     }
     let checkStockExsitResult = checkStockExsit(stock.code);
     if (!checkStockExsitResult.checkReuslt) {
-        // alert("不存在该股票");
         alertMessage("不存在该股票");
         $("#stock-modal").modal("hide");
         $("#search-stock-modal").modal("hide");
@@ -1152,15 +1148,15 @@ async function saveFund() {
         // 当fundCycleInvestType存在时检测fundCycleInvestDate，fundCycleInvestValue，fundCycleInvestRate不能为空
         if (fundCycleInvestType != '' && fundCycleInvestType != 'no') {
             if (fundCycleInvestDate == null || fundCycleInvestDate == '') {
-                alert("请选择基金周期投资日期");
+                alertMessage("请选择基金周期投资日期");
                 return;
             }
             if (fundCycleInvestValue == null || fundCycleInvestValue == '') {
-                alert("请选择基金周期投资金额");
+                alertMessage("请选择基金周期投资金额");
                 return;
             }
             if (fundCycleInvestRate == null || fundCycleInvestRate == '') {
-                alert("请选择基金周期投资收益率");
+                alertMessage("请选择基金周期投资收益率");
                 return;
             }
         }
