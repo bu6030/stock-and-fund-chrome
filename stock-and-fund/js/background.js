@@ -230,7 +230,9 @@ function monitorStock(code) {
 // 是否交易时间
 function isTradingTime(date) {
     return (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-    || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "15:01:00");
+    || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "16:01:00")
+    || (date.toLocaleTimeString() >= "21:30:00" && date.toLocaleTimeString() <= "23:59:59")
+    || (date.toLocaleTimeString() >= "00:00:00" && date.toLocaleTimeString() <= "04:01:00");
 }
 // 发送 chrome 通知
 // function showNotification(title, body) {
