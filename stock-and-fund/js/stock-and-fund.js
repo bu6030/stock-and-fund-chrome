@@ -24,6 +24,7 @@ var costPriceDisplay = 'DISPLAY';
 var bondsDisplay = 'DISPLAY';
 var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
+var largeMarketScroll = 'SCROOL';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -149,6 +150,10 @@ async function initLoad() {
     } else {
         allDisplay = 'HIDDEN';
         $("#all-display-checkbox").prop("checked", false);
+    }
+    largeMarketScroll = await readCacheData('large-market-scrool');
+    if (largeMarketScroll == null) {
+        largeMarketScroll = 'SCROOL';
     }
     var funds = await readCacheData('funds');
     if (funds == null) {
@@ -419,6 +424,9 @@ document.addEventListener(
         document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
         // 打赏页面，点击支付宝
         document.getElementById("ali-pay-button").addEventListener('click',  showDonate);
+        // 设置页面，点击支付宝
+        document.getElementById("large-market-scrool-button").addEventListener('click', largeMarketScrollChange);
+        document.getElementById("large-market-stop-button").addEventListener('click', largeMarketScrollChange);
     }
 );
 
@@ -2034,4 +2042,16 @@ async function showDonate(event) {
     $("#donate-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
     $("#setting-modal").modal('hide');
     $("#donate-modal").modal();
+}
+
+async function largeMarketScrollChange(event) {
+    let targetId = event.target.id;
+    if (targetId == 'large-market-scrool-button') {
+        largeMarketScroll = 'SCROOL';
+    } else {
+        largeMarketScroll = 'STOP';
+    }
+    saveCacheData('large-market-scrool', largeMarketScroll);
+    $("#fund-modal").modal("hide");
+    location.reload();
 }
