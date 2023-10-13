@@ -372,6 +372,14 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
+                                <button type="button" id="show-donate-button" class="btn btn-outline-primary btn-sm"
+                                data-toggle="modal">打赏
+                                </button>  感谢您的打赏，坚持不断更新
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
                                 <button type="button" id="change-blue-red-button" class="btn btn-outline-primary btn-sm"
                                 data-toggle="modal">颜色切换
                                 </button>  就是把涨跌红色/绿色互换下，涨红色跌绿色换成涨绿色跌红色
@@ -564,6 +572,33 @@
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-allyear-button">上市以来</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- 打赏模态框 -->
+        <div class="modal fade" id="donate-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">打赏</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        感谢有您的支持，股票基金神器才能一直保持更新，开发更多有趣的功能。
+                        <div align="center" id="donate-qr-code-image"></div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="wechat-pay-button">微信</button>
+                        <button type="button" class="btn btn-primary" id="ali-pay-button">支付宝</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+
                 </div>
             </div>
         </div>

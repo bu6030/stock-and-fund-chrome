@@ -413,6 +413,12 @@ document.addEventListener(
         document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，一键全选
         document.getElementById("all-display-checkbox").addEventListener('change', setDisplayTr);
+        // 设置页面，点击打赏按钮
+        document.getElementById("show-donate-button").addEventListener('click',  showDonate);
+        // 打赏页面，点击微信
+        document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
+        // 打赏页面，点击支付宝
+        document.getElementById("ali-pay-button").addEventListener('click',  showDonate);
     }
 );
 
@@ -2014,4 +2020,18 @@ async function clickSearchFundAndStockButton(event) {
     if (event.key === 'Enter') {
         searchFundAndStock();
     }
+}
+
+// 展示打赏码
+async function showDonate(event) {
+    let path;
+    let targetId = event.target.id;
+    if (targetId == 'ali-pay-button') {
+        path = Env.ALI_PAY_QR_CODE;
+    } else {
+        path = Env.WECHAT_PAY_QR_CODE;
+    }
+    $("#donate-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
+    $("#setting-modal").modal('hide');
+    $("#donate-modal").modal();
 }
