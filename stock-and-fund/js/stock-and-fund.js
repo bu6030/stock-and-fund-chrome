@@ -275,8 +275,10 @@ document.addEventListener(
         });
         // 首页，点击刷新按钮
         document.getElementById('refresh-button').addEventListener('click', initData);
-        // 首页，点击清除角标
+        // 首页，点击清除角标按钮
         document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
+        // 首页，点击全屏显示按钮
+        document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
 
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
@@ -436,7 +438,6 @@ document.addEventListener(
         document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
         // 打赏页面，点击支付宝
         document.getElementById("ali-pay-button").addEventListener('click',  showDonate);
-
     }
 );
 
@@ -1406,6 +1407,7 @@ async function initWindowsSize() {
         let footerDesc = document.getElementById('footer-desc');
         let helpDocumentButton = document.getElementById('help-document-button');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
+        let fullScreenButton2 = document.getElementById('full-screen-button-2');
         // 设置首页各项内容宽度 100%
         myWindows.style.width = '100%';
         myHeader.style.width = '100%';
@@ -1421,6 +1423,7 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
+        fullScreenButton2.style.display = "inline";
     } else if (windowSize == 'SMALL') {
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
@@ -1436,6 +1439,7 @@ async function initWindowsSize() {
         let footerDesc = document.getElementById('footer-desc');
         let helpDocumentButton = document.getElementById('help-document-button');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
+        let fullScreenButton2 = document.getElementById('full-screen-button-2');
         // 设置首页各项内容宽度 600px
         myWindows.style.width = '600px';
         myHeader.style.width = '600px';
@@ -1451,6 +1455,7 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
+        fullScreenButton2.style.display = "inline";
     } else if (windowSize == 'MINI') {
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
@@ -1467,6 +1472,7 @@ async function initWindowsSize() {
         let myMainContent = document.getElementById('my-main-content');
         let myWindows = document.getElementById('my-widnwos');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
+        let fullScreenButton2 = document.getElementById('full-screen-button-2');
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';
         myHeader.style.width = '400px';
@@ -1482,6 +1488,7 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
         helpDocumentButton.style.display = "none";
+        fullScreenButton2.style.display = "none";
     }
 }
 
