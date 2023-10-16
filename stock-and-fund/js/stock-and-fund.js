@@ -247,30 +247,56 @@ async function initHtml() {
 document.addEventListener(
     'DOMContentLoaded',
     function () {
-        // 设置页面，导入数据按钮点击展示导入数据页面
-        document.getElementById('show-import-data').addEventListener('click', showImportData);
-        // 设置页面，导出数据按钮点击展导出 txt 文件
-        document.getElementById('data-export-button').addEventListener('click', dataExport);
+        // 首页，点击设置按钮
+        document.getElementById('show-setting-button').addEventListener('click', async function () {
+            $("#setting-modal").modal();
+        });
+        // 首页，底部全部按钮，股票基金全部显示
+        document.getElementById('show-all-button').addEventListener('click', changeShowStockOrFundOrAll);
+        // 首页，底部股票按钮，只展示股票
+        document.getElementById('show-stock-button').addEventListener('click', changeShowStockOrFundOrAll);
+        // 首页，底部基金按钮，只展示基金
+        document.getElementById('show-fund-button').addEventListener('click', changeShowStockOrFundOrAll);
+        // 首页，在股票搜索名称输入框中点击回车
+        document.getElementById('input-stock-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
+        // 首页，在基金搜索名称输入框中点击回车
+        document.getElementById('input-fund-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
+        // 首页，输入股票名称后点击搜索股票/基金按钮
+        document.getElementById('stock-fund-name-search-button').addEventListener('click', searchFundAndStock);
+        // 首页，使用说明按钮点击
+        document.getElementById('help-document-button').addEventListener('click', helpDocument);
+        document.getElementById('help-document-alert').addEventListener('click', helpDocument);
+        // 首页，点击加入微信群
+        document.getElementById('show-wechat-group-button').addEventListener('click', function () {
+            let timestamp = Date.now();
+            let path = Env.WECHAT_GROUP_QR_CODE + "?date=" + timestamp;
+            $("#wechat-group-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
+            $("#wechat-group-modal").modal();
+        });
+        // 首页，点击刷新按钮
+        document.getElementById('refresh-button').addEventListener('click', initData);
+        // 首页，点击清除角标
+        document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
+
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
+
         // 基金编辑页面，点击保存按钮
         document.getElementById('fund-save-button').addEventListener('click', saveFund);
-        // 股票编辑页面，点击保存按钮
-        document.getElementById('stock-save-button').addEventListener('click', saveStock);
-        // 设置页面，自己开发时方便从 SpringBoot 项目直接导入数据
-        if (develop) {
-            document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
-        }
-        // 股票编辑页面，点击删除按钮
-        document.getElementById('stock-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击删除按钮
         document.getElementById('fund-delete-button').addEventListener('click', deleteStockAndFund);
-        // 走势图页面，点击股票基金按钮
-        document.getElementById('stock-fund-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击走势图按钮
         document.getElementById('fund-show-time-image-button').addEventListener('click', showTimeImage);
+
+        // 股票编辑页面，点击保存按钮
+        document.getElementById('stock-save-button').addEventListener('click', saveStock);
+        // 股票编辑页面，点击删除按钮
+        document.getElementById('stock-delete-button').addEventListener('click', deleteStockAndFund);
         // 股票编辑页面，点击走势图按钮
         document.getElementById('stock-show-time-image-button').addEventListener('click', showTimeImage);
+        // 股票编辑页面，点击监控股票价格
+        document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
+        
         // 走势图页面，点击分时图按钮
         document.getElementById('time-image-minute-button').addEventListener('click', showMinuteImage);
         // 走势图页面，日线图按钮点击
@@ -279,14 +305,26 @@ document.addEventListener(
         document.getElementById('time-image-week-button').addEventListener('click', showWeekImage);
         // 走势图页面，月线图按钮点击
         document.getElementById('time-image-month-button').addEventListener('click', showMonthImage);
-        // 设置页面，清理数据按钮点击
-        document.getElementById('remove-all-data-button').addEventListener('click', removeAllData);
-        // 首页，在股票搜索名称输入框中点击回车
-        document.getElementById('input-stock-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
-        // 首页，在基金搜索名称输入框中点击回车
-        document.getElementById('input-fund-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
-        // 首页，输入股票名称后点击搜索股票/基金按钮
-        document.getElementById('stock-fund-name-search-button').addEventListener('click', searchFundAndStock);
+        // 走势图页面，点击股票基金按钮
+        document.getElementById('stock-fund-delete-button').addEventListener('click', deleteStockAndFund);
+        // 走势图页面，点击编辑按钮
+        document.getElementById('update-stock-fund-button').addEventListener('click', function () {
+            $("#time-image-modal").modal("hide");
+            if (timeImageType == "FUND") {
+                $("#fund-modal").modal();
+            } else {
+                $("#stock-modal").modal();
+            }
+        });
+        // 走势图页面，点击监控股票价格
+        document.getElementById('stock-fund-monitor-button').addEventListener('click', stockMonitor);
+        // 走势图页面，股票/基金编辑页面，点击查看持仓明细
+        document.getElementById('fund-invers-position-button-1').addEventListener('click', getFundInversPosition);
+        document.getElementById('fund-invers-position-button-2').addEventListener('click', getFundInversPosition);
+        document.getElementById('fund-invers-position-button-3').addEventListener('click', getFundInversPosition);
+        // 走势图页面，股票/基金编辑页面，点击查看历史净值
+        document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
+
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', function () {
             let stockCode = $("#search-stock-select").val();
@@ -313,31 +351,7 @@ document.addEventListener(
             $("#fund-cycle-invest-rate").val('');
             saveFund();
         });
-        // 首页，使用说明按钮点击
-        document.getElementById('help-document-button').addEventListener('click', helpDocument);
-        document.getElementById('help-document-alert').addEventListener('click', helpDocument);
-        // 走势图页面，点击编辑按钮
-        document.getElementById('update-stock-fund-button').addEventListener('click', function () {
-            $("#time-image-modal").modal("hide");
-            if (timeImageType == "FUND") {
-                $("#fund-modal").modal();
-            } else {
-                $("#stock-modal").modal();
-            }
-        });
-        // 首页，点击加入微信群
-        document.getElementById('show-wechat-group-button').addEventListener('click', function () {
-            let timestamp = Date.now();
-            let path = Env.WECHAT_GROUP_QR_CODE + "?date=" + timestamp;
-            $("#wechat-group-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
-            $("#wechat-group-modal").modal();
-        });
-        // 设置页面，点击全屏按钮
-        document.getElementById('full-screen-button').addEventListener('click', fullScreen);
-        // 设置页面，点击样式切换
-        document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
-        // 设置页面，show-passwrod-protect-button点击，展示password-protect-modal
-        document.getElementById('show-password-protect-button').addEventListener('click', showPasswordProtect);
+
         // 密码保护页面，password-save-button点击，缓存密码
         document.getElementById('password-save-button').addEventListener('click', async function () {
             saveCacheData('password', $("#password").val());
@@ -350,36 +364,7 @@ document.addEventListener(
                 initLoad();
             }
         });
-        // 设置页面，点击分时图按钮
-        document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
-        // 首页，点击刷新按钮
-        document.getElementById('refresh-button').addEventListener('click', initData);
-        // 设置页面，点击颜色切换按钮
-        document.getElementById('change-blue-red-button').addEventListener('click', changeBlueRed);
-        // 设置页面，点击忽悠自己按钮
-        document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
-        // 首页，点击设置按钮
-        document.getElementById('show-setting-button').addEventListener('click', async function () {
-            $("#setting-modal").modal();
-        });
-        // 首页，底部全部按钮，股票基金全部显示
-        document.getElementById('show-all-button').addEventListener('click', changeShowStockOrFundOrAll);
-        // 首页，底部股票按钮，只展示股票
-        document.getElementById('show-stock-button').addEventListener('click', changeShowStockOrFundOrAll);
-        // 首页，底部基金按钮，只展示基金
-        document.getElementById('show-fund-button').addEventListener('click', changeShowStockOrFundOrAll);
-        // 分时图页面，点击监控股票价格
-        document.getElementById('stock-fund-monitor-button').addEventListener('click', stockMonitor);
-        // 股票编辑页面，点击监控股票价格
-        document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
-        // 首页，点击清除角标
-        document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
-        // 分时图页面，股票/基金编辑页面，点击查看持仓明细
-        document.getElementById('fund-invers-position-button-1').addEventListener('click', getFundInversPosition);
-        document.getElementById('fund-invers-position-button-2').addEventListener('click', getFundInversPosition);
-        document.getElementById('fund-invers-position-button-3').addEventListener('click', getFundInversPosition);
-        // 分时图页面，股票/基金编辑页面，点击查看历史净值
-        document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
+
         // 历史净值页面，点击月
         document.getElementById('fund-net-diagram-month-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击季
@@ -394,6 +379,7 @@ document.addEventListener(
         document.getElementById('fund-net-diagram-5year-button').addEventListener('click',  setFundNetDiagram);
         // 历史净值页面，点击上市以来
         document.getElementById('fund-net-diagram-allyear-button').addEventListener('click',  setFundNetDiagram);
+
         // 设置页面，页面大小按钮点击
         document.getElementById('window-normal-size-change-button').addEventListener('click',  changeWindowSize);
         document.getElementById('window-small-size-change-button').addEventListener('click',  changeWindowSize);
@@ -420,13 +406,37 @@ document.addEventListener(
         document.getElementById("all-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，点击打赏按钮
         document.getElementById("show-donate-button").addEventListener('click',  showDonate);
+        // 设置页面，点击滚动/停止
+        document.getElementById("large-market-scrool-button").addEventListener('click', largeMarketScrollChange);
+        document.getElementById("large-market-stop-button").addEventListener('click', largeMarketScrollChange);
+        // 设置页面，点击分时图按钮
+        document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
+        // 设置页面，点击颜色切换按钮
+        document.getElementById('change-blue-red-button').addEventListener('click', changeBlueRed);
+        // 设置页面，点击忽悠自己按钮
+        document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
+        // 设置页面，点击全屏按钮
+        document.getElementById('full-screen-button').addEventListener('click', fullScreen);
+        // 设置页面，点击样式切换
+        document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
+        // 设置页面，show-passwrod-protect-button点击，展示password-protect-modal
+        document.getElementById('show-password-protect-button').addEventListener('click', showPasswordProtect);
+        // 设置页面，自己开发时方便从 SpringBoot 项目直接导入数据
+        if (develop) {
+            document.getElementById('import-from-local-springboot').addEventListener('click', getStockAndFundFromLocalService);
+        }
+        // 设置页面，清理数据按钮点击
+        document.getElementById('remove-all-data-button').addEventListener('click', removeAllData);
+        // 设置页面，导入数据按钮点击展示导入数据页面
+        document.getElementById('show-import-data').addEventListener('click', showImportData);
+        // 设置页面，导出数据按钮点击展导出 txt 文件
+        document.getElementById('data-export-button').addEventListener('click', dataExport);
+
         // 打赏页面，点击微信
         document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
         // 打赏页面，点击支付宝
         document.getElementById("ali-pay-button").addEventListener('click',  showDonate);
-        // 设置页面，点击支付宝
-        document.getElementById("large-market-scrool-button").addEventListener('click', largeMarketScrollChange);
-        document.getElementById("large-market-stop-button").addEventListener('click', largeMarketScrollChange);
+
     }
 );
 
