@@ -433,6 +433,9 @@ document.addEventListener(
         document.getElementById('show-import-data').addEventListener('click', showImportData);
         // 设置页面，导出数据按钮点击展导出 txt 文件
         document.getElementById('data-export-button').addEventListener('click', dataExport);
+        // 设置页面，价格监控提醒是否允许发送浏览器通知
+        document.getElementById('send-chrome-notice-enable-button').addEventListener('click', enableChromeNotice);
+        document.getElementById('send-chrome-notice-disable-button').addEventListener('click', enableChromeNotice);
 
         // 打赏页面，点击微信
         document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
@@ -2071,4 +2074,16 @@ async function largeMarketScrollChange(event) {
     saveCacheData('large-market-scrool', largeMarketScroll);
     $("#fund-modal").modal("hide");
     location.reload();
+}
+
+async function enableChromeNotice(event) {
+    let targetId = event.target.id;
+    if (targetId == 'send-chrome-notice-enable-button') {
+        console.log('设置为true');
+        saveCacheData('send-chrome-notice-enable', true);
+    } else {
+        console.log('设置为false');
+        saveCacheData('send-chrome-notice-enable', false);
+    }
+    $("#setting-modal").modal("hide");
 }

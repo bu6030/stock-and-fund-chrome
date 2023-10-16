@@ -372,6 +372,14 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
+                                <button type="button" id="show-donate-button" class="btn btn-outline-primary btn-sm"
+                                data-toggle="modal">打赏
+                                </button>  感谢您的打赏，坚持不断更新
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
                                 <button type="button" id="change-blue-red-button" class="btn btn-outline-primary btn-sm"
                                 data-toggle="modal">颜色切换
                                 </button>  就是把涨跌红色/绿色互换下，涨红色跌绿色换成涨绿色跌红色
@@ -426,7 +434,15 @@
                                     <button type="button" id="window-small-size-change-button" class="btn btn-outline-primary btn-sm">缩小</button>
                                     <button type="button" id="window-mini-size-change-button" class="btn btn-outline-primary btn-sm">迷你</button>
                                 </div>  首页大小切换
-
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <button type="button" id="large-market-scrool-button" class="btn btn-outline-primary btn-sm">滚动</button>
+                                    <button type="button" id="large-market-stop-button" class="btn btn-outline-primary btn-sm">停止</button>
+                                </div>  大盘指数滚动，如果在迷你和缩小页面不滚动时候可能展示不全
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -443,6 +459,15 @@
                                 <button type="button" id="import-from-local-springboot" class="btn btn-outline-primary btn-sm" 
                                     data-toggle="modal">本地数据导入
                                 </button>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                    <button type="button" id="send-chrome-notice-disable-button" class="btn btn-outline-primary btn-sm">否</button>
+                                    <button type="button" id="send-chrome-notice-enable-button" class="btn btn-outline-primary btn-sm">是</button>
+                                </div>  价格监控提醒是否允许发送浏览器通知
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -567,6 +592,33 @@
                 </div>
             </div>
         </div>
+        <!-- 打赏模态框 -->
+        <div class="modal fade" id="donate-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">打赏</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        感谢有您的支持，股票基金神器才能一直保持更新，开发更多有趣的功能。
+                        <div align="center" id="donate-qr-code-image"></div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="wechat-pay-button">微信</button>
+                        <button type="button" class="btn btn-primary" id="ali-pay-button">支付宝</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <!-- 股票基金主体页面 start -->
         <div class="my-center-child my-main-content" id="my-main-content">
@@ -634,6 +686,9 @@
             <button type="button" id="show-setting-button" class="btn btn-outline-primary btn-sm"
                 data-toggle="modal">设置
             </button>
+            <button type="button" id="full-screen-button-2" class="btn btn-outline-primary btn-sm"
+                data-toggle="modal">全屏展示
+            </button>
             <button type="button" id="show-wechat-group-button" class="btn btn-outline-primary btn-sm"
                 data-toggle="modal">加入微信群
             </button>
@@ -642,7 +697,7 @@
             </button>
         </div>
         <div id="footer-desc">
-            CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com Version 1.7.1
+            CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com Version 1.7.4
         </div>
     </div>
 </body>

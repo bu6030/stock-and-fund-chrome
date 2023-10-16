@@ -109,7 +109,7 @@ function monitorStockPrice(stockList) {
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
-                            // showNotification("通知", text);
+                            showNotification("通知", text);
                             console.log("================监控价格涨破", highPrice, "============");
                         }
                     }
@@ -126,7 +126,7 @@ function monitorStockPrice(stockList) {
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
-                            // showNotification("通知", text);
+                            showNotification("通知", text);
                             console.log("================监控价格跌破", lowPrice, "============");
                         }
                     }
@@ -235,18 +235,24 @@ function isTradingTime(date) {
     || (date.toLocaleTimeString() >= "00:00:00" && date.toLocaleTimeString() <= "04:01:00");
 }
 // 发送 chrome 通知
-// function showNotification(title, body) {
-//     chrome.notifications.create({
-//         type: "basic",
-//         title: title,
-//         message: body,
-//         iconUrl: "/img/128.png"
-//     }, function(notificationId) {
-//         // 通知创建完成后的回调函数
-//         if (chrome.runtime.lastError) {
-//             console.log("创建通知失败: " + chrome.runtime.lastError.message);
-//         } else {
-//             console.log("通知已创建，ID: " + notificationId);
-//         }
-//     });
-// }
+async function showNotification(title, body) {
+    let sendCrhomeNoticeEnable = await getData('send-chrome-notice-enable');
+    console.log("发送浏览器通知开关：", sendCrhomeNoticeEnable);
+    if (sendCrhomeNoticeEnable == true || sendCrhomeNoticeEnable == 'true') {
+        chrome.notifications.create({
+            type: "basic",
+            title: title,
+            message: body,
+            iconUrl: "/img/128.png"
+        }, function(notificationId) {
+            // 通知创建完成后的回调函数
+            if (chrome.runtime.lastError) {
+                console.log("创建通知失败: " + chrome.runtime.lastError.message);
+            } else {
+                console.log("通知已创建，ID: " + notificationId);
+            }
+        });
+    } else {
+        console.log("不允许发送浏览器通知");
+    }
+}
