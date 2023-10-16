@@ -114,6 +114,7 @@
 94. 增加大盘指数滚动/停止按钮 2023/10/13 -- version 1.7.3 -- end
 95. 添加伯克希尔报错 2023/10/13
 96. 增加美股港股交易时间 2023/10/13
+97. 调整事件代码顺序 2023/10/16
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
