@@ -581,7 +581,12 @@ function initFund() {
                             let fund = checkFundExsitFromEastMoney(fundCode);
                             fundList[k].dwjz = fund.dwjz;
                             fundList[k].gsz = fund.dwjz;
-                            fundList[k].gszzl = "0";
+                            if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
+                                var gszzl = 0 - parseFloat(fund.gszzl);
+                                fundList[k].gszzl = gszzl + "";
+                            } else {
+                                fundList[k].gszzl = fund.gszzl + "";
+                            }
                             fundList[k].income = "0";
                             fundList[k].incomePercent = "0";
                             fundList[k].name = fund.name;
