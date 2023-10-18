@@ -114,7 +114,26 @@ function ajaxGetStockFromGtimg(code) {
 
 // 接口调用
 function ajaxGetFundFromTiantianjijin(code) {
-    return null;
+    let result;
+    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN;
+    FUND_URL = FUND_URL.replace('{CODE}', code);
+    $.ajax({
+        url: FUND_URL,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
 }
 
 // 接口调用
