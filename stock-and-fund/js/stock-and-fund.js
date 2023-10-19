@@ -1415,18 +1415,18 @@ async function initWindowsSize() {
         let helpDocumentButton = document.getElementById('help-document-button');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         let fullScreenButton2 = document.getElementById('full-screen-button-2');
-        // 设置首页各项内容宽度 100%
-        myWindows.style.width = '100%';
-        myHeader.style.width = '100%';
-        footer.style.width = '100%';
-        stockLargeMarket.style.width = '100%';
-        myInputGroup.style.width = '100%';
-        myDiv.style.width = '100%';
-        myBody.style.width = '100%';
-        myMainContent.style.width = '100%';
+        // 设置首页各项内容宽度 800px
+        myWindows.style.width = '800px';
+        myHeader.style.width = '800px';
+        footer.style.width = '800px';
+        stockLargeMarket.style.width = '800px';
+        myInputGroup.style.width = '800px';
+        myDiv.style.width = '800px';
+        myBody.style.width = '800px';
+        myMainContent.style.width = '800px';
         myMainContent.style.height = '100%';
-        myDiv.style.height = '100%';
-        helpDocumentAlert.style.width = '100%';
+        myDiv.style.height = '450px';
+        helpDocumentAlert.style.width = '800px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
