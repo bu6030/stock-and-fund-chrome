@@ -492,8 +492,7 @@ function initData() {
                         stockList[l].incomePercent = incomePercent + "";
                     }
                     var bonds = new BigDecimal(stockList[l].bonds);
-                    var income = incomeDiff.multiply(bonds)
-                        .setScale(2);
+                    var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
                     stockList[l].income = income + "";
                 }
             }
@@ -883,12 +882,12 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         }
         str += "<tr id=\"stock-tr-" + k + "\">"
             + "<td>" + stockName + alertStyle + minuteImageMiniDiv + "</td>"
-            + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome.setScale(2) + "</td>" : "")
+            + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(dayIncome + "").toFixed(2) + "</td>" : "")
             + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
             + "<td>" + result[k].now + "</td>"
             + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
             + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-            + (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue.setScale(2) + "</td>" : "")
+            + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(marketValue + "").toFixed(2) + "</td>" : "")
             + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
             + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
             + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
@@ -911,12 +910,12 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     str += "<tr>"
         + "<td>合计</td>"
-        + (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + stockDayIncome.setScale(2) + "</td>" : "") 
-        + "<td " + stockDayIncomePercentStyle + ">" + stockDayIncomePercent.setScale(2, 4) + "%</td>"
+        + (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "") 
+        + "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>"
         + "<td></td>"
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "") 
-        + (marketValueDisplay == 'DISPLAY' ? "<td>" + stockTotalmarketValue.setScale(2) + "</td>" : "") 
+        + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(stockTotalmarketValue + "").toFixed(2) + "</td>" : "") 
         + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
         + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + stockTotalCostValue + "</td>" : "") 
         + (incomePercentDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td>" : "") 
@@ -1017,11 +1016,11 @@ function getTotalTableHtml(totalMarketValueResult) {
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     str += "<tr>"
         + "<td>汇总合计</td>"
-        + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + allDayIncome.setScale(2) + "</td>" : "" )
-        + "<td colspan='2' " + allDayIncomePercentStyle + ">" + allDayIncomePercent.setScale(2, 4) + "%</td>"
+        + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" )
+        + "<td colspan='2' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" )
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "" )
-        + (marketValueDisplay == 'DISPLAY' ? "<td>" + totalMarketValueResult.setScale(2) + "</td>" : "" )
+        + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(totalMarketValueResult + "").toFixed(2) + "</td>" : "" )
         + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
         + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + totalCostPrice + "</td>" : "" ) 
         + (incomePercentDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td>" : "" ) 
