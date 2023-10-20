@@ -2068,6 +2068,7 @@ async function showDonate(event) {
     $("#donate-modal").modal();
 }
 
+// 大盘滚动/停止设定
 async function largeMarketScrollChange(event) {
     let targetId = event.target.id;
     if (targetId == 'large-market-scrool-button') {
@@ -2080,6 +2081,7 @@ async function largeMarketScrollChange(event) {
     location.reload();
 }
 
+// 监控价格是否允许推送浏览器通知
 async function enableChromeNotice(event) {
     let targetId = event.target.id;
     if (targetId == 'send-chrome-notice-enable-button') {
