@@ -325,6 +325,8 @@ document.addEventListener(
         document.getElementById('fund-invers-position-button-2').addEventListener('click', getFundInversPosition);
         document.getElementById('fund-invers-position-button-3').addEventListener('click', getFundInversPosition);
         // 走势图页面，股票/基金编辑页面，点击查看历史净值
+        document.getElementById('fund-net-diagram-button-1').addEventListener('click', setFundNetDiagram);
+        document.getElementById('fund-net-diagram-button-2').addEventListener('click', setFundNetDiagram);
         document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
 
         // 搜索股票页面，股票列表点击选择
