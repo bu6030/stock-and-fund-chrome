@@ -1334,7 +1334,7 @@ async function searchFundAndStock() {
             } else {
                 market = "其他"
             }
-            var option = $("<option></option>").val(values[0] + values[1].replace('.oq','').replace('.n','').toUpperCase()).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
+            var option = $("<option></option>").val(values[0] + values[1].replace('.oq','').replace('.ps','').replace('.n','').toUpperCase()).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
             $("#search-stock-select").append(option);
         }
         if (stocksArr != null && stocksArr != '' && stocksArr != undefined && stocksArr.length > 0) {
@@ -1765,7 +1765,11 @@ async function stockMonitor () {
     let stock = checkStockExsit(code);
     chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
     chrome.action.setBadgeBackgroundColor({ color: 'blue' });
-    chrome.action.setBadgeText({ text: "" + stock.now });
+    let now = stock.now;
+    if (now.length >= 5) {
+        now = parseFloat(now.substring(0, 5));
+    }
+    chrome.action.setBadgeText({ text: "" + now });
     saveCacheData("MONITOR_STOCK_CODE", code);
 }
 

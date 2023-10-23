@@ -214,7 +214,10 @@ function monitorStock(code) {
                 var stoksArr = data.split("\n");
                 var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
                 var values = dataStr.split("~");
-                var now = parseFloat(values[3]);
+                var now = values[3];
+                if (now.length >= 5) {
+                    now = parseFloat(now.substring(0, 5));
+                }
                 chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
                 chrome.action.setBadgeBackgroundColor({ color: 'blue' });
                 chrome.action.setBadgeText({ text: "" + now });
