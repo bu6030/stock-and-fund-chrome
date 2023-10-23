@@ -124,6 +124,8 @@
 104. 修改设置页面菜单顺序 2023/10/20
 105. 股票/基金编辑页面查看历史净值失效 2023/10/23
 106. 股票/基金编辑页面按钮大小不一致 2023/10/23 -- version 1.7.5 -- end
+107. 添加美团(美股)报错 2023/10/23
+108. 增加实时角标显示大盘指数以及超过长度精简显示 2023/10/23
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
