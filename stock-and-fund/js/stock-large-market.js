@@ -1,6 +1,6 @@
 // 初始化首页大盘股数据
 function initLargeMarketData() {
-    var stocks = "sh000001,sz399001,sz399006,hkHSI,hkHSTECH"
+    var stocks = "sh000001,sz399001,sz399006,hkHSI"
     $.ajax({
         url: Env.GET_STOCK_FROM_GTIMG + "q=" + stocks,
         type: "get",

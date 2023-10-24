@@ -24,7 +24,7 @@ var costPriceDisplay = 'DISPLAY';
 var bondsDisplay = 'DISPLAY';
 var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
-var largeMarketScroll = 'SCROOL';
+var largeMarketScroll = 'STOP';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -153,7 +153,7 @@ async function initLoad() {
     }
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
-        largeMarketScroll = 'SCROOL';
+        largeMarketScroll = 'STOP';
     }
     var funds = await readCacheData('funds');
     if (funds == null) {
