@@ -22,9 +22,9 @@ function initLargeMarketData() {
                 var now = values[3] + "";
                 var changePercent = values[32] + "";
                 var aId = "id = 'large-market-" + stockCode + "'";
-                var style = "style=\"font-size:9px;font-weight:600;"
+                var style = "style=\"font-size:11px;font-weight:600;"
                     + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
-                str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;&nbsp;" + changePercent + "%）   </a>";
+                str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;" + changePercent + "%） </a>";
             }
             if (largeMarketScroll == 'SCROOL') {
                 str = '<span>' + str + '</span>';
