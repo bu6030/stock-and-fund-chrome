@@ -1034,16 +1034,30 @@ function getTotalTableHtml(totalMarketValueResult) {
 
 // 通过股票名称搜索股票列表
 function searchStockByName(name) {
+    let preName = '';
     if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1 || name.indexOf("us") != -1
         || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1 || name.indexOf("US") != -1) {
+        preName = name.substring(0, 2);
         name = name.substring(2, name.length);
     }
     var stocksArr;
     let result = ajaxGetStockCodeByNameFromGtimg(name);
     if (result.indexOf("v_hint=\"N\";") != -1) {
-        alertMessage("不存在该股票");
-        $("#stock-name").val("");
-        return;
+        if (preName != '') { 
+            let stock = checkStockExsit(preName + name);
+            // 找到股票/ETF/可转债
+            if (stock.checkReuslt) {
+                result =  "v_hint=\"" + preName + "~" + name + "~" +stock.name ;
+            } else {
+                alertMessage("不存在该股票");
+                $("#stock-name").val("");
+                return;
+            }
+        } else {
+            alertMessage("不存在该股票");
+            $("#stock-name").val("");
+            return;
+        }
     }
     if (result.indexOf("v_cate_hint") != -1) {
         result = result.substring(result.indexOf("\n") + 1);
