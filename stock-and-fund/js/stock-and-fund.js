@@ -469,7 +469,7 @@ function initData() {
                     stockList[l].name = values[1] + "";
                     // 可转债上市前加格默认为 0
                     if (parseFloat(values[3]) == 0 && (values[1].indexOf("发债") != -1 || values[1].indexOf("转债") != -1)) {
-                        stockList[l].now = "100";
+                        stockList[l].now = "100.00";
                     } else {
                         stockList[l].now = values[3] + "";
                     }
@@ -856,7 +856,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
         if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
             marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-        }
+       }
         let changePercent = parseFloat(result[k].changePercent);
         var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
         var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
