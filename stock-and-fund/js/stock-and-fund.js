@@ -1032,23 +1032,37 @@ function getTotalTableHtml(totalMarketValueResult) {
     return str;
 }
 
+// 判断是否为纯数字
+function isNumeric(str) {
+    return str !== "" && !isNaN(Number(str));
+}
+
 // 通过股票名称搜索股票列表
 function searchStockByName(name) {
-    let preName = '';
     if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1 || name.indexOf("us") != -1
         || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1 || name.indexOf("US") != -1) {
-        preName = name.substring(0, 2);
         name = name.substring(2, name.length);
     }
     var stocksArr;
     let result = ajaxGetStockCodeByNameFromGtimg(name);
     if (result.indexOf("v_hint=\"N\";") != -1) {
-        if (preName != '') { 
-            let stock = checkStockExsit(preName + name);
-            // 找到股票/ETF/可转债
+        // 搜索可转债
+        if (isNumeric(name)) {
+            let stock = checkStockExsit("sh" + name);
+            result =  "v_hint=\"";
+
             if (stock.checkReuslt) {
-                result =  "v_hint=\"" + preName + "~" + name + "~" +stock.name ;
-            } else {
+                result = result + "sh~" + name + "~" +stock.name;
+            }
+            stock = checkStockExsit("sz" + name);
+            if (stock.checkReuslt) {
+                if (result == "v_hint=\"") {
+                    result = result + "sz~" + name + "~" +stock.name ;
+                } else {
+                    result = result  + "^" + "sz~" + name + "~" +stock.name ;
+                }
+            }
+            if (result == "v_hint=\"") {
                 alertMessage("不存在该股票");
                 $("#stock-name").val("");
                 return;
