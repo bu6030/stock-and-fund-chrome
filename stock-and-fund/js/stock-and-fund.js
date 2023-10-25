@@ -467,7 +467,12 @@ function initData() {
                     var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                     var values = dataStr.split("~");
                     stockList[l].name = values[1] + "";
-                    stockList[l].now = values[3] + "";
+                    // 可转债上市前加格默认为 0
+                    if (parseFloat(values[3]) == 0 && (values[1].indexOf("发债") != -1 || values[1].indexOf("转债") != -1)) {
+                        stockList[l].now = "100";
+                    } else {
+                        stockList[l].now = values[3] + "";
+                    }
                     if (cheatMeFlag && parseFloat(values[31]) < 0) {
                         var change = 0 - parseFloat(values[31]);
                         var changePercent = 0 - parseFloat(values[32]);
