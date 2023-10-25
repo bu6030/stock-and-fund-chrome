@@ -239,7 +239,7 @@ function isTradingTime(date) {
     || (date.toLocaleTimeString() >= "21:30:00" && date.toLocaleTimeString() <= "23:59:59")
     || (date.toLocaleTimeString() >= "9:30:00 PM" && date.toLocaleTimeString() <= "11:59:59 PM")
     || (date.toLocaleTimeString() >= "00:00:00" && date.toLocaleTimeString() <= "04:01:00")
-    || (date.toLocaleTimeString() >= "00:00:00 AM" && date.toLocaleTimeString() <= "04:01:00 AM");
+    || (date.toLocaleTimeString() >= "0:00:00 AM" && date.toLocaleTimeString() <= "4:01:00 AM");
 }
 // 发送 chrome 通知
 async function showNotification(title, body) {
