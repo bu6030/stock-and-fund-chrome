@@ -414,6 +414,7 @@ document.addEventListener(
         document.getElementById("all-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，点击打赏按钮
         document.getElementById("show-donate-button").addEventListener('click',  showDonate);
+        document.getElementById("show-donate-button-2").addEventListener('click',  showDonate);
         // 设置页面，点击滚动/停止
         document.getElementById("large-market-scrool-button").addEventListener('click', largeMarketScrollChange);
         document.getElementById("large-market-stop-button").addEventListener('click', largeMarketScrollChange);
