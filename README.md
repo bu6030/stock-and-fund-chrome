@@ -133,6 +133,7 @@
 113. 增加通过股票号码查询可转债 2023/10/25
 114. 针对上午下午时间显示格式问题修改 2023/10/25
 115. 可转债价格上市前为0 2023/10/25
+116. 股票基金搜索选择页面支持一下选择多个并添加 2023/10/26
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

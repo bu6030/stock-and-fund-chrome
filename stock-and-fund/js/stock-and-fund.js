@@ -330,30 +330,34 @@ document.addEventListener(
         document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
 
         // 搜索股票页面，股票列表点击选择
-        document.getElementById('search-stock-select').addEventListener('change', function () {
+        document.getElementById('search-stock-select').addEventListener('change', async function () {
             let stockCode = $("#search-stock-select").val();
-            $("#stock-code").val(stockCode);
-            $("#stock-name").val('');
-            // 清理之前表单记录
-            $("#stock-costPrise").val('');
-            $("#stock-bonds").val('');
-            $("#stock-monitor-high-price").val('');
-            $("#stock-monitor-low-price").val('');
-            saveStock();
+            for (var k in stockCode) {
+                $("#stock-code").val(stockCode[k]);
+                $("#stock-name").val('');
+                // 清理之前表单记录
+                $("#stock-costPrise").val('');
+                $("#stock-bonds").val('');
+                $("#stock-monitor-high-price").val('');
+                $("#stock-monitor-low-price").val('');
+                await saveStock();
+            }
         });
         // 搜索基金页面，基金列表点击选择
-        document.getElementById('search-fund-select').addEventListener('change', function () {
+        document.getElementById('search-fund-select').addEventListener('change', async function () {
             let fundCode = $("#search-fund-select").val();
-            $("#fund-code").val(fundCode);
-            $("#fund-name").val('');
-            // 清理之前表单记录
-            $("#fund-costPrise").val('');
-            $("#fund-bonds").val('');
-            $("#fund-cycle-invest-type").val('');
-            $("#fund-cycle-invest-date").val('');
-            $("#fund-cycle-invest-value").val('');
-            $("#fund-cycle-invest-rate").val('');
-            saveFund();
+            for (var k in fundCode) {
+                $("#fund-code").val(fundCode[k]);
+                $("#fund-name").val('');
+                // 清理之前表单记录
+                $("#fund-costPrise").val('');
+                $("#fund-bonds").val('');
+                $("#fund-cycle-invest-type").val('');
+                $("#fund-cycle-invest-date").val('');
+                $("#fund-cycle-invest-value").val('');
+                $("#fund-cycle-invest-rate").val('');
+                await saveFund();
+            }
         });
 
         // 密码保护页面，password-save-button点击，缓存密码
