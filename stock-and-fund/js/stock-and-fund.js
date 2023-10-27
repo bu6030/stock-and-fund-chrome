@@ -328,6 +328,10 @@ document.addEventListener(
         document.getElementById('fund-net-diagram-button-1').addEventListener('click', setFundNetDiagram);
         document.getElementById('fund-net-diagram-button-2').addEventListener('click', setFundNetDiagram);
         document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
+        // 走势图页面，股票/基金编辑页面，点击置顶按钮
+        document.getElementById('set-top-button').addEventListener('click', setTop);
+        document.getElementById('set-top-button-2').addEventListener('click', setTop);
+        document.getElementById('set-top-button-3').addEventListener('click', setTop);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -2136,4 +2140,40 @@ async function enableChromeNotice(event) {
         saveCacheData('send-chrome-notice-enable', false);
     }
     $("#setting-modal").modal("hide");
+}
+
+// 置顶股票基金
+async function setTop() {
+    // 基金编辑页面/基金分时图页面点击置顶
+    if (timeImageType == 'FUND') {
+        var funds = await readCacheData('funds');
+        funds = jQuery.parseJSON(funds);
+        let currentFund;
+        for (var k in funds) {
+            if (funds[k].fundCode == timeImageCode) {
+                currentFund = funds[k];
+                funds.splice(k, 1)
+                break;
+            }
+        }
+        funds.unshift(currentFund);
+        saveCacheData('funds', JSON.stringify(funds));
+    // 股票编辑页面/股票分时图页面点击置顶
+    } else {
+        var stocks = await readCacheData('stocks');
+        stocks = jQuery.parseJSON(stocks);
+        let currentStock;
+        for (var k in stocks) {
+            if (stocks[k].code == timeImageCode) {
+                currentStock = stocks[k];
+                stocks.splice(k, 1)
+                break;
+            }
+        }
+        stocks.unshift(currentStock);
+        saveCacheData('stocks', JSON.stringify(stocks));
+    }
+    $("#time-image-modal").modal("hide");
+    $("#stock-modal").modal("hide");
+    location.reload();
 }
