@@ -26,8 +26,8 @@ hs_err_pid*
 
 *.idea
 *.gz
-*.iml
 
+*.iml
 *.pem
 *.zip
 *.crx
