@@ -202,8 +202,9 @@ function ajaxGetFundTimeImageMinuteMini(code) {
 // 接口调用
 function ajaxGetFundInvesterPosition(code) {
     let result;
+    let timestamp = Date.now();
     $.ajax({
-        url: Env.GET_FUND_INVERST_POSITION + "?FCODE="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=&_=",
+        url: Env.GET_FUND_INVERST_POSITION + "?FCODE="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=&_=" + timestamp,
         type: "get",
         data: {},
         async: false,
@@ -211,6 +212,29 @@ function ajaxGetFundInvesterPosition(code) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             result = data.Datas.fundStocks;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
+function ajaxGetFundPositionList(code) {
+    let result;
+    let timestamp = Date.now();
+    $.ajax({
+        url: Env.GET_FUND_POSITION_LIST + "?pageIndex=1&pageSize=10&deviceid=1234567.py.service&version=4.3.0&product=Eastmoney&plat=Web&FCODE="+ code +"&_=" + timestamp,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.Datas;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);

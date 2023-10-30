@@ -1826,9 +1826,16 @@ async function getFundInversPosition() {
     code = code.replace('sz','').replace('sh','');
     let fundStocks = ajaxGetFundInvesterPosition(code);
     if (fundStocks == null || fundStocks == '' || fundStocks == []) {
-        return;
+        fundStocks = ajaxGetFundPositionList(code);
+        for (k in fundStocks) {
+            fundStocks[k].GPDM = fundStocks[k].ShareCode;
+            fundStocks[k].JZBL = fundStocks[k].ShareProportion;
+        }
+        if (fundStocks == null || fundStocks == '' || fundStocks == []) {
+            return;
+        }
     }
-    let fundStocksArr;
+    let fundStocksArr = '';
     for (k in fundStocks) {
         fundStocksArr = fundStocksArr + fundStocks[k].NEWTEXCH + "." + fundStocks[k].GPDM + ",";
     }
