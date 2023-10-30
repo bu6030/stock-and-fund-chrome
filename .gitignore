@@ -28,6 +28,10 @@ hs_err_pid*
 *.gz
 *.iml
 
+*.pem
+*.zip
+*.crx
+
 target*
 
 APP_HOME_LOG*/*
