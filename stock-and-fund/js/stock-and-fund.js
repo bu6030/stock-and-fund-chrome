@@ -1594,7 +1594,7 @@ function setStockMinitesImageMini(){
         let dataStr = [];
         let now;
         if (result.data == null){
-            return;
+            continue;
         }
         for (var k = 0; k < result.data.trends.length; k++) {
             let str = result.data.trends[k];
@@ -1604,7 +1604,7 @@ function setStockMinitesImageMini(){
             }
         }
         if(dataStr.length == 0){
-            return;
+            continue;
         }
         let color;
         if (parseFloat(now) >= parseFloat(result.data.preClose)) {
@@ -1624,7 +1624,7 @@ function setFundMinitesImageMini(){
         let dataStr = [];
         let now;
         if (result.data == null){
-            return;
+            continue;
         }
         for (var k = 0; k < result.data.trends.length; k++) {
             let str = result.data.trends[k];
