@@ -1936,7 +1936,31 @@ async function setFundNetDiagram(event) {
                 smooth: true,
                 color: 'red',
             }
-        ]
+        ],
+        // 添加事件监听器，鼠标放在上面显示横纵坐标值
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+            type: 'line',
+            lineStyle: {
+                color: '#999999',
+                width: 1,
+                type: 'solid'
+            }
+            },
+            formatter: function(params) {
+            if (params.length > 0) {
+                var outputContent = "";
+                if(params.length > 1) {
+                    outputContent = "日期：" + params[0].name + "，" + params[0].seriesName + "：" + params[0].value + "，" + params[1].seriesName + "：" + params[1].value;
+                } else {
+                    outputContent = "日期：" + params[0].name + "，" + params[0].seriesName + "：" + params[0].value;
+                }
+                return outputContent;
+            }
+            return '';
+            }
+        },
     };
     myChart.setOption(option);
     $("#fund-net-diagram-modal").modal();
