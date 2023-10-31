@@ -1952,9 +1952,9 @@ async function setFundNetDiagram(event) {
             if (params.length > 0) {
                 var outputContent = "";
                 if(params.length > 1) {
-                    outputContent = "日期：" + params[0].name + "，" + params[0].seriesName + "：" + params[0].value + "，" + params[1].seriesName + "：" + params[1].value;
+                    outputContent = "日期：" + params[0].name + "<br>" + params[0].seriesName + "：" + params[0].value + "<br>" + params[1].seriesName + "：" + params[1].value;
                 } else {
-                    outputContent = "日期：" + params[0].name + "，" + params[0].seriesName + "：" + params[0].value;
+                    outputContent = "日期：" + params[0].name + "<br>" + params[0].seriesName + "：" + params[0].value;
                 }
                 return outputContent;
             }
