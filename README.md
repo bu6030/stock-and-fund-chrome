@@ -140,6 +140,7 @@
 120. 同步置顶按钮到全屏页面 2023/10/30 -- version 1.7.8 -- end
 121. 首页迷你分时线显示报错 2023/10/30
 122. 历史净值页面，鼠标放上展示具体日期以及数值 2023/10/31
+122. 历史净值页面，鼠标放上展示具体日期以及数值 2023/10/31 -- version 1.7.9 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
