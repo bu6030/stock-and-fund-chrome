@@ -2251,9 +2251,15 @@ async function syncDataFromCloud() {
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     let result = ajaxSyncDataFromCloud(syncDataCloudUuid);
     if (result != null && result != '' && result != undefined) {
-        saveCacheData('stocks', JSON.stringify(result.stocks));
-        saveCacheData('funds', JSON.stringify(result.funds));
-        location.reload();
+        var checkResult = confirm("这些数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
+        if (checkResult) {
+            saveCacheData('stocks', JSON.stringify(result.stocks));
+            saveCacheData('funds', JSON.stringify(result.funds));
+            location.reload();
+        } else {
+            $("#sync-data-cloud-modal").modal('hide');
+            alertMessage("您取消了同步");
+        }
     }
 }
 
@@ -2269,6 +2275,7 @@ async function syncDataToCloud() {
     var data = {};
     data.stocks = stockList;
     data.funds = fundList;
+    data.updateTime = getBeijingTime();
     ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     $("#sync-data-cloud-modal").modal('hide');
@@ -2279,7 +2286,39 @@ async function showSyncData() {
     let syncDataCloudUuid = await readCacheData('sync-data-cloud-uuid');
     if (syncDataCloudUuid !='' && syncDataCloudUuid != null && syncDataCloudUuid != undefined) {
         $("#sync-data-cloud-uuid").val(syncDataCloudUuid);
+    } else {
+        $("#sync-data-cloud-uuid").val(generateRandomUUID());
     }
     $("#setting-modal").modal('hide');
     $("#sync-data-cloud-modal").modal();
+}
+
+// 生成uuid
+function generateRandomUUID() {
+    var chars = '0123456789abcdef';
+    var uuid = '';
+    for (var i = 0; i < 32; i++) {
+        var randomIndex = Math.floor(Math.random() * 16);
+        uuid += chars[randomIndex];
+        if (i === 7 || i === 11 || i === 15 || i === 19) {
+          uuid += '-';
+        }
+    }
+    return uuid;
+}
+
+// 获取北京时间格式的日期
+function getBeijingTime() {
+    var date = new Date();
+    var options = {
+      timeZone: 'Asia/Shanghai',
+      hour12: false,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    };
+    return date.toLocaleString('zh-CN', options);
 }
