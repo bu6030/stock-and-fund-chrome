@@ -360,6 +360,39 @@
                 </div>
             </div>
         </div>
+        <!-- 云同步模态框 -->
+        <div class="modal fade" id="sync-data-cloud-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">云同步</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">云同步唯一标识：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm my-text" id="sync-data-cloud-uuid" placeholder="请输入云同步唯一标识">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" id="sync-data-from-cloud-button" class="btn btn-outline-danger"
+                            data-toggle="modal">从云服务器同步数据
+                        </button>
+                        <button type="button" id="sync-data-to-cloud-button" class="btn btn-outline-danger"
+                            data-toggle="modal">向云服务器同步数据
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 设置页面模态框 -->
         <div class="modal fade" id="setting-modal">
             <div class="modal-dialog modal-lg">
@@ -455,6 +488,9 @@
                                 <button type="button" id="remove-all-data-button" class="btn btn-outline-danger"
                                     data-toggle="modal">清空数据
                                 </button>  一键清空所有数据，慎点
+                                <button type="button" id="show-sync-data-button" class="btn btn-outline-danger"
+                                    data-toggle="modal">云同步
+                                </button>
                             </div>
                         </div>
                         <div class="am-form-group am-cf">

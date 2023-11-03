@@ -447,6 +447,12 @@ document.addEventListener(
         // 设置页面，价格监控提醒是否允许发送浏览器通知
         document.getElementById('send-chrome-notice-enable-button').addEventListener('click', enableChromeNotice);
         document.getElementById('send-chrome-notice-disable-button').addEventListener('click', enableChromeNotice);
+        // 设置页面，点击云同步按钮
+        document.getElementById('show-sync-data-button').addEventListener('click', showSyncData);
+        
+        // 云同步页面，向服务器同步数据/从服务器同步数据
+        document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
+        document.getElementById('sync-data-from-cloud-button').addEventListener('click', syncDataFromCloud);
 
         // 打赏页面，点击微信
         document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
@@ -2232,4 +2238,48 @@ async function setTop() {
     $("#time-image-modal").modal("hide");
     $("#stock-modal").modal("hide");
     location.reload();
+}
+
+// 从云服务器获取数据
+async function syncDataFromCloud() {
+    let syncDataCloudUuid = $("#sync-data-cloud-uuid").val();
+    if (syncDataCloudUuid == null || syncDataCloudUuid == '') {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("请输入云同步唯一标识");
+        return;
+    }
+    saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    let result = ajaxSyncDataFromCloud(syncDataCloudUuid);
+    if (result != null && result != '' && result != undefined) {
+        saveCacheData('stocks', JSON.stringify(result.stocks));
+        saveCacheData('funds', JSON.stringify(result.funds));
+        location.reload();
+    }
+}
+
+// 向云服务器存储数据
+async function syncDataToCloud() {
+    let syncDataCloudUuid = $("#sync-data-cloud-uuid").val();
+    if (syncDataCloudUuid == null || syncDataCloudUuid == '') {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("请输入云同步唯一标识");
+        return;
+    }
+    saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    var data = {};
+    data.stocks = stockList;
+    data.funds = fundList;
+    ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
+    saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    $("#sync-data-cloud-modal").modal('hide');
+}
+
+// 展示云同步页面
+async function showSyncData() {
+    let syncDataCloudUuid = await readCacheData('sync-data-cloud-uuid');
+    if (syncDataCloudUuid !='' && syncDataCloudUuid != null && syncDataCloudUuid != undefined) {
+        $("#sync-data-cloud-uuid").val(syncDataCloudUuid);
+    }
+    $("#setting-modal").modal('hide');
+    $("#sync-data-cloud-modal").modal();
 }

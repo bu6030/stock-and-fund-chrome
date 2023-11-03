@@ -305,4 +305,52 @@ function ajaxGetFundNetDiagram(code, type) {
     return result;
 }
 
+// 接口调用
+function ajaxSyncDataFromCloud(syncDataCloudUuid) {
+    let result;
+    $.ajax({
+        url: Env.CLOUD_SERVER_DATA_SYNC + syncDataCloudUuid + ".json",
+        type: "get",
+        data: {},
+        headers: {
+            "Authorization" : "Basic YnV4dWVzb25nQGZveG1haWwuY29tOmF1ZGZoeXNzcmg4bWlmc2U="
+        },
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
 
+// 接口调用
+function ajaxSyncDataToCloud(data, syncDataCloudUuid) {
+    let result;
+    $.ajax({
+        url: Env.CLOUD_SERVER_DATA_SYNC + syncDataCloudUuid + ".json",
+        type: "put",
+        data: data,
+        headers: {
+            "Authorization" : "Basic YnV4dWVzb25nQGZveG1haWwuY29tOmF1ZGZoeXNzcmg4bWlmc2U="
+        },
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
