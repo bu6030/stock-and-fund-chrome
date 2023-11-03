@@ -1850,7 +1850,7 @@ async function getFundInversPosition() {
             }
         }
         let fundStocksDetailStyle = parseFloat(fundStocksDetail[k].f3) == 0 ? "" : (parseFloat(fundStocksDetail[k].f3) > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
-        str += "<tr>"
+        str += "<tr id=\"fund-stock-detail-tr-" + k + "\">"
         + "<td >" + fundStocksDetail[k].f14 + "(" + fundStocksDetail[k].f12 + ")" 
         + "</td><td>" + parseFloat(fundStocksDetail[k].f2).toFixed(2)
         + "</td><td " + fundStocksDetailStyle + ">" + parseFloat(fundStocksDetail[k].f3).toFixed(2) + "%"
@@ -1862,6 +1862,31 @@ async function getFundInversPosition() {
     $("#stock-modal").modal("hide");
     $("#fund-modal").modal("hide");
     $("#time-image-modal").modal("hide");
+    // 设置监听点击持仓明细事件
+    for (k in fundStocksDetail) {
+        let fundStocksDetailTr = document.getElementById('fund-stock-detail-tr-' + k);
+        fundStocksDetailTr.addEventListener('click', async function () {
+            var result = confirm("是否添加" + fundStocksDetail[this.sectionRowIndex].f14 + "?");
+            if (result) {
+                let stockCode = fundStocksDetail[this.sectionRowIndex].f12;
+                if (stockCode.length == 6 && stockCode.startsWith("6")) {
+                    stockCode = "sh" + stockCode;
+                } else if (stockCode.length == 6 && (stockCode.startsWith("0") || stockCode.startsWith("3"))) {
+                    stockCode = "sz" + stockCode;
+                } else if(stockCode.length == 5) {
+                    stockCode = "hk" + stockCode;
+                }
+                $("#stock-code").val(stockCode);
+                $("#stock-costPrise").val('');
+                $("#stock-bonds").val('');
+                $("#stock-monitor-high-price").val('');
+                $("#stock-monitor-low-price").val('');
+                await saveStock();
+                $("#stock-code").val('');
+                $("#fund-invers-position-modal").modal("hide");
+            }
+        });
+    }
 }
 
 // 展示历史净值
