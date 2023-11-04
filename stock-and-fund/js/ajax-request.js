@@ -313,7 +313,7 @@ function ajaxSyncDataFromCloud(syncDataCloudUuid) {
         type: "get",
         data: {},
         headers: {
-            "Authorization" : "Basic YnV4dWVzb25nQGZveG1haWwuY29tOmF1ZGZoeXNzcmg4bWlmc2U="
+            "Authorization" : Env.CLOUD_SERVER_DATA_SYNC_BASIC_AUTH
         },
         async: false,
         dataType: 'json',
@@ -338,7 +338,7 @@ function ajaxSyncDataToCloud(data, syncDataCloudUuid) {
         type: "put",
         data: data,
         headers: {
-            "Authorization" : "Basic YnV4dWVzb25nQGZveG1haWwuY29tOmF1ZGZoeXNzcmg4bWlmc2U="
+            "Authorization" : Env.CLOUD_SERVER_DATA_SYNC_BASIC_AUTH
         },
         async: false,
         dataType: 'json',

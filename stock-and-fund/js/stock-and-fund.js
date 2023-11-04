@@ -2260,6 +2260,9 @@ async function syncDataFromCloud() {
             $("#sync-data-cloud-modal").modal('hide');
             alertMessage("您取消了同步");
         }
+    } else {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("云数据不存在!");
     }
 }
 
