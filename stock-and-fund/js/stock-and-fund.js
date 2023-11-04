@@ -2268,6 +2268,12 @@ async function syncDataFromCloud() {
 
 // 向云服务器存储数据
 async function syncDataToCloud() {
+    var checkResult = confirm("您是否要同步数据到云服务器？");
+    if (!checkResult) {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("您取消了云同步");
+        return;
+    }
     let syncDataCloudUuid = $("#sync-data-cloud-uuid").val();
     if (syncDataCloudUuid == null || syncDataCloudUuid == '') {
         $("#sync-data-cloud-modal").modal('hide');
@@ -2302,6 +2308,7 @@ async function syncDataToCloud() {
     ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     $("#sync-data-cloud-modal").modal('hide');
+    alertMessage("云同步成功");
 }
 
 // 展示云同步页面
