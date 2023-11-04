@@ -2251,18 +2251,18 @@ async function syncDataFromCloud() {
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     let result = ajaxSyncDataFromCloud(syncDataCloudUuid);
     if (result != null && result != '' && result != undefined) {
-        var checkResult = confirm("这些数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
+        var checkResult = confirm("这些云同步数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
         if (checkResult) {
             saveCacheData('stocks', JSON.stringify(result.stocks));
             saveCacheData('funds', JSON.stringify(result.funds));
             location.reload();
         } else {
             $("#sync-data-cloud-modal").modal('hide');
-            alertMessage("您取消了同步");
+            alertMessage("您取消了云同步");
         }
     } else {
         $("#sync-data-cloud-modal").modal('hide');
-        alertMessage("云数据不存在!");
+        alertMessage("云同步数据不存在!");
     }
 }
 
