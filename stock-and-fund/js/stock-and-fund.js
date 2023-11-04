@@ -2282,7 +2282,9 @@ async function syncDataToCloud() {
         let syncStock = {
             "code" : stockList[k].code,
             "costPrise" : stockList[k].costPrise,
-            "bonds" : stockList[k].bonds
+            "bonds" : stockList[k].bonds,
+            "monitorHighPrice" : stockList[k].monitorHighPrice,
+            "monitorLowPrice" : stockList[k].monitorLowPrice
         }
         syncStocks.push(syncStock);
     }
