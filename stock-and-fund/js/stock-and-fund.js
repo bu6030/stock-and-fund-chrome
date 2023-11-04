@@ -2276,8 +2276,26 @@ async function syncDataToCloud() {
     }
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     var data = {};
-    data.stocks = stockList;
-    data.funds = fundList;
+    let syncStocks = [];
+    let syncFunds = [];
+    for (k in stockList) {
+        let syncStock = {
+            "code" : stockList[k].code,
+            "costPrise" : stockList[k].costPrise,
+            "bonds" : stockList[k].bonds
+        }
+        syncStocks.push(syncStock);
+    }
+    for (k in fundList) {
+        let syncFund = {
+            "fundCode" : fundList[k].fundCode,
+            "costPrise" : fundList[k].costPrise,
+            "bonds" : fundList[k].bonds
+        }
+        syncFunds.push(syncFund);
+    }
+    data.stocks = syncStocks;
+    data.funds = syncFunds;
     data.updateTime = getBeijingTime();
     ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
