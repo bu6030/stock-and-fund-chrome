@@ -143,7 +143,7 @@
 123. 基金持仓明细中，点击某个股票支持添加到本地股票中 2023/11/3
 124. 增加云同步功能 2023/11/3
 125. 修改云同步提示文言 2023/11/4
-126. 降低云同步数据大小 2023/11/4
+126. 降低云同步数据大小 2023/11/4 -- version 1.8.0 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
