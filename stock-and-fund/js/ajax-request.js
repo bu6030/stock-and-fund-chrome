@@ -350,6 +350,7 @@ function ajaxSyncDataToCloud(data, syncDataCloudUuid) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            result = "fail";
         }
     });
     return result;

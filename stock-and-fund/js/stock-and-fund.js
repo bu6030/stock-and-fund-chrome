@@ -2305,10 +2305,15 @@ async function syncDataToCloud() {
     data.stocks = syncStocks;
     data.funds = syncFunds;
     data.updateTime = getBeijingTime();
-    ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
+    let result = ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
-    $("#sync-data-cloud-modal").modal('hide');
-    alertMessage("云同步成功");
+    if (result == 'fail') {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("云同步失败，请检查网络是否可以访问云服务器");
+    } else {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("云同步成功");
+    }
 }
 
 // 展示云同步页面
