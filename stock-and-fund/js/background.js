@@ -134,7 +134,7 @@ function monitorStockPrice(stockList) {
             })
             .catch(error => {
                 // 处理请求错误
-                console.error(error);
+                console.info("执行突破价格监控任务:", error);
             });
     } else {
         console.log("非交易时间，停止执行任务...");
@@ -190,7 +190,7 @@ function monitorFundCycleInvest(fundList) {
                         })
                     .catch(error => {
                         // 处理请求错误
-                        console.error(error);
+                        console.info("执行定投任务报错:", error);
                     });
                 }
             }
@@ -224,7 +224,7 @@ function monitorStock(code) {
             })
             .catch(error => {
                 // 处理请求错误
-                console.error(error);
+                console.info("执行监控股票实时价格任务:", error);
             });
     } else {
         console.log("非交易时间，停止执行任务...");
