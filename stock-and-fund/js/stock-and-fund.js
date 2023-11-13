@@ -2400,7 +2400,6 @@ async function buyOrSell() {
     let buyOrSell = $("#buy-or-sell").val();
     let handleBonds = $("#buy-or-sell-handle-bonds").val();
     let price = $("#buy-or-sell-price").val();
-    // let costPrice = $("#buy-or-sell-cost-price").val();
     let cost = $("#buy-or-sell-cost").val();
     for (var k in stockList) {
         if (stockList[k].code == stockCode) {
@@ -2408,7 +2407,6 @@ async function buyOrSell() {
             break;
         }
     }
-    // stock.costPrise = costPrice;
     // 保存buyOrSell
     let buyOrSells = {};
     let buyDate = getBeijingDate();
@@ -2467,7 +2465,6 @@ async function buyOrSell() {
         stock.bonds = restBound + "";
         stock.costPrise = newCostPrice + "";
     }
-
     console.log("操作结果：", stock);
     saveCacheData('stocks', JSON.stringify(stockList));
     $("#buy-or-sell-modal").modal("hide");
