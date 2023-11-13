@@ -853,8 +853,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         var todaySellIncom = new BigDecimal("0");
         var maxBuyOrSellBonds = 0;
         for (var l in buyOrSells) {
+            let beijingDate = getBeijingDate();
             // 当天购买过
-            if (buyOrSells[l].type == "1") {
+            if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].buyDate) {
                 maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
                 var buyIncome = (new BigDecimal(result[k].now))
                     .subtract(new BigDecimal(buyOrSells[l].price + ""))
@@ -862,7 +863,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 todayBuyIncom = todayBuyIncom.add(buyIncome);
             }
             // 当天卖出过
-            if (buyOrSells[l].type == "2") {
+            if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].buyDate) {
                 todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
             }
         }
@@ -2363,6 +2364,19 @@ function getBeijingTime() {
     return date.toLocaleString('zh-CN', options);
 }
 
+// 获取北京时间格式的日期
+function getBeijingDate() {
+    var date = new Date();
+    var options = {
+      timeZone: 'Asia/Shanghai',
+      hour12: false,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    };
+    return date.toLocaleString('zh-CN', options);
+}
+
 // 展示买/卖股票页面
 async function showBuyOrSell() {
     let stockCode = timeImageCode;
@@ -2395,6 +2409,8 @@ async function buyOrSell() {
     }
     stock.costPrise = costPrice;
     let buyOrSells = {};
+    let buyDate = getBeijingDate();
+    buyOrSells.buyDate = buyDate;
     buyOrSells.bonds = handleBonds;
     buyOrSells.price = price;
     if (buyOrSell == '2') {
@@ -2418,6 +2434,14 @@ async function buyOrSell() {
         let totalBonds = parseInt(stock.bonds) - parseInt(handleBonds);
         stock.bonds = totalBonds + "";
     }
-    stock.buyOrSellStockRequestList.push(buyOrSells);
+    let buyOrSellStockRequestList = stock.buyOrSellStockRequestList;
+    if (buyOrSellStockRequestList == null || buyOrSellStockRequestList == [] || buyOrSellStockRequestList == undefined) {
+        buyOrSellStockRequestList = [];
+    }
+    buyOrSellStockRequestList.push(buyOrSells);
+    stock.buyOrSellStockRequestList = buyOrSellStockRequestList;
     console.log("操作结果：", stock);
+    saveCacheData('stocks', JSON.stringify(stockList));
+    $("#buy-or-sell-modal").modal("hide");
+    initData();
 }
