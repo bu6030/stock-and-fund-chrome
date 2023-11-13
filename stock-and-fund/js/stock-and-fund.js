@@ -859,7 +859,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
                 var buyIncome = (new BigDecimal(result[k].now))
                     .subtract(new BigDecimal(buyOrSells[l].price + ""))
-                    .multiply(new BigDecimal(buyOrSells[l].bonds + ""));
+                    .multiply(new BigDecimal(buyOrSells[l].bonds + ""))
+                    .subtract(new BigDecimal(buyOrSells[l].cost + ""));
                 todayBuyIncom = todayBuyIncom.add(buyIncome);
             }
             // 当天卖出过
@@ -2399,7 +2400,7 @@ async function buyOrSell() {
     let buyOrSell = $("#buy-or-sell").val();
     let handleBonds = $("#buy-or-sell-handle-bonds").val();
     let price = $("#buy-or-sell-price").val();
-    let costPrice = $("#buy-or-sell-cost-price").val();
+    // let costPrice = $("#buy-or-sell-cost-price").val();
     let cost = $("#buy-or-sell-cost").val();
     for (var k in stockList) {
         if (stockList[k].code == stockCode) {
@@ -2407,12 +2408,14 @@ async function buyOrSell() {
             break;
         }
     }
-    stock.costPrise = costPrice;
+    // stock.costPrise = costPrice;
+    // 保存buyOrSell
     let buyOrSells = {};
     let buyDate = getBeijingDate();
     buyOrSells.buyDate = buyDate;
     buyOrSells.bonds = handleBonds;
     buyOrSells.price = price;
+    buyOrSells.cost = cost;
     if (buyOrSell == '2') {
         let stockNow = checkStockExsit(stockCode);
         let now = new BigDecimal(stockNow.now + "");
@@ -2427,19 +2430,44 @@ async function buyOrSell() {
         buyOrSells.income = 0;
         buyOrSells.type = "1";
     }
-    if(buyOrSell == '1') {
-        let totalBonds = parseInt(stock.bonds) + parseInt(handleBonds);
-        stock.bonds = totalBonds + "";
-    } else {
-        let totalBonds = parseInt(stock.bonds) - parseInt(handleBonds);
-        stock.bonds = totalBonds + "";
-    }
     let buyOrSellStockRequestList = stock.buyOrSellStockRequestList;
     if (buyOrSellStockRequestList == null || buyOrSellStockRequestList == [] || buyOrSellStockRequestList == undefined) {
         buyOrSellStockRequestList = [];
     }
     buyOrSellStockRequestList.push(buyOrSells);
     stock.buyOrSellStockRequestList = buyOrSellStockRequestList;
+    // 重新计算成本以及持仓
+    if(buyOrSell == '1') {
+        let restBound;
+        let newCostPrice;
+        // 之前未持有
+        if(parseInt(stock.bonds) == 0) {
+            restBound = parseInt(handleBonds);
+            newCostPrice = (new BigDecimal(buyOrSells.price + "")).multiply(new BigDecimal(buyOrSells.bonds + ""))
+            .add(new BigDecimal(cost + ""))
+            .divide(new BigDecimal(restBound + ""), 3, BigDecimal.ROUND_DOWN);
+        } else { // 之前持有
+            restBound = parseInt(stock.bonds) + parseInt(handleBonds);
+            let newBuyTotalFee = (new BigDecimal(buyOrSells.price + "")).multiply(new BigDecimal(buyOrSells.bonds + ""))
+                .add(new BigDecimal(buyOrSells.cost + ""));
+            newCostPrice = new BigDecimal(stock.costPrise + "").multiply(new BigDecimal(stock.bonds)).add(newBuyTotalFee)
+                .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_DOWN);
+        }
+        stock.bonds = restBound + "";
+        stock.costPrise = newCostPrice + "";
+    } else {
+        let restBound = parseInt(stock.bonds) - parseInt(handleBonds);
+        let newSellTotalFee = buyOrSells.price.multiply(new BigDecimal(buyOrSells.bonds))
+            .subtract(buyOrSells.cost);
+        let newCostPrice = new BigDecimal("0");
+        if (restBound != 0) {
+            newCostPrice = stock.costPrise.multiply(new BigDecimal(stock.bonds + ""))
+                .subtract(newSellTotalFee).divide(new BigDecimal(restBound + ""), 3, BigDecimal.ROUND_DOWN);
+        }
+        stock.bonds = restBound + "";
+        stock.costPrise = newCostPrice + "";
+    }
+
     console.log("操作结果：", stock);
     saveCacheData('stocks', JSON.stringify(stockList));
     $("#buy-or-sell-modal").modal("hide");
