@@ -176,10 +176,72 @@
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-1">持仓明细</button>
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-button-1">历史净值</button>
                         <button type="button" class="btn btn-primary" id="stock-save-button">保存</button>
+                        <button type="button" class="btn btn-primary" id="show-buy-or-sell-button">买入/卖出</button>
                         <button type="button" class="btn btn-secondary" id="stock-delete-button">删除</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
 
+                </div>
+            </div>
+        </div>
+        <!-- 买卖模态框 -->
+        <div class="modal fade" id="buy-or-sell-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">买入/卖出股票</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">股票名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="buy-or-sell-name" >
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入/卖出：</div>
+                            <div class="you">
+                                <select id="buy-or-sell">
+                                    <option value="1">买入</option>
+                                    <option value="2">卖出</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">操作股数：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="buy-or-sell-handle-bonds" value="100" placeholder="请输入操作股数，买入/卖出股数">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入/卖出股价：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="buy-or-sell-price" placeholder="请输入买入/卖出股价">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入/卖出后成本：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="buy-or-sell-cost-price" placeholder="买入/卖出后成本">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">手续费：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="buy-or-sell-cost" value="5" placeholder="请输入手续费">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" id="buy-or-sell-button" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
                 </div>
             </div>
         </div>

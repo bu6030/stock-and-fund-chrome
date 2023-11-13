@@ -298,6 +298,8 @@ document.addEventListener(
         document.getElementById('stock-show-time-image-button').addEventListener('click', showTimeImage);
         // 股票编辑页面，点击监控股票价格
         document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
+        // 股票编辑页面，点击买/卖股票
+        document.getElementById('show-buy-or-sell-button').addEventListener('click', showBuyOrSell);
         
         // 走势图页面，点击分时图按钮
         document.getElementById('time-image-minute-button').addEventListener('click', showMinuteImage);
@@ -458,6 +460,9 @@ document.addEventListener(
         document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
         // 打赏页面，点击支付宝
         document.getElementById("ali-pay-button").addEventListener('click',  showDonate);
+
+        // 买/卖股票页面，点击买/卖
+        document.getElementById("buy-or-sell-button").addEventListener('click',  buyOrSell);
     }
 );
 
@@ -2356,4 +2361,63 @@ function getBeijingTime() {
       second: '2-digit'
     };
     return date.toLocaleString('zh-CN', options);
+}
+
+// 展示买/卖股票页面
+async function showBuyOrSell() {
+    let stockCode = timeImageCode;
+    let stockName = '';
+    for (var k in stockList) {
+        if (stockList[k].code == stockCode) {
+            stockName = stockList[k].name;
+            break;
+        }
+    }
+    $("#buy-or-sell-name").val(stockName);
+    $("#stock-modal").modal("hide");
+    $("#buy-or-sell-modal").modal();
+}
+
+// 买/卖股票计算该笔操作盈亏以及设定新成本，新持仓数等
+async function buyOrSell() {
+    let stock;
+    let stockCode = timeImageCode;
+    let buyOrSell = $("#buy-or-sell").val();
+    let handleBonds = $("#buy-or-sell-handle-bonds").val();
+    let price = $("#buy-or-sell-price").val();
+    let costPrice = $("#buy-or-sell-cost-price").val();
+    let cost = $("#buy-or-sell-cost").val();
+    for (var k in stockList) {
+        if (stockList[k].code == stockCode) {
+            stock = stockList[k];
+            break;
+        }
+    }
+    stock.costPrise = costPrice;
+    let buyOrSells = {};
+    buyOrSells.bonds = handleBonds;
+    buyOrSells.price = price;
+    if (buyOrSell == '2') {
+        let stockNow = checkStockExsit(stockCode);
+        let now = new BigDecimal(stockNow.now + "");
+        let change = new BigDecimal(stockNow.change + "");
+        let openPrice = now.subtract(change);
+        let income = (new BigDecimal(price + "")).subtract(openPrice)
+            .multiply(new BigDecimal(handleBonds + "")).subtract(new BigDecimal(cost + ""));
+        console.log("卖出当日收益：", income);
+        buyOrSells.income = income + "";
+        buyOrSells.type = "2";
+    } else {
+        buyOrSells.income = 0;
+        buyOrSells.type = "1";
+    }
+    if(buyOrSell == '1') {
+        let totalBonds = parseInt(stock.bonds) + parseInt(handleBonds);
+        stock.bonds = totalBonds + "";
+    } else {
+        let totalBonds = parseInt(stock.bonds) - parseInt(handleBonds);
+        stock.bonds = totalBonds + "";
+    }
+    stock.buyOrSellStockRequestList.push(buyOrSells);
+    console.log("操作结果：", stock);
 }
