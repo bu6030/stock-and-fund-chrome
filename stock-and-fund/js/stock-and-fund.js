@@ -298,9 +298,6 @@ document.addEventListener(
         document.getElementById('stock-show-time-image-button').addEventListener('click', showTimeImage);
         // 股票编辑页面，点击监控股票价格
         document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
-        // 股票编辑页面，点击买/卖股票
-        document.getElementById('show-buy-button').addEventListener('click', showBuyOrSell);
-        document.getElementById('show-sell-button').addEventListener('click', showBuyOrSell);
         
         // 走势图页面，点击分时图按钮
         document.getElementById('time-image-minute-button').addEventListener('click', showMinuteImage);
@@ -335,6 +332,11 @@ document.addEventListener(
         document.getElementById('set-top-button').addEventListener('click', setTop);
         document.getElementById('set-top-button-2').addEventListener('click', setTop);
         document.getElementById('set-top-button-3').addEventListener('click', setTop);
+        // 走势图页面，股票/基金编辑页面，点击买/卖股票
+        document.getElementById('show-buy-button').addEventListener('click', showBuyOrSell);
+        document.getElementById('show-buy-button-2').addEventListener('click', showBuyOrSell);
+        document.getElementById('show-sell-button').addEventListener('click', showBuyOrSell);
+        document.getElementById('show-sell-button-2').addEventListener('click', showBuyOrSell);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -741,6 +743,7 @@ async function initStockAndFundHtml() {
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
+                $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
                 (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
                     $("#fund-invers-position-button-3")[0].style.display = 'inline';
@@ -807,6 +810,7 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-monitor-button")[0].style.display = 'none';
                 $("#fund-invers-position-button-3")[0].style.display = 'inline';
                 $("#fund-net-diagram-button-3")[0].style.display = 'inline';
+                $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -2382,7 +2386,7 @@ function getBeijingDate() {
 // 展示买/卖股票页面
 async function showBuyOrSell(event) {
     let targetId = event.target.id;
-    if (targetId == 'show-buy-button') {
+    if (targetId == 'show-buy-button' || targetId == 'show-buy-button-2') {
         $("#buy-or-sell-type").val("1");
     } else {
         $("#buy-or-sell-type").val("2");
@@ -2401,6 +2405,7 @@ async function showBuyOrSell(event) {
     } else {
         $("#buy-or-sell-cost").val(5);
     }
+    $("#time-image-modal").modal("hide");
     $("#stock-modal").modal("hide");
     $("#buy-or-sell-modal").modal();
 }
@@ -2463,14 +2468,14 @@ async function buyOrSell() {
             restBound = parseInt(stock.bonds) + parseInt(handleBonds);
             let newBuyTotalFee = (new BigDecimal(buyOrSell.price + "")).multiply(new BigDecimal(buyOrSell.bonds + ""))
                 .add(new BigDecimal(buyOrSell.cost + ""));
-            newCostPrice = new BigDecimal(stock.costPrise + "").multiply(new BigDecimal(stock.bonds)).add(newBuyTotalFee)
-                .divide(new BigDecimal(restBound), 3, BigDecimal.ROUND_DOWN);
+            newCostPrice = new BigDecimal(stock.costPrise + "").multiply(new BigDecimal(stock.bonds + "")).add(newBuyTotalFee)
+                .divide(new BigDecimal(restBound + ""), 3, BigDecimal.ROUND_DOWN);
         }
         stock.bonds = restBound + "";
         stock.costPrise = newCostPrice + "";
     } else {
         let restBound = parseInt(stock.bonds) - parseInt(handleBonds);
-        let newSellTotalFee = buyOrSell.price.multiply(new BigDecimal(buyOrSell.bonds))
+        let newSellTotalFee = buyOrSell.price.multiply(new BigDecimal(buyOrSell.bonds + ""))
             .subtract(buyOrSell.cost);
         let newCostPrice = new BigDecimal("0");
         if (restBound != 0) {

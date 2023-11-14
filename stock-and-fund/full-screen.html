@@ -9,6 +9,7 @@
 
     <script src="js/env.js"></script>
     <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/BigDecimal.js"></script>
     <script src="js/stock-large-market.js"></script>
@@ -176,8 +177,16 @@
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-1">持仓明细</button>
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-button-1">历史净值</button>
                         <button type="button" class="btn btn-primary" id="stock-save-button">保存</button>
-                        <button type="button" class="btn btn-primary" id="show-buy-button">买</button>
-                        <button type="button" class="btn btn-primary" id="show-sell-button">卖</button>
+                        <div class="btn-group">
+                            <button type="button" id="show-buy-or-sell-button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              买/卖
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" id="show-buy-button">买</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" id="show-sell-button">卖</a>
+                            </div>
+                        </div>
                         <button type="button" class="btn btn-secondary" id="stock-delete-button">删除</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
@@ -259,14 +268,34 @@
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="set-top-button-3">置顶</button>
-                        <button type="button" class="btn btn-primary" id="time-image-minute-button">分时线</button>
-                        <button type="button" class="btn btn-primary" id="time-image-day-button">日线</button>
-                        <button type="button" class="btn btn-primary" id="time-image-week-button">周线</button>
-                        <button type="button" class="btn btn-primary" id="time-image-month-button">月线</button>
                         <button type="button" class="btn btn-primary" id="stock-fund-monitor-button">监控价格</button>
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-3">持仓明细</button>
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-button-3">历史净值</button>
                         <button type="button" class="btn btn-primary" id="update-stock-fund-button">编辑</button>
+                        <div class="btn-group">
+                            <button type="button" id="show-buy-or-sell-button-2" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              买/卖
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" id="show-buy-button-2">买</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" id="show-sell-button-2">卖</a>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              走势图
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" id="time-image-minute-button">分时线</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" id="time-image-day-button">日线</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" id="time-image-week-button">周线</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" id="time-image-month-button">月线</a>
+                            </div>
+                        </div>
                         <button type="button" class="btn btn-secondary" id="stock-fund-delete-button">删除</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>

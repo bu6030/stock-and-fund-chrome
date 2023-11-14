@@ -147,6 +147,7 @@
 127. 增加云同步失败提示信息 2023/11/6 -- version 1.8.1 -- end
 128. 处理异常日志 2023/11/10
 129. 增加买/卖股票操作 2023/11/13
+130. 缩减走势图按钮，买/卖按钮为下拉按钮 2023/11/14
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
