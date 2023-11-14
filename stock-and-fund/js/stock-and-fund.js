@@ -743,7 +743,6 @@ async function initStockAndFundHtml() {
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
-                $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
                 (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
                     $("#fund-invers-position-button-3")[0].style.display = 'inline';
@@ -774,12 +773,14 @@ async function initStockAndFundHtml() {
                     $("#time-image-week-button")[0].style.display = 'none';
                     $("#time-image-month-button")[0].style.display = 'none';
                     $("#stock-show-time-image-button")[0].style.display = 'none';
+                    $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 } else {
                     $("#time-image-minute-button")[0].style.display = 'inline';
                     $("#time-image-day-button")[0].style.display = 'inline';
                     $("#time-image-week-button")[0].style.display = 'inline';
                     $("#time-image-month-button")[0].style.display = 'inline';
                     $("#stock-show-time-image-button")[0].style.display = 'inline';
+                    $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
                 }
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
@@ -1477,6 +1478,9 @@ async function initWindowsSize() {
         let helpDocumentButton = document.getElementById('help-document-button');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         let fullScreenButton2 = document.getElementById('full-screen-button-2');
+        let timeImageButton = document.getElementById('time-image-button');
+        let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
+        let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
         myHeader.style.width = '800px';
@@ -1493,6 +1497,9 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
         fullScreenButton2.style.display = "inline";
+        timeImageButton.style.display = "inline";
+        showBuyOrSellButton.style.display = "inline";
+        showBuyOrSellButton2.style.display = "inline";
     } else if (windowSize == 'SMALL') {
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
@@ -1509,6 +1516,9 @@ async function initWindowsSize() {
         let helpDocumentButton = document.getElementById('help-document-button');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         let fullScreenButton2 = document.getElementById('full-screen-button-2');
+        let timeImageButton = document.getElementById('time-image-button');
+        let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
+        let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
         // 设置首页各项内容宽度 600px
         myWindows.style.width = '600px';
         myHeader.style.width = '600px';
@@ -1525,6 +1535,9 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
         fullScreenButton2.style.display = "inline";
+        timeImageButton.style.display = "inline";
+        showBuyOrSellButton.style.display = "inline";
+        showBuyOrSellButton2.style.display = "inline";
     } else if (windowSize == 'MINI') {
         let myDiv = document.getElementById('my-div');
         let myInputGroup = document.getElementById('my-input-group');
@@ -1542,6 +1555,9 @@ async function initWindowsSize() {
         let myWindows = document.getElementById('my-widnwos');
         let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
         let fullScreenButton2 = document.getElementById('full-screen-button-2');
+        let timeImageButton = document.getElementById('time-image-button');
+        let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
+        let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';
         myHeader.style.width = '400px';
@@ -1558,6 +1574,9 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '200px';
         helpDocumentButton.style.display = "none";
         fullScreenButton2.style.display = "none";
+        timeImageButton.style.display = "none";
+        showBuyOrSellButton.style.display = "none";
+        showBuyOrSellButton2.style.display = "none";
     }
 }
 
@@ -2475,11 +2494,11 @@ async function buyOrSell() {
         stock.costPrise = newCostPrice + "";
     } else {
         let restBound = parseInt(stock.bonds) - parseInt(handleBonds);
-        let newSellTotalFee = buyOrSell.price.multiply(new BigDecimal(buyOrSell.bonds + ""))
-            .subtract(buyOrSell.cost);
+        let newSellTotalFee = (new BigDecimal(buyOrSell.price + "")).multiply(new BigDecimal(buyOrSell.bonds + ""))
+            .subtract(new BigDecimal(buyOrSell.cost + ""));
         let newCostPrice = new BigDecimal("0");
         if (restBound != 0) {
-            newCostPrice = stock.costPrise.multiply(new BigDecimal(stock.bonds + ""))
+            newCostPrice = (new BigDecimal(stock.costPrise + "")).multiply(new BigDecimal(stock.bonds + ""))
                 .subtract(newSellTotalFee).divide(new BigDecimal(restBound + ""), 3, BigDecimal.ROUND_DOWN);
         }
         stock.bonds = restBound + "";
