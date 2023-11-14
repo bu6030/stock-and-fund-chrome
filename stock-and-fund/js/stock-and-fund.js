@@ -2419,6 +2419,10 @@ async function buyOrSell() {
             break;
         }
     }
+    if (type == '2' && parseFloat(handleBonds) > parseFloat(stock.bonds)) {
+        $("#buy-or-sell-modal").modal("hide");
+        alertMessage('超出可以卖的股数！');
+    }
     // 保存buyOrSell
     let buyOrSell = {};
     let buyDate = getBeijingDate();
