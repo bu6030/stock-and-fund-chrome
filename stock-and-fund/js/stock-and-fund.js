@@ -2424,6 +2424,8 @@ async function showBuyOrSell(event) {
     } else {
         $("#buy-or-sell-cost").val(5);
     }
+    $("#buy-or-sell-price").val('');
+    $("#buy-or-sell-handle-bonds").val('100');
     $("#time-image-modal").modal("hide");
     $("#stock-modal").modal("hide");
     $("#buy-or-sell-modal").modal();
