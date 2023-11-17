@@ -1121,7 +1121,7 @@ async function searchFundByName(name) {
     var timeCached = await readCacheData('all_fund_arr_time_cached');
     var nowTimestamp = Date.now();
     if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_DAY) {
-        console.log("缓存超过 1 天，重新调用接口");
+        console.log("缓存超过 7 天，重新调用接口");
         allFundArr = null;
     }
     if (allFundArr != null) {
@@ -1361,7 +1361,7 @@ async function readCacheData(key) {
     if (result == null || result == undefined || result == 'undefined' || result == '[]') {
         result = localStorage.getItem(key);
     }
-    console.log("readCacheData key = " + key + ", value = " + result);
+    console.log("读取缓存 key = " + key + ", value = " + result);
     return result;
 }
 
@@ -2226,10 +2226,8 @@ async function largeMarketScrollChange(event) {
 async function enableChromeNotice(event) {
     let targetId = event.target.id;
     if (targetId == 'send-chrome-notice-enable-button') {
-        console.log('设置为true');
         saveCacheData('send-chrome-notice-enable', true);
     } else {
-        console.log('设置为false');
         saveCacheData('send-chrome-notice-enable', false);
     }
     $("#setting-modal").modal("hide");
@@ -2446,6 +2444,7 @@ async function buyOrSell() {
             break;
         }
     }
+    // 卖出时判断是否有足够的仓位
     if (type == '2' && parseFloat(handleBonds) > parseFloat(stock.bonds)) {
         $("#buy-or-sell-modal").modal("hide");
         alertMessage('超出可以卖的股数！');
@@ -2465,7 +2464,6 @@ async function buyOrSell() {
         let openPrice = now.subtract(change);
         let income = (new BigDecimal(price + "")).subtract(openPrice)
             .multiply(new BigDecimal(handleBonds + "")).subtract(new BigDecimal(cost + ""));
-        console.log("卖出当日收益：", income);
         buyOrSell.income = income + "";
     } else {
         buyOrSell.income = 0;
@@ -2476,7 +2474,7 @@ async function buyOrSell() {
     }
     buyOrSellStockRequestList.push(buyOrSell);
     stock.buyOrSellStockRequestList = buyOrSellStockRequestList;
-    // 重新计算成本以及持仓
+    // 买入重新计算成本以及持仓
     if(type == '1') {
         let restBound;
         let newCostPrice;
@@ -2495,7 +2493,7 @@ async function buyOrSell() {
         }
         stock.bonds = restBound + "";
         stock.costPrise = newCostPrice + "";
-    } else {
+    } else {// 卖出重新计算成本以及持仓
         let restBound = parseInt(stock.bonds) - parseInt(handleBonds);
         let newSellTotalFee = (new BigDecimal(buyOrSell.price + "")).multiply(new BigDecimal(buyOrSell.bonds + ""))
             .subtract(new BigDecimal(buyOrSell.cost + ""));
@@ -2507,7 +2505,6 @@ async function buyOrSell() {
         stock.bonds = restBound + "";
         stock.costPrise = newCostPrice + "";
     }
-    console.log("操作结果：", stock);
     saveCacheData('stocks', JSON.stringify(stockList));
     $("#buy-or-sell-modal").modal("hide");
     initData();
