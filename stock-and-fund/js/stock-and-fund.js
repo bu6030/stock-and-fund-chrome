@@ -861,7 +861,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         for (var l in buyOrSells) {
             let beijingDate = getBeijingDate();
             // 当天购买过
-            if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].buyDate) {
+            if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].date) {
                 maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
                 var buyIncome = (new BigDecimal(result[k].now))
                     .subtract(new BigDecimal(buyOrSells[l].price + ""))
@@ -870,7 +870,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 todayBuyIncom = todayBuyIncom.add(buyIncome);
             }
             // 当天卖出过
-            if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].buyDate) {
+            if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].date) {
                 todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
             }
         }
@@ -2391,15 +2391,16 @@ function getBeijingTime() {
 
 // 获取北京时间格式的日期
 function getBeijingDate() {
-    var date = new Date();
-    var options = {
+    let date = new Date();
+    let options = {
       timeZone: 'Asia/Shanghai',
       hour12: false,
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
     };
-    return date.toLocaleString('zh-CN', options);
+    let formattedDate = date.toLocaleString('zh-CN', options);
+    return formattedDate.replace(/\//g, '-');
 }
 
 // 展示买/卖股票页面
@@ -2452,7 +2453,7 @@ async function buyOrSell() {
     // 保存buyOrSell
     let buyOrSell = {};
     let buyDate = getBeijingDate();
-    buyOrSell.buyDate = buyDate;
+    buyOrSell.date = buyDate;
     buyOrSell.bonds = handleBonds;
     buyOrSell.price = price;
     buyOrSell.cost = cost;
