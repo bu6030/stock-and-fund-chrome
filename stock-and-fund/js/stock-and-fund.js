@@ -1462,25 +1462,25 @@ async function initWindowsSize() {
     if (currentURL.indexOf('full-screen.html') > 0) {
         return;
     }
+    let myDiv = document.getElementById('my-div');
+    let myInputGroup = document.getElementById('my-input-group');
+    let stockLargeMarket = document.getElementById('stock-large-market');
+    let footer = document.getElementById('footer');
+    let myHeader = document.getElementById('my-header');
+    let myBody = document.getElementById('my-body');
+    let alertContent = document.getElementById('alert-content');
+    let helpDocumentAlert = document.getElementById('help-document-alert');
+    let myMainContent = document.getElementById('my-main-content');
+    let myWindows = document.getElementById('my-widnwos');
+    let footerDesc = document.getElementById('footer-desc');
+    let helpDocumentButton = document.getElementById('help-document-button');
+    let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
+    let fullScreenButton2 = document.getElementById('full-screen-button-2');
+    let timeImageButton = document.getElementById('time-image-button');
+    let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
+    let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
+    let showWechatGroupButton = document.getElementById('show-wechat-group-button');
     if (windowSize == 'NORMAL') {
-        let myDiv = document.getElementById('my-div');
-        let myInputGroup = document.getElementById('my-input-group');
-        let stockLargeMarket = document.getElementById('stock-large-market');
-        let footer = document.getElementById('footer');
-        let myHeader = document.getElementById('my-header');
-        let myBody = document.getElementById('my-body');
-        // let monitorText = document.getElementById('monitor-text');
-        let alertContent = document.getElementById('alert-content');
-        let helpDocumentAlert = document.getElementById('help-document-alert');
-        let myMainContent = document.getElementById('my-main-content');
-        let myWindows = document.getElementById('my-widnwos');
-        let footerDesc = document.getElementById('footer-desc');
-        let helpDocumentButton = document.getElementById('help-document-button');
-        let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
-        let fullScreenButton2 = document.getElementById('full-screen-button-2');
-        let timeImageButton = document.getElementById('time-image-button');
-        let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
-        let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
         myHeader.style.width = '800px';
@@ -1501,24 +1501,6 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
     } else if (windowSize == 'SMALL') {
-        let myDiv = document.getElementById('my-div');
-        let myInputGroup = document.getElementById('my-input-group');
-        let stockLargeMarket = document.getElementById('stock-large-market');
-        let footer = document.getElementById('footer');
-        let myHeader = document.getElementById('my-header');
-        let myBody = document.getElementById('my-body');
-        // let monitorText = document.getElementById('monitor-text');
-        let alertContent = document.getElementById('alert-content');
-        let helpDocumentAlert = document.getElementById('help-document-alert');
-        let myMainContent = document.getElementById('my-main-content');
-        let myWindows = document.getElementById('my-widnwos');
-        let footerDesc = document.getElementById('footer-desc');
-        let helpDocumentButton = document.getElementById('help-document-button');
-        let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
-        let fullScreenButton2 = document.getElementById('full-screen-button-2');
-        let timeImageButton = document.getElementById('time-image-button');
-        let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
-        let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
         // 设置首页各项内容宽度 600px
         myWindows.style.width = '600px';
         myHeader.style.width = '600px';
@@ -1539,25 +1521,6 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
     } else if (windowSize == 'MINI') {
-        let myDiv = document.getElementById('my-div');
-        let myInputGroup = document.getElementById('my-input-group');
-        let stockLargeMarket = document.getElementById('stock-large-market');
-        let footer = document.getElementById('footer');
-        let myHeader = document.getElementById('my-header');
-        let myBody = document.getElementById('my-body');
-        // let monitorText = document.getElementById('monitor-text');
-        let alertContent = document.getElementById('alert-content');
-        let helpDocumentAlert = document.getElementById('help-document-alert');
-        let footerDesc = document.getElementById('footer-desc');
-        let showWechatGroupButton = document.getElementById('show-wechat-group-button');
-        let helpDocumentButton = document.getElementById('help-document-button');
-        let myMainContent = document.getElementById('my-main-content');
-        let myWindows = document.getElementById('my-widnwos');
-        let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
-        let fullScreenButton2 = document.getElementById('full-screen-button-2');
-        let timeImageButton = document.getElementById('time-image-button');
-        let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
-        let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';
         myHeader.style.width = '400px';
@@ -2371,7 +2334,7 @@ function generateRandomUUID() {
     return uuid;
 }
 
-// 获取北京时间格式的日期
+// 获取北京时间格式的日期时间
 function getBeijingTime() {
     var date = new Date();
     var options = {
