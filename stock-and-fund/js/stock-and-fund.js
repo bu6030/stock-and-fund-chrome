@@ -841,6 +841,8 @@ async function initStockAndFundHtml() {
             setFundMinitesImageMini();
         }
     }
+    // 增加拖拽
+    sortedByDrag();
 }
 
 // 拼接股票 html
@@ -915,7 +917,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         if (result[k].code.startsWith('hk') || result[k].code.startsWith('HK')) {
             stockName = result[k].name + "(港股)";
         }
-        str += "<tr id=\"stock-tr-" + k + "\">"
+        str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
             + "<td>" + stockName + alertStyle + minuteImageMiniDiv + "</td>"
             + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(dayIncome + "").toFixed(2) + "</td>" : "")
             + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
@@ -989,7 +991,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         if (showMinuteImageMini == 'open') {
             minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
         }
-        str += "<tr id=\"fund-tr-" + k + "\">"
+        str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
             + "<td>" + result[k].name + minuteImageMiniDiv + "</td>"
             + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
             + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
@@ -2471,4 +2473,37 @@ async function buyOrSell() {
     saveCacheData('stocks', JSON.stringify(stockList));
     $("#buy-or-sell-modal").modal("hide");
     initData();
+}
+
+// 拖拽股票基金后，调整位置
+function sortedByDrag() {
+    var sortableTable = document.getElementById("sortable-table");
+    var rows = sortableTable.getElementsByTagName("tr");
+    for (var i = 0; i < rows.length; i++) {
+        rows[i].addEventListener("dragstart", function(event) {
+            event.dataTransfer.setData("dragSrouceId", event.target.id);
+        });
+        rows[i].addEventListener("dragover", function(event) {
+            event.preventDefault();
+        });
+        rows[i].addEventListener("drop", function(event) {
+            var sourceId = event.dataTransfer.getData("dragSrouceId").split('-');
+            var targetId = event.currentTarget.id.split('-');
+            let dragType = sourceId[0];
+            let sourceIndex = sourceId[2];
+            let targetIndex = targetId[2];
+            if (dragType == 'fund') {
+                let currentFund = fundList[sourceIndex];
+                fundList.splice(sourceIndex, 1);
+                fundList.splice(targetIndex, 0, currentFund);
+                saveCacheData('funds', JSON.stringify(fundList));
+            } else {
+                let currentStock = stockList[sourceIndex];
+                stockList.splice(sourceIndex, 1);
+                stockList.splice(targetIndex, 0, currentStock);
+                saveCacheData('stocks', JSON.stringify(stockList));
+            }
+            initData();
+        });
+    }
 }
