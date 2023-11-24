@@ -194,7 +194,7 @@ async function initHtml() {
         document.getElementById('import-from-local-springboot-div').style.display = 'none';
     }
     // 股票标题
-    var stockHead = " <tr > " +
+    var stockHead = " <tr id=\"stock-tr-title\"> " +
         " <th >股票名称</th> " +
         (dayIncomeDisplay == 'DISPLAY' ? " <th >当日盈利</th> " : "") + 
         " <th >涨跌幅</th> " +
@@ -209,7 +209,7 @@ async function initHtml() {
         (addtimePriceDisplay == 'DISPLAY' ? " <th >自选价格</th> " : "") + 
         " </tr>";
     // 基金标题
-    var fundHead = " <tr >" +
+    var fundHead = " <tr id=\"fund-tr-title\">" +
         " <th >基金名称</th>" +
         (dayIncomeDisplay == 'DISPLAY' ? " <th >当日盈利</th>" : "") + 
         " <th >涨跌幅</th>" +
@@ -945,7 +945,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr>"
+    str += "<tr id=\"stock-tr-total\">"
         + "<td>合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "") 
         + "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>"
@@ -1019,7 +1019,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr>"
+    str += "<tr id=\"fund-tr-total\">"
         + "<td>合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "") 
         + "<td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
@@ -1051,7 +1051,7 @@ function getTotalTableHtml(totalMarketValueResult) {
     }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr>"
+    str += "<tr id=\"total-tr-total\">"
         + "<td>汇总合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" )
         + "<td colspan='2' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
@@ -2492,12 +2492,28 @@ function sortedByDrag() {
             let dragType = sourceId[0];
             let sourceIndex = sourceId[2];
             let targetIndex = targetId[2];
+            let dragTargetType = targetId[0];
+            if (targetIndex == '' || targetIndex == null || targetIndex == undefined) {
+                console.log("位置有问题");
+                return;
+            }
             if (dragType == 'fund') {
+                if (dragTargetType == 'stock' || targetIndex == 'title') {
+                    targetIndex = 0;
+                } else if (targetIndex == 'total') {
+                    targetIndex = fundList.length - 1;
+                }
                 let currentFund = fundList[sourceIndex];
                 fundList.splice(sourceIndex, 1);
                 fundList.splice(targetIndex, 0, currentFund);
                 saveCacheData('funds', JSON.stringify(fundList));
             } else {
+                if (dragTargetType == 'stock'  && targetIndex == 'title') {
+                    targetIndex = 0;
+                }
+                if (dragTargetType == 'fund' || targetIndex == 'total') {
+                    targetIndex = stockList.length - 1;
+                } 
                 let currentStock = stockList[sourceIndex];
                 stockList.splice(sourceIndex, 1);
                 stockList.splice(targetIndex, 0, currentStock);

@@ -150,7 +150,8 @@
 130. 缩减走势图按钮，买/卖按钮为下拉按钮 2023/11/14 -- version 1.8.2 -- end
 131. 买/卖操作页面清除填写历史 2023/11/16
 132. 买/卖操作日期与SpringBoot格式统一 2023/11/17
-133. 增加拖拽股票基金调整位置 2023/11/23
+133. 增加拖拽股票基金调整位置 2023/11/23 -- version 1.8.3 -- end
+134. 拖拽位置问题修改 2023/11/24
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
