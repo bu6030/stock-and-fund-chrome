@@ -214,7 +214,7 @@ async function initHtml() {
         (dayIncomeDisplay == 'DISPLAY' ? " <th >当日盈利</th>" : "") + 
         " <th >涨跌幅</th>" +
         " <th >估算净值</th>" +
-        (costPriceDisplay == 'DISPLAY' ? " <th >持仓成本</th>" : "") + 
+        (costPriceDisplay == 'DISPLAY' ? " <th >持仓成本单价</th>" : "") + 
         (bondsDisplay == 'DISPLAY' ? " <th >持有份额</th>" : "") + 
         (marketValueDisplay == 'DISPLAY' ? " <th >市值/金额</th> " : "") + 
         (marketValuePercentDisplay == 'DISPLAY' ? " <th >持仓占比</th> " : "") + 
@@ -413,7 +413,7 @@ document.addEventListener(
         document.getElementById("addtime-price-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，当日盈利
         document.getElementById("day-income-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，成本价/持仓成本
+        // 设置页面，隐藏/展示页面展示项，成本价/持仓成本单价
         document.getElementById("cost-price-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，持仓/持有份额
         document.getElementById("bonds-display-checkbox").addEventListener('change', setDisplayTr);
