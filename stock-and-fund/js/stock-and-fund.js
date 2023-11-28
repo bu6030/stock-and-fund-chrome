@@ -1491,7 +1491,7 @@ async function initWindowsSize() {
     let helpDocumentButton = document.getElementById('help-document-button');
     let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
     let fullScreenButton2 = document.getElementById('full-screen-button-2');
-    let timeImageButton = document.getElementById('time-image-button');
+    // let timeImageButton = document.getElementById('time-image-button');
     let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
     let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
     let showWechatGroupButton = document.getElementById('show-wechat-group-button');
@@ -1512,7 +1512,7 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
         fullScreenButton2.style.display = "inline";
-        timeImageButton.style.display = "inline";
+        // timeImageButton.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
     } else if (windowSize == 'SMALL') {
@@ -1532,7 +1532,7 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
         fullScreenButton2.style.display = "inline";
-        timeImageButton.style.display = "inline";
+        // timeImageButton.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
     } else if (windowSize == 'MINI') {
@@ -1552,7 +1552,7 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '200px';
         helpDocumentButton.style.display = "none";
         fullScreenButton2.style.display = "none";
-        timeImageButton.style.display = "none";
+        // timeImageButton.style.display = "none";
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
     }
