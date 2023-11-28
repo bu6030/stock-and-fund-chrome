@@ -24,6 +24,7 @@ var costPriceDisplay = 'DISPLAY';
 var bondsDisplay = 'DISPLAY';
 var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
+var codeDisplay = 'HIDDEN';
 var largeMarketScroll = 'STOP';
 
 // 整个程序的初始化
@@ -150,6 +151,14 @@ async function initLoad() {
     } else {
         allDisplay = 'HIDDEN';
         $("#all-display-checkbox").prop("checked", false);
+    }
+    codeDisplay = await readCacheData('code-display');
+    if (codeDisplay == null || codeDisplay == 'HIDDEN') {
+        codeDisplay = 'HIDDEN';
+        $("#code-display-checkbox").prop("checked", false);
+    } else {
+        codeDisplay = 'DISPLAY';
+        $("#code-display-checkbox").prop("checked", true);
     }
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
@@ -401,6 +410,8 @@ document.addEventListener(
         document.getElementById('window-normal-size-change-button').addEventListener('click',  changeWindowSize);
         document.getElementById('window-small-size-change-button').addEventListener('click',  changeWindowSize);
         document.getElementById('window-mini-size-change-button').addEventListener('click',  changeWindowSize);
+        // 设置页面，隐藏/展示页面展示项，编码
+        document.getElementById("code-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，市值/金额
         document.getElementById("market-value-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，持仓占比
@@ -431,6 +442,8 @@ document.addEventListener(
         document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
         // 设置页面，点击颜色切换按钮
         document.getElementById('change-blue-red-button').addEventListener('click', changeBlueRed);
+        // 设置黑暗，点击隐身模式
+        document.getElementById('change-black-button').addEventListener('click', changeBlueRed);
         // 设置页面，点击忽悠自己按钮
         document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
         // 设置页面，点击全屏按钮
@@ -918,7 +931,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             stockName = result[k].name + "(港股)";
         }
         str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
-            + "<td>" + stockName + alertStyle + minuteImageMiniDiv + "</td>"
+            + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
             + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(dayIncome + "").toFixed(2) + "</td>" : "")
             + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
             + "<td>" + result[k].now + "</td>"
@@ -992,7 +1005,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
         }
         str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
-            + "<td>" + result[k].name + minuteImageMiniDiv + "</td>"
+            + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
             + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
             + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
             + "<td>" + result[k].gsz + "</td>"
@@ -1711,18 +1724,33 @@ function setDetailChart(elementId, dataStr, color, preClose) {
 }
 
 // 修改涨跌蓝绿颜色
-async function changeBlueRed() {
+async function changeBlueRed(event) {
+    let targetId = event.target.id;
+    if (targetId == 'change-blue-red-button') {
+        if (blueColor == '#3e8f3e') {
+            blueColor = '#c12e2a';
+        } else if (blueColor == '#c12e2a') {
+            blueColor = '#3e8f3e';
+        } else { // 隐身模式下，变为红绿模式
+            blueColor = '#3e8f3e'; 
+        }
+        if (redColor == '#c12e2a') {
+            redColor = '#3e8f3e';
+        } else if (redColor == '#3e8f3e') {
+            redColor = '#c12e2a';
+        } else { // 隐身模式下，变为红绿模式
+            redColor = '#c12e2a';
+        }
+    } else if (targetId == 'change-black-button'){
+        if (blueColor == '#545454') {// 已经是隐身模式了点击变更为红绿模式
+            blueColor = '#3e8f3e'; 
+            redColor = '#c12e2a';
+        } else { // 红绿模式下点击变更为隐身模式
+            blueColor = '#545454'; 
+            redColor = '#545454';
+        }
+    }
     $("#setting-modal").modal("hide");
-    if (blueColor == '#3e8f3e') {
-        blueColor = '#c12e2a';
-    } else if (blueColor == '#c12e2a') {
-        blueColor = '#3e8f3e';
-    }
-    if (redColor == '#c12e2a') {
-        redColor = '#3e8f3e';
-    } else if (redColor == '#3e8f3e') {
-        redColor = '#c12e2a';
-    }
     saveCacheData('redColor', redColor);
     saveCacheData('blueColor', blueColor);
     initData();
@@ -2011,6 +2039,9 @@ async function setDisplayTr(event) {
     } else if(type == 'market-value-percent-display-checkbox') {
         marketValuePercentDisplay = dispaly;
         saveCacheData('market-value-percent-display', dispaly);
+    } else if(type == 'code-display-checkbox') {
+        codeDisplay = dispaly;
+        saveCacheData('code-display', dispaly);
     } else if(type == 'cost-price-value-display-checkbox') {
         costPriceValueDisplay = dispaly;
         saveCacheData('cost-price-value-display', dispaly);
@@ -2043,7 +2074,9 @@ async function setDisplayTr(event) {
         costPriceDisplay = dispaly;
         bondsDisplay = dispaly;
         incomeDisplay = dispaly;
+        codeDisplay = dispaly;
         saveCacheData('all-display', dispaly);
+        saveCacheData('code-display', dispaly);
         saveCacheData('market-value-display', dispaly);
         saveCacheData('market-value-percent-display', dispaly);
         saveCacheData('cost-price-value-display', dispaly);
@@ -2055,6 +2088,7 @@ async function setDisplayTr(event) {
         saveCacheData('income-display', dispaly);
         if(dispaly == 'DISPLAY') {
             $("#all-display-checkbox").prop("checked", true);
+            $("#code-display-checkbox").prop("checked", true);
             $("#market-value-display-checkbox").prop("checked", true);
             $("#market-value-percent-display-checkbox").prop("checked", true);
             $("#cost-price-value-display-checkbox").prop("checked", true);
@@ -2066,6 +2100,7 @@ async function setDisplayTr(event) {
             $("#income-display-checkbox").prop("checked", true);
         } else {
             $("#all-display-checkbox").prop("checked", false);
+            $("#code-display-checkbox").prop("checked", false);
             $("#market-value-display-checkbox").prop("checked", false);
             $("#market-value-percent-display-checkbox").prop("checked", false);
             $("#cost-price-value-display-checkbox").prop("checked", false);

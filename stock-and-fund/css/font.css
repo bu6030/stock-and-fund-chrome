@@ -167,3 +167,7 @@
     height: 400px;
     overflow-y: auto;
 }
+
+.stock-fund-name-and-code {
+    white-space: pre;
+}
