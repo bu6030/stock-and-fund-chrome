@@ -15,12 +15,18 @@ chrome.runtime.onStartup.addListener(scheduleTask);
 chrome.runtime.onMessage.addListener(async function(message, sender, sendResponse) {
     // 在接收到消息时执行的操作
     console.log('收到消息:', message);
-    let performTaskId = await getData("performTaskId");
-    console.log('清理performTaskId:', performTaskId);
-    clearInterval(performTaskId);
-    scheduleTask();
-    // 可选：发送响应消息给消息发送方
-    sendResponse('已收到消息');
+    if(message == 'scheduleTask'){
+        let performTaskId = await getData("performTaskId");
+        console.log('清理performTaskId:', performTaskId);
+        clearInterval(performTaskId);
+        scheduleTask();
+        // 可选：发送响应消息给消息发送方
+        sendResponse('已收到消息');
+    } else if(message.action == 'sendTonghuashunXueqiuStockCodes') {
+        let stockCodes = message.content;
+        console.log("stockCodes == ", stockCodes);
+        saveData("tonghuashun-xueqiu-stock", stockCodes);
+    }
 });
 
 chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/640002036");

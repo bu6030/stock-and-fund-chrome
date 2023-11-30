@@ -288,6 +288,8 @@ document.addEventListener(
         document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
         // 首页，点击全屏显示按钮
         document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
+        // 首页，点击读取自选股
+        document.getElementById('add-stock-from-tonghuashun-xueqiu').addEventListener('click', addStockFromTonghuashunXueqiu);
 
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
@@ -2556,5 +2558,23 @@ function sortedByDrag() {
             }
             initData();
         });
+    }
+}
+
+async function addStockFromTonghuashunXueqiu() {
+    let data = await readCacheData('tonghuashun-xueqiu-stock');
+    console.log('data=====', data );
+    for (let k in data) {
+        let code = data[k].replace('SH', '').replace('SZ', '');
+        if (code.length == 6 && code.startsWith("6")) {
+            code = "sh" + code;
+        } else if (code.length == 6 && (code.startsWith("0") || code.startsWith("3"))) {
+            code = "sz" + code;
+        } else if(code.length == 5) {
+            code = "hk" + code;
+        }
+        $("#stock-code").val(code);
+        await saveStock();
+        $("#stock-code").val('');
     }
 }
