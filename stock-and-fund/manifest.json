@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.8.5",
+  "version": "1.8.6",
   "name": "股票基金神器",
   "description": "上班族必备，实时监控股票价格，角标提醒，终身免费，股票基金神器，实时盯盘，A股美股港股。",
   "action": {
