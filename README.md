@@ -156,7 +156,8 @@
 136. 增加股票/基金编码显示隐藏 2023/11/28
 137. 增加隐身模式，涨跌都是黑色 2023/11/28 -- version 1.8.4 -- end
 138. 恢复分时线/日线/周线/月线按钮 2023/11/28 -- version 1.8.5 -- end
-139. 增加从同花顺/雪球自选股导入 2023/11/29
+139. 增加从同花顺/雪球自选股导入 2023/11/30
+140. 增加从东方财富自选股导入 2023/12/1
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
