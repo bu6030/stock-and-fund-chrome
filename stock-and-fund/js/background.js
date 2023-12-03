@@ -15,7 +15,7 @@ chrome.runtime.onStartup.addListener(scheduleTask);
 chrome.runtime.onMessage.addListener(async function(message, sender, sendResponse) {
     // 在接收到消息时执行的操作
     console.log('收到消息:', message);
-    if(message == 'scheduleTask'){
+    if(message.message == "scheduleTask"){
         let performTaskId = await getData("performTaskId");
         console.log('清理performTaskId:', performTaskId);
         clearInterval(performTaskId);
