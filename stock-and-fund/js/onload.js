@@ -68,12 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                     if (stockCodes.length > 0) {
+                        console.log('stockCodes.length=', stockCodes.length);
                         chrome.runtime.sendMessage({ action: 'sendTonghuashunXueqiuStockCodes', content: stockCodes });
                     }
                 }
             }, 2000); 
         } else {
             if (stockCodes.length > 0) {
+                console.log('stockCodes.length=', stockCodes.length);
                 chrome.runtime.sendMessage({ action: 'sendTonghuashunXueqiuStockCodes', content: stockCodes });
             }
         }

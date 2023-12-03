@@ -2564,6 +2564,12 @@ function sortedByDrag() {
 async function addStockFromTonghuashunXueqiu() {
     let data = await readCacheData('tonghuashun-xueqiu-stock');
     console.log('data=====', data );
+    let stocks = await readCacheData('stocks');
+    if (stocks == null) {
+        stocks = [];
+    } else {
+        stocks = jQuery.parseJSON(stocks);
+    }
     for (let k in data) {
         let code = data[k].replace('SH', '').replace('SZ', '');
         if (code.length == 6 && code.startsWith("6")) {
@@ -2573,8 +2579,32 @@ async function addStockFromTonghuashunXueqiu() {
         } else if(code.length == 5) {
             code = "hk" + code;
         }
-        $("#stock-code").val(code);
-        await saveStock();
-        $("#stock-code").val('');
+        let stock = {
+            "code": code,
+            "costPrise": "0",
+            "bonds": "0"
+        }
+        let existInStockList = false;
+        for (let l in stocks) {
+            if (stocks[l].code == stock.code) {
+                existInStockList = true;
+                break;
+            }
+        }
+        if (existInStockList) {
+            continue;
+        }
+        let checkStockExsitResult = checkStockExsit(stock.code);
+        if (!checkStockExsitResult.checkReuslt) {
+            alertMessage("不存在该股票" + stock.code);
+            continue;
+        }
+        stock.addTimePrice = checkStockExsitResult.now;
+        stock.addTime = getCurrentDate();
+        stocks.push(stock);
     }
+    saveCacheData('stocks', JSON.stringify(stocks));
+    stockList = stocks;
+    $("#setting-modal").modal("hide");
+    initData();
 }
