@@ -353,6 +353,18 @@ document.addEventListener(
         document.getElementById('search-stock-select').addEventListener('change', async function () {
             let stockCode = $("#search-stock-select").val();
             for (var k in stockCode) {
+                let existInStockList = false;
+                for (let l in stockList) {
+                    if (stockList[l].code == stockCode) {
+                        existInStockList = true;
+                        break;
+                    }
+                }
+                if (existInStockList) {
+                    alertMessage("您已经添加过" + stockCode);
+                    $("#search-stock-modal").modal("hide");
+                    continue;
+                }
                 $("#stock-code").val(stockCode[k]);
                 $("#stock-name").val('');
                 // 清理之前表单记录
@@ -367,6 +379,18 @@ document.addEventListener(
         document.getElementById('search-fund-select').addEventListener('change', async function () {
             let fundCode = $("#search-fund-select").val();
             for (var k in fundCode) {
+                let existInFundList = false;
+                for (let l in fundList) {
+                    if (fundList[l].fundCode == fundCode) {
+                        existInFundList = true;
+                        break;
+                    }
+                }
+                if (existInFundList) {
+                    alertMessage("您已经添加过" + fundCode);
+                    $("#search-fund-modal").modal("hide");
+                    continue;
+                }
                 $("#fund-code").val(fundCode[k]);
                 $("#fund-name").val('');
                 // 清理之前表单记录

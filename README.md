@@ -159,6 +159,7 @@
 139. 增加从同花顺/雪球自选股导入 2023/11/30
 140. 增加从东方财富自选股导入 2023/12/1
 141. 导入自选股时，新增批量保存方法 2023/12/3
+142. 股票/基金添加前检测是否存在，如果存在不能添加 2023/12/3
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
