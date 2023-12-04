@@ -4,7 +4,7 @@ window.addEventListener("load", async (event) => {
     chrome.runtime.sendMessage({ 'message' : 'scheduleTask' });
 
 });
-
+// 启动时，获取同花顺/雪球/东方财富自选
 document.addEventListener('DOMContentLoaded', function() {
     // 这里放置你想要在等待2秒后执行的代码，防止页面没有完全打开获取不到股票
     setTimeout(function() {
@@ -16,8 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (tonghuashunElements[i].outerHTML.startsWith('<span class=\"code\">')) {
                     let code = tonghuashunElements[i].textContent || tonghuashunElements[i].innerText;
                     if (code != '' && code != null && code != undefined && 
-                    (code.startsWith('SZ') || code.startsWith('sz') || code.startsWith('SH') || code.startsWith('sh')
-                    || code.startsWith('HK') || code.startsWith('hk'))) {
+                        (code.startsWith('SZ') || code.startsWith('sz') || code.startsWith('SH') || code.startsWith('sh')
+                            || code.startsWith('HK') || code.startsWith('hk') || code.startsWith('US') || code.startsWith('us') || code.startsWith('hk'))) {
+                        // console.log('code-tonghuashun:', code);
+                        // 同花顺的股票编码不准确，需要去掉
+                        code = codeTransform(code);
+                        // console.log('code-tonghuashun1:', code);
                         stockCodes.push(code);
                     }
                 }
@@ -43,9 +47,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             code = "sh" + code;
                         }
                         stockCodes.push(code);
-                    } else if(code.length == 5) {
+                    } else if(code.length == 5 && isNumeric(code)) {
                         code = "hk" + code;
                         stockCodes.push(code);
+                    } else {
+                        code = "us" + code;
+                        stockCodes.push(code); 
                     }
                 }
             }
@@ -64,7 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     for (let i = 0; i < xueqiuElements.length; i++) {
                         if(xueqiuElements[i].cells[0].innerHTML.startsWith('<a href=\"/S')) {
                             let code = xueqiuElements[i].cells[0].innerText.split('\n')[1];
+                            // console.log('code-xueqiu0:', code);
                             if (code != '' && code != null && code != undefined) {
+                                code = codeTransform(code);
                                 stockCodes.push(code);
                             }
                         }
@@ -83,3 +92,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 2000); 
 });
+// 判断是否为数字
+function isNumeric(str) {
+    return str !== "" && !isNaN(Number(str));
+}
+// 股票编码处理
+function codeTransform(code) {
+    code = code.replace('SH', '').replace('sh', '')
+    .replace('SZ', '').replace('sz', '')
+    .replace('HK', '').replace('hk', '')
+    .replace('USA', '').replace('usa', '')
+    .replace('US', '').replace('us', '');
+    if (code.length == 6 && code.startsWith("6")) {
+        code = "sh" + code;
+    } else if (code.length == 6 && (code.startsWith("0") || code.startsWith("3"))) {
+        code = "sz" + code;
+    } else if (code.length == 6 && (code.startsWith("1") || code.startsWith("5"))) {
+        code = "sz" + code;
+    } else if (code.length == 5 && isNumeric(code)) {
+        code = "hk" + code;
+    } else if (code.length == 4 && isNumeric(code)) {
+        code = "hk0" + code;
+    } else {
+        code = "us" + code;
+    }
+    return code;
+}

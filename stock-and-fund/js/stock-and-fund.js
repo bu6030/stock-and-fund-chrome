@@ -2587,7 +2587,7 @@ function sortedByDrag() {
 
 async function addStockFromTonghuashunXueqiu() {
     let data = await readCacheData('tonghuashun-xueqiu-stock');
-    console.log('data=====', data );
+    console.log('从同花顺/雪球/东方财富导入的数据：', data );
     let stocks = await readCacheData('stocks');
     if (stocks == null) {
         stocks = [];
@@ -2595,16 +2595,7 @@ async function addStockFromTonghuashunXueqiu() {
         stocks = jQuery.parseJSON(stocks);
     }
     for (let k in data) {
-        let code = data[k].replace('SH', '').replace('SZ', '');
-        if (code.length == 6 && code.startsWith("6")) {
-            code = "sh" + code;
-        } else if (code.length == 6 && (code.startsWith("0") || code.startsWith("3"))) {
-            code = "sz" + code;
-        } else if(code.length == 5 && isNumeric(code)) {
-            code = "hk" + code;
-        } else {
-            code = "us" + code;
-        }
+        let code = data[k];
         let stock = {
             "code": code,
             "costPrise": "0",
