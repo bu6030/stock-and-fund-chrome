@@ -2600,8 +2600,10 @@ async function addStockFromTonghuashunXueqiu() {
             code = "sh" + code;
         } else if (code.length == 6 && (code.startsWith("0") || code.startsWith("3"))) {
             code = "sz" + code;
-        } else if(code.length == 5) {
+        } else if(code.length == 5 && isNumeric(code)) {
             code = "hk" + code;
+        } else {
+            code = "us" + code;
         }
         let stock = {
             "code": code,

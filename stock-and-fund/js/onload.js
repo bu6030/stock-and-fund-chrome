@@ -13,9 +13,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var stockCodes = [];
         if (tonghuashunElements.length > 0) {
             for (let i = 0; i < tonghuashunElements.length; i++) {
-                if (tonghuashunElements[i].outerHTML.startsWith('<span class=\"code\"')) {
+                if (tonghuashunElements[i].outerHTML.startsWith('<span class=\"code\">')) {
                     let code = tonghuashunElements[i].textContent || tonghuashunElements[i].innerText;
-                    if (code != '' && code != null && code != undefined) {
+                    if (code != '' && code != null && code != undefined && 
+                    (code.startsWith('SZ') || code.startsWith('sz') || code.startsWith('SH') || code.startsWith('sh')
+                    || code.startsWith('HK') || code.startsWith('hk'))) {
                         stockCodes.push(code);
                     }
                 }
