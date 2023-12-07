@@ -250,6 +250,7 @@ async function initHtml() {
     // initNotice();
     initFontStyle();
     initWindowsSize();
+    changeBlackButton();
 }
 
 // 按钮监听事件
@@ -1775,6 +1776,7 @@ async function changeBlueRed(event) {
             blueColor = '#545454'; 
             redColor = '#545454';
         }
+        changeBlackButton();
     }
     $("#setting-modal").modal("hide");
     saveCacheData('redColor', redColor);
@@ -2624,4 +2626,59 @@ async function addStockFromTonghuashunXueqiu() {
     stockList = stocks;
     $("#setting-modal").modal("hide");
     initData();
+}
+
+function changeBlackButton() {
+    let btnLightCss = 'btn-light';
+    let btnOutlinePrimaryCss = 'btn-outline-primary';
+    let btnInfoCss = 'btn-info';
+    let blackCss = '';
+    let blackOutlineCss = '';
+    if (blueColor == '#545454') {
+        blackCss = btnLightCss;
+        blackOutlineCss = btnLightCss;
+    } else {
+        blackCss = btnInfoCss;
+        blackOutlineCss = btnOutlinePrimaryCss;
+    }
+    document.getElementById('show-all-button').classList.remove(btnInfoCss);
+    document.getElementById('show-all-button').classList.remove(btnLightCss);
+    document.getElementById('show-all-button').classList.add(blackCss);
+
+    document.getElementById('show-stock-button').classList.remove(btnInfoCss);
+    document.getElementById('show-stock-button').classList.remove(btnLightCss);
+    document.getElementById('show-stock-button').classList.add(blackCss);
+
+    document.getElementById('show-fund-button').classList.remove(btnInfoCss);
+    document.getElementById('show-fund-button').classList.remove(btnLightCss);
+    document.getElementById('show-fund-button').classList.add(blackCss);
+
+    document.getElementById('refresh-button').classList.remove(btnInfoCss);
+    document.getElementById('refresh-button').classList.remove(btnLightCss);
+    document.getElementById('refresh-button').classList.add(blackCss);
+
+    document.getElementById('remove-badgetext-button').classList.remove(btnInfoCss);
+    document.getElementById('remove-badgetext-button').classList.remove(btnLightCss);
+    document.getElementById('remove-badgetext-button').classList.add(blackCss);
+
+    document.getElementById('show-setting-button').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('show-setting-button').classList.remove(btnLightCss);
+    document.getElementById('show-setting-button').classList.add(blackOutlineCss);
+
+    document.getElementById('full-screen-button-2').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('full-screen-button-2').classList.remove(btnLightCss);
+    document.getElementById('full-screen-button-2').classList.add(blackOutlineCss);
+
+    document.getElementById('show-wechat-group-button').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('show-wechat-group-button').classList.remove(btnLightCss);
+    document.getElementById('show-wechat-group-button').classList.add(blackOutlineCss);
+
+    document.getElementById('help-document-button').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('help-document-button').classList.remove(btnLightCss);
+    document.getElementById('help-document-button').classList.add(blackOutlineCss);
+
+    document.getElementById('show-donate-button-2').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('show-donate-button-2').classList.remove(btnLightCss);
+    document.getElementById('show-donate-button-2').classList.add(blackOutlineCss);
+
 }
