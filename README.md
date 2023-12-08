@@ -162,6 +162,7 @@
 142. 股票/基金添加前检测是否存在，如果存在不能添加 2023/12/3 -- version 1.8.6 -- end
 143. 雪球导入股票报错修改 2023/12/4 -- version 1.8.7 -- end
 144. 隐藏模式首页按钮变成灰色 2023/12/8
+145. 修改隐身模式说明 2023/12/8
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
