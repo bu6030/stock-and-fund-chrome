@@ -584,7 +584,9 @@ function initFund() {
                         let fund = checkFundExsitFromEastMoney(fundCode);
                         fundList[k].dwjz = fund.dwjz;
                         fundList[k].gsz = fund.dwjz;
-                        if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
+                        if (fund.gszzl == "--" || fund.gszzl == '' || fund.gszzl == undefined || fund.gszzl == null) {
+                            fundList[k].gszzl = "0";
+                        } else if(cheatMeFlag && parseFloat(fund.gszzl) < 0) {
                             var gszzl = 0 - parseFloat(fund.gszzl);
                             fundList[k].gszzl = gszzl + "";
                         } else {
@@ -896,84 +898,88 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
-        var buyOrSells = result[k].buyOrSellStockRequestList;
-        var todayBuyIncom = new BigDecimal("0");
-        var todaySellIncom = new BigDecimal("0");
-        var maxBuyOrSellBonds = 0;
-        for (var l in buyOrSells) {
-            let beijingDate = getBeijingDate();
-            // 当天购买过
-            if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].date) {
-                maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
-                var buyIncome = (new BigDecimal(result[k].now))
-                    .subtract(new BigDecimal(buyOrSells[l].price + ""))
-                    .multiply(new BigDecimal(buyOrSells[l].bonds + ""))
-                    .subtract(new BigDecimal(buyOrSells[l].cost + ""));
-                todayBuyIncom = todayBuyIncom.add(buyIncome);
+        try {
+            var buyOrSells = result[k].buyOrSellStockRequestList;
+            var todayBuyIncom = new BigDecimal("0");
+            var todaySellIncom = new BigDecimal("0");
+            var maxBuyOrSellBonds = 0;
+            for (var l in buyOrSells) {
+                let beijingDate = getBeijingDate();
+                // 当天购买过
+                if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].date) {
+                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
+                    var buyIncome = (new BigDecimal(result[k].now))
+                        .subtract(new BigDecimal(buyOrSells[l].price + ""))
+                        .multiply(new BigDecimal(buyOrSells[l].bonds + ""))
+                        .subtract(new BigDecimal(buyOrSells[l].cost + ""));
+                    todayBuyIncom = todayBuyIncom.add(buyIncome);
+                }
+                // 当天卖出过
+                if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].date) {
+                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
+                }
             }
-            // 当天卖出过
-            if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].date) {
-                todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
+            if (maxBuyOrSellBonds < result[k].bonds) {
+                var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+                dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);
+            } else {
+                dayIncome = new BigDecimal("0");
             }
-        }
-        if (maxBuyOrSellBonds < result[k].bonds) {
-            var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-            dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);
-        } else {
-            dayIncome = new BigDecimal("0");
-        }
-        dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
-        marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
-        if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-       }
-        let changePercent = parseFloat(result[k].changePercent);
-        var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
-        var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-        let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
-        // 计算股票总成本
-        var costPrice = new BigDecimal(result[k].costPrise + "");
-        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
-        stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
-        let showMinuteImageMini = await readCacheData('show-minute-image-mini');
-        let minuteImageMiniDiv = "";
-        if (showMinuteImageMini == 'open') {
-            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].code + "\" class=\"my-echart\"></div>"
-        }
-        let nowTimestamp = Date.now();
-        let monitorAlertDate = result[k].monitorAlertDate;
-        let alertStyle = "";
-        if ((nowTimestamp - monitorAlertDate) <= Env.TIME_CACHED_ONE_DAY) {
-            if (result[k].monitorAlert == '1') {
-                alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破最高价格提醒" + result[k].monitorHighPrice + ")</span>";
-            } else if(result[k].monitorAlert == '2') {
-                alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
+            dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+            marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
+            if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
+                marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
             }
+            let changePercent = parseFloat(result[k].changePercent);
+            var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
+            var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
+            let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
+            // 计算股票总成本
+            var costPrice = new BigDecimal(result[k].costPrise + "");
+            var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+            stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
+            let showMinuteImageMini = await readCacheData('show-minute-image-mini');
+            let minuteImageMiniDiv = "";
+            if (showMinuteImageMini == 'open') {
+                minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].code + "\" class=\"my-echart\"></div>"
+            }
+            let nowTimestamp = Date.now();
+            let monitorAlertDate = result[k].monitorAlertDate;
+            let alertStyle = "";
+            if ((nowTimestamp - monitorAlertDate) <= Env.TIME_CACHED_ONE_DAY) {
+                if (result[k].monitorAlert == '1') {
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破最高价格提醒" + result[k].monitorHighPrice + ")</span>";
+                } else if(result[k].monitorAlert == '2') {
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
+                }
+            }
+            let stockName = result[k].name;
+            if (result[k].code.startsWith('us') || result[k].code.startsWith('US')) {
+                stockName = result[k].name + "(美股)";
+            }
+            if (result[k].code.startsWith('hk') || result[k].code.startsWith('HK')) {
+                stockName = result[k].name + "(港股)";
+            }
+            str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
+                + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
+                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(dayIncome + "").toFixed(2) + "</td>" : "")
+                + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
+                + "<td>" + result[k].now + "</td>"
+                + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
+                + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
+                + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(marketValue + "").toFixed(2) + "</td>" : "")
+                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
+                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
+                + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
+                + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
+                + (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "")
+                + "</tr>";
+            stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
+            stockDayIncome = stockDayIncome.add(dayIncome);
+            stockTotalmarketValue = stockTotalmarketValue.add(marketValue);
+        } catch (error) {
+            console.error(error);
         }
-        let stockName = result[k].name;
-        if (result[k].code.startsWith('us') || result[k].code.startsWith('US')) {
-            stockName = result[k].name + "(美股)";
-        }
-        if (result[k].code.startsWith('hk') || result[k].code.startsWith('HK')) {
-            stockName = result[k].name + "(港股)";
-        }
-        str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
-            + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
-            + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(dayIncome + "").toFixed(2) + "</td>" : "")
-            + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
-            + "<td>" + result[k].now + "</td>"
-            + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
-            + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-            + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(marketValue + "").toFixed(2) + "</td>" : "")
-            + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
-            + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
-            + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
-            + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
-            + (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "")
-            + "</tr>";
-        stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
-        stockDayIncome = stockDayIncome.add(dayIncome);
-        stockTotalmarketValue = stockTotalmarketValue.add(marketValue);
     }
     var stockDayIncomePercent = new BigDecimal("0");
     var stockTotalIncomePercent = new BigDecimal("0");
@@ -1013,41 +1019,45 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     var marketValue = new BigDecimal("0");
     var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
-        dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
-        marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
-        if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-            marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
+        try {
+            dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+            marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+            if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
+                marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
+            }
+            let gszzl = parseFloat(result[k].gszzl);
+            var dayIncomeStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
+            var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
+            let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
+            // 计算基金总成本
+            var costPrice = new BigDecimal(result[k].costPrise + "");
+            var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+            fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
+            let showMinuteImageMini = await readCacheData('show-minute-image-mini');
+            let minuteImageMiniDiv = "";
+            if (showMinuteImageMini == 'open') {
+                minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
+            }
+            str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
+                + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
+                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
+                + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
+                + "<td>" + result[k].gsz + "</td>"
+                + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
+                + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
+                + (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue + "</td>" : "")
+                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
+                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
+                + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
+                + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
+                + (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "")
+                + "</tr>";
+            fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
+            fundDayIncome = fundDayIncome.add(dayIncome);
+            fundTotalmarketValue = fundTotalmarketValue.add(marketValue);
+        } catch (error) {
+            console.error(error);
         }
-        let gszzl = parseFloat(result[k].gszzl);
-        var dayIncomeStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
-        var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-        let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
-        // 计算基金总成本
-        var costPrice = new BigDecimal(result[k].costPrise + "");
-        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
-        fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
-        let showMinuteImageMini = await readCacheData('show-minute-image-mini');
-        let minuteImageMiniDiv = "";
-        if (showMinuteImageMini == 'open') {
-            minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
-        }
-        str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
-            + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
-            + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
-            + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
-            + "<td>" + result[k].gsz + "</td>"
-            + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
-            + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-            + (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue + "</td>" : "")
-            + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
-            + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
-            + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
-            + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
-            + (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "")
-            + "</tr>";
-        fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
-        fundDayIncome = fundDayIncome.add(dayIncome);
-        fundTotalmarketValue = fundTotalmarketValue.add(marketValue);
     }
     var fundDayIncomePercent = new BigDecimal("0");
     var fundTotalIncomePercent = new BigDecimal("0");
