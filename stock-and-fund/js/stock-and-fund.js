@@ -1885,6 +1885,7 @@ async function stockMonitor () {
 
 // 清理角标
 async function removeBadgeText() {
+    saveCacheData("MONITOR_STOCK_CODE", '');
     chrome.action.setBadgeText({ text: '' });
 }
 

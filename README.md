@@ -163,7 +163,8 @@
 143. 雪球导入股票报错修改 2023/12/4 -- version 1.8.7 -- end
 144. 隐藏模式首页按钮变成灰色 2023/12/8
 145. 修改隐身模式说明 2023/12/8
-145. 每一条股票基金增加异常处理不影响这个列表展示 2023/12/9 -- version 1.8.8 -- end
+146. 每一条股票基金增加异常处理不影响这个列表展示 2023/12/9 -- version 1.8.8 -- end
+147. 修改设置页面特别丑的多选按钮 2023/12/12
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
