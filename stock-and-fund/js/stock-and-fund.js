@@ -2780,16 +2780,19 @@ function changeBlackButton() {
 // 对股票/基金的某一列排序
 async function sortStockAndFund(event) {
     let targetId = event.target.id;
-    if(document.getElementById(targetId).classList.contains('order')
-    || document.getElementById(targetId).classList.contains('desc')) {
+    // 第一次未排序时候点击，按正序排列，并把之前未排序的顺序保存起来
+    if (document.getElementById(targetId).classList.contains('order')) {
         if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'asc';
             lastSort.stock.targetId = targetId;
+            lastSort.stock.history = JSON.stringify(stockList);
         } else {
             lastSort.fund.sortType = 'asc';
             lastSort.fund.targetId = targetId;
+            lastSort.fund.history = JSON.stringify(fundList);
         }
-    } else {
+    // 第二次点击，之前已经正序排序，这次按倒序排列
+    } else if(document.getElementById(targetId).classList.contains('asc')) {
         if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'desc';
             lastSort.stock.targetId = targetId;
@@ -2797,8 +2800,26 @@ async function sortStockAndFund(event) {
             lastSort.fund.sortType = 'desc';
             lastSort.fund.targetId = targetId;
         }
+    // 第三次点击，之前已经倒序排序，这次恢复第一次未排序的顺序
+    } else {
+        if (targetId.indexOf('stock-') >= 0) {
+            lastSort.stock.sortType = 'order';
+            lastSort.stock.targetId = '';
+            stockList = jQuery.parseJSON(lastSort.stock.history);
+            saveCacheData('stocks', JSON.stringify(stockList));
+            lastSort.stock.history = [];
+        } else {
+            lastSort.fund.sortType = 'order';
+            lastSort.fund.targetId = '';
+            fundList = jQuery.parseJSON(lastSort.fund.history);
+            lastSort.fund.history = [];
+            saveCacheData('funds', JSON.stringify(fundList));
+        }
+        saveCacheData("last-sort", lastSort);
+        initHtml();
+        initData();
+        return;
     }
-    // console.log('===', document.getElementById(targetId).classList);
     if (targetId.indexOf('stock-') >= 0) {
         stockList.sort(function (a, b) {
             if (targetId == 'stock-name-th') {
