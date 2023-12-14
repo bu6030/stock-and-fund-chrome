@@ -26,7 +26,6 @@ var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var largeMarketScroll = 'STOP';
-var sortType = 'asc';
 var lastSort;
 
 // 整个程序的初始化
@@ -169,8 +168,14 @@ async function initLoad() {
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
         lastSort = {
-            'targetId' : '',
-            'sortType' : 'order'
+            'stock' : {
+                'targetId' : '',
+                'sortType' : 'order'
+            },
+            'fund' : {
+                'targetId' : '',
+                'sortType' : 'order'
+            }
         };
     }
     var funds = await readCacheData('funds');
@@ -279,17 +284,29 @@ async function initHtml() {
         document.getElementById('stock-income-percent-th').addEventListener('click', sortStockAndFund);
         document.getElementById('stock-income-th').addEventListener('click', sortStockAndFund);
     }
-    if (lastSort.targetId != null && lastSort.targetId != '') {
-        if (document.getElementById(lastSort.targetId).classList.contains('order')) {
-            document.getElementById(lastSort.targetId).classList.remove('order');
+    if (lastSort.stock.targetId != null && lastSort.stock.targetId != '') {
+        if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
+            document.getElementById(lastSort.stock.targetId).classList.remove('order');
         }
-        if (document.getElementById(lastSort.targetId).classList.contains('desc')) {
-            document.getElementById(lastSort.targetId).classList.remove('desc');
+        if (document.getElementById(lastSort.stock.targetId).classList.contains('desc')) {
+            document.getElementById(lastSort.stock.targetId).classList.remove('desc');
         }
-        if (document.getElementById(lastSort.targetId).classList.contains('asc')) {
-            document.getElementById(lastSort.targetId).classList.remove('asc');
+        if (document.getElementById(lastSort.stock.targetId).classList.contains('asc')) {
+            document.getElementById(lastSort.stock.targetId).classList.remove('asc');
         }
-        document.getElementById(lastSort.targetId).classList.add(lastSort.sortType);
+        document.getElementById(lastSort.stock.targetId).classList.add(lastSort.stock.sortType);
+    }
+    if (lastSort.fund.targetId != null && lastSort.fund.targetId != '') {
+        if (document.getElementById(lastSort.fund.targetId).classList.contains('order')) {
+            document.getElementById(lastSort.fund.targetId).classList.remove('order');
+        }
+        if (document.getElementById(lastSort.fund.targetId).classList.contains('desc')) {
+            document.getElementById(lastSort.fund.targetId).classList.remove('desc');
+        }
+        if (document.getElementById(lastSort.fund.targetId).classList.contains('asc')) {
+            document.getElementById(lastSort.fund.targetId).classList.remove('asc');
+        }
+        document.getElementById(lastSort.fund.targetId).classList.add(lastSort.fund.sortType);
     }
     // 在页面顶部显示一些监控信息，重要信息
     // initNotice();
@@ -2636,6 +2653,11 @@ function sortedByDrag() {
                 fundList.splice(sourceIndex, 1);
                 fundList.splice(targetIndex, 0, currentFund);
                 saveCacheData('funds', JSON.stringify(fundList));
+                if (lastSort.fund.targetId.indexOf('fund') >= 0) {
+                    lastSort.fund.targetId = '';
+                    lastSort.fund.sortType = 'order';
+                    saveCacheData('last-sort', lastSort);
+                }
             } else {
                 if (dragTargetType == 'stock'  && targetIndex == 'title') {
                     targetIndex = 0;
@@ -2647,7 +2669,13 @@ function sortedByDrag() {
                 stockList.splice(sourceIndex, 1);
                 stockList.splice(targetIndex, 0, currentStock);
                 saveCacheData('stocks', JSON.stringify(stockList));
+                if (lastSort.stock.targetId.indexOf('stock') >= 0) {
+                    lastSort.stock.targetId = '';
+                    lastSort.stock.sortType = 'order';
+                    saveCacheData('last-sort', lastSort);
+                }
             }
+            initHtml();
             initData();
         });
     }
@@ -2750,108 +2778,91 @@ function changeBlackButton() {
 }
 
 // 对股票/基金的某一列排序
-function sortStockAndFund(event) {
+async function sortStockAndFund(event) {
     let targetId = event.target.id;
-    if(document.getElementById(targetId).classList.contains('order') ||
-        document.getElementById(targetId).classList.contains('desc')) {
-        sortType = 'asc';
-        if (document.getElementById(targetId).classList.contains('order')) {
-            document.getElementById(targetId).classList.remove('order');
+    if(document.getElementById(targetId).classList.contains('order')
+    || document.getElementById(targetId).classList.contains('desc')) {
+        if (targetId.indexOf('stock-') >= 0) {
+            lastSort.stock.sortType = 'asc';
+            lastSort.stock.targetId = targetId;
+        } else {
+            lastSort.fund.sortType = 'asc';
+            lastSort.fund.targetId = targetId;
         }
-        if (document.getElementById(targetId).classList.contains('desc')) {
-            document.getElementById(targetId).classList.remove('desc');
-        }
-        document.getElementById(targetId).classList.add('asc');
     } else {
-        sortType = 'desc';
-        if (document.getElementById(targetId).classList.contains('asc')) {
-            document.getElementById(targetId).classList.remove('asc');
+        if (targetId.indexOf('stock-') >= 0) {
+            lastSort.stock.sortType = 'desc';
+            lastSort.stock.targetId = targetId;
+        } else {
+            lastSort.fund.sortType = 'desc';
+            lastSort.fund.targetId = targetId;
         }
-        document.getElementById(targetId).classList.add('desc');
     }
-    // 点击后清理其他ASC排序样式
-    let elementsWithStyleAsc = document.querySelectorAll('.asc');
-    elementsWithStyleAsc.forEach(function(element) {
-        if (element.id == targetId) {
-            return;
-        }
-        element.classList.remove('asc');
-        element.classList.add('order');
-    });
-    // 点击后清理其他DESC排序样式
-    let elementsWithStyleDesc = document.querySelectorAll('.desc');
-    elementsWithStyleDesc.forEach(function(element) {
-        if (element.id == targetId) {
-            return;
-        }
-        element.classList.remove('desc');
-        element.classList.add('order');
-    });
-    console.log('===', document.getElementById(targetId).classList);
+    // console.log('===', document.getElementById(targetId).classList);
     if (targetId.indexOf('stock-') >= 0) {
         stockList.sort(function (a, b) {
             if (targetId == 'stock-name-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return a.name.localeCompare(b.name);
                 } else {
                     return b.name.localeCompare(a.name);
                 }
             } else if (targetId == 'stock-day-income-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.dayIncome + "") - parseFloat(b.dayIncome + "");
                 } else {
                     return parseFloat(b.dayIncome + "") - parseFloat(a.dayIncome + "");
                 }
             } else if (targetId == 'stock-change-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.changePercent + "") - parseFloat(b.changePercent + "");
                 } else {
                     return parseFloat(b.changePercent + "") - parseFloat(a.changePercent + "");
                 }
             } else if (targetId == 'stock-price-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.now + "") - parseFloat(b.now + "");
                 } else {
                     return parseFloat(b.now + "") - parseFloat(a.now + "");
                 }
             } else if (targetId == 'stock-cost-price-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.costPrise + "") - parseFloat(b.costPrise + "");
                 } else {
                     return parseFloat(b.costPrise + "") - parseFloat(a.costPrise + "");
                 }
             } else if (targetId == 'stock-bonds-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.bonds + "") - parseFloat(b.bonds + "");
                 } else {
                     return parseFloat(b.bonds + "") - parseFloat(a.bonds + "");
                 }
             } else if (targetId == 'stock-market-value-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.marketValue + "") - parseFloat(b.marketValue + "");
                 } else {
                     return parseFloat(b.marketValue + "") - parseFloat(a.marketValue + "");
                 }
             } else if (targetId == 'stock-market-value-percent-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.marketValuePercent + "") - parseFloat(b.marketValuePercent + "");
                 } else {
                     return parseFloat(b.marketValuePercent + "") - parseFloat(a.marketValuePercent + "");
                 }
             } else if (targetId == 'stock-cost-price-value-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.costPriceValue + "") - parseFloat(b.costPriceValue + "");
                 } else {
                     return parseFloat(b.costPriceValue + "") - parseFloat(a.costPriceValue + "");
                 }
             } else if (targetId == 'stock-income-percent-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.incomePercent + "") - parseFloat(b.incomePercent + "");
                 } else {
                     return parseFloat(b.incomePercent + "") - parseFloat(a.incomePercent + "");
                 }
             } else if (targetId == 'stock-income-th') {
-                if(sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.income + "") - parseFloat(b.income + "");
                 } else {
                     return parseFloat(b.income + "") - parseFloat(a.income + "");
@@ -2864,67 +2875,67 @@ function sortStockAndFund(event) {
     } else {
         fundList.sort(function (a, b) {
             if (targetId == 'fund-name-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return a.name.localeCompare(b.name);
                 } else {
                     return b.name.localeCompare(a.name);
                 }
             } else if (targetId == 'fund-day-income-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.dayIncome + "") - parseFloat(b.dayIncome + "");
                 } else {
                     return parseFloat(b.dayIncome + "") - parseFloat(a.dayIncome + "");
                 }
             } else if (targetId == 'fund-change-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.gszzl + "") - parseFloat(b.gszzl + "");
                 } else {
                     return parseFloat(b.gszzl + "") - parseFloat(a.gszzl + "");
                 }
             } else if (targetId == 'fund-price-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.gsz + "") - parseFloat(b.gsz + "");
                 } else {
                     return parseFloat(b.gsz + "") - parseFloat(a.gsz + "");
                 }
             } else if (targetId == 'fund-cost-price-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.costPrise + "") - parseFloat(b.costPrise + "");
                 } else {
                     return parseFloat(b.costPrise + "") - parseFloat(a.costPrise + "");
                 }
             } else if (targetId == 'fund-bonds-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.bonds + "") - parseFloat(b.bonds + "");
                 } else {
                     return parseFloat(b.bonds + "") - parseFloat(a.bonds + "");
                 }
             } else if (targetId == 'fund-market-value-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.marketValue + "") - parseFloat(b.marketValue + "");
                 } else {
                     return parseFloat(b.marketValue + "") - parseFloat(a.marketValue + "");
                 }
             } else if (targetId == 'fund-market-value-percent-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.marketValuePercent + "") - parseFloat(b.marketValuePercent + "");
                 } else {
                     return parseFloat(b.marketValuePercent + "") - parseFloat(a.marketValuePercent + "");
                 }
             } else if (targetId == 'fund-cost-price-value-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.costPriceValue + "") - parseFloat(b.costPriceValue + "");
                 } else {
                     return parseFloat(b.costPriceValue + "") - parseFloat(a.costPriceValue + "");
                 }
             } else if (targetId == 'fund-income-percent-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.incomePercent + "") - parseFloat(b.incomePercent + "");
                 } else {
                     return parseFloat(b.incomePercent + "") - parseFloat(a.incomePercent + "");
                 }
             } else if (targetId == 'fund-income-th') {
-                if(sortType == 'asc'){
+                if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.income + "") - parseFloat(b.income + "");
                 } else {
                     return parseFloat(b.income + "") - parseFloat(a.income + "");
@@ -2935,8 +2946,7 @@ function sortStockAndFund(event) {
         })
         saveCacheData('funds', JSON.stringify(fundList));
     }
-    lastSort.sortType = sortType;
-    lastSort.targetId = targetId;
     saveCacheData("last-sort", lastSort);
+    initHtml();
     initData();
 }
