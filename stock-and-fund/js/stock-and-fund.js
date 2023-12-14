@@ -205,32 +205,32 @@ async function initHtml() {
     }
     // 股票标题
     var stockHead = " <tr id=\"stock-tr-title\"> " +
-        " <th id=\"stock-name-th\">股票名称（点击排序）</th> " +
-        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"stock-day-income-th\">当日盈利</th> " : "") + 
-        " <th id=\"stock-change-th\">涨跌幅</th> " +
-        " <th id=\"stock-price-th\">当前价</th> " +
-        (costPriceDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-th\">成本价</th> " : "") + 
-        (bondsDisplay == 'DISPLAY' ? " <th id=\"stock-bonds-th\">持仓</th> " : "") + 
-        (marketValueDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-th\">市值/金额</th> " : "") + 
-        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-percent-th\">持仓占比</th> " : "") + 
-        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-value-th\">成本</th> " : "") + 
-        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"stock-income-percent-th\">收益率</th> " : "") + 
-        (incomeDisplay == 'DISPLAY' ? " <th id=\"stock-income-th\">收益</th> " : "") + 
+        " <th id=\"stock-name-th\" class=\"asc\">股票名称</th> " +
+        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"stock-day-income-th\" class=\"asc\">当日盈利</th> " : "") + 
+        " <th id=\"stock-change-th\" class=\"asc\">涨跌幅</th> " +
+        " <th id=\"stock-price-th\" class=\"asc\">当前价</th> " +
+        (costPriceDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-th\" class=\"asc\">成本价</th> " : "") + 
+        (bondsDisplay == 'DISPLAY' ? " <th id=\"stock-bonds-th\" class=\"asc\">持仓</th> " : "") + 
+        (marketValueDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-th\" class=\"asc\">市值/金额</th> " : "") + 
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-percent-th\" class=\"asc\">持仓占比</th> " : "") + 
+        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-value-th\" class=\"asc\">成本</th> " : "") + 
+        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"stock-income-percent-th\" class=\"asc\">收益率</th> " : "") + 
+        (incomeDisplay == 'DISPLAY' ? " <th id=\"stock-income-th\" class=\"asc\">收益</th> " : "") + 
         (addtimePriceDisplay == 'DISPLAY' ? " <th >自选价格</th> " : "") + 
         " </tr>";
     // 基金标题
     var fundHead = " <tr id=\"fund-tr-title\">" +
-        " <th id=\"fund-name-th\">基金名称（点击排序）</th>" +
-        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"fund-day-income-th\">当日盈利</th>" : "") + 
-        " <th id=\"fund-change-th\">涨跌幅</th>" +
-        " <th id=\"fund-price-th\">估算净值</th>" +
-        (costPriceDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-th\">持仓成本单价</th>" : "") + 
-        (bondsDisplay == 'DISPLAY' ? " <th id=\"fund-bonds-th\">持有份额</th>" : "") + 
-        (marketValueDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-th\">市值/金额</th> " : "") + 
-        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-percent-th\">持仓占比</th> " : "") + 
-        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-value-th\">成本</th> " : "") + 
-        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"fund-income-percent-th\">收益率</th> " : "") + 
-        (incomeDisplay == 'DISPLAY' ? " <th id=\"fund-income-th\">收益</th> " : "") + 
+        " <th id=\"fund-name-th\" class=\"asc\">基金名称</th>" +
+        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"fund-day-income-th\" class=\"asc\">当日盈利</th>" : "") + 
+        " <th id=\"fund-change-th\" class=\"asc\">涨跌幅</th>" +
+        " <th id=\"fund-price-th\" class=\"asc\">估算净值</th>" +
+        (costPriceDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-th\" class=\"asc\">持仓成本单价</th>" : "") + 
+        (bondsDisplay == 'DISPLAY' ? " <th id=\"fund-bonds-th\" class=\"asc\">持有份额</th>" : "") + 
+        (marketValueDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-th\" class=\"asc\">市值/金额</th> " : "") + 
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-percent-th\" class=\"asc\">持仓占比</th> " : "") + 
+        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-value-th\" class=\"asc\">成本</th> " : "") + 
+        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"fund-income-percent-th\" class=\"asc\">收益率</th> " : "") + 
+        (incomeDisplay == 'DISPLAY' ? " <th id=\"fund-income-th\" class=\"asc\">收益</th> " : "") + 
         (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"fund-addtime-price-th\">自选价格</th> " : "") + 
         " </tr>";
     // 持仓明细标题
@@ -243,39 +243,39 @@ async function initHtml() {
     $("#fund-invers-position-head").html(fundInversPositionHead);
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
         $("#fund-head").html(fundHead);
+        // 监听基金的TH行点击事件，点击后排序
+        document.getElementById('fund-name-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-day-income-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-change-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-price-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-cost-price-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-bonds-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-market-value-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-market-value-percent-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-cost-price-value-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-income-percent-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-income-th').addEventListener('click', sortStockAndFund);
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         $("#stock-head").html(stockHead);
+        // 监听股票的TH行点击事件，点击后排序
+        document.getElementById('stock-name-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-day-income-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-change-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-price-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-cost-price-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-bonds-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-market-value-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-market-value-percent-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-cost-price-value-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-income-percent-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-income-th').addEventListener('click', sortStockAndFund);
     }
     // 在页面顶部显示一些监控信息，重要信息
     // initNotice();
     initFontStyle();
     initWindowsSize();
     changeBlackButton();
-    // 监听股票和基金的TH行点击事件，点击后排序
-    document.getElementById('stock-name-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-day-income-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-change-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-price-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-cost-price-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-bonds-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-market-value-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-market-value-percent-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-cost-price-value-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-income-percent-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('stock-income-th').addEventListener('click', sortStockAndFund);
-
-    document.getElementById('fund-name-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-day-income-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-change-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-price-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-cost-price-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-bonds-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-market-value-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-market-value-percent-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-cost-price-value-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-income-percent-th').addEventListener('click', sortStockAndFund);
-    document.getElementById('fund-income-th').addEventListener('click', sortStockAndFund);
 }
 
 // 按钮监听事件
