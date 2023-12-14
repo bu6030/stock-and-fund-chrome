@@ -171,15 +171,3 @@
 .stock-fund-name-and-code {
     white-space: pre;
 }
-
-th.order:after {
-    content:'▲▼';
-}
-
-th.asc:after {
-    content:'▲';
-}
-
-th.desc:after {
-    content:'▼';
-}

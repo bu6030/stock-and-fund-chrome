@@ -27,6 +27,7 @@ var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var largeMarketScroll = 'STOP';
 var sortType = 'asc';
+var lastSort;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -165,6 +166,13 @@ async function initLoad() {
     if (largeMarketScroll == null) {
         largeMarketScroll = 'STOP';
     }
+    lastSort = await readCacheData('last-sort');
+    if (lastSort == null) {
+        lastSort = {
+            'targetId' : '',
+            'sortType' : 'order'
+        };
+    }
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -270,6 +278,18 @@ async function initHtml() {
         document.getElementById('stock-cost-price-value-th').addEventListener('click', sortStockAndFund);
         document.getElementById('stock-income-percent-th').addEventListener('click', sortStockAndFund);
         document.getElementById('stock-income-th').addEventListener('click', sortStockAndFund);
+    }
+    if (lastSort.targetId != null && lastSort.targetId != '') {
+        if (document.getElementById(lastSort.targetId).classList.contains('order')) {
+            document.getElementById(lastSort.targetId).classList.remove('order');
+        }
+        if (document.getElementById(lastSort.targetId).classList.contains('desc')) {
+            document.getElementById(lastSort.targetId).classList.remove('desc');
+        }
+        if (document.getElementById(lastSort.targetId).classList.contains('asc')) {
+            document.getElementById(lastSort.targetId).classList.remove('asc');
+        }
+        document.getElementById(lastSort.targetId).classList.add(lastSort.sortType);
     }
     // 在页面顶部显示一些监控信息，重要信息
     // initNotice();
@@ -2732,31 +2752,35 @@ function changeBlackButton() {
 // 对股票/基金的某一列排序
 function sortStockAndFund(event) {
     let targetId = event.target.id;
-    // console.log('===', document.getElementById(targetId).classList);
     if(document.getElementById(targetId).classList.contains('order') ||
         document.getElementById(targetId).classList.contains('desc')) {
         sortType = 'asc';
-        document.getElementById(targetId).classList.remove('order');
-        document.getElementById(targetId).classList.remove('desc');
+        if (document.getElementById(targetId).classList.contains('order')) {
+            document.getElementById(targetId).classList.remove('order');
+        }
+        if (document.getElementById(targetId).classList.contains('desc')) {
+            document.getElementById(targetId).classList.remove('desc');
+        }
         document.getElementById(targetId).classList.add('asc');
     } else {
         sortType = 'desc';
-        document.getElementById(targetId).classList.remove('asc');
+        if (document.getElementById(targetId).classList.contains('asc')) {
+            document.getElementById(targetId).classList.remove('asc');
+        }
         document.getElementById(targetId).classList.add('desc');
     }
-    // 点击后清理其他排序样式
+    // 点击后清理其他ASC排序样式
     let elementsWithStyleAsc = document.querySelectorAll('.asc');
     elementsWithStyleAsc.forEach(function(element) {
-        console.log(element, '===', targetId);
         if (element.id == targetId) {
             return;
         }
         element.classList.remove('asc');
         element.classList.add('order');
     });
+    // 点击后清理其他DESC排序样式
     let elementsWithStyleDesc = document.querySelectorAll('.desc');
     elementsWithStyleDesc.forEach(function(element) {
-        console.log(element.id, '===', targetId);
         if (element.id == targetId) {
             return;
         }
@@ -2911,5 +2935,8 @@ function sortStockAndFund(event) {
         })
         saveCacheData('funds', JSON.stringify(fundList));
     }
+    lastSort.sortType = sortType;
+    lastSort.targetId = targetId;
+    saveCacheData("last-sort", lastSort);
     initData();
 }
