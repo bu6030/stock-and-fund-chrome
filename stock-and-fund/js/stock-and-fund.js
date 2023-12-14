@@ -26,6 +26,7 @@ var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var largeMarketScroll = 'STOP';
+var sortType = 'ASC';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -204,33 +205,33 @@ async function initHtml() {
     }
     // 股票标题
     var stockHead = " <tr id=\"stock-tr-title\"> " +
-        " <th >股票名称</th> " +
-        (dayIncomeDisplay == 'DISPLAY' ? " <th >当日盈利</th> " : "") + 
-        " <th >涨跌幅</th> " +
-        " <th >当前价</th> " +
-        (costPriceDisplay == 'DISPLAY' ? " <th >成本价</th> " : "") + 
-        (bondsDisplay == 'DISPLAY' ? " <th >持仓</th> " : "") + 
-        (marketValueDisplay == 'DISPLAY' ? " <th >市值/金额</th> " : "") + 
-        (marketValuePercentDisplay == 'DISPLAY' ? " <th >持仓占比</th> " : "") + 
-        (costPriceValueDisplay == 'DISPLAY' ? " <th >成本</th> " : "") + 
-        (incomePercentDisplay == 'DISPLAY' ? " <th >收益率</th> " : "") + 
-        (incomeDisplay == 'DISPLAY' ? " <th >收益</th> " : "") + 
+        " <th id=\"stock-name-th\">股票名称（点击排序）</th> " +
+        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"stock-day-income-th\">当日盈利</th> " : "") + 
+        " <th id=\"stock-change-th\">涨跌幅</th> " +
+        " <th id=\"stock-price-th\">当前价</th> " +
+        (costPriceDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-th\">成本价</th> " : "") + 
+        (bondsDisplay == 'DISPLAY' ? " <th id=\"stock-bonds-th\">持仓</th> " : "") + 
+        (marketValueDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-th\">市值/金额</th> " : "") + 
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-percent-th\">持仓占比</th> " : "") + 
+        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-value-th\">成本</th> " : "") + 
+        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"stock-income-percent-th\">收益率</th> " : "") + 
+        (incomeDisplay == 'DISPLAY' ? " <th id=\"stock-income-th\">收益</th> " : "") + 
         (addtimePriceDisplay == 'DISPLAY' ? " <th >自选价格</th> " : "") + 
         " </tr>";
     // 基金标题
     var fundHead = " <tr id=\"fund-tr-title\">" +
-        " <th >基金名称</th>" +
-        (dayIncomeDisplay == 'DISPLAY' ? " <th >当日盈利</th>" : "") + 
-        " <th >涨跌幅</th>" +
-        " <th >估算净值</th>" +
-        (costPriceDisplay == 'DISPLAY' ? " <th >持仓成本单价</th>" : "") + 
-        (bondsDisplay == 'DISPLAY' ? " <th >持有份额</th>" : "") + 
-        (marketValueDisplay == 'DISPLAY' ? " <th >市值/金额</th> " : "") + 
-        (marketValuePercentDisplay == 'DISPLAY' ? " <th >持仓占比</th> " : "") + 
-        (costPriceValueDisplay == 'DISPLAY' ? " <th >成本</th> " : "") + 
-        (incomePercentDisplay == 'DISPLAY' ? " <th >收益率</th> " : "") + 
-        (incomeDisplay == 'DISPLAY' ? " <th >收益</th> " : "") + 
-        (addtimePriceDisplay == 'DISPLAY' ? " <th >自选价格</th> " : "") + 
+        " <th id=\"fund-name-th\">基金名称（点击排序）</th>" +
+        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"fund-day-income-th\">当日盈利</th>" : "") + 
+        " <th id=\"fund-change-th\">涨跌幅</th>" +
+        " <th id=\"fund-price-th\">估算净值</th>" +
+        (costPriceDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-th\">持仓成本单价</th>" : "") + 
+        (bondsDisplay == 'DISPLAY' ? " <th id=\"fund-bonds-th\">持有份额</th>" : "") + 
+        (marketValueDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-th\">市值/金额</th> " : "") + 
+        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-percent-th\">持仓占比</th> " : "") + 
+        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-value-th\">成本</th> " : "") + 
+        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"fund-income-percent-th\">收益率</th> " : "") + 
+        (incomeDisplay == 'DISPLAY' ? " <th id=\"fund-income-th\">收益</th> " : "") + 
+        (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"fund-addtime-price-th\">自选价格</th> " : "") + 
         " </tr>";
     // 持仓明细标题
     var fundInversPositionHead = " <tr >" +
@@ -251,6 +252,30 @@ async function initHtml() {
     initFontStyle();
     initWindowsSize();
     changeBlackButton();
+    // 监听股票和基金的TH行点击事件，点击后排序
+    document.getElementById('stock-name-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-day-income-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-change-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-price-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-cost-price-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-bonds-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-market-value-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-market-value-percent-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-cost-price-value-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-income-percent-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('stock-income-th').addEventListener('click', sortStockAndFund);
+
+    document.getElementById('fund-name-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-day-income-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-change-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-price-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-cost-price-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-bonds-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-market-value-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-market-value-percent-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-cost-price-value-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-income-percent-th').addEventListener('click', sortStockAndFund);
+    document.getElementById('fund-income-th').addEventListener('click', sortStockAndFund);
 }
 
 // 按钮监听事件
@@ -960,6 +985,11 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             if (result[k].code.startsWith('hk') || result[k].code.startsWith('HK')) {
                 stockName = result[k].name + "(港股)";
             }
+            // 设置一下每个票的值，为了后边排序使用
+            result[k].dayIncome = dayIncome + "";
+            result[k].marketValue = marketValue + "";
+            result[k].marketValuePercent = marketValuePercent + "";
+            result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
                 + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(dayIncome + "").toFixed(2) + "</td>" : "")
@@ -1038,6 +1068,11 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             if (showMinuteImageMini == 'open') {
                 minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
             }
+            // 设置一下每个基金的值，为了后边排序使用
+            result[k].dayIncome = dayIncome + "";
+            result[k].marketValue = marketValue + "";
+            result[k].marketValuePercent = marketValuePercent + "";
+            result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
                 + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
@@ -2692,4 +2727,162 @@ function changeBlackButton() {
     document.getElementById('show-donate-button-2').classList.remove(btnLightCss);
     document.getElementById('show-donate-button-2').classList.add(blackOutlineCss);
 
+}
+
+// 对股票/基金的某一列排序
+function sortStockAndFund(event) {
+    let targetId = event.target.id;
+    if (sortType == 'ASC') {
+        sortType = 'DESC';
+    } else {
+        sortType = 'ASC';
+    }
+    if (targetId.indexOf('stock-') >= 0) {
+        stockList.sort(function (a, b) {
+            if (targetId == 'stock-name-th') {
+                if(sortType == 'ASC'){
+                    return a.name.localeCompare(b.name);
+                } else {
+                    return b.name.localeCompare(a.name);
+                }
+            } else if (targetId == 'stock-day-income-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.dayIncome + "") - parseFloat(b.dayIncome + "");
+                } else {
+                    return parseFloat(b.dayIncome + "") - parseFloat(a.dayIncome + "");
+                }
+            } else if (targetId == 'stock-change-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.changePercent + "") - parseFloat(b.changePercent + "");
+                } else {
+                    return parseFloat(b.changePercent + "") - parseFloat(a.changePercent + "");
+                }
+            } else if (targetId == 'stock-price-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.now + "") - parseFloat(b.now + "");
+                } else {
+                    return parseFloat(b.now + "") - parseFloat(a.now + "");
+                }
+            } else if (targetId == 'stock-cost-price-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.costPrise + "") - parseFloat(b.costPrise + "");
+                } else {
+                    return parseFloat(b.costPrise + "") - parseFloat(a.costPrise + "");
+                }
+            } else if (targetId == 'stock-bonds-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.bonds + "") - parseFloat(b.bonds + "");
+                } else {
+                    return parseFloat(b.bonds + "") - parseFloat(a.bonds + "");
+                }
+            } else if (targetId == 'stock-market-value-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.marketValue + "") - parseFloat(b.marketValue + "");
+                } else {
+                    return parseFloat(b.marketValue + "") - parseFloat(a.marketValue + "");
+                }
+            } else if (targetId == 'stock-market-value-percent-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.marketValuePercent + "") - parseFloat(b.marketValuePercent + "");
+                } else {
+                    return parseFloat(b.marketValuePercent + "") - parseFloat(a.marketValuePercent + "");
+                }
+            } else if (targetId == 'stock-cost-price-value-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.costPriceValue + "") - parseFloat(b.costPriceValue + "");
+                } else {
+                    return parseFloat(b.costPriceValue + "") - parseFloat(a.costPriceValue + "");
+                }
+            } else if (targetId == 'stock-income-percent-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.incomePercent + "") - parseFloat(b.incomePercent + "");
+                } else {
+                    return parseFloat(b.incomePercent + "") - parseFloat(a.incomePercent + "");
+                }
+            } else if (targetId == 'stock-income-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.income + "") - parseFloat(b.income + "");
+                } else {
+                    return parseFloat(b.income + "") - parseFloat(a.income + "");
+                }
+            } else {
+                return 0;
+            }
+        })
+        saveCacheData('stocks', JSON.stringify(stockList));
+    } else {
+        fundList.sort(function (a, b) {
+            if (targetId == 'fund-name-th') {
+                if(sortType == 'ASC'){
+                    return a.name.localeCompare(b.name);
+                } else {
+                    return b.name.localeCompare(a.name);
+                }
+            } else if (targetId == 'fund-day-income-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.dayIncome + "") - parseFloat(b.dayIncome + "");
+                } else {
+                    return parseFloat(b.dayIncome + "") - parseFloat(a.dayIncome + "");
+                }
+            } else if (targetId == 'fund-change-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.gszzl + "") - parseFloat(b.gszzl + "");
+                } else {
+                    return parseFloat(b.gszzl + "") - parseFloat(a.gszzl + "");
+                }
+            } else if (targetId == 'fund-price-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.gsz + "") - parseFloat(b.gsz + "");
+                } else {
+                    return parseFloat(b.gsz + "") - parseFloat(a.gsz + "");
+                }
+            } else if (targetId == 'fund-cost-price-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.costPrise + "") - parseFloat(b.costPrise + "");
+                } else {
+                    return parseFloat(b.costPrise + "") - parseFloat(a.costPrise + "");
+                }
+            } else if (targetId == 'fund-bonds-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.bonds + "") - parseFloat(b.bonds + "");
+                } else {
+                    return parseFloat(b.bonds + "") - parseFloat(a.bonds + "");
+                }
+            } else if (targetId == 'fund-market-value-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.marketValue + "") - parseFloat(b.marketValue + "");
+                } else {
+                    return parseFloat(b.marketValue + "") - parseFloat(a.marketValue + "");
+                }
+            } else if (targetId == 'fund-market-value-percent-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.marketValuePercent + "") - parseFloat(b.marketValuePercent + "");
+                } else {
+                    return parseFloat(b.marketValuePercent + "") - parseFloat(a.marketValuePercent + "");
+                }
+            } else if (targetId == 'fund-cost-price-value-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.costPriceValue + "") - parseFloat(b.costPriceValue + "");
+                } else {
+                    return parseFloat(b.costPriceValue + "") - parseFloat(a.costPriceValue + "");
+                }
+            } else if (targetId == 'fund-income-percent-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.incomePercent + "") - parseFloat(b.incomePercent + "");
+                } else {
+                    return parseFloat(b.incomePercent + "") - parseFloat(a.incomePercent + "");
+                }
+            } else if (targetId == 'fund-income-th') {
+                if(sortType == 'ASC'){
+                    return parseFloat(a.income + "") - parseFloat(b.income + "");
+                } else {
+                    return parseFloat(b.income + "") - parseFloat(a.income + "");
+                }
+            } else {
+                return 0;
+            }
+        })
+        saveCacheData('funds', JSON.stringify(fundList));
+    }
+    initData();
 }
