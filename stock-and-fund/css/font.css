@@ -172,6 +172,14 @@
     white-space: pre;
 }
 
-th.asc:after {
+th.order:after {
     content:'▲▼';
+}
+
+th.asc:after {
+    content:'▲';
+}
+
+th.desc:after {
+    content:'▼';
 }
