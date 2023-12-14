@@ -18,6 +18,10 @@ function showMinuteImage() {
     }
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006") {
         $("#update-stock-fund-button")[0].style.display = 'block';
+        $("#set-top-button-3")[0].style.display = 'block';
+        if (timeImageType == "STOCK") {
+            $("#show-buy-or-sell-button-2")[0].style.display = 'block';
+        }
     }
     $("#time-image-modal").modal();
     $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
