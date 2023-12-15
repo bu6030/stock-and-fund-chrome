@@ -268,6 +268,18 @@ async function initHtml() {
         document.getElementById('fund-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
         document.getElementById('fund-income-percent-th').addEventListener('click', clickSortStockAndFund);
         document.getElementById('fund-income-th').addEventListener('click', clickSortStockAndFund);
+        if (lastSort.fund.targetId != null && lastSort.fund.targetId != '') {
+            if (document.getElementById(lastSort.fund.targetId).classList.contains('order')) {
+                document.getElementById(lastSort.fund.targetId).classList.remove('order');
+            }
+            if (document.getElementById(lastSort.fund.targetId).classList.contains('desc')) {
+                document.getElementById(lastSort.fund.targetId).classList.remove('desc');
+            }
+            if (document.getElementById(lastSort.fund.targetId).classList.contains('asc')) {
+                document.getElementById(lastSort.fund.targetId).classList.remove('asc');
+            }
+            document.getElementById(lastSort.fund.targetId).classList.add(lastSort.fund.sortType);
+        }
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         $("#stock-head").html(stockHead);
@@ -283,30 +295,18 @@ async function initHtml() {
         document.getElementById('stock-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
         document.getElementById('stock-income-percent-th').addEventListener('click', clickSortStockAndFund);
         document.getElementById('stock-income-th').addEventListener('click', clickSortStockAndFund);
-    }
-    if (lastSort.stock.targetId != null && lastSort.stock.targetId != '') {
-        if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
-            document.getElementById(lastSort.stock.targetId).classList.remove('order');
+        if (lastSort.stock.targetId != null && lastSort.stock.targetId != '') {
+            if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
+                document.getElementById(lastSort.stock.targetId).classList.remove('order');
+            }
+            if (document.getElementById(lastSort.stock.targetId).classList.contains('desc')) {
+                document.getElementById(lastSort.stock.targetId).classList.remove('desc');
+            }
+            if (document.getElementById(lastSort.stock.targetId).classList.contains('asc')) {
+                document.getElementById(lastSort.stock.targetId).classList.remove('asc');
+            }
+            document.getElementById(lastSort.stock.targetId).classList.add(lastSort.stock.sortType);
         }
-        if (document.getElementById(lastSort.stock.targetId).classList.contains('desc')) {
-            document.getElementById(lastSort.stock.targetId).classList.remove('desc');
-        }
-        if (document.getElementById(lastSort.stock.targetId).classList.contains('asc')) {
-            document.getElementById(lastSort.stock.targetId).classList.remove('asc');
-        }
-        document.getElementById(lastSort.stock.targetId).classList.add(lastSort.stock.sortType);
-    }
-    if (lastSort.fund.targetId != null && lastSort.fund.targetId != '') {
-        if (document.getElementById(lastSort.fund.targetId).classList.contains('order')) {
-            document.getElementById(lastSort.fund.targetId).classList.remove('order');
-        }
-        if (document.getElementById(lastSort.fund.targetId).classList.contains('desc')) {
-            document.getElementById(lastSort.fund.targetId).classList.remove('desc');
-        }
-        if (document.getElementById(lastSort.fund.targetId).classList.contains('asc')) {
-            document.getElementById(lastSort.fund.targetId).classList.remove('asc');
-        }
-        document.getElementById(lastSort.fund.targetId).classList.add(lastSort.fund.sortType);
     }
     // 在页面顶部显示一些监控信息，重要信息
     // initNotice();
@@ -2874,11 +2874,13 @@ async function clickSortStockAndFund(event) {
 }
 
 async function sortStockAndFund(totalMarketValue) {
-    if (lastSort.stock != null && lastSort.stock.sortType != 'order') {
+    if ((showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') && lastSort.stock != null && lastSort.stock.sortType != 'order') {
         stockList.forEach(function (stock) {
             if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                 let marketValuePercent = (new BigDecimal(stock.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
-                stock.marketValuePercent = marketValuePercent;
+                stock.marketValuePercent = marketValuePercent + "";
+            } else {
+                stock.marketValuePercent = "0.00";
             }
         });
         stockList.sort(function (a, b) {
@@ -2954,11 +2956,13 @@ async function sortStockAndFund(totalMarketValue) {
             }
         })
     } 
-    if (lastSort.fund != null && lastSort.fund.sortType != 'order') {
+    if ((showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') && lastSort.fund != null && lastSort.fund.sortType != 'order') {
         fundList.forEach(function (fund) {
             if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                 let marketValuePercent = (new BigDecimal(fund.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
-                fund.marketValuePercent = marketValuePercent;
+                fund.marketValuePercent = marketValuePercent + "";
+            } else {
+                fund.marketValuePercent = "0.00";
             }
         });
         let targetId = lastSort.fund.targetId;
