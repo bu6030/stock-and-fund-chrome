@@ -257,32 +257,32 @@ async function initHtml() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
         $("#fund-head").html(fundHead);
         // 监听基金的TH行点击事件，点击后排序
-        document.getElementById('fund-name-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-day-income-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-change-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-price-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-cost-price-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-bonds-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-market-value-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-market-value-percent-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-cost-price-value-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-income-percent-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('fund-income-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('fund-name-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-day-income-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-change-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-price-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-cost-price-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-bonds-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-market-value-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-market-value-percent-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-income-percent-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('fund-income-th').addEventListener('click', clickSortStockAndFund);
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         $("#stock-head").html(stockHead);
         // 监听股票的TH行点击事件，点击后排序
-        document.getElementById('stock-name-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-day-income-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-change-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-price-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-cost-price-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-bonds-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-market-value-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-market-value-percent-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-cost-price-value-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-income-percent-th').addEventListener('click', sortStockAndFund);
-        document.getElementById('stock-income-th').addEventListener('click', sortStockAndFund);
+        document.getElementById('stock-name-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-day-income-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-change-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-price-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-cost-price-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-bonds-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-market-value-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-market-value-percent-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-income-percent-th').addEventListener('click', clickSortStockAndFund);
+        document.getElementById('stock-income-th').addEventListener('click', clickSortStockAndFund);
     }
     if (lastSort.stock.targetId != null && lastSort.stock.targetId != '') {
         if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
@@ -577,7 +577,7 @@ function A2U(str) {
 }
 
 // 初始化首页股票列表数据
-function initData() {
+async function initData() {
     initFirstInstall();
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         var stocks = "";
@@ -626,15 +626,51 @@ function initData() {
                     var bonds = new BigDecimal(stockList[l].bonds);
                     var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
                     stockList[l].income = income + "";
+                    // 计算股票中的部分值
+                    var buyOrSells = stockList[l].buyOrSellStockRequestList;
+                    var todayBuyIncom = new BigDecimal("0");
+                    var todaySellIncom = new BigDecimal("0");
+                    var dayIncome = new BigDecimal("0");
+                    var marketValue = new BigDecimal("0");
+                    var maxBuyOrSellBonds = 0;
+                    for (var g in buyOrSells) {
+                        let beijingDate = getBeijingDate();
+                        // 当天购买过
+                        if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
+                            maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
+                            var buyIncome = (new BigDecimal(stockList[l].now))
+                                .subtract(new BigDecimal(buyOrSells[g].price + ""))
+                                .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
+                                .subtract(new BigDecimal(buyOrSells[g].cost + ""));
+                            todayBuyIncom = todayBuyIncom.add(buyIncome);
+                        }
+                        // 当天卖出过
+                        if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
+                            todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[g].income + ""));
+                        }
+                    }
+                    if (maxBuyOrSellBonds < stockList[l].bonds) {
+                        var restBonds = (new BigDecimal(stockList[l].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+                        dayIncome = (new BigDecimal(stockList[l].change)).multiply(restBonds);
+                    } else {
+                        dayIncome = new BigDecimal("0");
+                    }
+                    dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+                    stockList[l].dayIncome = dayIncome + "";
+                    marketValue = (new BigDecimal(stockList[l].now)).multiply(new BigDecimal(stockList[l].bonds));
+                    stockList[l].marketValue = marketValue + "";
+                    var costPrice = new BigDecimal(stockList[l].costPrise + "");
+                    var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(stockList[l].bonds))).toFixed(2));
+                    stockList[l].costPriceValue = costPriceValue + "";
                 }
             }
         }
     }
-    initFund();
+    await initFund();
 }
 
 // 初始化首页基金列表数据
-function initFund() {
+async function initFund() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
         for (var l in fundList) {
             var fundCode = fundList[l].fundCode;
@@ -673,6 +709,16 @@ function initFund() {
                             fundList[k].income = income + "";
                             fundList[k].incomePercent = incomePercent + "";
                         }
+                        // 计算其他属性
+                        let dayIncome = new BigDecimal("0");
+                        let marketValue = new BigDecimal("0");
+                        dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+                        marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        fundList[k].dayIncome = dayIncome + "";
+                        fundList[k].marketValue = marketValue + "";
+                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        fundList[k].costPriceValue = costPriceValue + "";
                     }
                 }
             } else {
@@ -740,11 +786,22 @@ function initFund() {
                                 fundList[k].incomePercent = incomePercent + "";
                             }
                         }
+                        // 计算其他属性
+                        let dayIncome = new BigDecimal("0");
+                        let marketValue = new BigDecimal("0");
+                        dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+                        marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        fundList[k].dayIncome = dayIncome + "";
+                        fundList[k].marketValue = marketValue + "";
+                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        fundList[k].costPriceValue = costPriceValue + "";
                     }
                 }
             }
         }
     }
+    await sortStockAndFund();
     initStockAndFundHtml();
 }
 
@@ -961,45 +1018,45 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
         try {
-            var buyOrSells = result[k].buyOrSellStockRequestList;
-            var todayBuyIncom = new BigDecimal("0");
-            var todaySellIncom = new BigDecimal("0");
-            var maxBuyOrSellBonds = 0;
-            for (var l in buyOrSells) {
-                let beijingDate = getBeijingDate();
-                // 当天购买过
-                if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].date) {
-                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
-                    var buyIncome = (new BigDecimal(result[k].now))
-                        .subtract(new BigDecimal(buyOrSells[l].price + ""))
-                        .multiply(new BigDecimal(buyOrSells[l].bonds + ""))
-                        .subtract(new BigDecimal(buyOrSells[l].cost + ""));
-                    todayBuyIncom = todayBuyIncom.add(buyIncome);
-                }
-                // 当天卖出过
-                if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].date) {
-                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
-                }
-            }
-            if (maxBuyOrSellBonds < result[k].bonds) {
-                var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-                dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);
-            } else {
-                dayIncome = new BigDecimal("0");
-            }
-            dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
-            marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
+            // var buyOrSells = result[k].buyOrSellStockRequestList;
+            // var todayBuyIncom = new BigDecimal("0");
+            // var todaySellIncom = new BigDecimal("0");
+            // var maxBuyOrSellBonds = 0;
+            // for (var l in buyOrSells) {
+            //     let beijingDate = getBeijingDate();
+            //     // 当天购买过
+            //     if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].date) {
+            //         maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
+            //         var buyIncome = (new BigDecimal(result[k].now))
+            //             .subtract(new BigDecimal(buyOrSells[l].price + ""))
+            //             .multiply(new BigDecimal(buyOrSells[l].bonds + ""))
+            //             .subtract(new BigDecimal(buyOrSells[l].cost + ""));
+            //         todayBuyIncom = todayBuyIncom.add(buyIncome);
+            //     }
+            //     // 当天卖出过
+            //     if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].date) {
+            //         todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
+            //     }
+            // }
+            // if (maxBuyOrSellBonds < result[k].bonds) {
+            //     var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+            //     dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);
+            // } else {
+            //     dayIncome = new BigDecimal("0");
+            // }
+            // dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+            // marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
             if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-                marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
+                marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
             }
             let changePercent = parseFloat(result[k].changePercent);
             var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
             // 计算股票总成本
-            var costPrice = new BigDecimal(result[k].costPrise + "");
-            var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
-            stockTotalCostValue = stockTotalCostValue.add(costPriceValue);
+            // var costPrice = new BigDecimal(result[k].costPrise + "");
+            // var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+            stockTotalCostValue = stockTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
             let showMinuteImageMini = await readCacheData('show-minute-image-mini');
             let minuteImageMiniDiv = "";
             if (showMinuteImageMini == 'open') {
@@ -1023,27 +1080,25 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 stockName = result[k].name + "(港股)";
             }
             // 设置一下每个票的值，为了后边排序使用
-            result[k].dayIncome = dayIncome + "";
-            result[k].marketValue = marketValue + "";
             result[k].marketValuePercent = marketValuePercent + "";
-            result[k].costPriceValue = costPriceValue + "";
+            // result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
-                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(dayIncome + "").toFixed(2) + "</td>" : "")
+                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(result[k].dayIncome + "").toFixed(2) + "</td>" : "")
                 + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
                 + "<td>" + result[k].now + "</td>"
                 + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
                 + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-                + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(marketValue + "").toFixed(2) + "</td>" : "")
+                + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(result[k].marketValue + "").toFixed(2) + "</td>" : "")
                 + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
-                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
+                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "")
                 + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
                 + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
                 + (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "")
                 + "</tr>";
             stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
-            stockDayIncome = stockDayIncome.add(dayIncome);
-            stockTotalmarketValue = stockTotalmarketValue.add(marketValue);
+            stockDayIncome = stockDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
+            stockTotalmarketValue = stockTotalmarketValue.add(new BigDecimal(result[k].marketValue + ""));
         } catch (error) {
             console.error(error);
         }
@@ -1087,46 +1142,46 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
         try {
-            dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
-            marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+            // dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+            // marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
             if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-                marketValuePercent = marketValue.multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
+                marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
             }
             let gszzl = parseFloat(result[k].gszzl);
             var dayIncomeStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
             // 计算基金总成本
-            var costPrice = new BigDecimal(result[k].costPrise + "");
-            var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
-            fundTotalCostValue = fundTotalCostValue.add(costPriceValue);
+            // var costPrice = new BigDecimal(result[k].costPrise + "");
+            // var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
+            fundTotalCostValue = fundTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
             let showMinuteImageMini = await readCacheData('show-minute-image-mini');
             let minuteImageMiniDiv = "";
             if (showMinuteImageMini == 'open') {
                 minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
             }
             // 设置一下每个基金的值，为了后边排序使用
-            result[k].dayIncome = dayIncome + "";
-            result[k].marketValue = marketValue + "";
+            // result[k].dayIncome = dayIncome + "";
+            // result[k].marketValue = marketValue + "";
             result[k].marketValuePercent = marketValuePercent + "";
-            result[k].costPriceValue = costPriceValue + "";
+            // result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
-                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
+                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + "</td>" : "")
                 + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
                 + "<td>" + result[k].gsz + "</td>"
                 + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
                 + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-                + (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue + "</td>" : "")
+                + (marketValueDisplay == 'DISPLAY' ? "<td>" + result[k].marketValue + "</td>" : "")
                 + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
-                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
+                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "")
                 + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
                 + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
                 + (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "")
                 + "</tr>";
             fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
-            fundDayIncome = fundDayIncome.add(dayIncome);
-            fundTotalmarketValue = fundTotalmarketValue.add(marketValue);
+            fundDayIncome = fundDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
+            fundTotalmarketValue = fundTotalmarketValue.add(new BigDecimal(result[k].marketValue + ""));
         } catch (error) {
             console.error(error);
         }
@@ -2778,7 +2833,7 @@ function changeBlackButton() {
 }
 
 // 对股票/基金的某一列排序
-async function sortStockAndFund(event) {
+async function clickSortStockAndFund(event) {
     let targetId = event.target.id;
     // 第一次未排序时候点击，按正序排列，并把之前未排序的顺序保存起来
     if (document.getElementById(targetId).classList.contains('order')) {
@@ -2805,23 +2860,22 @@ async function sortStockAndFund(event) {
         if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'order';
             lastSort.stock.targetId = '';
-            stockList = jQuery.parseJSON(lastSort.stock.history);
-            saveCacheData('stocks', JSON.stringify(stockList));
             lastSort.stock.history = [];
         } else {
             lastSort.fund.sortType = 'order';
             lastSort.fund.targetId = '';
-            fundList = jQuery.parseJSON(lastSort.fund.history);
             lastSort.fund.history = [];
-            saveCacheData('funds', JSON.stringify(fundList));
         }
-        saveCacheData("last-sort", lastSort);
-        initHtml();
-        initData();
-        return;
-    }
-    if (targetId.indexOf('stock-') >= 0) {
+    } 
+    saveCacheData("last-sort", lastSort);
+    initHtml();
+    initData();
+}
+
+async function sortStockAndFund() {
+    if (lastSort.stock != null && lastSort.stock.sortType != 'order') {
         stockList.sort(function (a, b) {
+            let targetId = lastSort.stock.targetId;
             if (targetId == 'stock-name-th') {
                 if(lastSort.stock.sortType == 'asc'){
                     return a.name.localeCompare(b.name);
@@ -2829,7 +2883,7 @@ async function sortStockAndFund(event) {
                     return b.name.localeCompare(a.name);
                 }
             } else if (targetId == 'stock-day-income-th') {
-                if(lastSort.stock.sortType == 'asc'){
+                if(lastSort.stock.sortType == 'asc') {
                     return parseFloat(a.dayIncome + "") - parseFloat(b.dayIncome + "");
                 } else {
                     return parseFloat(b.dayIncome + "") - parseFloat(a.dayIncome + "");
@@ -2892,8 +2946,9 @@ async function sortStockAndFund(event) {
                 return 0;
             }
         })
-        saveCacheData('stocks', JSON.stringify(stockList));
-    } else {
+    } 
+    if (lastSort.fund != null && lastSort.fund.sortType != 'order') {
+        let targetId = lastSort.fund.targetId;
         fundList.sort(function (a, b) {
             if (targetId == 'fund-name-th') {
                 if(lastSort.fund.sortType == 'asc'){
@@ -2965,9 +3020,5 @@ async function sortStockAndFund(event) {
                 return 0;
             }
         })
-        saveCacheData('funds', JSON.stringify(fundList));
     }
-    saveCacheData("last-sort", lastSort);
-    initHtml();
-    initData();
 }
