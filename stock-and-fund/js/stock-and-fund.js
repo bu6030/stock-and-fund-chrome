@@ -2896,7 +2896,7 @@ async function clickSortStockAndFund(event) {
 }
 
 async function sortStockAndFund(totalMarketValue) {
-    if ((showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') && lastSort.stock != null && lastSort.stock.sortType != 'order') {
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         stockList.forEach(function (stock) {
             if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                 let marketValuePercent = (new BigDecimal(stock.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
@@ -2905,6 +2905,18 @@ async function sortStockAndFund(totalMarketValue) {
                 stock.marketValuePercent = "0.00";
             }
         });
+    }
+    if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        fundList.forEach(function (fund) {
+            if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
+                let marketValuePercent = (new BigDecimal(fund.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
+                fund.marketValuePercent = marketValuePercent + "";
+            } else {
+                fund.marketValuePercent = "0.00";
+            }
+        });
+    }
+    if ((showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') && lastSort.stock != null && lastSort.stock.sortType != 'order') {
         stockList.sort(function (a, b) {
             let targetId = lastSort.stock.targetId;
             if (targetId == 'stock-name-th') {
@@ -2979,14 +2991,6 @@ async function sortStockAndFund(totalMarketValue) {
         })
     } 
     if ((showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') && lastSort.fund != null && lastSort.fund.sortType != 'order') {
-        fundList.forEach(function (fund) {
-            if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
-                let marketValuePercent = (new BigDecimal(fund.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
-                fund.marketValuePercent = marketValuePercent + "";
-            } else {
-                fund.marketValuePercent = "0.00";
-            }
-        });
         let targetId = lastSort.fund.targetId;
         fundList.sort(function (a, b) {
             if (targetId == 'fund-name-th') {
