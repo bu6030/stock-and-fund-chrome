@@ -257,18 +257,29 @@ async function initHtml() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
         $("#fund-head").html(fundHead);
         // 监听基金的TH行点击事件，点击后排序
-        document.getElementById('fund-name-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-day-income-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-change-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-price-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-cost-price-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-bonds-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-market-value-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-market-value-percent-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-income-percent-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('fund-income-th').addEventListener('click', clickSortStockAndFund);
-        if (lastSort.fund.targetId != null && lastSort.fund.targetId != '') {
+        if(document.getElementById('fund-name-th'))
+            document.getElementById('fund-name-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-day-income-th'))
+            document.getElementById('fund-day-income-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-change-th'))
+            document.getElementById('fund-change-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-price-th'))
+            document.getElementById('fund-price-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-cost-price-th'))
+            document.getElementById('fund-cost-price-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-bonds-th'))
+            document.getElementById('fund-bonds-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-market-value-th'))
+            document.getElementById('fund-market-value-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-market-value-percent-th'))
+            document.getElementById('fund-market-value-percent-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-cost-price-value-th'))
+            document.getElementById('fund-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-income-percent-th'))
+            document.getElementById('fund-income-percent-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-income-th'))
+            document.getElementById('fund-income-th').addEventListener('click', clickSortStockAndFund);
+        if (lastSort.fund.targetId != null && lastSort.fund.targetId != '' && document.getElementById(lastSort.fund.targetId)) {
             if (document.getElementById(lastSort.fund.targetId).classList.contains('order')) {
                 document.getElementById(lastSort.fund.targetId).classList.remove('order');
             }
@@ -284,18 +295,29 @@ async function initHtml() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         $("#stock-head").html(stockHead);
         // 监听股票的TH行点击事件，点击后排序
-        document.getElementById('stock-name-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-day-income-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-change-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-price-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-cost-price-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-bonds-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-market-value-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-market-value-percent-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-income-percent-th').addEventListener('click', clickSortStockAndFund);
-        document.getElementById('stock-income-th').addEventListener('click', clickSortStockAndFund);
-        if (lastSort.stock.targetId != null && lastSort.stock.targetId != '') {
+        if(document.getElementById('stock-name-th'))
+            document.getElementById('stock-name-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-day-income-th'))
+            document.getElementById('stock-day-income-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-change-th'))
+            document.getElementById('stock-change-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-price-th'))
+            document.getElementById('stock-price-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-cost-price-th'))
+            document.getElementById('stock-cost-price-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-bonds-th'))
+            document.getElementById('stock-bonds-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-market-value-th'))
+            document.getElementById('stock-market-value-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-market-value-percent-th'))
+            document.getElementById('stock-market-value-percent-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-cost-price-value-th'))
+            document.getElementById('stock-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-income-percent-th'))
+            document.getElementById('stock-income-percent-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-income-th'))
+            document.getElementById('stock-income-th').addEventListener('click', clickSortStockAndFund);
+        if (lastSort.stock.targetId != null && lastSort.stock.targetId != '' && document.getElementById(lastSort.stock.targetId)) {
             if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
                 document.getElementById(lastSort.stock.targetId).classList.remove('order');
             }
