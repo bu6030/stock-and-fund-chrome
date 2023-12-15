@@ -801,7 +801,6 @@ async function initFund() {
             }
         }
     }
-    await sortStockAndFund();
     initStockAndFundHtml();
 }
 
@@ -878,6 +877,8 @@ async function initStockAndFundHtml() {
             totalMarketValue = totalMarketValue.add(marketValue);
         }
     }
+    // 获取完totalMarketValue再排序
+    await sortStockAndFund(totalMarketValue);
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         var str1 = await getStockTableHtml(stockList, totalMarketValue);
         $("#stock-nr").html(str1);
@@ -1046,9 +1047,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             // }
             // dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
             // marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
-            if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-                marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-            }
+            // if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
+            //     marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
+            // }
             let changePercent = parseFloat(result[k].changePercent);
             var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
@@ -1080,7 +1081,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 stockName = result[k].name + "(港股)";
             }
             // 设置一下每个票的值，为了后边排序使用
-            result[k].marketValuePercent = marketValuePercent + "";
+            // result[k].marketValuePercent = marketValuePercent + "";
             // result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
@@ -1090,7 +1091,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
                 + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
                 + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(result[k].marketValue + "").toFixed(2) + "</td>" : "")
-                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
+                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "")
                 + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "")
                 + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
                 + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
@@ -1144,9 +1145,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         try {
             // dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
             // marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
-            if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-                marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-            }
+            // if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
+            //     marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
+            // }
             let gszzl = parseFloat(result[k].gszzl);
             var dayIncomeStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
@@ -1163,7 +1164,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             // 设置一下每个基金的值，为了后边排序使用
             // result[k].dayIncome = dayIncome + "";
             // result[k].marketValue = marketValue + "";
-            result[k].marketValuePercent = marketValuePercent + "";
+            // result[k].marketValuePercent = marketValuePercent + "";
             // result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
@@ -1173,7 +1174,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
                 + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
                 + (marketValueDisplay == 'DISPLAY' ? "<td>" + result[k].marketValue + "</td>" : "")
-                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + marketValuePercent + "%</td>" : "")
+                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "")
                 + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "")
                 + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
                 + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
@@ -2872,8 +2873,14 @@ async function clickSortStockAndFund(event) {
     initData();
 }
 
-async function sortStockAndFund() {
+async function sortStockAndFund(totalMarketValue) {
     if (lastSort.stock != null && lastSort.stock.sortType != 'order') {
+        stockList.forEach(function (stock) {
+            if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
+                let marketValuePercent = (new BigDecimal(stock.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
+                stock.marketValuePercent = marketValuePercent;
+            }
+        });
         stockList.sort(function (a, b) {
             let targetId = lastSort.stock.targetId;
             if (targetId == 'stock-name-th') {
@@ -2948,6 +2955,12 @@ async function sortStockAndFund() {
         })
     } 
     if (lastSort.fund != null && lastSort.fund.sortType != 'order') {
+        fundList.forEach(function (fund) {
+            if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
+                let marketValuePercent = (new BigDecimal(fund.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
+                fund.marketValuePercent = marketValuePercent;
+            }
+        });
         let targetId = lastSort.fund.targetId;
         fundList.sort(function (a, b) {
             if (targetId == 'fund-name-th') {
