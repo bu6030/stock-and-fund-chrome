@@ -299,7 +299,30 @@
                 </div>
             </div>
         </div>
+        <!-- 分时图模态框 -->
+        <div class="modal fade" id="data-center-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
 
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">数据中心 </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div id="data-center-chart" class="my-echart-new"></div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="big-stock-money">大盘资金</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <!-- 导入数据模态框 -->
         <div class="modal fade" id="data-import-modal">
             <div class="modal-dialog modal-lg">
@@ -827,6 +850,9 @@
             <button type="button" id="refresh-button" class="btn btn-info"
                 data-toggle="modal">刷新
             </button>
+            <!-- <button type="button" id="show-data-center-button" class="btn btn-info"
+                data-toggle="modal">数据中心
+            </button> -->
             <button type="button" id="remove-badgetext-button" class="btn btn-info"
                 data-toggle="modal">清理角标
             </button>

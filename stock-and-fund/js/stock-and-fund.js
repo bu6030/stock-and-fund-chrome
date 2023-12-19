@@ -351,6 +351,8 @@ document.addEventListener(
         document.getElementById('show-stock-button').addEventListener('click', changeShowStockOrFundOrAll);
         // 首页，底部基金按钮，只展示基金
         document.getElementById('show-fund-button').addEventListener('click', changeShowStockOrFundOrAll);
+        // 首页，底部全部按钮，点击数据中心
+        // document.getElementById('show-data-center-button').addEventListener('click', showDataCenter);
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
         // 首页，在基金搜索名称输入框中点击回车
@@ -2863,11 +2865,9 @@ async function clickSortStockAndFund(event) {
         if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'asc';
             lastSort.stock.targetId = targetId;
-            lastSort.stock.history = JSON.stringify(stockList);
         } else {
             lastSort.fund.sortType = 'asc';
             lastSort.fund.targetId = targetId;
-            lastSort.fund.history = JSON.stringify(fundList);
         }
     // 第二次点击，之前已经正序排序，这次按倒序排列
     } else if(document.getElementById(targetId).classList.contains('asc')) {
@@ -2883,13 +2883,13 @@ async function clickSortStockAndFund(event) {
         if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'order';
             lastSort.stock.targetId = '';
-            stockList = JSON.parse(lastSort.stock.history);
-            lastSort.stock.history = [];
+            var stocks = await readCacheData('stocks');
+            stockList = jQuery.parseJSON(stocks);
         } else {
             lastSort.fund.sortType = 'order';
             lastSort.fund.targetId = '';
-            fundList = JSON.parse(lastSort.fund.history);
-            lastSort.fund.history = [];
+            var funds = await readCacheData('funds')
+            fundList = jQuery.parseJSON(funds);
         }
     }
     saveCacheData("last-sort", lastSort);
@@ -3066,4 +3066,151 @@ async function sortStockAndFund(totalMarketValue) {
             }
         })
     }
+}
+
+async function showDataCenter() {
+    $('#data-center-modal').modal('show');
+    showBigStockMoney();
+}
+
+async function showBigStockMoney() {
+    let result = ajaxGetBigStockMoney();
+    let elementId = 'data-center-chart';
+    let dataZhuLiJingLiuRu = [];
+    let dataXiaoDanJingLiuRu = [];
+    let dataZhongDanJingLiuRu = [];
+    let dataDaDanJingLiuRu = [];
+    let dataChaoDaDanJingLiuRu = [];
+    let dataAxis = [];
+    if (result.data == null || result.data.klines == null){
+        return;
+    }
+    let oneHundredMillion = new BigDecimal("100000000");
+    dataAxis.push("09:30");
+    dataZhuLiJingLiuRu.push(parseFloat("0"));
+    dataXiaoDanJingLiuRu.push(parseFloat("0"));
+    dataZhongDanJingLiuRu.push(parseFloat("0"));
+    dataDaDanJingLiuRu.push(parseFloat("0"));
+    dataChaoDaDanJingLiuRu.push(parseFloat("0"));
+    for (var k = 0; k < result.data.klines.length; k++) {
+        let str = result.data.klines[k];
+        let zhuLiJingLiuRu = new BigDecimal(str.split(",")[1] + "");
+        zhuLiJingLiuRu = zhuLiJingLiuRu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+        let xiaoDanJingLiuRu = new BigDecimal(str.split(",")[2] + "");
+        xiaoDanJingLiuRu = xiaoDanJingLiuRu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+        let zhongDanJingLiuRu = new BigDecimal(str.split(",")[3] + "");
+        zhongDanJingLiuRu = zhongDanJingLiuRu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+        let daDanJingLiuRu = new BigDecimal(str.split(",")[4] + "");
+        daDanJingLiuRu = daDanJingLiuRu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+        let chaoDaDanJingLiuRu = new BigDecimal(str.split(",")[5] + "");
+        chaoDaDanJingLiuRu = chaoDaDanJingLiuRu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+
+        dataZhuLiJingLiuRu.push(parseFloat(zhuLiJingLiuRu + ""));
+        dataXiaoDanJingLiuRu.push(parseFloat(xiaoDanJingLiuRu + ""));
+        dataZhongDanJingLiuRu.push(parseFloat(zhongDanJingLiuRu + ""));
+        dataDaDanJingLiuRu.push(parseFloat(daDanJingLiuRu + ""));
+        dataChaoDaDanJingLiuRu.push(parseFloat(chaoDaDanJingLiuRu + ""));
+        dataAxis.push(str.split(",")[0].split(" ")[1]);
+    }
+    if(dataZhuLiJingLiuRu.length == 0) {
+        return;
+    }
+    console.log('dataStr == ', dataZhuLiJingLiuRu);
+    if (dataZhuLiJingLiuRu.length < 241) {
+        const diffLength = 241 - dataZhuLiJingLiuRu.length;
+        const emptyData = Array(diffLength).fill(null); // 使用 null 填充空数据
+        dataZhuLiJingLiuRu = dataZhuLiJingLiuRu.concat(emptyData);
+        dataXiaoDanJingLiuRu = dataXiaoDanJingLiuRu.concat(emptyData);
+        dataZhongDanJingLiuRu = dataZhongDanJingLiuRu.concat(emptyData);
+        dataDaDanJingLiuRu = dataDaDanJingLiuRu.concat(emptyData);
+        dataChaoDaDanJingLiuRu = dataChaoDaDanJingLiuRu.concat(emptyData);
+        let maxDate = dataAxis[dataAxis.length - 1];
+        console.log('maxDate=', maxDate);
+        dataAxis = dataAxis.concat(emptyData);
+    }
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById(elementId));
+    option = {
+        title: {
+            text: '大盘资金（沪深）资金流入', // 设置整个图表的标题
+            left: 'center', // 标题水平居中
+            top: 0 // 标题距离图表顶部的距离
+        },
+        legend: {
+            data: ['主力净流入', '小单净流入', '中单净流入', '大单净流入', '超大单净流入'],
+            top: 20
+        },
+        // resize: true,
+        lineStyle: {
+            // color: color, // 设置线的颜色
+            // 其他样式配置
+            width: 1,
+            opacity: 0.5
+        },
+        xAxis: {
+            data: dataAxis,
+            type: 'category',
+            axisLabel: {
+                interval: 29 // 调整刻度显示间隔
+            },
+            min: "09:30",
+        },
+        yAxis: {
+            scale: true,
+            type: 'value',
+        },
+        series: [
+            {
+                name: '主力净流入',
+                data: dataZhuLiJingLiuRu,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '小单净流入',
+                data: dataXiaoDanJingLiuRu,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '中单净流入',
+                data: dataZhongDanJingLiuRu,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '大单净流入',
+                data: dataDaDanJingLiuRu,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '超大单净流入',
+                data: dataChaoDaDanJingLiuRu,
+                type: 'line',
+                smooth: true,
+            },
+        ],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+            type: 'line',
+            lineStyle: {
+                color: '#999999',
+                width: 1,
+                type: 'solid'
+            }
+            },
+            formatter: function(params) {
+                return "时间：" + params[0].name + "<br>" 
+                    + "主力净流入：" + params[0].value + "<br>"
+                    + "小单净流入：" + params[1].value + "<br>"
+                    + "中单净流入：" + params[2].value + "<br>"
+                    + "大单净流入：" + params[3].value + "<br>"
+                    + "超大单净流入：" + params[4].value + "<br>"
+                    ;
+            }
+        },
+    };
+    myChart.setOption(option);
 }

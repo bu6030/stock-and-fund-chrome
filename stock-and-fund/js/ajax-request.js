@@ -355,3 +355,26 @@ function ajaxSyncDataToCloud(data, syncDataCloudUuid) {
     });
     return result;
 }
+
+// 接口调用
+function ajaxGetBigStockMoney() {
+    let result;
+    var url = Env.GET_BIG_STOCK_MONEY_URL + "?lmt=0&klt=1&secid=1.000001&secid2=0.399001&fields1=f1,f2,f3,f7&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63";
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
