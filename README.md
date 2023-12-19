@@ -169,6 +169,7 @@
 149. 大盘指数不展示置顶和买卖按钮 2023/12/14 -- version 1.8.9 -- end
 150. 修改部分css样式 2023/12/19
 151. 第三次点击排序按钮时候，未恢复原始状态 2023/12/19 -- version 1.9.0 -- end
+152. 增加大盘数据，南北向数据 2023/12/19
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

@@ -352,7 +352,7 @@ document.addEventListener(
         // 首页，底部基金按钮，只展示基金
         document.getElementById('show-fund-button').addEventListener('click', changeShowStockOrFundOrAll);
         // 首页，底部全部按钮，点击数据中心
-        // document.getElementById('show-data-center-button').addEventListener('click', showDataCenter);
+        document.getElementById('show-data-center-button').addEventListener('click', showDataCenter);
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
         // 首页，在基金搜索名称输入框中点击回车
@@ -592,6 +592,14 @@ document.addEventListener(
 
         // 买/卖股票页面，点击买/卖
         document.getElementById("buy-or-sell-button").addEventListener('click',  buyOrSell);
+
+        // 数据中心页面，点击大盘资金
+        document.getElementById('big-stock-money-button').addEventListener('click', showDataCenter);
+        // 数据中心页面，点击北向资金
+        document.getElementById('beixiang-money-button').addEventListener('click', showBeiXiang);
+        // 数据中心页面，点击南向资金
+        document.getElementById('nanxiang-money-button').addEventListener('click', showNanXiang);
+        
     }
 );
 
@@ -3118,7 +3126,7 @@ async function showBigStockMoney() {
     console.log('dataStr == ', dataZhuLiJingLiuRu);
     if (dataZhuLiJingLiuRu.length < 241) {
         const diffLength = 241 - dataZhuLiJingLiuRu.length;
-        const emptyData = Array(diffLength).fill(null); // 使用 null 填充空数据
+        const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
         dataZhuLiJingLiuRu = dataZhuLiJingLiuRu.concat(emptyData);
         dataXiaoDanJingLiuRu = dataXiaoDanJingLiuRu.concat(emptyData);
         dataZhongDanJingLiuRu = dataZhongDanJingLiuRu.concat(emptyData);
@@ -3130,6 +3138,7 @@ async function showBigStockMoney() {
     }
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
     option = {
         title: {
             text: '大盘资金（沪深）资金流入', // 设置整个图表的标题
@@ -3138,7 +3147,7 @@ async function showBigStockMoney() {
         },
         legend: {
             data: ['主力净流入', '小单净流入', '中单净流入', '大单净流入', '超大单净流入'],
-            top: 20
+            top: 30
         },
         // resize: true,
         lineStyle: {
@@ -3208,6 +3217,234 @@ async function showBigStockMoney() {
                     + "中单净流入：" + params[2].value + "<br>"
                     + "大单净流入：" + params[3].value + "<br>"
                     + "超大单净流入：" + params[4].value + "<br>"
+                    ;
+            }
+        },
+    };
+    myChart.setOption(option);
+}
+
+async function showNanXiang() {
+    console.log('showNanXiang');
+    let result = ajaxGetNanBeiXiangMoney();
+    let elementId = 'data-center-chart';
+    let dataNanXiangMoney = [];
+    let dataGangGuTongHu = [];
+    let dataGangGuTongShen = [];
+    let dataAxis = [];
+    if (result.data == null || result.data.n2s == null) {
+        return;
+    }
+    let oneHundredMillion = new BigDecimal("10000");
+    for (var k = 0; k < result.data.n2s.length; k++) {
+        let str = result.data.n2s[k];
+        let nanXiangMoney = new BigDecimal(str.split(",")[5] + "");
+        nanXiangMoney = nanXiangMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+        let gangGuTongHu = new BigDecimal(str.split(",")[1] + "");
+        gangGuTongHu = gangGuTongHu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+        let gangGuTongShen = new BigDecimal(str.split(",")[3] + "");
+        gangGuTongShen = gangGuTongShen.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+
+        dataNanXiangMoney.push(parseFloat(nanXiangMoney + ""));
+        dataGangGuTongHu.push(parseFloat(gangGuTongHu + ""));
+        dataGangGuTongShen.push(parseFloat(gangGuTongShen + ""));
+        dataAxis.push(str.split(",")[0]);
+    }
+    if(dataNanXiangMoney.length == 0) {
+        return;
+    }
+    if (dataNanXiangMoney.length < 241) {
+        const diffLength = 241 - dataZhuLiJingLiuRu.length;
+        const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
+        dataNanXiangMoney = dataNanXiangMoney.concat(emptyData);
+        dataGangGuTongHu = dataGangGuTongHu.concat(emptyData);
+        dataGangGuTongShen = dataGangGuTongShen.concat(emptyData);
+
+        let maxDate = dataAxis[dataAxis.length - 1];
+        console.log('maxDate=', maxDate);
+        dataAxis = dataAxis.concat(emptyData);
+    }
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
+    option = {
+        title: {
+            text: '南向资金', // 设置整个图表的标题
+            left: 'center', // 标题水平居中
+            top: 0 // 标题距离图表顶部的距离
+        },
+        legend: {
+            data: ['南向资金', '港股通（沪）', '港股通（深）'],
+            top: 30
+        },
+        // resize: true,
+        lineStyle: {
+            // color: color, // 设置线的颜色
+            // 其他样式配置
+            width: 1,
+            opacity: 0.5
+        },
+        xAxis: {
+            data: dataAxis,
+            type: 'category',
+            axisLabel: {
+                interval: 29 // 调整刻度显示间隔
+            },
+            min: "09:30",
+        },
+        yAxis: {
+            scale: true,
+            type: 'value',
+        },
+        series: [
+            {
+                name: '南向资金',
+                data: dataNanXiangMoney,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '港股通（沪）',
+                data: dataGangGuTongHu,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '港股通（深）',
+                data: dataGangGuTongShen,
+                type: 'line',
+                smooth: true,
+            }
+        ],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+            type: 'line',
+            lineStyle: {
+                color: '#999999',
+                width: 1,
+                type: 'solid'
+            }
+            },
+            formatter: function(params) {
+                return "时间：" + params[0].name + "<br>" 
+                    + "南向资金：" + params[0].value + "<br>"
+                    + "港股通（沪）：" + params[1].value + "<br>"
+                    + "港股通（深）：" + params[2].value + "<br>"
+                    ;
+            }
+        },
+    };
+    myChart.setOption(option);
+}
+
+async function showBeiXiang() {
+    console.log('showBeiXiang');
+    let result = ajaxGetNanBeiXiangMoney();
+    let elementId = 'data-center-chart';
+    let dataBeiXiangMoney = [];
+    let dataHuGuTong = [];
+    let dataShenGuTong = [];
+    let dataAxis = [];
+    if (result.data == null || result.data.s2n == null) {
+        return;
+    }
+    let oneHundredMillion = new BigDecimal("10000");
+    for (var k = 0; k < result.data.s2n.length; k++) {
+        let str = result.data.s2n[k];
+        let beiXiangMoney = new BigDecimal(str.split(",")[5] + "");
+        beiXiangMoney = beiXiangMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+        let huGuTong = new BigDecimal(str.split(",")[1] + "");
+        huGuTong = huGuTong.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+        let shenGuTong = new BigDecimal(str.split(",")[3] + "");
+        shenGuTong = shenGuTong.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+
+        dataBeiXiangMoney.push(parseFloat(beiXiangMoney + ""));
+        dataHuGuTong.push(parseFloat(huGuTong + ""));
+        dataShenGuTong.push(parseFloat(shenGuTong + ""));
+        dataAxis.push(str.split(",")[0]);
+    }
+    if(dataBeiXiangMoney.length == 0) {
+        return;
+    }
+    if (dataBeiXiangMoney.length < 241) {
+        const diffLength = 241 - dataZhuLiJingLiuRu.length;
+        const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
+        dataBeiXiangMoney = dataBeiXiangMoney.concat(emptyData);
+        dataHuGuTong = dataHuGuTong.concat(emptyData);
+        dataShenGuTong = dataShenGuTong.concat(emptyData);
+
+        let maxDate = dataAxis[dataAxis.length - 1];
+        console.log('maxDate=', maxDate);
+        dataAxis = dataAxis.concat(emptyData);
+    }
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
+    option = {
+        title: {
+            text: '北向资金', // 设置整个图表的标题
+            left: 'center', // 标题水平居中
+            top: 0 // 标题距离图表顶部的距离
+        },
+        legend: {
+            data: ['北向资金', '沪股通', '深股通'],
+            top: 30
+        },
+        // resize: true,
+        lineStyle: {
+            // color: color, // 设置线的颜色
+            // 其他样式配置
+            width: 1,
+            opacity: 0.5
+        },
+        xAxis: {
+            data: dataAxis,
+            type: 'category',
+            axisLabel: {
+                interval: 29 // 调整刻度显示间隔
+            },
+            min: "09:30",
+        },
+        yAxis: {
+            scale: true,
+            type: 'value',
+        },
+        series: [
+            {
+                name: '北向资金',
+                data: dataBeiXiangMoney,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '沪股通',
+                data: dataHuGuTong,
+                type: 'line',
+                smooth: true,
+            },
+            {
+                name: '深股通',
+                data: dataShenGuTong,
+                type: 'line',
+                smooth: true,
+            }
+        ],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+            type: 'line',
+            lineStyle: {
+                color: '#999999',
+                width: 1,
+                type: 'solid'
+            }
+            },
+            formatter: function(params) {
+                return "时间：" + params[0].name + "<br>" 
+                    + "北向资金：" + params[0].value + "<br>"
+                    + "沪股通：" + params[1].value + "<br>"
+                    + "深股通：" + params[2].value + "<br>"
                     ;
             }
         },

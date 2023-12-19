@@ -378,3 +378,26 @@ function ajaxGetBigStockMoney() {
     });
     return result;
 }
+
+// 接口调用
+function ajaxGetNanBeiXiangMoney() {
+    let result;
+    var url = Env.GET_NANBEI_XIANG_MONEY_URL + "?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55,f56&?r=1702972344338";
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
