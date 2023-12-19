@@ -2883,13 +2883,15 @@ async function clickSortStockAndFund(event) {
         if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'order';
             lastSort.stock.targetId = '';
+            stockList = JSON.parse(lastSort.stock.history);
             lastSort.stock.history = [];
         } else {
             lastSort.fund.sortType = 'order';
             lastSort.fund.targetId = '';
+            fundList = JSON.parse(lastSort.fund.history);
             lastSort.fund.history = [];
         }
-    } 
+    }
     saveCacheData("last-sort", lastSort);
     initHtml();
     initData();
