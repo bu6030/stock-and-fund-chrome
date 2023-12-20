@@ -447,3 +447,27 @@ function ajaxGetWholeTwoMarketMoney() {
     });
     return result;
 }
+
+// 接口调用
+function ajaxGetHuiLv(type) {
+    let result;
+    var url = Env.GET_HUILV_URL + "?num=100&chiyouhuobi=" + type + "&duihuanhuobi=CNY&type=1&callback=jisuanjieguo";
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            data = data.substring(13, data.length - 2);
+            result = JSON.parse(data);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}

@@ -617,6 +617,16 @@ async function initData() {
         for (var k in stockList) {
             stocks += stockList[k].code + ",";
         }
+        let huilvHK;
+        let huilvUS;
+        if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
+            huilvHK = await getHuilv('HKD');
+            console.log('huilvHK=', huilvHK);
+        }
+        if (stocks.indexOf('us') || stocks.indexOf('US')) {
+            huilvUS = await getHuilv('USD');
+            console.log('huilvUS=', huilvUS);
+        }
         let result = ajaxGetStockFromGtimg(stocks);
         var stoksArr = result.split("\n");
         for (var k in stoksArr) {
@@ -1334,7 +1344,7 @@ async function searchFundByName(name) {
     var allFundArr = await readCacheData('all_fund_arr');
     var timeCached = await readCacheData('all_fund_arr_time_cached');
     var nowTimestamp = Date.now();
-    if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_DAY) {
+    if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_SEVEN_DAY) {
         console.log("缓存超过 7 天，重新调用接口");
         allFundArr = null;
     }
@@ -3717,4 +3727,28 @@ async function showHangYeBanKuai() {
         }
     };
     myChart.setOption(option);
+}
+
+// 获取换算汇率
+async function getHuilv(type) {
+    let huilv;
+    var timeCached = await readCacheData(type + '_time_cached');
+    var huilvCached = await readCacheData(type + '_huilv_cached');
+    var nowTimestamp = Date.now();
+    if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_DAY) {
+        console.log('汇率缓存超过1天');
+        huilvCached = null;
+    }
+    if (huilvCached != null) {
+        huilv = huilvCached;
+        console.log('从缓存取汇率');
+    } else {
+        console.log('从接口取汇率');
+        var timestamp = Date.now();
+        let huilv = ajaxGetHuiLv(type).dangqianhuilv;
+        // 减少所有基金的搜索频率，缓存数据
+        saveCacheData(type + '_huilv_cached', huilv);
+        saveCacheData(type + '_time_cached', timestamp);
+    }
+    return huilv;
 }
