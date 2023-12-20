@@ -599,7 +599,7 @@ document.addEventListener(
         document.getElementById('beixiang-money-button').addEventListener('click', showBeiXiang);
         // 数据中心页面，点击南向资金
         document.getElementById('nanxiang-money-button').addEventListener('click', showNanXiang);
-        // 数据中心页面，点击南向资金
+        // 数据中心页面，点击行业板块
         document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
     }
 );
@@ -2777,6 +2777,7 @@ function sortedByDrag() {
     }
 }
 
+// 从同花顺/雪球/东方财富导入
 async function addStockFromTonghuashunXueqiu() {
     let data = await readCacheData('tonghuashun-xueqiu-stock');
     console.log('从同花顺/雪球/东方财富导入的数据：', data );
@@ -2818,6 +2819,7 @@ async function addStockFromTonghuashunXueqiu() {
     initData();
 }
 
+// 切换隐身模式
 function changeBlackButton() {
     let btnLightCss = 'btn-light';
     let btnOutlinePrimaryCss = 'btn-outline-primary';
@@ -2917,6 +2919,7 @@ async function clickSortStockAndFund(event) {
     initData();
 }
 
+// 对股票/基金按照点击的列进行排序
 async function sortStockAndFund(totalMarketValue) {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         stockList.forEach(function (stock) {
@@ -3088,11 +3091,13 @@ async function sortStockAndFund(totalMarketValue) {
     }
 }
 
+// 展示数据中心
 async function showDataCenter() {
     $('#data-center-modal').modal('show');
     showBigStockMoney();
 }
 
+// 展示大盘资金图表
 async function showBigStockMoney() {
     let result = ajaxGetBigStockMoney();
     let elementId = 'data-center-chart';
@@ -3272,6 +3277,7 @@ async function showBigStockMoney() {
     myChart.setOption(option);
 }
 
+// 展示南向资金图表
 async function showNanXiang() {
     console.log('showNanXiang');
     let result = ajaxGetNanBeiXiangMoney();
@@ -3426,6 +3432,7 @@ async function showNanXiang() {
     myChart.setOption(option);
 }
 
+// 展示北向资金图表
 async function showBeiXiang() {
     console.log('showBeiXiang');
     let result = ajaxGetNanBeiXiangMoney();
@@ -3581,7 +3588,7 @@ async function showBeiXiang() {
     myChart.setOption(option);
 }
 
-
+// 展示行业板块图表
 async function showHangYeBanKuai() {
     console.log('showHangYeBanKuai');
     let result = ajaxGetHangYeBanKuaiMoney();
