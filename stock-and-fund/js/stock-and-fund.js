@@ -27,6 +27,7 @@ var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var largeMarketScroll = 'STOP';
 var lastSort;
+var huilvConvert = true;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -668,6 +669,13 @@ async function initData() {
                     }
                     var bonds = new BigDecimal(stockList[l].bonds);
                     var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
+                    if (huilvConvert) {
+                        if (stockList[l].code.indexOf("hk") || stockList[l].code.indexOf("HK")) {
+                            income = (new BigDecimal(income + "")).divide(new BigDecimal(huilvHK + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        } else if (stockList[l].code.indexOf("us") || stockList[l].code.indexOf("US")) {
+                            income = (new BigDecimal(income + "")).divide(new BigDecimal(huilvUS + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        }
+                    }
                     stockList[l].income = income + "";
                     // 计算股票中的部分值
                     var buyOrSells = stockList[l].buyOrSellStockRequestList;
@@ -699,11 +707,32 @@ async function initData() {
                         dayIncome = new BigDecimal("0");
                     }
                     dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+                    if (huilvConvert) {
+                        if (stockList[l].code.indexOf("hk") || stockList[l].code.indexOf("HK")) {
+                            dayIncome = dayIncome.divide(new BigDecimal(huilvHK + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        } else if (stockList[l].code.indexOf("us") || stockList[l].code.indexOf("US")) {
+                            dayIncome = dayIncome.divide(new BigDecimal(huilvUS + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        }
+                    }
                     stockList[l].dayIncome = dayIncome + "";
                     marketValue = (new BigDecimal(stockList[l].now)).multiply(new BigDecimal(stockList[l].bonds));
+                    if (huilvConvert) {
+                        if (stockList[l].code.indexOf("hk") || stockList[l].code.indexOf("HK")) {
+                            marketValue = marketValue.divide(new BigDecimal(huilvHK + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        } else if (stockList[l].code.indexOf("us") || stockList[l].code.indexOf("US")) {
+                            marketValue = marketValue.divide(new BigDecimal(huilvUS + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        }
+                    }
                     stockList[l].marketValue = marketValue + "";
                     var costPrice = new BigDecimal(stockList[l].costPrise + "");
                     var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(stockList[l].bonds))).toFixed(2));
+                    if (huilvConvert) {
+                        if (stockList[l].code.indexOf("hk") || stockList[l].code.indexOf("HK")) {
+                            costPriceValue = costPriceValue.divide(new BigDecimal(huilvHK + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        } else if (stockList[l].code.indexOf("us") || stockList[l].code.indexOf("US")) {
+                            costPriceValue = costPriceValue.divide(new BigDecimal(huilvUS + ""), 2, BigDecimal.ROUND_HALF_UP);
+                        }
+                    }
                     stockList[l].costPriceValue = costPriceValue + "";
                 }
             }
