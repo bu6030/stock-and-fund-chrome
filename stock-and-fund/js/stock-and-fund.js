@@ -880,6 +880,7 @@ function checkStockExsit(code) {
     if (values.length > 5) {
         stock.name = values[1] + "";
         stock.now = values[3] + "";
+        stock.openPrice = values[4] + "";
         stock.change = values[31] + "";
         stock.changePercent = values[32] + "";
         stock.time = values[30] + "";
@@ -2034,8 +2035,14 @@ async function stockMonitor () {
     }
     let stock = checkStockExsit(code);
     chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-    chrome.action.setBadgeBackgroundColor({ color: 'blue' });
+
     let now = stock.now;
+    let openPrice = stock.openPrice;
+    if (now >= parseFloat(openPrice)) {
+        chrome.action.setBadgeBackgroundColor({ color: 'red' });
+    } else {
+        chrome.action.setBadgeBackgroundColor({ color: 'green' });
+    }
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));
     }

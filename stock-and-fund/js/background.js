@@ -221,11 +221,16 @@ function monitorStock(code) {
                 var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
                 var values = dataStr.split("~");
                 var now = values[3];
+                var openPrice = values[4];
+                if (parseFloat(now) >= parseFloat(openPrice)) {
+                    chrome.action.setBadgeBackgroundColor({ color: 'red' });
+                } else {
+                    chrome.action.setBadgeBackgroundColor({ color: 'green' });
+                }
                 if (now.length >= 5) {
                     now = parseFloat(now.substring(0, 5));
                 }
-                chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                chrome.action.setBadgeBackgroundColor({ color: 'blue' });
+                chrome.action.setBadgeTextColor({ color: '#FFFFFF' });  
                 chrome.action.setBadgeText({ text: "" + now });
             })
             .catch(error => {
