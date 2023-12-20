@@ -382,7 +382,53 @@ function ajaxGetBigStockMoney() {
 // 接口调用
 function ajaxGetNanBeiXiangMoney() {
     let result;
-    var url = Env.GET_NANBEI_XIANG_MONEY_URL + "?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55,f56&?r=1702972344338";
+    var url = Env.GET_NANBEI_XIANG_MONEY_URL + "?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55,f56";
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
+function ajaxGetHangYeBanKuaiMoney() {
+    let result;
+    var url = Env.GET_HANGYE_BANKUAI_MONEY_URL + "?pn=1&pz=500&po=1&np=1&fields=f12,f13,f14,f62&fid=f62&fs=m:90+t:2";
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
+function ajaxGetWholeTwoMarketMoney() {
+    let result;
+    var url = Env.GET_WHOLE_TWO_MARKET_MONEY_URL + "?fltt=2&secids=1.000001,0.399001&fields=f1,f2,f3,f4,f6,f12,f13,f104,f105,f106";
     $.ajax({
         url: url,
         type: "get",

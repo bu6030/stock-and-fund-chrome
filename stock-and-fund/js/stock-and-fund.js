@@ -599,7 +599,8 @@ document.addEventListener(
         document.getElementById('beixiang-money-button').addEventListener('click', showBeiXiang);
         // 数据中心页面，点击南向资金
         document.getElementById('nanxiang-money-button').addEventListener('click', showNanXiang);
-        
+        // 数据中心页面，点击南向资金
+        document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
     }
 );
 
@@ -2842,6 +2843,10 @@ function changeBlackButton() {
     document.getElementById('show-fund-button').classList.remove(btnLightCss);
     document.getElementById('show-fund-button').classList.add(blackCss);
 
+    document.getElementById('show-data-center-button').classList.remove(btnInfoCss);
+    document.getElementById('show-data-center-button').classList.remove(btnLightCss);
+    document.getElementById('show-data-center-button').classList.add(blackCss);
+
     document.getElementById('refresh-button').classList.remove(btnInfoCss);
     document.getElementById('refresh-button').classList.remove(btnLightCss);
     document.getElementById('refresh-button').classList.add(blackCss);
@@ -3135,11 +3140,23 @@ async function showBigStockMoney() {
     let lastZhongDanJingLiuRu = dataZhongDanJingLiuRu[dataZhongDanJingLiuRu.length-1];
     let lastDaDanJingLiuRu = dataDaDanJingLiuRu[dataDaDanJingLiuRu.length-1];
     let lastChaoDaDanJingLiuRu = dataChaoDaDanJingLiuRu[dataChaoDaDanJingLiuRu.length-1];
-    let contentHtml = "主力净流入: <font color=" + (parseFloat(lastZhuLiJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastZhuLiJingLiuRu + "</font>亿元";
-    contentHtml += "  小单净流入:<font color=" + (parseFloat(lastXiaoDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastXiaoDanJingLiuRu + "</font>亿元<br>";
-    contentHtml += "中单净流入:<font color=" + (parseFloat(lastZhongDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastZhongDanJingLiuRu + "</font>亿元";
-    contentHtml += "  大单净流入:<font color=" + (parseFloat(lastDaDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastDaDanJingLiuRu + "</font>亿元<br>";
-    contentHtml += "超大单净流入:<font color=" + (parseFloat(lastChaoDaDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastChaoDaDanJingLiuRu + "</font>亿元<br>";
+    let contentHtml = "主力净流入: <font color=" + (parseFloat(lastZhuLiJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastZhuLiJingLiuRu + "</font> 亿元";
+    contentHtml += "  小单净流入: <font color=" + (parseFloat(lastXiaoDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastXiaoDanJingLiuRu + "</font> 亿元";
+    contentHtml += "  中单净流入: <font color=" + (parseFloat(lastZhongDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastZhongDanJingLiuRu + "</font> 亿元<br>";
+    contentHtml += "大单净流入: <font color=" + (parseFloat(lastDaDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastDaDanJingLiuRu + "</font> 亿元";
+    contentHtml += "  超大单净流入: <font color=" + (parseFloat(lastChaoDaDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastChaoDaDanJingLiuRu + "</font> 亿元<br>";
+    let wholeTwoMarketMoney = ajaxGetWholeTwoMarketMoney();
+    if (wholeTwoMarketMoney != null && wholeTwoMarketMoney.data.diff != null) {
+        let shen = wholeTwoMarketMoney.data.diff[0];
+        let hu = wholeTwoMarketMoney.data.diff[1];
+        let totalMoney = (new BigDecimal(shen.f6 + "")).add(new BigDecimal(hu.f6 + ""));
+        totalMoney = totalMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+        contentHtml += "沪深两市总市值: " + totalMoney + " 亿元";
+        let up = parseInt(shen.f104) + parseInt(hu.f104);
+        let down = parseInt(shen.f105) + parseInt(hu.f105);
+        let ping = parseInt(shen.f106) + parseInt(hu.f106);
+        contentHtml += " 上涨: <font color=red>" + up + "</font> 平盘: " + ping + " 下跌: <font color=green>" + down + "</font>";
+    }
     $("#data-center-content").html(contentHtml);
     console.log('dataStr == ', dataZhuLiJingLiuRu);
     if (dataZhuLiJingLiuRu.length < 241) {
@@ -3228,14 +3245,29 @@ async function showBigStockMoney() {
             },
             formatter: function(params) {
                 return "时间：" + params[0].name + "<br>" 
-                    + "主力净流入：" + params[0].value + "<br>"
-                    + "小单净流入：" + params[1].value + "<br>"
-                    + "中单净流入：" + params[2].value + "<br>"
-                    + "大单净流入：" + params[3].value + "<br>"
-                    + "超大单净流入：" + params[4].value + "<br>"
+                    + "主力净流入: " + params[0].value + " 亿元<br>"
+                    + "小单净流入: " + params[1].value + " 亿元<br>"
+                    + "中单净流入: " + params[2].value + " 亿元<br>"
+                    + "大单净流入: " + params[3].value + " 亿元<br>"
+                    + "超大单净流入: " + params[4].value + " 亿元<br>"
                     ;
             }
         },
+        graphic: {
+            elements: [
+                {
+                    type: 'text',
+                    left: '5%',
+                    top: '3%',
+                    style: {
+                        text: '单位: 亿元',
+                        textAlign: 'left',
+                        fill: '#333',
+                        fontSize: 14
+                    }
+                }
+            ]
+        }
     };
     myChart.setOption(option);
 }
@@ -3287,9 +3319,9 @@ async function showNanXiang() {
             lastGangGuTongShenYuE = gangGuTongShenYuE + "";
         }
     }
-    let contentHtml = "港股通（沪） 当日净流入:<font color=" + (parseFloat(lastGangGuTongHu) >= 0 ? "red" : "green")+ ">" + lastGangGuTongHu + "</font>亿元 余额：<font color=red>" + lastGangGuTongHuYuE + "</font>亿元<br>";
-    contentHtml += "港股通（深） 当日净流入:<font color=" + (parseFloat(lastGangGuTongShen) >= 0 ? "red" : "green")+ ">" + lastGangGuTongShen + "</font>亿元 余额：<font color=red>" + lastGangGuTongShenYuE + "</font>亿元<br>";
-    contentHtml += "南向资金 当日净流入:<font color=" + (parseFloat(lastNanXiangMoney) >= 0 ? "red" : "green")+ ">" + lastNanXiangMoney + "</font>亿元<br>";
+    let contentHtml = "港股通（沪） 当日净流入: <font color=" + (parseFloat(lastGangGuTongHu) >= 0 ? "red" : "green")+ ">" + lastGangGuTongHu + "</font> 亿元 余额: <font color=red>" + lastGangGuTongHuYuE + "</font> 亿元<br>";
+    contentHtml += "港股通（深） 当日净流入: <font color=" + (parseFloat(lastGangGuTongShen) >= 0 ? "red" : "green")+ ">" + lastGangGuTongShen + "</font> 亿元 余额: <font color=red>" + lastGangGuTongShenYuE + "</font> 亿元<br>";
+    contentHtml += "南向资金 当日净流入: <font color=" + (parseFloat(lastNanXiangMoney) >= 0 ? "red" : "green")+ ">" + lastNanXiangMoney + "</font> 亿元<br>";
     $("#data-center-content").html(contentHtml);
     if(dataNanXiangMoney.length == 0) {
         return;
@@ -3368,13 +3400,28 @@ async function showNanXiang() {
             }
             },
             formatter: function(params) {
-                return "时间：" + params[0].name + "<br>" 
-                    + "南向资金：" + params[0].value + "<br>"
-                    + "港股通（沪）：" + params[1].value + "<br>"
-                    + "港股通（深）：" + params[2].value + "<br>"
+                return "时间: " + params[0].name + "<br>" 
+                    + "南向资金: " + params[0].value + " 亿元<br>"
+                    + "港股通（沪）: " + params[1].value + " 亿元<br>"
+                    + "港股通（深）: " + params[2].value + " 亿元<br>"
                     ;
             }
         },
+        graphic: {
+            elements: [
+                {
+                    type: 'text',
+                    left: '5%',
+                    top: '5%',
+                    style: {
+                        text: '单位：亿元',
+                        textAlign: 'left',
+                        fill: '#333',
+                        fontSize: 14
+                    }
+                }
+            ]
+        }
     };
     myChart.setOption(option);
 }
@@ -3427,9 +3474,9 @@ async function showBeiXiang() {
             lastShenGuTongYuE = shenGuTongYuE + "";
         }
     }
-    let contentHtml = "沪股通 当日净流入:<font color=" + (parseFloat(lastHuGuTong) >= 0 ? "red" : "green")+ ">" + lastHuGuTong + "</font>亿元 余额：<font color='red'>" + lastHuGuTongYuE + "</font>亿元<br>";
-    contentHtml += "深股通 当日净流入:<font color=" + (parseFloat(lastShenGuTong) >= 0 ? "red" : "green")+ ">" + lastShenGuTong + "</font>亿元 余额：<font color='red'>" + lastShenGuTongYuE + "</font>亿元<br>";
-    contentHtml += "北向资金 当日净流入:<font color=" + (parseFloat(lastBeiXiangMoney) >= 0 ? "red" : "green")+ ">" + lastBeiXiangMoney + "</font>亿元<br>";
+    let contentHtml = "沪股通 当日净流入: <font color=" + (parseFloat(lastHuGuTong) >= 0 ? "red" : "green")+ ">" + lastHuGuTong + "</font> 亿元 余额: <font color='red'>" + lastHuGuTongYuE + "</font> 亿元<br>";
+    contentHtml += "深股通 当日净流入: <font color=" + (parseFloat(lastShenGuTong) >= 0 ? "red" : "green")+ ">" + lastShenGuTong + "</font> 亿元 余额: <font color='red'>" + lastShenGuTongYuE + "</font> 亿元<br>";
+    contentHtml += "北向资金 当日净流入: <font color=" + (parseFloat(lastBeiXiangMoney) >= 0 ? "red" : "green")+ ">" + lastBeiXiangMoney + "</font> 亿元<br>";
     $("#data-center-content").html(contentHtml);
     if(dataBeiXiangMoney.length == 0) {
         return;
@@ -3508,13 +3555,159 @@ async function showBeiXiang() {
             }
             },
             formatter: function(params) {
-                return "时间：" + params[0].name + "<br>" 
-                    + "北向资金：" + params[0].value + "<br>"
-                    + "沪股通：" + params[1].value + "<br>"
-                    + "深股通：" + params[2].value + "<br>"
+                return "时间: " + params[0].name + "<br>" 
+                    + "北向资金: " + params[0].value + " 亿元<br>"
+                    + "沪股通: " + params[1].value + " 亿元<br>"
+                    + "深股通: " + params[2].value + " 亿元<br>"
                     ;
             }
         },
+        graphic: {
+            elements: [
+                {
+                    type: 'text',
+                    left: '5%',
+                    top: '5%',
+                    style: {
+                        text: '单位：亿元',
+                        textAlign: 'left',
+                        fill: '#333',
+                        fontSize: 14
+                    }
+                }
+            ]
+        }
+    };
+    myChart.setOption(option);
+}
+
+
+async function showHangYeBanKuai() {
+    console.log('showHangYeBanKuai');
+    let result = ajaxGetHangYeBanKuaiMoney();
+    let elementId = 'data-center-chart';
+    let data = [];
+    let dataAxis = [];
+    if (result.data == null || result.data.diff == null) {
+        return;
+    }
+    let oneHundredMillion = new BigDecimal("100000000");
+    for (var k = 0; k < result.data.diff.length; k++) {
+        dataAxis.push(result.data.diff[k].f14);
+        let moeny = new BigDecimal(result.data.diff[k].f62 + "");
+        moeny = moeny.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+        data.push(moeny + "");
+    }
+    // let contentHtml = "沪股通 当日净流入:<font color=" + (parseFloat(lastHuGuTong) >= 0 ? "red" : "green")+ ">" + lastHuGuTong + "</font>亿元 余额：<font color='red'>" + lastHuGuTongYuE + "</font>亿元<br>";
+    // contentHtml += "深股通 当日净流入:<font color=" + (parseFloat(lastShenGuTong) >= 0 ? "red" : "green")+ ">" + lastShenGuTong + "</font>亿元 余额：<font color='red'>" + lastShenGuTongYuE + "</font>亿元<br>";
+    // contentHtml += "北向资金 当日净流入:<font color=" + (parseFloat(lastBeiXiangMoney) >= 0 ? "red" : "green")+ ">" + lastBeiXiangMoney + "</font>亿元<br>";
+    $("#data-center-content").html("");
+    if(data.length == 0) {
+        return;
+    }
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
+    option = {
+        grid: {
+            left: '10%',   // 调整图表左边距离容器的距离
+            right: '10%',  // 调整图表右边距离容器的距离
+            bottom: '30%' // 调整图表底部距离容器的距离
+        },
+        title: {
+            text: '行业板块', // 设置整个图表的标题
+            left: 'center', // 标题水平居中
+            top: 0 // 标题距离图表顶部的距离
+        },
+        xAxis: {
+            data: dataAxis,
+            type: 'category',
+            axisLabel: {
+                rotate: 0,  // 设置整体不旋转
+                interval: 0, // 设置标签项全部显示
+                formatter: function(value) {
+                    // 使用 CSS 样式设置文字旋转
+                    return '{a|' + value.split('').join('\n') + '}';
+                },
+                rich: {
+                    a: {
+                        lineHeight: 12,  // 行高
+                        align: 'center', // 对齐方式
+                        verticalAlign: 'middle', // 垂直对齐方式
+                        padding: [0, 0, 10, 0], // 内边距
+                        textBorderColor: 'transparent' // 文字描边颜色
+                    }
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+        },
+        series: [
+            {
+                name: '行业板块',
+                data: data,
+                type: 'bar',
+                itemStyle: {
+                    color: function(params) {
+                        // 根据数据的正负来设置颜色
+                        return params.value >= 0 ? redColor : blueColor;
+                    }
+                }
+            }
+        ],
+        tooltip: {
+            trigger: 'axis',  // 触发类型，可以是 'item'（单项）或 'axis'（坐标轴）
+            axisPointer: {     // 坐标轴指示器配置项
+                type: 'shadow'  // 使用阴影表示坐标轴指示器
+            },
+            formatter: function(params) {
+                // params 中包含了鼠标悬停位置的信息
+                var dataIndex = params[0].dataIndex;  // 获取柱子的索引
+                var value = params[0].data;           // 获取柱子的值
+                return params[0].axisValue + '<br />'
+                        + value + '亿元';
+            }
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'  // 设置为 'none' 表示只控制 x 轴
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        dataZoom: [
+            {
+                type: 'slider',  // 滑动条型选择框
+                show: true,
+                xAxisIndex: [0],  // 表示控制第一个 x 轴
+                start: 0,
+                end: 30
+            },
+            {
+                type: 'inside',  // 内置型选择框
+                xAxisIndex: [0],  // 表示控制第一个 x 轴
+                start: 0,
+                end: 30
+            }
+        ],
+        graphic: {
+            elements: [
+                {
+                    type: 'text',
+                    left: '5%',
+                    top: '5%',
+                    style: {
+                        text: '单位：亿元',
+                        textAlign: 'left',
+                        fill: '#333',
+                        fontSize: 14
+                    }
+                }
+            ]
+        }
     };
     myChart.setOption(option);
 }

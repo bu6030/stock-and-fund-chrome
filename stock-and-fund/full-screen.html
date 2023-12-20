@@ -313,11 +313,15 @@
                     <!-- 模态框主体 -->
                     <div class="modal-body">
                         <div id="data-center-chart" class="my-echart-new"></div>
+                        <div id="data-center-content"></div>
                     </div>
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="big-stock-money">大盘资金</button>
+                        <button type="button" class="btn btn-primary" id="big-stock-money-button">大盘资金</button>
+                        <button type="button" class="btn btn-primary" id="hangye-bankuai-money-button">行业板块</button>
+                        <button type="button" class="btn btn-primary" id="beixiang-money-button">北向资金</button>
+                        <button type="button" class="btn btn-primary" id="nanxiang-money-button">南向资金</button>
                     </div>
 
                 </div>
@@ -850,9 +854,9 @@
             <button type="button" id="refresh-button" class="btn btn-info"
                 data-toggle="modal">刷新
             </button>
-            <!-- <button type="button" id="show-data-center-button" class="btn btn-info"
+            <button type="button" id="show-data-center-button" class="btn btn-info"
                 data-toggle="modal">数据中心
-            </button> -->
+            </button>
             <button type="button" id="remove-badgetext-button" class="btn btn-info"
                 data-toggle="modal">清理角标
             </button>
