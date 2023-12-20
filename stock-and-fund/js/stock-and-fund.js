@@ -3130,6 +3130,17 @@ async function showBigStockMoney() {
     if(dataZhuLiJingLiuRu.length == 0) {
         return;
     }
+    let lastZhuLiJingLiuRu = dataZhuLiJingLiuRu[dataZhuLiJingLiuRu.length-1];
+    let lastXiaoDanJingLiuRu = dataXiaoDanJingLiuRu[dataXiaoDanJingLiuRu.length-1];
+    let lastZhongDanJingLiuRu = dataZhongDanJingLiuRu[dataZhongDanJingLiuRu.length-1];
+    let lastDaDanJingLiuRu = dataDaDanJingLiuRu[dataDaDanJingLiuRu.length-1];
+    let lastChaoDaDanJingLiuRu = dataChaoDaDanJingLiuRu[dataChaoDaDanJingLiuRu.length-1];
+    let contentHtml = "主力净流入: <font color=" + (parseFloat(lastZhuLiJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastZhuLiJingLiuRu + "</font>亿元";
+    contentHtml += "  小单净流入:<font color=" + (parseFloat(lastXiaoDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastXiaoDanJingLiuRu + "</font>亿元<br>";
+    contentHtml += "中单净流入:<font color=" + (parseFloat(lastZhongDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastZhongDanJingLiuRu + "</font>亿元";
+    contentHtml += "  大单净流入:<font color=" + (parseFloat(lastDaDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastDaDanJingLiuRu + "</font>亿元<br>";
+    contentHtml += "超大单净流入:<font color=" + (parseFloat(lastChaoDaDanJingLiuRu) >= 0 ? "red" : "green")+ ">" + lastChaoDaDanJingLiuRu + "</font>亿元<br>";
+    $("#data-center-content").html(contentHtml);
     console.log('dataStr == ', dataZhuLiJingLiuRu);
     if (dataZhuLiJingLiuRu.length < 241) {
         const diffLength = 241 - dataZhuLiJingLiuRu.length;
@@ -3139,8 +3150,6 @@ async function showBigStockMoney() {
         dataZhongDanJingLiuRu = dataZhongDanJingLiuRu.concat(emptyData);
         dataDaDanJingLiuRu = dataDaDanJingLiuRu.concat(emptyData);
         dataChaoDaDanJingLiuRu = dataChaoDaDanJingLiuRu.concat(emptyData);
-        let maxDate = dataAxis[dataAxis.length - 1];
-        console.log('maxDate=', maxDate);
         dataAxis = dataAxis.concat(emptyData);
     }
     // 基于准备好的dom，初始化echarts实例
@@ -3243,20 +3252,45 @@ async function showNanXiang() {
         return;
     }
     let oneHundredMillion = new BigDecimal("10000");
+    let lastNanXiangMoney;
+    let lastGangGuTongHu;
+    let lastGangGuTongHuYuE;
+    let lastGangGuTongShen;
+    let lastGangGuTongShenYuE;
     for (var k = 0; k < result.data.n2s.length; k++) {
         let str = result.data.n2s[k];
-        let nanXiangMoney = new BigDecimal(str.split(",")[5] + "");
-        nanXiangMoney = nanXiangMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
-        let gangGuTongHu = new BigDecimal(str.split(",")[1] + "");
-        gangGuTongHu = gangGuTongHu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
-        let gangGuTongShen = new BigDecimal(str.split(",")[3] + "");
-        gangGuTongShen = gangGuTongShen.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+        if(str.split(",")[1] == '-') {
+            dataNanXiangMoney.push("");
+            dataGangGuTongHu.push("");
+            dataGangGuTongShen.push("");
+            dataAxis.push(str.split(",")[0]);
+        } else {
+            let nanXiangMoney = new BigDecimal(str.split(",")[5] + "");
+            nanXiangMoney = nanXiangMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+            let gangGuTongHu = new BigDecimal(str.split(",")[1] + "");
+            gangGuTongHu = gangGuTongHu.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+            let gangGuTongShen = new BigDecimal(str.split(",")[3] + "");
+            gangGuTongShen = gangGuTongShen.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
 
-        dataNanXiangMoney.push(parseFloat(nanXiangMoney + ""));
-        dataGangGuTongHu.push(parseFloat(gangGuTongHu + ""));
-        dataGangGuTongShen.push(parseFloat(gangGuTongShen + ""));
-        dataAxis.push(str.split(",")[0]);
+            dataNanXiangMoney.push(parseFloat(nanXiangMoney + ""));
+            dataGangGuTongHu.push(parseFloat(gangGuTongHu + ""));
+            dataGangGuTongShen.push(parseFloat(gangGuTongShen + ""));
+            dataAxis.push(str.split(",")[0]);
+            lastNanXiangMoney = nanXiangMoney + "";
+            lastGangGuTongHu = gangGuTongHu + "";
+            lastGangGuTongShen = gangGuTongShen + "";
+            let gangGuTongHuYuE = new BigDecimal(str.split(",")[2] + "");
+            gangGuTongHuYuE = gangGuTongHuYuE.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+            lastGangGuTongHuYuE = gangGuTongHuYuE + "";
+            let gangGuTongShenYuE = new BigDecimal(str.split(",")[4] + "");
+            gangGuTongShenYuE = gangGuTongShenYuE.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+            lastGangGuTongShenYuE = gangGuTongShenYuE + "";
+        }
     }
+    let contentHtml = "港股通（沪） 当日净流入:<font color=" + (parseFloat(lastGangGuTongHu) >= 0 ? "red" : "green")+ ">" + lastGangGuTongHu + "</font>亿元 余额：<font color=red>" + lastGangGuTongHuYuE + "</font>亿元<br>";
+    contentHtml += "港股通（深） 当日净流入:<font color=" + (parseFloat(lastGangGuTongShen) >= 0 ? "red" : "green")+ ">" + lastGangGuTongShen + "</font>亿元 余额：<font color=red>" + lastGangGuTongShenYuE + "</font>亿元<br>";
+    contentHtml += "南向资金 当日净流入:<font color=" + (parseFloat(lastNanXiangMoney) >= 0 ? "red" : "green")+ ">" + lastNanXiangMoney + "</font>亿元<br>";
+    $("#data-center-content").html(contentHtml);
     if(dataNanXiangMoney.length == 0) {
         return;
     }
@@ -3357,20 +3391,46 @@ async function showBeiXiang() {
         return;
     }
     let oneHundredMillion = new BigDecimal("10000");
+    let lastBeiXiangMoney;
+    let lastHuGuTong;
+    let lastHuGuTongYuE;
+    let lastShenGuTong;
+    let lastShenGuTongYuE;
     for (var k = 0; k < result.data.s2n.length; k++) {
         let str = result.data.s2n[k];
-        let beiXiangMoney = new BigDecimal(str.split(",")[5] + "");
-        beiXiangMoney = beiXiangMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
-        let huGuTong = new BigDecimal(str.split(",")[1] + "");
-        huGuTong = huGuTong.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
-        let shenGuTong = new BigDecimal(str.split(",")[3] + "");
-        shenGuTong = shenGuTong.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP)
+        if(str.split(",")[1] == '-') {
+            dataBeiXiangMoney.push("");
+            dataHuGuTong.push("");
+            dataShenGuTong.push("");
+            dataAxis.push(str.split(",")[0]);
+        } else {
+            let beiXiangMoney = new BigDecimal(str.split(",")[5] + "");
+            beiXiangMoney = beiXiangMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+            let huGuTong = new BigDecimal(str.split(",")[1] + "");
+            huGuTong = huGuTong.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+            let shenGuTong = new BigDecimal(str.split(",")[3] + "");
+            shenGuTong = shenGuTong.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
 
-        dataBeiXiangMoney.push(parseFloat(beiXiangMoney + ""));
-        dataHuGuTong.push(parseFloat(huGuTong + ""));
-        dataShenGuTong.push(parseFloat(shenGuTong + ""));
-        dataAxis.push(str.split(",")[0]);
+            dataBeiXiangMoney.push(parseFloat(beiXiangMoney + ""));
+            dataHuGuTong.push(parseFloat(huGuTong + ""));
+            dataShenGuTong.push(parseFloat(shenGuTong + ""));
+            dataAxis.push(str.split(",")[0]);
+
+            lastBeiXiangMoney = beiXiangMoney + "";
+            lastHuGuTong = huGuTong + "";
+            lastShenGuTong = shenGuTong + "";
+            let huGuTongYuE = new BigDecimal(str.split(",")[2] + "");
+            huGuTongYuE = huGuTongYuE.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+            lastHuGuTongYuE = huGuTongYuE + "";
+            let shenGuTongYuE = new BigDecimal(str.split(",")[4] + "");
+            shenGuTongYuE = shenGuTongYuE.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+            lastShenGuTongYuE = shenGuTongYuE + "";
+        }
     }
+    let contentHtml = "沪股通 当日净流入:<font color=" + (parseFloat(lastHuGuTong) >= 0 ? "red" : "green")+ ">" + lastHuGuTong + "</font>亿元 余额：<font color='red'>" + lastHuGuTongYuE + "</font>亿元<br>";
+    contentHtml += "深股通 当日净流入:<font color=" + (parseFloat(lastShenGuTong) >= 0 ? "red" : "green")+ ">" + lastShenGuTong + "</font>亿元 余额：<font color='red'>" + lastShenGuTongYuE + "</font>亿元<br>";
+    contentHtml += "北向资金 当日净流入:<font color=" + (parseFloat(lastBeiXiangMoney) >= 0 ? "red" : "green")+ ">" + lastBeiXiangMoney + "</font>亿元<br>";
+    $("#data-center-content").html(contentHtml);
     if(dataBeiXiangMoney.length == 0) {
         return;
     }
