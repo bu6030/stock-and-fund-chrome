@@ -223,9 +223,9 @@ function monitorStock(code) {
                 var now = values[3];
                 var openPrice = values[4];
                 if (parseFloat(now) >= parseFloat(openPrice)) {
-                    chrome.action.setBadgeBackgroundColor({ color: 'red' });
+                    chrome.action.setBadgeBackgroundColor({ color: '#c12e2a' });
                 } else {
-                    chrome.action.setBadgeBackgroundColor({ color: 'green' });
+                    chrome.action.setBadgeBackgroundColor({ color: '#3e8f3e' });
                 }
                 if (now.length >= 5) {
                     now = parseFloat(now.substring(0, 5));

@@ -2038,10 +2038,10 @@ async function stockMonitor () {
 
     let now = stock.now;
     let openPrice = stock.openPrice;
-    if (now >= parseFloat(openPrice)) {
-        chrome.action.setBadgeBackgroundColor({ color: 'red' });
+    if (parseFloat(now) >= parseFloat(openPrice)) {
+        chrome.action.setBadgeBackgroundColor({ color: '#c12e2a' });
     } else {
-        chrome.action.setBadgeBackgroundColor({ color: 'green' });
+        chrome.action.setBadgeBackgroundColor({ color: '#3e8f3e' });
     }
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));
