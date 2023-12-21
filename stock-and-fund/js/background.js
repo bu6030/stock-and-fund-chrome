@@ -73,11 +73,14 @@ function monitorStockPrice(stockList) {
         console.log("交易时间，执行任务...");
         var stocks = "";
         for (let k in stockList) {
-            if (stockList[k].monitorAlert == '1' || stockList[k].monitorAlert == '2') {
+            if (stockList[k].monitorAlert == '1' || stockList[k].monitorAlert == '2' 
+                || stockList[k].monitorAlert == '3'|| stockList[k].monitorAlert == '4') {
                 continue;
             }
             if ((typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorHighPrice != '')
-                || (typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorLowPrice != '')) {
+                || (typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorLowPrice != '')
+                || (typeof stockList[k].monitorUpperPercent != 'undefined' && stockList[k].monitorUpperPercent != '')
+                || (typeof stockList[k].monitorLowerPercent != 'undefined' && stockList[k].monitorLowerPercent != '')) {
                 stocks += stockList[k].code + ",";
             }
         }
@@ -134,6 +137,44 @@ function monitorStockPrice(stockList) {
                             saveData("MONITOR_STOCK_CODE", '');
                             showNotification("通知", text);
                             console.log("================监控价格跌破", lowPrice, "============");
+                        }
+                    }
+                    // 日涨幅提醒
+                    if (typeof monitorStock.monitorUpperPercent != 'undefined' && monitorStock.monitorUpperPercent != '') {
+                        var upperPercent = parseFloat(monitorStock.monitorUpperPercent);
+                        var openPrice = parseFloat(values[4]);
+                        let currentPercent = (now - openPrice) / openPrice * 100;
+                        if (currentPercent >= upperPercent) {
+                            monitorStock.monitorAlert = '3';
+                            monitorStock.monitorAlertDate = Date.now();
+                            chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                            chrome.action.setBadgeBackgroundColor({ color: 'red' });
+                            chrome.action.setBadgeText({ text: upperPercent + "%" });
+                            var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
+                            // saveData("MONITOR_TEXT", text);
+                            saveData('stocks', JSON.stringify(stockList));
+                            saveData("MONITOR_STOCK_CODE", '');
+                            showNotification("通知", text);
+                            console.log("================日涨幅提醒", upperPercent, "%============");
+                        }
+                    }
+                    // 日跌幅提醒
+                    if (typeof monitorStock.monitorLowerPercent != 'undefined' && monitorStock.monitorLowerPercent != '') {
+                        var lowerPercent = parseFloat(monitorStock.monitorLowerPercent);
+                        var openPrice = parseFloat(values[4]);
+                        let currentPercent = (openPrice - now) / openPrice * 100;
+                        if (currentPercent >= lowerPercent) {
+                            monitorStock.monitorAlert = '4';
+                            monitorStock.monitorAlertDate = Date.now();
+                            chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                            chrome.action.setBadgeBackgroundColor({ color: 'green' });
+                            chrome.action.setBadgeText({ text: lowerPercent + "%" });
+                            var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
+                            // saveData("MONITOR_TEXT", text);
+                            saveData('stocks', JSON.stringify(stockList));
+                            saveData("MONITOR_STOCK_CODE", '');
+                            showNotification("通知", text);
+                            console.log("================日跌幅提醒", lowerPercent, "%============");
                         }
                     }
                 }

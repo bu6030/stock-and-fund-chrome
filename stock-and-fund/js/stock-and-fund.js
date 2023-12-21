@@ -989,6 +989,8 @@ async function initStockAndFundHtml() {
                 $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
                 $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
                 $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
+                $("#stock-monitor-upper-percent").val(stockList[this.sectionRowIndex].monitorUpperPercent);
+                $("#stock-monitor-lower-percent").val(stockList[this.sectionRowIndex].monitorLowerPercent);
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
@@ -1155,9 +1157,13 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             let alertStyle = "";
             if ((nowTimestamp - monitorAlertDate) <= Env.TIME_CACHED_ONE_DAY) {
                 if (result[k].monitorAlert == '1') {
-                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破最高价格提醒" + result[k].monitorHighPrice + ")</span>";
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破最高价格" + result[k].monitorHighPrice + "提醒)</span>";
                 } else if(result[k].monitorAlert == '2') {
-                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格提醒" + result[k].monitorLowPrice + ")</span>";
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格" + result[k].monitorLowPrice + "提醒)</span>";
+                } else if(result[k].monitorAlert == '3') {
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(日涨幅" + result[k].monitorUpperPercent + "提醒)</span>";
+                } else if(result[k].monitorAlert == '4') {
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(日跌幅" + result[k].monitorLowerPercent + "提醒)</span>";
                 }
             }
             let stockName = result[k].name;
@@ -1468,6 +1474,9 @@ async function saveStock() {
     var bonds = $("#stock-bonds").val();
     var monitorHighPrice = $("#stock-monitor-high-price").val();
     var monitorLowPrice = $("#stock-monitor-low-price").val();
+    var monitorUpperPercent = $("#stock-monitor-upper-percent").val();
+    var monitorLowerPercent = $("#stock-monitor-lower-percent").val();
+    
     var code = $("#stock-code").val();
     if (code == null || code == '') {
         alertMessage("请添加股票编码或通过股票名称搜索");
@@ -1485,6 +1494,8 @@ async function saveStock() {
         "bonds": bonds,
         "monitorHighPrice": monitorHighPrice,
         "monitorLowPrice": monitorLowPrice,
+        "monitorUpperPercent": monitorUpperPercent,
+        "monitorLowerPercent": monitorLowerPercent,
     }
     var stocks = await readCacheData('stocks');
     if (stocks == null) {
@@ -1499,6 +1510,8 @@ async function saveStock() {
             stocks[k].bonds = stock.bonds;
             stocks[k].monitorHighPrice = stock.monitorHighPrice;
             stocks[k].monitorLowPrice = stock.monitorLowPrice;
+            stocks[k].monitorUpperPercent = stock.monitorUpperPercent;
+            stocks[k].monitorLowerPercent = stock.monitorLowerPercent;
             stocks[k].monitorAlert = '';
             if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stocks[k].code);
@@ -2611,7 +2624,9 @@ async function syncDataToCloud() {
             "costPrise" : stockList[k].costPrise,
             "bonds" : stockList[k].bonds,
             "monitorHighPrice" : stockList[k].monitorHighPrice,
-            "monitorLowPrice" : stockList[k].monitorLowPrice
+            "monitorLowPrice" : stockList[k].monitorLowPrice,
+            "monitorUpperPercent" : stockList[k].monitorUpperPercent,
+            "monitorLowerPercent" : stockList[k].monitorLowerPercent,
         }
         syncStocks.push(syncStock);
     }
