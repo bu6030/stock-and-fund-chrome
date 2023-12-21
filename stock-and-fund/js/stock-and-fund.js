@@ -1792,6 +1792,7 @@ async function initWindowsSize() {
     let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
     let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
     let showWechatGroupButton = document.getElementById('show-wechat-group-button');
+    let showDataCenterButton = document.getElementById('show-data-center-button');
     if (windowSize == 'NORMAL') {
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
@@ -1812,6 +1813,7 @@ async function initWindowsSize() {
         // timeImageButton.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
+        showDataCenterButton.style.display = "inline";
     } else if (windowSize == 'SMALL') {
         // 设置首页各项内容宽度 600px
         myWindows.style.width = '600px';
@@ -1832,6 +1834,7 @@ async function initWindowsSize() {
         // timeImageButton.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
+        showDataCenterButton.style.display = "inline";
     } else if (windowSize == 'MINI') {
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';
@@ -1852,6 +1855,7 @@ async function initWindowsSize() {
         // timeImageButton.style.display = "none";
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
+        showDataCenterButton.style.display = "none";
     }
 }
 
