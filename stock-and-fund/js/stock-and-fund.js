@@ -27,7 +27,7 @@ var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var largeMarketScroll = 'STOP';
 var lastSort;
-var huilvConvert = true;
+var huilvConvert = false;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -65,6 +65,14 @@ async function initLoad() {
         cheatMeFlag = true;
     } else if(cheatMeFlag == "false") {
         cheatMeFlag = false;
+    }
+    huilvConvert = await readCacheData('huilvConvert');
+    if (huilvConvert == null) {
+        huilvConvert = false;
+    } else if(huilvConvert == "true") {
+        huilvConvert = true;
+    } else if(huilvConvert == "false") {
+        huilvConvert = false;
     }
     showStockOrFundOrAll = await readCacheData('showStockOrFundOrAll');
     if (showStockOrFundOrAll == null) {
@@ -581,7 +589,10 @@ document.addEventListener(
         document.getElementById('send-chrome-notice-disable-button').addEventListener('click', enableChromeNotice);
         // 设置页面，点击云同步按钮
         document.getElementById('show-sync-data-button').addEventListener('click', showSyncData);
-        
+        // 设置页面，点击切换汇率按钮
+        document.getElementById('huilv-convert-change-button').addEventListener('click', changeHuilvConvert);
+        document.getElementById('huilv-dont-convert-change-button').addEventListener('click', changeHuilvConvert);
+
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
         document.getElementById('sync-data-from-cloud-button').addEventListener('click', syncDataFromCloud);
@@ -1147,27 +1158,59 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 }
             }
             let stockName = result[k].name;
+            let dayIncome = parseFloat(result[k].dayIncome + "").toFixed(2);
+            let now = result[k].now;
+            let costPrise = result[k].costPrise;
+            let marketValue = parseFloat(result[k].marketValue + "").toFixed(2);
+            let costPriceValue = result[k].costPriceValue;
+            let income = result[k].income;
             if (result[k].code.startsWith('us') || result[k].code.startsWith('US')) {
                 stockName = result[k].name + "(美股)";
+                now = now + "(美元)";
+                costPrise = costPrise + "(美元)";
+                if (huilvConvert) {
+                    marketValue = marketValue + "(人民币)";
+                    costPriceValue = costPriceValue + "(人民币)";
+                    income = income + "(人民币)";
+                    dayIncome = dayIncome + "(人民币)";
+                } else {
+                    marketValue = marketValue + "(美元)";
+                    costPriceValue = costPriceValue + "(美元)";
+                    income = income + "(美元)";
+                    dayIncome = dayIncome + "(美元)";
+                }
             }
             if (result[k].code.startsWith('hk') || result[k].code.startsWith('HK')) {
                 stockName = result[k].name + "(港股)";
+                now = now + "(港币)";
+                costPrise = costPrise + "(港币)";
+                if (huilvConvert) {
+                    marketValue = marketValue + "(人民币)";
+                    costPriceValue = costPriceValue + "(人民币)";
+                    income = income + "(人民币)";
+                    dayIncome = dayIncome + "(人民币)";
+                } else {
+                    marketValue = marketValue + "(港币)";
+                    costPriceValue = costPriceValue + "(港币)";
+                    income = income + "(港币)";
+                    dayIncome = dayIncome + "(港币)";
+                }
             }
             // 设置一下每个票的值，为了后边排序使用
             // result[k].marketValuePercent = marketValuePercent + "";
             // result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
-                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + parseFloat(result[k].dayIncome + "").toFixed(2) + "</td>" : "")
+                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
                 + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
-                + "<td>" + result[k].now + "</td>"
-                + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
+                + "<td>" + now + "</td>"
+                + (costPriceDisplay == 'DISPLAY' ? "<td>" + costPrise + "</td>" : "")
                 + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-                + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(result[k].marketValue + "").toFixed(2) + "</td>" : "")
+                + (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue + "</td>" : "")
                 + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "")
-                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "")
+                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
                 + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
-                + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
+                + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "")
                 + (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "")
                 + "</tr>";
             stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
@@ -3764,7 +3807,7 @@ async function getHuilv(type) {
     var timeCached = await readCacheData(type + '_time_cached');
     var huilvCached = await readCacheData(type + '_huilv_cached');
     var nowTimestamp = Date.now();
-    if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_DAY) {
+    if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_HOUR) {
         console.log('汇率缓存超过1天');
         huilvCached = null;
     }
@@ -3780,4 +3823,17 @@ async function getHuilv(type) {
         saveCacheData(type + '_time_cached', timestamp);
     }
     return huilv;
+}
+
+// 点击汇率切换按钮
+async function changeHuilvConvert(event) {
+    let targetId = event.target.id;
+    if (targetId == 'huilv-convert-change-button') {
+        huilvConvert = true;
+    } else {
+        huilvConvert = false;
+    }
+    saveCacheData('huilvConvert', huilvConvert);
+    $("#setting-modal").modal("hide");
+    initData();
 }

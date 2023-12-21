@@ -467,6 +467,9 @@ function ajaxGetHuiLv(type) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            result = {
+                "dangqianhuilv" : 1
+            }
         }
     });
     return result;
