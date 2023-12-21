@@ -631,13 +631,16 @@ async function initData() {
         }
         let huilvHK;
         let huilvUS;
-        if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
-            huilvHK = await getHuilv('HKD');
-            console.log('huilvHK=', huilvHK);
-        }
-        if (stocks.indexOf('us') || stocks.indexOf('US')) {
-            huilvUS = await getHuilv('USD');
-            console.log('huilvUS=', huilvUS);
+        // 只有切换了汇率才获取汇率接口数据
+        if(huilvConvert){
+            if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
+                huilvHK = await getHuilv('HKD');
+                console.log('huilvHK=', huilvHK);
+            }
+            if (stocks.indexOf('us') || stocks.indexOf('US')) {
+                huilvUS = await getHuilv('USD');
+                console.log('huilvUS=', huilvUS);
+            }
         }
         let result = ajaxGetStockFromGtimg(stocks);
         var stoksArr = result.split("\n");
@@ -3817,7 +3820,7 @@ async function getHuilv(type) {
     } else {
         console.log('从接口取汇率');
         var timestamp = Date.now();
-        let huilv = ajaxGetHuiLv(type).dangqianhuilv;
+        huilv = ajaxGetHuiLv(type).dangqianhuilv;
         // 减少所有基金的搜索频率，缓存数据
         saveCacheData(type + '_huilv_cached', huilv);
         saveCacheData(type + '_time_cached', timestamp);

@@ -462,13 +462,19 @@ function ajaxGetHuiLv(type) {
         success: function (data) {
             data = data.substring(13, data.length - 2);
             result = JSON.parse(data);
+            if (result == null || result == undefined || result == 'undefined'
+                || result.dangqianhuilv == null || result.dangqianhuilv == '') {
+                    result = {
+                        "dangqianhuilv" : "1"
+                    };
+            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
             result = {
-                "dangqianhuilv" : 1
+                "dangqianhuilv" : "1"
             }
         }
     });
