@@ -3826,7 +3826,7 @@ async function getHuilv(type) {
     var huilvCached = await readCacheData(type + '_huilv_cached');
     var nowTimestamp = Date.now();
     if (timeCached == null || (nowTimestamp - timeCached) >= Env.TIME_CACHED_ONE_HOUR) {
-        console.log('汇率缓存超过1天');
+        console.log('汇率缓存超过1小时');
         huilvCached = null;
     }
     if (huilvCached != null) {
