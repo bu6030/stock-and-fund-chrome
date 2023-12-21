@@ -685,9 +685,9 @@ async function initData() {
                     var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
                     if (huilvConvert) {
                         if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            income = (new BigDecimal(income + "")).multiply(new BigDecimal(huilvHK + ""));
+                            income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
                         } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            income = (new BigDecimal(income + "")).multiply(new BigDecimal(huilvUS + ""));
+                            income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                         }
                     }
                     stockList[l].income = income + "";
@@ -723,18 +723,18 @@ async function initData() {
                     dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
                     if (huilvConvert) {
                         if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            dayIncome = dayIncome.multiply(new BigDecimal(huilvHK + ""));
+                            dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
                         } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            dayIncome = dayIncome.multiply(new BigDecimal(huilvUS + ""));
+                            dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                         }
                     }
                     stockList[l].dayIncome = dayIncome + "";
                     marketValue = (new BigDecimal(stockList[l].now)).multiply(new BigDecimal(stockList[l].bonds));
                     if (huilvConvert) {
                         if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            marketValue = marketValue.multiply(new BigDecimal(huilvHK + ""));
+                            marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
                         } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            marketValue = marketValue.multiply(new BigDecimal(huilvUS + ""));
+                            marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                         }
                     }
                     stockList[l].marketValue = marketValue + "";
@@ -742,9 +742,9 @@ async function initData() {
                     var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(stockList[l].bonds))).toFixed(2));
                     if (huilvConvert) {
                         if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            costPriceValue = costPriceValue.multiply(new BigDecimal(huilvHK + ""));
+                            costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
                         } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            costPriceValue = costPriceValue.multiply(new BigDecimal(huilvUS + ""));
+                            costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                         }
                     }
                     stockList[l].costPriceValue = costPriceValue + "";
