@@ -1161,9 +1161,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 } else if(result[k].monitorAlert == '2') {
                     alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格" + result[k].monitorLowPrice + "提醒)</span>";
                 } else if(result[k].monitorAlert == '3') {
-                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(日涨幅" + result[k].monitorUpperPercent + "提醒)</span>";
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(日涨幅" + result[k].monitorUpperPercent + "%提醒)</span>";
                 } else if(result[k].monitorAlert == '4') {
-                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(日跌幅" + result[k].monitorLowerPercent + "提醒)</span>";
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(日跌幅" + result[k].monitorLowerPercent + "%提醒)</span>";
                 }
             }
             let stockName = result[k].name;
@@ -3256,7 +3256,7 @@ async function showBigStockMoney() {
         let hu = wholeTwoMarketMoney.data.diff[1];
         let totalMoney = (new BigDecimal(shen.f6 + "")).add(new BigDecimal(hu.f6 + ""));
         totalMoney = totalMoney.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
-        contentHtml += "沪深两市总市值: " + totalMoney + " 亿元";
+        contentHtml += "沪深两市总成交额: " + totalMoney + " 亿元";
         let up = parseInt(shen.f104) + parseInt(hu.f104);
         let down = parseInt(shen.f105) + parseInt(hu.f105);
         let ping = parseInt(shen.f106) + parseInt(hu.f106);
