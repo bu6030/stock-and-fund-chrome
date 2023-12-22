@@ -1108,44 +1108,11 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
         try {
-            // var buyOrSells = result[k].buyOrSellStockRequestList;
-            // var todayBuyIncom = new BigDecimal("0");
-            // var todaySellIncom = new BigDecimal("0");
-            // var maxBuyOrSellBonds = 0;
-            // for (var l in buyOrSells) {
-            //     let beijingDate = getBeijingDate();
-            //     // 当天购买过
-            //     if (buyOrSells[l].type == "1" && beijingDate == buyOrSells[l].date) {
-            //         maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[l].bonds;
-            //         var buyIncome = (new BigDecimal(result[k].now))
-            //             .subtract(new BigDecimal(buyOrSells[l].price + ""))
-            //             .multiply(new BigDecimal(buyOrSells[l].bonds + ""))
-            //             .subtract(new BigDecimal(buyOrSells[l].cost + ""));
-            //         todayBuyIncom = todayBuyIncom.add(buyIncome);
-            //     }
-            //     // 当天卖出过
-            //     if (buyOrSells[l].type == "2" && beijingDate == buyOrSells[l].date) {
-            //         todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[l].income + ""));
-            //     }
-            // }
-            // if (maxBuyOrSellBonds < result[k].bonds) {
-            //     var restBonds = (new BigDecimal(result[k].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-            //     dayIncome = (new BigDecimal(result[k].change)).multiply(restBonds);
-            // } else {
-            //     dayIncome = new BigDecimal("0");
-            // }
-            // dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
-            // marketValue = (new BigDecimal(result[k].now)).multiply(new BigDecimal(result[k].bonds));
-            // if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-            //     marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-            // }
             let changePercent = parseFloat(result[k].changePercent);
             var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
-            // 计算股票总成本
-            // var costPrice = new BigDecimal(result[k].costPrise + "");
-            // var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds))).toFixed(2));
+            
             stockTotalCostValue = stockTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
             let showMinuteImageMini = await readCacheData('show-minute-image-mini');
             let minuteImageMiniDiv = "";
@@ -1205,9 +1172,6 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     dayIncome = dayIncome + "(港币)";
                 }
             }
-            // 设置一下每个票的值，为了后边排序使用
-            // result[k].marketValuePercent = marketValuePercent + "";
-            // result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
                 + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
@@ -1268,29 +1232,17 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
         try {
-            // dayIncome = new BigDecimal(parseFloat((new BigDecimal(result[k].gszzl)).multiply((new BigDecimal(result[k].dwjz))).multiply(new BigDecimal(result[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
-            // marketValue = new BigDecimal(parseFloat((new BigDecimal(result[k].gsz)).multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
-            // if (totalMarketValueResult.compareTo(new BigDecimal("0")) != 0) {
-            //     marketValuePercent = (new BigDecimal(result[k].marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValueResult, 4);
-            // }
             let gszzl = parseFloat(result[k].gszzl);
             var dayIncomeStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
             // 计算基金总成本
-            // var costPrice = new BigDecimal(result[k].costPrise + "");
-            // var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(result[k].bonds + ""))).toFixed(2));
             fundTotalCostValue = fundTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
             let showMinuteImageMini = await readCacheData('show-minute-image-mini');
             let minuteImageMiniDiv = "";
             if (showMinuteImageMini == 'open') {
                 minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
             }
-            // 设置一下每个基金的值，为了后边排序使用
-            // result[k].dayIncome = dayIncome + "";
-            // result[k].marketValue = marketValue + "";
-            // result[k].marketValuePercent = marketValuePercent + "";
-            // result[k].costPriceValue = costPriceValue + "";
             str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
                 + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
                 + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + "</td>" : "")
@@ -3709,9 +3661,6 @@ async function showHangYeBanKuai() {
         moeny = moeny.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
         data.push(moeny + "");
     }
-    // let contentHtml = "沪股通 当日净流入:<font color=" + (parseFloat(lastHuGuTong) >= 0 ? "red" : "green")+ ">" + lastHuGuTong + "</font>亿元 余额：<font color='red'>" + lastHuGuTongYuE + "</font>亿元<br>";
-    // contentHtml += "深股通 当日净流入:<font color=" + (parseFloat(lastShenGuTong) >= 0 ? "red" : "green")+ ">" + lastShenGuTong + "</font>亿元 余额：<font color='red'>" + lastShenGuTongYuE + "</font>亿元<br>";
-    // contentHtml += "北向资金 当日净流入:<font color=" + (parseFloat(lastBeiXiangMoney) >= 0 ? "red" : "green")+ ">" + lastBeiXiangMoney + "</font>亿元<br>";
     $("#data-center-content").html("");
     if(data.length == 0) {
         return;
@@ -3821,6 +3770,41 @@ async function showHangYeBanKuai() {
         }
     };
     myChart.setOption(option);
+    // 监听 dataZoom 缩放事件
+    myChart.on('dataZoom', function (params) {
+        // 获取缩放程度和总数据量
+        var zoomStart = params.start;
+        var zoomEnd = params.end;
+        var totalDataCount = myChart.getOption().xAxis[0].data.length;
+        // 根据缩放程度和总数据量计算新的 interval
+        var interval = calculateInterval(zoomStart, zoomEnd, totalDataCount);
+        // 更新 x 轴标签的 interval
+        myChart.setOption({
+            xAxis: {
+                axisLabel: {
+                    interval: interval
+                }
+            }
+        });
+    });
+}
+
+// 根据缩放程度计算新的标签显示间隔
+function calculateInterval(start, end, totalDataCount) {
+    // 当数据量小于等于 30 时，全部显示
+    if (totalDataCount <= 30) {
+        return 0;
+    }
+    // 当数据量超过 30 个时，默认显示 30 个
+    var defaultVisibleCount = 30;
+    // 计算当前显示的数据量
+    var visibleDataCount = totalDataCount * (end - start) / 100;
+    // 当显示的数据量小于默认显示数量时，直接全部显示
+    if (visibleDataCount <= defaultVisibleCount) {
+        return 0;
+    }
+    // 计算新的 interval
+    return Math.ceil(visibleDataCount / defaultVisibleCount);
 }
 
 // 获取换算汇率
