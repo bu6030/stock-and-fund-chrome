@@ -173,7 +173,7 @@
 153. 监控价格，当日涨红色，当日跌绿色 2023/12/20
 154. 增加行业板块数据 2023/12/20
 155. 港股/美股汇率换算显示 2023/12/21
-156. 增加日涨跌幅监控提醒 2023/12/21
+156. 增加日涨跌幅监控提醒 2023/12/21 -- version 1.9.1 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
