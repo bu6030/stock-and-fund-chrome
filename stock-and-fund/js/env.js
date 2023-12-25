@@ -20,6 +20,8 @@ let Env = {
     GET_FUND_INVERST_POSITION_DETAIL: "https://push2.eastmoney.com/api/qt/ulist.np/get",
     GET_FUND_NET_DIAGRAM: "https://fundmobapi.eastmoney.com/FundMApi/FundNetDiagram.ashx",
     GET_FUND_POSITION_LIST: "https://fundwebapi.eastmoney.com/FundMEApi/FundPositionList",
+    GO_TO_EASTMONEY_1_URL: "https://quote.eastmoney.com/basic/h5chart-iframe.html",
+    GO_TO_EASTMONEY_2_URL: "https://quote.eastmoney.com",
     CLOUD_SERVER_DATA_SYNC: "https://dav.jianguoyun.com/dav/stock-and-fund/",
     CLOUD_SERVER_DATA_SYNC_BASIC_AUTH: "请申请自己的云账户",
     // 下面这两个地址可以通过本地启动stock-and-fund项目
