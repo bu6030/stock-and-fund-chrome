@@ -447,7 +447,7 @@ document.addEventListener(
         document.getElementById('show-buy-button-2').addEventListener('click', showBuyOrSell);
         document.getElementById('show-sell-button').addEventListener('click', showBuyOrSell);
         document.getElementById('show-sell-button-2').addEventListener('click', showBuyOrSell);
-        // 股票编辑页面，点击东方财富走势图
+        // 走势图页面，点击东方财富走势图
         document.getElementById('go-to-eastmoney-button').addEventListener('click', goToEastMoney);
 
         // 搜索股票页面，股票列表点击选择
@@ -999,6 +999,7 @@ async function initStockAndFundHtml() {
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
+                $("#go-to-eastmoney-button")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
                 (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
                     $("#fund-invers-position-button-3")[0].style.display = 'inline';
@@ -1068,6 +1069,7 @@ async function initStockAndFundHtml() {
                 $("#fund-invers-position-button-3")[0].style.display = 'inline';
                 $("#fund-net-diagram-button-3")[0].style.display = 'inline';
                 $("#show-buy-or-sell-button-2")[0].style.display = 'none';
+                $("#go-to-eastmoney-button")[0].style.display = 'none';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
