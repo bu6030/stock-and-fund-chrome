@@ -408,7 +408,7 @@ document.addEventListener(
         document.getElementById('stock-show-time-image-button').addEventListener('click', showTimeImage);
         // 股票编辑页面，点击监控股票价格
         document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
-        
+
         // 走势图页面，点击分时图按钮
         document.getElementById('time-image-minute-button').addEventListener('click', showMinuteImage);
         // 走势图页面，日线图按钮点击
@@ -447,6 +447,8 @@ document.addEventListener(
         document.getElementById('show-buy-button-2').addEventListener('click', showBuyOrSell);
         document.getElementById('show-sell-button').addEventListener('click', showBuyOrSell);
         document.getElementById('show-sell-button-2').addEventListener('click', showBuyOrSell);
+        // 股票编辑页面，点击东方财富走势图
+        document.getElementById('go-to-eastmoney-button').addEventListener('click', goToEastMoney);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -2443,7 +2445,12 @@ function showTimeImage(event) {
         timeImageCode = $("#stock-code").val();
         timeImageType = "STOCK";
     }
-    showMinuteImage();
+    if(timeImageCode.startsWith('hk') || timeImageCode.startsWith('HK') ||
+        timeImageCode.startsWith('us') || timeImageCode.startsWith('US')) {
+        goToEastMoney();
+    } else {
+        showMinuteImage();
+    }
 }
 
 // 搜索股票基金输入框，点击回车搜索股票基金
@@ -3834,4 +3841,26 @@ async function changeHuilvConvert(event) {
     saveCacheData('huilvConvert', huilvConvert);
     $("#setting-modal").modal("hide");
     initData();
+}
+
+// 去东方财富看走势图
+async function goToEastMoney() {
+    let market;
+    let url;
+    if(timeImageCode.startsWith('sh') || timeImageCode.startsWith('SH')){
+        market = "1";
+        let code = timeImageCode.substring(2, timeImageCode.length);
+        url = Env.GO_TO_EASTMONEY_1_URL + "?code=" + code + "&market=" + market;
+    } else if(timeImageCode.startsWith('sz') || timeImageCode.startsWith('SZ')) {
+        market = "0";
+        let code = timeImageCode.substring(2, timeImageCode.length);
+        url = Env.GO_TO_EASTMONEY_1_URL + "?code=" + code + "&market=" + market;
+    } else if(timeImageCode.startsWith('hk') || timeImageCode.startsWith('HK')) {
+        let code = timeImageCode.substring(2, timeImageCode.length);
+        url = Env.GO_TO_EASTMONEY_2_URL + "/hk/" + code + ".html#fullScreenChart"; 
+    } else if(timeImageCode.startsWith('us') || timeImageCode.startsWith('US')) {
+        let code = timeImageCode.substring(2, timeImageCode.length);
+        url = Env.GO_TO_EASTMONEY_2_URL + "/us/" + code + ".html#fullScreenChart"; 
+    }
+    chrome.tabs.create({ url: url });
 }
