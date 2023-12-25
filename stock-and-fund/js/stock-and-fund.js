@@ -28,6 +28,9 @@ var codeDisplay = 'HIDDEN';
 var largeMarketScroll = 'STOP';
 var lastSort;
 var huilvConvert = false;
+var s2nDate;
+var n2sDate;
+var bigStockMoneyDate;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -3192,6 +3195,7 @@ async function showBigStockMoney() {
         dataDaDanJingLiuRu.push(parseFloat(daDanJingLiuRu + ""));
         dataChaoDaDanJingLiuRu.push(parseFloat(chaoDaDanJingLiuRu + ""));
         dataAxis.push(str.split(",")[0].split(" ")[1]);
+        bigStockMoneyDate = str.split(",")[0].split(" ")[0] + " ";
     }
     if(dataZhuLiJingLiuRu.length == 0) {
         return;
@@ -3305,7 +3309,7 @@ async function showBigStockMoney() {
             }
             },
             formatter: function(params) {
-                return "时间：" + params[0].name + "<br>" 
+                return "时间：" + bigStockMoneyDate + params[0].name + "<br>" 
                     + "主力净流入: " + params[0].value + " 亿元<br>"
                     + "小单净流入: " + params[1].value + " 亿元<br>"
                     + "中单净流入: " + params[2].value + " 亿元<br>"
@@ -3399,6 +3403,8 @@ async function showNanXiang() {
         console.log('maxDate=', maxDate);
         dataAxis = dataAxis.concat(emptyData);
     }
+    s2nDate = result.data.s2nDate;
+    n2sDate = result.data.n2sDate;
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById(elementId));
     myChart.clear();
@@ -3462,7 +3468,7 @@ async function showNanXiang() {
             }
             },
             formatter: function(params) {
-                return "时间: " + params[0].name + "<br>" 
+                return "时间: " + n2sDate + " " + params[0].name + "<br>" 
                     + "南向资金: " + params[0].value + " 亿元<br>"
                     + "港股通（沪）: " + params[1].value + " 亿元<br>"
                     + "港股通（深）: " + params[2].value + " 亿元<br>"
@@ -3555,6 +3561,8 @@ async function showBeiXiang() {
         console.log('maxDate=', maxDate);
         dataAxis = dataAxis.concat(emptyData);
     }
+    s2nDate = result.data.s2nDate;
+    n2sDate = result.data.n2sDate;
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById(elementId));
     myChart.clear();
@@ -3618,7 +3626,7 @@ async function showBeiXiang() {
             }
             },
             formatter: function(params) {
-                return "时间: " + params[0].name + "<br>" 
+                return "时间: " + s2nDate + " " + params[0].name + "<br>" 
                     + "北向资金: " + params[0].value + " 亿元<br>"
                     + "沪股通: " + params[1].value + " 亿元<br>"
                     + "深股通: " + params[2].value + " 亿元<br>"
