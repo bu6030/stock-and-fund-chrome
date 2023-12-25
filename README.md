@@ -175,6 +175,8 @@
 155. 港股/美股汇率换算显示 2023/12/21
 156. 增加日涨跌幅监控提醒 2023/12/21 -- version 1.9.1 -- end
 157. 数据中心部分数据展示日期 2023/12/25
+158. 港股点击走势图通过浏览器打开东方财富走势图 2023/12/25
+159. 走势图页面增加东方财富走势图按钮，点击通过浏览器打开东方财富走势图 2023/12/25
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
