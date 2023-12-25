@@ -1106,9 +1106,6 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     stockDayIncome = new BigDecimal("0");
     stockTotalmarketValue = new BigDecimal("0");
     stockTotalCostValue = new BigDecimal("0");
-    var dayIncome = new BigDecimal("0");
-    var marketValue = new BigDecimal("0");
-    var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
         try {
             let changePercent = parseFloat(result[k].changePercent);
@@ -1230,9 +1227,6 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     fundDayIncome = new BigDecimal("0");
     fundTotalmarketValue = new BigDecimal("0");
     fundTotalCostValue = new BigDecimal("0");
-    var dayIncome = new BigDecimal("0");
-    var marketValue = new BigDecimal("0");
-    var marketValuePercent = new BigDecimal("0");
     for (var k in result) {
         try {
             let gszzl = parseFloat(result[k].gszzl);
@@ -3223,7 +3217,6 @@ async function showBigStockMoney() {
         contentHtml += " 上涨: <font color=red>" + up + "</font> 平盘: " + ping + " 下跌: <font color=green>" + down + "</font>";
     }
     $("#data-center-content").html(contentHtml);
-    console.log('dataStr == ', dataZhuLiJingLiuRu);
     if (dataZhuLiJingLiuRu.length < 241) {
         const diffLength = 241 - dataZhuLiJingLiuRu.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
@@ -3339,7 +3332,6 @@ async function showBigStockMoney() {
 
 // 展示南向资金图表
 async function showNanXiang() {
-    console.log('showNanXiang');
     let result = ajaxGetNanBeiXiangMoney();
     let elementId = 'data-center-chart';
     let dataNanXiangMoney = [];
@@ -3398,9 +3390,6 @@ async function showNanXiang() {
         dataNanXiangMoney = dataNanXiangMoney.concat(emptyData);
         dataGangGuTongHu = dataGangGuTongHu.concat(emptyData);
         dataGangGuTongShen = dataGangGuTongShen.concat(emptyData);
-
-        let maxDate = dataAxis[dataAxis.length - 1];
-        console.log('maxDate=', maxDate);
         dataAxis = dataAxis.concat(emptyData);
     }
     s2nDate = result.data.s2nDate;
@@ -3496,7 +3485,6 @@ async function showNanXiang() {
 
 // 展示北向资金图表
 async function showBeiXiang() {
-    console.log('showBeiXiang');
     let result = ajaxGetNanBeiXiangMoney();
     let elementId = 'data-center-chart';
     let dataBeiXiangMoney = [];
@@ -3556,9 +3544,6 @@ async function showBeiXiang() {
         dataBeiXiangMoney = dataBeiXiangMoney.concat(emptyData);
         dataHuGuTong = dataHuGuTong.concat(emptyData);
         dataShenGuTong = dataShenGuTong.concat(emptyData);
-
-        let maxDate = dataAxis[dataAxis.length - 1];
-        console.log('maxDate=', maxDate);
         dataAxis = dataAxis.concat(emptyData);
     }
     s2nDate = result.data.s2nDate;
@@ -3654,7 +3639,6 @@ async function showBeiXiang() {
 
 // 展示行业板块图表
 async function showHangYeBanKuai() {
-    console.log('showHangYeBanKuai');
     let result = ajaxGetHangYeBanKuaiMoney();
     let elementId = 'data-center-chart';
     let data = [];
@@ -3719,7 +3703,7 @@ async function showHangYeBanKuai() {
                 itemStyle: {
                     color: function(params) {
                         // 根据数据的正负来设置颜色
-                        return params.value >= 0 ? redColor : blueColor;
+                        return params.value >= 0 ? 'red' : 'green';
                     }
                 }
             }
