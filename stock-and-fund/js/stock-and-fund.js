@@ -205,6 +205,7 @@ async function initLoad() {
     // 展示密码保护按钮
     $("#show-password-protect-button")[0].style.display = 'inline';
     $("#data-export-button")[0].style.display = 'inline';
+    initWindowsSize();
     initHtml();
     initData();
     initLargeMarketData();
@@ -342,10 +343,18 @@ async function initHtml() {
             document.getElementById(lastSort.stock.targetId).classList.add(lastSort.stock.sortType);
         }
     }
+    if (showStockOrFundOrAll == 'fund') {
+        $("#stock-head").html('');
+        $("#stock-nr").html('');
+        $("#total-nr").html('');
+    } else if (showStockOrFundOrAll == 'stock') {
+        $("#fund-head").html('');
+        $("#fund-nr").html('');
+        $("#total-nr").html('');
+    }
     // 在页面顶部显示一些监控信息，重要信息
     // initNotice();
     initFontStyle();
-    initWindowsSize();
     changeBlackButton();
 }
 
@@ -2036,7 +2045,9 @@ async function changeShowStockOrFundOrAll(event) {
     }
     await saveCacheData('showStockOrFundOrAll', type);
     showStockOrFundOrAll = type;
-    location.reload();
+    // location.reload();
+    initHtml();
+    initData();
 }
 
 // 展示数据导入页面
@@ -2059,7 +2070,11 @@ function removeAllData() {
     let fundsRemove = [];
     saveCacheData('stocks', JSON.stringify(stocksRemove));
     saveCacheData('funds', JSON.stringify(fundsRemove));
-    location.reload();
+    // location.reload();
+    stockList = [];
+    fundList = [];
+    $("#setting-modal").modal("hide");
+    reloadDataAndHtml();
 }
 
 // 打开使用说明文档
@@ -2389,7 +2404,11 @@ async function fileInput (e) {
         saveCacheData('stocks', JSON.stringify(json.stocks));
         saveCacheData('funds', JSON.stringify(json.funds));
         $("#data-import-modal").modal("hide");
-        location.reload();
+        // location.reload();
+        stockList = json.stocks;
+        fundList = json.funds;
+        reloadDataAndHtml();
+        // $("#setting-modal").modal("hide");
     };
     reader.readAsText(file);
 }
@@ -2400,7 +2419,11 @@ function getStockAndFundFromLocalService () {
     if (result != null && result != '' && result != undefined) {
         saveCacheData('stocks', JSON.stringify(result.stocks));
         saveCacheData('funds', JSON.stringify(result.funds));
-        location.reload();
+        // location.reload();
+        stockList = result.stocks;
+        fundList = result.funds;
+        reloadDataAndHtml();
+        $("#setting-modal").modal("hide");
     }
 }
 
@@ -2419,7 +2442,8 @@ async function deleteStockAndFund() {
         saveCacheData('funds', JSON.stringify(funds));
         $("#time-image-modal").modal("hide");
         $("#fund-modal").modal("hide");
-        location.reload();
+        // location.reload();
+        fundList = funds;
     } else {
         var stocks = await readCacheData('stocks');
         stocks = jQuery.parseJSON(stocks);
@@ -2433,8 +2457,10 @@ async function deleteStockAndFund() {
         saveCacheData('stocks', JSON.stringify(stocks));
         $("#time-image-modal").modal("hide");
         $("#stock-modal").modal("hide");
-        location.reload();
+        // location.reload();
+        stockList = stocks;
     }
+    reloadDataAndHtml();
 }
 
 // 展示分时图
@@ -2486,7 +2512,9 @@ async function largeMarketScrollChange(event) {
     }
     saveCacheData('large-market-scrool', largeMarketScroll);
     $("#fund-modal").modal("hide");
-    location.reload();
+    // location.reload();
+    initLargeMarketData();
+    $("#setting-modal").modal("hide");
 }
 
 // 监控价格是否允许推送浏览器通知
@@ -2516,6 +2544,7 @@ async function setTop() {
         }
         funds.unshift(currentFund);
         saveCacheData('funds', JSON.stringify(funds));
+        fundList = funds;
     // 股票编辑页面/股票分时图页面点击置顶
     } else {
         var stocks = await readCacheData('stocks');
@@ -2530,10 +2559,12 @@ async function setTop() {
         }
         stocks.unshift(currentStock);
         saveCacheData('stocks', JSON.stringify(stocks));
+        stockList = stocks;
     }
     $("#time-image-modal").modal("hide");
     $("#stock-modal").modal("hide");
-    location.reload();
+    // location.reload();
+    reloadDataAndHtml();
 }
 
 // 从云服务器获取数据
@@ -2551,7 +2582,11 @@ async function syncDataFromCloud() {
         if (checkResult) {
             saveCacheData('stocks', JSON.stringify(result.stocks));
             saveCacheData('funds', JSON.stringify(result.funds));
-            location.reload();
+            stockList = result.stocks;
+            fundList = result.funds;
+            // location.reload();
+            reloadDataAndHtml();
+            $("#sync-data-cloud-modal").modal('hide');
         } else {
             $("#sync-data-cloud-modal").modal('hide');
             alertMessage("您取消了云同步");
@@ -3865,4 +3900,9 @@ async function goToEastMoney() {
         url = Env.GO_TO_EASTMONEY_2_URL + "/us/" + code + ".html#fullScreenChart"; 
     }
     chrome.tabs.create({ url: url });
+}
+
+async function reloadDataAndHtml() {
+    initHtml();
+    initData();
 }
