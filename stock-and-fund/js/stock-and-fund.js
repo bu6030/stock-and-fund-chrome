@@ -25,6 +25,7 @@ var bondsDisplay = 'DISPLAY';
 var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
+var changeDisplay = 'DISPLAY';
 var largeMarketScroll = 'STOP';
 var lastSort;
 var huilvConvert = false;
@@ -173,6 +174,14 @@ async function initLoad() {
         codeDisplay = 'DISPLAY';
         $("#code-display-checkbox").prop("checked", true);
     }
+    changeDisplay = await readCacheData('change-display');
+    if (changeDisplay == null || changeDisplay == 'HIDDEN') {
+        changeDisplay = 'HIDDEN';
+        $("#change-display-checkbox").prop("checked", false);
+    } else {
+        changeDisplay = 'DISPLAY';
+        $("#change-display-checkbox").prop("checked", true);
+    }
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
         largeMarketScroll = 'STOP';
@@ -233,7 +242,8 @@ async function initHtml() {
     var stockHead = " <tr id=\"stock-tr-title\"> " +
         " <th id=\"stock-name-th\" class=\"order\">股票名称</th> " +
         (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"stock-day-income-th\" class=\"order\">当日盈利</th> " : "") + 
-        " <th id=\"stock-change-th\" class=\"order\">涨跌幅</th> " +
+        " <th id=\"stock-change-percent-th\" class=\"order\">涨跌幅</th> " +
+        (changeDisplay == 'DISPLAY' ? " <th id=\"stock-change-th\" class=\"order\">涨跌</th>" : "") + 
         " <th id=\"stock-price-th\" class=\"order\">当前价</th> " +
         (costPriceDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-th\" class=\"order\">成本价</th> " : "") + 
         (bondsDisplay == 'DISPLAY' ? " <th id=\"stock-bonds-th\" class=\"order\">持仓</th> " : "") + 
@@ -248,7 +258,8 @@ async function initHtml() {
     var fundHead = " <tr id=\"fund-tr-title\">" +
         " <th id=\"fund-name-th\" class=\"order\">基金名称</th>" +
         (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"fund-day-income-th\" class=\"order\">当日盈利</th>" : "") + 
-        " <th id=\"fund-change-th\" class=\"order\">涨跌幅</th>" +
+        " <th id=\"fund-change-percent-th\" class=\"order\">涨跌幅</th>" +
+        (changeDisplay == 'DISPLAY' ? " <th id=\"fund-change-th\" class=\"order\">涨跌</th>" : "") + 
         " <th id=\"fund-price-th\" class=\"order\">估算净值</th>" +
         (costPriceDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-th\" class=\"order\">持仓成本单价</th>" : "") + 
         (bondsDisplay == 'DISPLAY' ? " <th id=\"fund-bonds-th\" class=\"order\">持有份额</th>" : "") + 
@@ -274,8 +285,8 @@ async function initHtml() {
             document.getElementById('fund-name-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('fund-day-income-th'))
             document.getElementById('fund-day-income-th').addEventListener('click', clickSortStockAndFund);
-        if(document.getElementById('fund-change-th'))
-            document.getElementById('fund-change-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-change-percent-th'))
+            document.getElementById('fund-change-percent-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('fund-price-th'))
             document.getElementById('fund-price-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('fund-cost-price-th'))
@@ -312,8 +323,8 @@ async function initHtml() {
             document.getElementById('stock-name-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-day-income-th'))
             document.getElementById('stock-day-income-th').addEventListener('click', clickSortStockAndFund);
-        if(document.getElementById('stock-change-th'))
-            document.getElementById('stock-change-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-change-percent-th'))
+            document.getElementById('stock-change-percent-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-price-th'))
             document.getElementById('stock-price-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-cost-price-th'))
@@ -330,6 +341,8 @@ async function initHtml() {
             document.getElementById('stock-income-percent-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-income-th'))
             document.getElementById('stock-income-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-change-th'))
+            document.getElementById('stock-change-th').addEventListener('click', clickSortStockAndFund);
         if (lastSort.stock.targetId != null && lastSort.stock.targetId != '' && document.getElementById(lastSort.stock.targetId)) {
             if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
                 document.getElementById(lastSort.stock.targetId).classList.remove('order');
@@ -566,6 +579,8 @@ document.addEventListener(
         document.getElementById("bonds-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，收益
         document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
+        // 设置页面，隐藏/展示页面展示项，涨跌
+        document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，一键全选
         document.getElementById("all-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，点击打赏按钮
@@ -1189,6 +1204,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
                 + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
                 + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
+                + (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].change + "</td>" : "")
                 + "<td>" + now + "</td>"
                 + (costPriceDisplay == 'DISPLAY' ? "<td>" + costPrise + "</td>" : "")
                 + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
@@ -1220,7 +1236,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         + "<td>合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "") 
         + "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>"
-        + "<td></td>"
+        + "<td></td><td></td>"
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(stockTotalmarketValue + "").toFixed(2) + "</td>" : "") 
@@ -1257,6 +1273,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
                 + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + "</td>" : "")
                 + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
+                + (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">--</td>" : "")
                 + "<td>" + result[k].gsz + "</td>"
                 + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
                 + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
@@ -1287,7 +1304,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     str += "<tr id=\"fund-tr-total\">"
         + "<td>合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "") 
-        + "<td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
+        + "<td colspan='3' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "")
         + (marketValueDisplay == 'DISPLAY' ? "<td>" + fundTotalmarketValue + "</td>" : "") 
@@ -1319,7 +1336,7 @@ function getTotalTableHtml(totalMarketValueResult) {
     str += "<tr id=\"total-tr-total\">"
         + "<td>汇总合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" )
-        + "<td colspan='2' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
+        + "<td colspan='3' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" )
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "" )
         + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(totalMarketValueResult + "").toFixed(2) + "</td>" : "" )
@@ -2340,6 +2357,9 @@ async function setDisplayTr(event) {
     } else if(type == 'income-display-checkbox') {
         incomeDisplay = dispaly;
         saveCacheData('income-display', dispaly);
+    } else if(type == 'change-display-checkbox') {
+        changeDisplay = dispaly;
+        saveCacheData('change-display', dispaly);
     } else if(type == 'all-display-checkbox'){
         $("#setting-modal").modal("hide");
         marketValueDisplay = dispaly;
@@ -3053,11 +3073,17 @@ async function sortStockAndFund(totalMarketValue) {
                 } else {
                     return parseFloat(b.dayIncome + "") - parseFloat(a.dayIncome + "");
                 }
-            } else if (targetId == 'stock-change-th') {
+            } else if (targetId == 'stock-change-percent-th') {
                 if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.changePercent + "") - parseFloat(b.changePercent + "");
                 } else {
                     return parseFloat(b.changePercent + "") - parseFloat(a.changePercent + "");
+                }
+            } else if (targetId == 'stock-change-th') {
+                if(lastSort.stock.sortType == 'asc'){
+                    return parseFloat(a.change + "") - parseFloat(b.change + "");
+                } else {
+                    return parseFloat(b.change + "") - parseFloat(a.change + "");
                 }
             } else if (targetId == 'stock-price-th') {
                 if(lastSort.stock.sortType == 'asc'){
@@ -3127,7 +3153,7 @@ async function sortStockAndFund(totalMarketValue) {
                 } else {
                     return parseFloat(b.dayIncome + "") - parseFloat(a.dayIncome + "");
                 }
-            } else if (targetId == 'fund-change-th') {
+            } else if (targetId == 'fund-change-percent-th') {
                 if(lastSort.fund.sortType == 'asc'){
                     return parseFloat(a.gszzl + "") - parseFloat(b.gszzl + "");
                 } else {
