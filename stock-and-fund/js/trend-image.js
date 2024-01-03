@@ -7,15 +7,21 @@ function showMinuteImage() {
     if (timeImageType == "FUND") {
         path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
         $("#fund-modal").modal("hide");
+        $("#time-image-new").hide();
+        $("#time-image").show();
     } else {
         path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
-        setStockMinitesImage();
         $("#stock-modal").modal("hide");
         $("#time-image-modal").modal();
-        $("#time-image-new").show();
         if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US") ||
             timeImageCode.startsWith("hk") || timeImageCode.startsWith("HK")) {
+                setStockMinitesImage();
+                $("#time-image-new").show();
+                $("#time-image").hide();
                 return;
+        } else {
+            $("#time-image-new").hide();
+            $("#time-image").show();
         }
     }
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006") {
