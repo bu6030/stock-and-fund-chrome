@@ -138,10 +138,20 @@ function ajaxGetFundFromTiantianjijin(code) {
 
 // 接口调用
 function ajaxGetStockTimeImageMinuteMini(code){
-    code = code.replace('sh','').replace('sz','');
+    let secid;
+    if(code.startsWith('sh') || code.startsWith('SH')){
+        secid = '1';
+    } else if(code.startsWith('sz') || code.startsWith('SZ')) {
+        secid = '0';
+    } else if(code.startsWith('hk') || code.startsWith('HK')) {
+        secid = '116';
+    } else if(code.startsWith('us') || code.startsWith('US')) {
+        secid = '106';
+    }
+    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('.', '_');
     let result;
     $.ajax({
-        url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=1."+ code +"&fields1=f1,f2,f8&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
+        url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=" + secid + "."+ code +"&fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
         type: "get",
         data: {},
         async: false,
@@ -156,24 +166,6 @@ function ajaxGetStockTimeImageMinuteMini(code){
             console.log(textStatus);
         }
     });
-    if (result.data == null || result.data == "null") {
-        $.ajax({
-            url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=0."+ code +"&fields1=f1,f2,f8&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
-            type: "get",
-            data: {},
-            async: false,
-            dataType: 'json',
-            contentType: 'application/x-www-form-urlencoded',
-            success: function (data) {
-                result = data;
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(XMLHttpRequest.status);
-                console.log(XMLHttpRequest.readyState);
-                console.log(textStatus);
-            }
-        });
-    }
     return result;
 }
 

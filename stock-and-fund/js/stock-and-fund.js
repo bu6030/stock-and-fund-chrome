@@ -2493,12 +2493,7 @@ function showTimeImage(event) {
         timeImageCode = $("#stock-code").val();
         timeImageType = "STOCK";
     }
-    if(timeImageCode.startsWith('hk') || timeImageCode.startsWith('HK') ||
-        timeImageCode.startsWith('us') || timeImageCode.startsWith('US')) {
-        goToEastMoney();
-    } else {
-        showMinuteImage();
-    }
+    showMinuteImage();
 }
 
 // 搜索股票基金输入框，点击回车搜索股票基金
