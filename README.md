@@ -180,6 +180,7 @@
 160. 点击基金/股票切换时，窗口抖动修改 2023/12/26 -- version 1.9.2 -- end
 161. 优化股票/基金编辑页面 2024/1/2
 162. 增加股票涨跌列 2024/1/2
+163. 增加echarts分时图 2024/1/3
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
