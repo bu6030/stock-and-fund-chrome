@@ -3,6 +3,7 @@ let Env = {
     GET_STOCK_CODE_BY_NAME_FROM_GTIMG: "https://smartbox.gtimg.cn/s3/",
     GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA: "http://image.sinajs.cn/newchart/min/n/",
     GET_STOCK_TIME_IMAGE_DAY_FROM_SINA: "http://image.sinajs.cn/newchart/daily/n/",
+    GET_STOCK_TIME_IMAGE_FROM_EASTMONEY: "https://push2his.eastmoney.com/api/qt/stock/kline/get",
     GET_STOCK_TIME_IMAGE_WEEK_FROM_SINA: "http://image.sinajs.cn/newchart/weekly/n/",
     GET_STOCK_TIME_IMAGE_MONTH_FROM_SINA: "http://image.sinajs.cn/newchart/monthly/n/",
     GET_STOCK_TIME_IMAGE_MINUTE_MINI: "https://push2.eastmoney.com/api/qt/stock/trends2/get",

@@ -3927,3 +3927,36 @@ async function reloadDataAndHtml() {
     initHtml();
     initData();
 }
+
+function getSecid(code) {
+    let secid;
+    if(code.startsWith('sh') || code.startsWith('SH')){
+        secid = '1';
+    } else if(code.startsWith('sz') || code.startsWith('SZ')) {
+        secid = '0';
+    } else if(code.startsWith('hk') || code.startsWith('HK')) {
+        secid = '116';
+    } else if(code.startsWith('us') || code.startsWith('US')) {
+        try {
+            let stock;
+            for (k in stockList) {
+                if(code == stockList[k].code){
+                    stock = stockList[k];
+                    break;
+                }
+            }
+            let name = stock.name;
+            let result = ajaxGetStockCodeByNameFromGtimg(name);
+            let sec = result.split("^")[0].split('~')[1];
+            if (sec.endsWith('.oq')) {
+                secid = '105';
+            } else {
+                secid = '106';
+            }
+        } catch (error) {
+            console.error(error);
+            secid = '106';
+        }
+    }
+    return secid;
+}

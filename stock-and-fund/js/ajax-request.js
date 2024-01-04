@@ -137,17 +137,8 @@ function ajaxGetFundFromTiantianjijin(code) {
 }
 
 // 接口调用
-function ajaxGetStockTimeImageMinuteMini(code){
-    let secid;
-    if(code.startsWith('sh') || code.startsWith('SH')){
-        secid = '1';
-    } else if(code.startsWith('sz') || code.startsWith('SZ')) {
-        secid = '0';
-    } else if(code.startsWith('hk') || code.startsWith('HK')) {
-        secid = '116';
-    } else if(code.startsWith('us') || code.startsWith('US')) {
-        secid = '106';
-    }
+function ajaxGetStockTimeImageMinuteMini(code) {
+    let secid = getSecid(code);
     code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('.', '_');
     let result;
     $.ajax({
@@ -174,6 +165,38 @@ function ajaxGetFundTimeImageMinuteMini(code) {
     let result;
     $.ajax({
         url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=0."+ code +"&fields1=f1,f2,f8&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
+function ajaxGetStockTimeImage(code, type) {
+    let klt;
+    if (type == 'DAY') {
+        klt = 101;
+    } else if (type == 'WEEK'){
+        klt = 102;
+    } else if (type == 'MONTH'){
+        klt = 103;
+    }
+    let secid = getSecid(code);
+    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('.', '_');
+    let result;
+    $.ajax({
+    url: Env.GET_STOCK_TIME_IMAGE_FROM_EASTMONEY + "?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=80&end=20240104&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&ut=f057cbcbce2a86e2866ab8877db1d059&forcect=1",
         type: "get",
         data: {},
         async: false,
