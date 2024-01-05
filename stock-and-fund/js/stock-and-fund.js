@@ -1032,8 +1032,6 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-button")[0].style.display = 'inline';
-                $("#time-image-new-button")[0].style.display = 'inline';
-                $("#time-image-old-button")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
                 (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
                     $("#fund-invers-position-button-3")[0].style.display = 'inline';
@@ -1104,8 +1102,6 @@ async function initStockAndFundHtml() {
                 $("#fund-net-diagram-button-3")[0].style.display = 'inline';
                 $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 $("#go-to-eastmoney-button")[0].style.display = 'none';
-                $("#time-image-new-button")[0].style.display = 'none';
-                $("#time-image-old-button")[0].style.display = 'none';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -3969,6 +3965,8 @@ function getSecid(code) {
             console.error(error);
             secid = '106';
         }
+    } else {
+        secid = '0';
     }
     return secid;
 }

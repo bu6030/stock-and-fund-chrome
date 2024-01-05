@@ -11,8 +11,8 @@ function showMinuteImage() {
             $("#show-buy-or-sell-button-2")[0].style.display = 'block';
         }
     }
-    if (timeImageType == "FUND" || (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK"))) {
+    if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
         if (timeImageType == "FUND") {
             path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
             $("#fund-modal").modal("hide");
@@ -36,8 +36,8 @@ function showMinuteImage() {
 // 展示日线图
 function showDayImage() {
     let path = "";
-    if (timeImageType == "FUND" || (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK"))) {
+    if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -60,8 +60,8 @@ function showDayImage() {
 // 展示周线图
 function showWeekImage() {
     let path = "";
-    if (timeImageType == "FUND" || (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK"))) {
+    if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=W&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -82,8 +82,8 @@ function showWeekImage() {
 // 展示月线图
 function showMonthImage() {
     let path = "";
-    if (timeImageType == "FUND" || (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK"))) {
+    if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=M&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -118,8 +118,11 @@ function toEditPage() {
 }
 // 展示分时图
 function setStockMinitesImage() {
-    $("#time-image").html('');
+    // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
+    var myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
+    $("#time-image").html('');
     let result = ajaxGetStockTimeImageMinuteMini(timeImageCode);
     let dataStr = [];
     let dataVolumnStr = [];
@@ -172,9 +175,6 @@ function setStockMinitesImage() {
     if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US")) {
         interval = 59;
     }
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById(elementId));
-    myChart.clear();
     option = {
         // resize: true,
         lineStyle: {
@@ -273,8 +273,11 @@ function setStockMinitesImage() {
 }
 // 展示日线/周线/月线图
 function setStockImage(type) {
-    $("#time-image").html('');
+    // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
+    var myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
+    $("#time-image").html('');
     let result = ajaxGetStockTimeImage(timeImageCode, type);
     for (k in stockList) {
         if(timeImageCode == stockList[k].code){
@@ -288,9 +291,6 @@ function setStockImage(type) {
     // 提取数据
     const echartsData = transformDayData(result);
     const data0 = splitData(echartsData);
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById(elementId));
-    myChart.clear();
     let kType;
     if (type == 'DAY') {
         kType = '日K';
