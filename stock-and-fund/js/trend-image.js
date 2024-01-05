@@ -21,17 +21,17 @@ function showMinuteImage() {
         } else {
             path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
             $("#stock-modal").modal("hide");
-            $("#time-image-modal").modal();
             $("#time-image-new").hide();
             $("#time-image").show();
         }
         $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+        $("#time-image-modal").modal();
     } else {
-        setStockMinitesImage();
         $("#time-image-new").show();
         $("#time-image").html('');
+        setStockMinitesImage();
     }
-    $("#time-image-modal").modal();
+
 }
 // 展示日线图
 function showDayImage() {
@@ -129,6 +129,8 @@ function setStockMinitesImage() {
     let dataAxis = [];
     let now;
     if (result.data == null) {
+        $("#time-image-modal").modal("hide");
+        alertMessage('无法提供该股票/基金的走势图信息');
         return;
     }
     var preClose = parseFloat(result.data.preClose);
@@ -244,7 +246,20 @@ function setStockMinitesImage() {
                 style: {
                     stroke: 'green',
                     lineWidth: 2
-                }
+                },
+                elements: [
+                    {
+                        type: 'text',
+                        left: '5%',
+                        top: '5%',
+                        style: {
+                            text: result.data.name,
+                            textAlign: 'left',
+                            fill: '#333',
+                            fontSize: 14
+                        }
+                    }
+                ]
             }
         ],
         tooltip: {
@@ -270,6 +285,7 @@ function setStockMinitesImage() {
         },
     };
     myChart.setOption(option);
+    $("#time-image-modal").modal();
 }
 // 展示日线/周线/月线图
 function setStockImage(type) {
@@ -286,6 +302,8 @@ function setStockImage(type) {
         }
     }
     if (result.data == null) {
+        $("#time-image-modal").modal("hide");
+        alertMessage('无法提供该股票/基金的走势图信息');
         return;
     }
     // 提取数据
@@ -329,9 +347,40 @@ function setStockImage(type) {
         series: [
             {
                 type: 'candlestick',
-                data: data0.values
+                data: data0.values,
+                // 配置涨的颜色和跌的颜色
+                itemStyle: {
+                    color: redColor, // 涨的颜色
+                    color0: blueColor, // 跌的颜色
+                    borderColor: null, // 边框颜色，null 表示使用涨跌颜色
+                    borderColor0: null, // 跌的边框颜色，null 表示使用涨跌颜色
+                },
+                // // 配置高亮时的样式
+                // emphasis: {
+                //     itemStyle: {
+                //     color: 'yellow', // 涨的高亮颜色
+                //     color0: 'blue', // 跌的高亮颜色
+                //     borderColor: null, // 边框颜色，null 表示使用涨跌颜色
+                //     borderColor0: null, // 跌的边框颜色，null 表示使用涨跌颜色
+                //     },
+                // },
             }
         ],
+        graphic: {
+            elements: [
+                {
+                    type: 'text',
+                    left: '5%',
+                    top: '5%',
+                    style: {
+                        text: result.data.name,
+                        textAlign: 'left',
+                        fill: '#333',
+                        fontSize: 14
+                    }
+                }
+            ]
+        },
         tooltip: {
             trigger: 'axis',
             axisPointer: {

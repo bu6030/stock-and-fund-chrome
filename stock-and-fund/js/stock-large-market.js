@@ -60,7 +60,7 @@ function initLargeMarketData() {
 // 初始化大盘指数 onclick 具体方法
 function initLargeMarketClick() {
     timeImageType = "STOCK";
-    let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
+    // let path = Env.GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA + timeImageCode + ".gif";
     $("#stock-code").val(timeImageCode);
     $("#stock-modal").modal("hide");
     $("#time-image-day-button")[0].style.display = 'block';
@@ -75,6 +75,7 @@ function initLargeMarketClick() {
     $("#set-top-button-3")[0].style.display = 'none';
     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
 
-    $("#time-image-modal").modal();
-    $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+    // $("#time-image-modal").modal();
+    // $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
+    showMinuteImage();
 }
