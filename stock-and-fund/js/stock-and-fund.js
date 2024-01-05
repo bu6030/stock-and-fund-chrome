@@ -32,6 +32,7 @@ var huilvConvert = false;
 var s2nDate;
 var n2sDate;
 var bigStockMoneyDate;
+var timeImageNewOrOld;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -185,6 +186,10 @@ async function initLoad() {
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
         largeMarketScroll = 'STOP';
+    }
+    timeImageNewOrOld = await readCacheData('time-image-new-or-old');
+    if (timeImageNewOrOld == null) {
+        timeImageNewOrOld = 'OLD';
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -471,6 +476,9 @@ document.addEventListener(
         document.getElementById('show-sell-button-2').addEventListener('click', showBuyOrSell);
         // 走势图页面，点击东方财富走势图
         document.getElementById('go-to-eastmoney-button').addEventListener('click', goToEastMoney);
+        // 走势图页面，切换新旧走势图
+        document.getElementById('time-image-new-button').addEventListener('click', changeTimeImage);
+        document.getElementById('time-image-old-button').addEventListener('click', changeTimeImage);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -1024,6 +1032,8 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-button")[0].style.display = 'inline';
+                $("#time-image-new-button")[0].style.display = 'inline';
+                $("#time-image-old-button")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
                 (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
                     $("#fund-invers-position-button-3")[0].style.display = 'inline';
@@ -1094,6 +1104,8 @@ async function initStockAndFundHtml() {
                 $("#fund-net-diagram-button-3")[0].style.display = 'inline';
                 $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 $("#go-to-eastmoney-button")[0].style.display = 'none';
+                $("#time-image-new-button")[0].style.display = 'none';
+                $("#time-image-old-button")[0].style.display = 'none';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -3959,4 +3971,16 @@ function getSecid(code) {
         }
     }
     return secid;
+}
+
+// 切换新旧走势图
+async function changeTimeImage(event) {
+    let targetId = event.target.id;
+    if (targetId == 'time-image-old-button') {
+        timeImageNewOrOld = 'OLD';
+    } else {
+        timeImageNewOrOld = 'NEW';
+    }
+    saveCacheData('time-image-new-or-old', timeImageNewOrOld);
+    showMinuteImage();
 }
