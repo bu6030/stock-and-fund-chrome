@@ -2698,7 +2698,7 @@ function generateRandomUUID() {
     return uuid;
 }
 
-// 获取北京时间格式的日期时间
+// 获取北京时间格式的日期时间，2023/01/01 00:00:00格式
 function getBeijingTime() {
     var date = new Date();
     var options = {
@@ -2714,7 +2714,7 @@ function getBeijingTime() {
     return date.toLocaleString('zh-CN', options);
 }
 
-// 获取北京时间格式的日期
+// 获取北京时间格式的日期，2023-01-01格式
 function getBeijingDate() {
     let date = new Date();
     let options = {
@@ -2726,6 +2726,20 @@ function getBeijingDate() {
     };
     let formattedDate = date.toLocaleString('zh-CN', options);
     return formattedDate.replace(/\//g, '-');
+}
+
+// 获取北京时间格式的日期，20230101格式
+function getBeijingDateNoSlash() {
+    let date = new Date();
+    let options = {
+      timeZone: 'Asia/Shanghai',
+      hour12: false,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    };
+    let formattedDate = date.toLocaleString('zh-CN', options);
+    return formattedDate.replace(/\//g, '');
 }
 
 // 展示买/卖股票页面

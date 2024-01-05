@@ -183,7 +183,7 @@ function ajaxGetFundTimeImageMinuteMini(code) {
 }
 
 // 接口调用
-function ajaxGetStockTimeImage(code, type) {
+function ajaxGetStockTimeImage(code, type, end) {
     let klt;
     if (type == 'DAY') {
         klt = 101;
@@ -196,7 +196,7 @@ function ajaxGetStockTimeImage(code, type) {
     code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('.', '_');
     let result;
     $.ajax({
-    url: Env.GET_STOCK_TIME_IMAGE_FROM_EASTMONEY + "?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=80&end=20240104&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1",
+    url: Env.GET_STOCK_TIME_IMAGE_FROM_EASTMONEY + "?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=80&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1",
         type: "get",
         data: {},
         async: false,

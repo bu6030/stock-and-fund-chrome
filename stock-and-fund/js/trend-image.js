@@ -294,7 +294,8 @@ function setStockImage(type) {
     var myChart = echarts.init(document.getElementById(elementId));
     myChart.clear();
     $("#time-image").html('');
-    let result = ajaxGetStockTimeImage(timeImageCode, type);
+    let end = getBeijingDateNoSlash();
+    let result = ajaxGetStockTimeImage(timeImageCode, type, end);
     for (k in stockList) {
         if(timeImageCode == stockList[k].code){
             stockName = stockList[k].name;
