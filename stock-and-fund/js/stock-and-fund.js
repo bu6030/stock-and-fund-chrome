@@ -3972,6 +3972,8 @@ function getSecid(code) {
             let sec = result.split("^")[0].split('~')[1];
             if (sec.endsWith('.oq')) {
                 secid = '105';
+            }else if (sec.endsWith('.ps')) {
+                secid = '153';
             } else {
                 secid = '106';
             }

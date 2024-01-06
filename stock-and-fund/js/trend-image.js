@@ -27,6 +27,7 @@ function showMinuteImage() {
         $("#time-image").html('<img src="' + path + '" width="100%" length="100%" />');
         $("#time-image-modal").modal();
     } else {
+        $("#time-image-modal").modal();
         $("#time-image-new").show();
         $("#time-image").html('');
         setStockMinitesImage();
@@ -129,7 +130,6 @@ function setStockMinitesImage() {
     let dataAxis = [];
     let now;
     if (result.data == null) {
-        $("#time-image-modal").modal("hide");
         alertMessage('无法提供该股票/基金的走势图信息');
         return;
     }
@@ -303,7 +303,6 @@ function setStockImage(type) {
         }
     }
     if (result.data == null) {
-        $("#time-image-modal").modal("hide");
         alertMessage('无法提供该股票/基金的走势图信息');
         return;
     }
