@@ -3945,11 +3945,13 @@ async function goToEastMoney() {
     chrome.tabs.create({ url: url });
 }
 
+// 重新加载页面
 async function reloadDataAndHtml() {
     initHtml();
     initData();
 }
 
+// 获取市场id
 function getSecid(code) {
     let secid;
     if(code.startsWith('sh') || code.startsWith('SH')){
