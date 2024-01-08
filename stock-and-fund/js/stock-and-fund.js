@@ -1244,7 +1244,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         + "<td>合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "") 
         + "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>"
-        + "<td></td><td></td>"
+        + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
+        + "<td></td>"
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(stockTotalmarketValue + "").toFixed(2) + "</td>" : "") 
@@ -1312,7 +1313,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     str += "<tr id=\"fund-tr-total\">"
         + "<td>合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "") 
-        + "<td colspan='3' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
+        + "<td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
+        + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "")
         + (marketValueDisplay == 'DISPLAY' ? "<td>" + fundTotalmarketValue + "</td>" : "") 
@@ -1344,7 +1346,8 @@ function getTotalTableHtml(totalMarketValueResult) {
     str += "<tr id=\"total-tr-total\">"
         + "<td>汇总合计</td>"
         + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" )
-        + "<td colspan='3' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
+        + "<td colspan='2' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
+        + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
         + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" )
         + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "" )
         + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(totalMarketValueResult + "").toFixed(2) + "</td>" : "" )
