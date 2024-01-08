@@ -153,10 +153,6 @@ function setStockMinitesImage() {
             now = dataStr[k];
         }
     }
-    // let changePercent = Math.ceil((maxPrice - minPrice) / maxPrice * 1000);
-    // let centerPrice = (maxPrice + minPrice) / 2;
-    // maxPrice = Math.ceil(centerPrice * (1000 + changePercent) / 1000);
-    // minPrice = Math.floor(centerPrice * (1000 - changePercent) / 1000);
     if(dataStr.length == 0) {
         return;
     }
@@ -197,8 +193,6 @@ function setStockMinitesImage() {
                 scale: true,
                 type: 'value',
                 position: 'left',  // 左侧 Y 轴
-                // min: minPrice,
-                // max: maxPrice,
                 axisLabel: {
                     formatter: '{value}',  // 左侧 Y 轴刻度显示价格
                 },
@@ -208,12 +202,9 @@ function setStockMinitesImage() {
                 scale: true,
                 type: 'value',
                 position: 'right',  // 右侧 Y 轴
-                // min: minPrice,
-                // max: maxPrice,
                 axisLabel: {
                     formatter: function(value) {
                         // 计算涨跌比例，假设初始价格为 prePrice
-                        // var prePrice = 100;  // 你的实际初始价格
                         var changePercent = ((value - preClose) / preClose * 100).toFixed(2) + '%';
                         return changePercent;
                     },
@@ -355,15 +346,6 @@ function setStockImage(type) {
                     borderColor: null, // 边框颜色，null 表示使用涨跌颜色
                     borderColor0: null, // 跌的边框颜色，null 表示使用涨跌颜色
                 },
-                // // 配置高亮时的样式
-                // emphasis: {
-                //     itemStyle: {
-                //     color: 'yellow', // 涨的高亮颜色
-                //     color0: 'blue', // 跌的高亮颜色
-                //     borderColor: null, // 边框颜色，null 表示使用涨跌颜色
-                //     borderColor0: null, // 跌的边框颜色，null 表示使用涨跌颜色
-                //     },
-                // },
             }
         ],
         graphic: {
@@ -404,7 +386,7 @@ function setStockImage(type) {
     };
     myChart.setOption(option);
 }
-
+// 处理分时线数据
 function transformMinuteData(apiData) {
     const trends = apiData.data.trends;
     const transformedData = trends.map((trends) => {
@@ -413,7 +395,7 @@ function transformMinuteData(apiData) {
     });
     return transformedData;
 }
-
+// 处理日线/周线/月线数据
 function transformDayData(apiData) {
     const klines = apiData.data.klines;
     const transformedData = klines.map((kline) => {
@@ -422,7 +404,7 @@ function transformDayData(apiData) {
     });
     return transformedData;
 }
-
+// 处理分时线数据
 function splitData(rawData) {
     const categoryData = [];
     const values = [];
