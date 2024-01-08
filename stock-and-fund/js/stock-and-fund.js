@@ -257,7 +257,7 @@ async function initHtml() {
         (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-value-th\" class=\"order\">成本</th> " : "") + 
         (incomePercentDisplay == 'DISPLAY' ? " <th id=\"stock-income-percent-th\" class=\"order\">收益率</th> " : "") + 
         (incomeDisplay == 'DISPLAY' ? " <th id=\"stock-income-th\" class=\"order\">收益</th> " : "") + 
-        (addtimePriceDisplay == 'DISPLAY' ? " <th >自选价格</th> " : "") + 
+        (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"stock-add-time-price-th\">自选价格</th> " : "") + 
         " </tr>";
     // 基金标题
     var fundHead = " <tr id=\"fund-tr-title\">" +
@@ -2133,8 +2133,11 @@ async function stockMonitor () {
         return;
     }
     let stock = checkStockExsit(code);
-    chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-
+    try {
+        chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+    } catch(error){
+        console.error(error);
+    }
     let now = stock.now;
     let openPrice = stock.openPrice;
     if (parseFloat(now) >= parseFloat(openPrice)) {
@@ -4002,4 +4005,44 @@ async function changeTimeImage(event) {
     }
     saveCacheData('time-image-new-or-old', timeImageNewOrOld);
     showMinuteImage();
+}
+
+// 根据列顺序排序展示
+function swapColumns() {
+    var columnOrder = {
+        "stock-name-th": 0,
+        "stock-day-income-th": 1,
+        "stock-change-percent-th": 2,
+        "stock-change-th": 3,
+        "stock-price-th": 4,
+        "stock-cost-price-th": 5,
+        "stock-bonds-th": 6,
+        "stock-market-value-th": 7,
+        "stock-market-value-percent-th": 8,
+        "stock-cost-price-value-th": 9,
+        "stock-income-percent-th": 10,
+        "stock-income-th": 11,
+        "stock-add-time-price-th": 12
+    };
+    var table = document.getElementById("sortable-table");
+    var headerRow = table.rows[0];
+    // 根据 JSON 对象重新排列列
+    Object.keys(columnOrder).forEach(function (columnName) {
+        var columnIndex = getColumnIndexByColumnName(headerRow, columnName);
+        // 移动数据列
+        for (var i = 0; i < table.rows.length; i++) {
+            var dataCell = table.rows[i].cells[columnOrder[columnName]];
+            dataCell.parentNode.insertBefore(dataCell, table.rows[i].cells[columnIndex]);
+        }
+    });
+}
+// 通过列名获取列的索引位置
+function getColumnIndexByColumnName(headerRow, columnName) {
+    for (var i = 0; i < headerRow.cells.length; i++) {
+        // console.log('headerRow.cells[i].textContent', headerRow.cells[i].outerHTML);
+        if (headerRow.cells[i].outerHTML.indexOf(columnName) > -1) {
+            return i;
+        }
+    }
+    return -1; // 如果没找到，返回 -1 表示未找到
 }

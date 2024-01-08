@@ -271,7 +271,11 @@ function monitorStock(code) {
                 if (now.length >= 5) {
                     now = parseFloat(now.substring(0, 5));
                 }
-                chrome.action.setBadgeTextColor({ color: '#FFFFFF' });  
+                try {
+                    chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                } catch (error){
+                    console.error(error);
+                }
                 chrome.action.setBadgeText({ text: "" + now });
             })
             .catch(error => {
