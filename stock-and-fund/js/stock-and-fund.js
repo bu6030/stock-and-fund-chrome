@@ -33,21 +33,37 @@ var s2nDate;
 var n2sDate;
 var bigStockMoneyDate;
 var timeImageNewOrOld;
-var columnOrder = [
-    {"add-time-price-th": 0},
-    {"name-th": 0},
-    {"day-income-th": 0},
-    {"change-percent-th": 0},
-    {"change-th": 0},
-    {"price-th": 0},
-    {"cost-price-th": 0},
-    {"bonds-th": 0},
-    {"market-value-th": 0},
-    {"market-value-percent-th": 0},
-    {"cost-price-value-th": 0},
-    {"income-percent-th": 0},
-    {"income-th": 0},
-];
+var columnOrder;
+var stockColumnNames = {
+    "name-th": "股票名称",
+    "day-income-th": "当日盈利",
+    "change-percent-th": "涨跌幅",
+    "change-th": "涨跌",
+    "price-th": "当前价",
+    "cost-price-th": "成本价",
+    "bonds-th": "持仓",
+    "market-value-th": "市值/金额",
+    "market-value-percent-th": "持仓占比",
+    "cost-price-value-th": "成本",
+    "income-percent-th": "收益率",
+    "income-th": "收益",
+    "add-time-price-th": "自选价格"
+};
+var fundColumnNames = {
+    "name-th": "基金名称",
+    "day-income-th": "当日盈利",
+    "change-percent-th": "涨跌幅",
+    "change-th": "涨跌",
+    "price-th": "估算净值",
+    "cost-price-th": "持仓成本单价",
+    "bonds-th": "持有份额",
+    "market-value-th": "市值/金额",
+    "market-value-percent-th": "持仓占比",
+    "cost-price-value-th": "成本",
+    "income-percent-th": "收益率",
+    "income-th": "收益",
+    "add-time-price-th": "自选价格"
+};
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -218,6 +234,24 @@ async function initLoad() {
                 'sortType' : 'order'
             }
         };
+    }
+    columnOrder = await readCacheData('column-order');
+    if (columnOrder == null) {
+        columnOrder = [
+            {"name-th": 0},
+            {"day-income-th": 0},
+            {"change-percent-th": 0},
+            {"change-th": 0},
+            {"price-th": 0},
+            {"cost-price-th": 0},
+            {"bonds-th": 0},
+            {"market-value-th": 0},
+            {"market-value-percent-th": 0},
+            {"cost-price-value-th": 0},
+            {"income-percent-th": 0},
+            {"income-th": 0},
+            {"add-time-price-th": 0},
+        ];
     }
     var funds = await readCacheData('funds');
     if (funds == null) {
@@ -415,6 +449,7 @@ document.addEventListener(
         // 首页，点击设置按钮
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
+            generateColumnList();
         });
         // 首页，底部全部按钮，股票基金全部显示
         document.getElementById('show-all-button').addEventListener('click', changeShowStockOrFundOrAll);
@@ -661,6 +696,8 @@ document.addEventListener(
         // 设置页面，点击切换汇率按钮
         document.getElementById('huilv-convert-change-button').addEventListener('click', changeHuilvConvert);
         document.getElementById('huilv-dont-convert-change-button').addEventListener('click', changeHuilvConvert);
+        // 设置页面，点击恢复默认顺序按钮
+        document.getElementById('column-order-recovery-button').addEventListener('click', recoveryColumnOrder);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -4226,36 +4263,6 @@ async function changeTimeImage(event) {
 // 根据顺序拼接html信息
 function getThColumnHtml(columnId, type) {
     // 这里可以根据需要定义每个列的显示名称
-    var stockColumnNames = {
-        "name-th": "股票名称",
-        "day-income-th": "当日盈利",
-        "change-percent-th": "涨跌幅",
-        "change-th": "涨跌",
-        "price-th": "当前价",
-        "cost-price-th": "成本价",
-        "bonds-th": "持仓",
-        "market-value-th": "市值/金额",
-        "market-value-percent-th": "持仓占比",
-        "cost-price-value-th": "成本",
-        "income-percent-th": "收益率",
-        "income-th": "收益",
-        "add-time-price-th": "自选价格"
-    };
-    var fundColumnNames = {
-        "name-th": "基金名称",
-        "day-income-th": "当日盈利",
-        "change-percent-th": "涨跌幅",
-        "change-th": "涨跌",
-        "price-th": "估算净值",
-        "cost-price-th": "持仓成本单价",
-        "bonds-th": "持有份额",
-        "market-value-th": "市值/金额",
-        "market-value-percent-th": "持仓占比",
-        "cost-price-value-th": "成本",
-        "income-percent-th": "收益率",
-        "income-th": "收益",
-        "add-time-price-th": "自选价格"
-    };
     var html;
     if (columnId == 'day-income-th' && dayIncomeDisplay != 'DISPLAY') {
         html = "";
@@ -4283,4 +4290,66 @@ function getThColumnHtml(columnId, type) {
             " <th id=\"fund-" + columnId + "\" class=\"order\">" + fundColumnNames[columnId] || columnId + "</th> ";
     }
     return html;
+}
+// 拼接拖拽可以修改列展示顺序的列表
+function generateColumnList() {
+    var columnList = document.getElementById('sortable-column-table');
+    columnList.innerHTML = '';
+    columnOrder.forEach(function (column) {
+        var columnName = Object.keys(column)[0];
+        var listItem = document.createElement('li');
+        listItem.textContent = "(股票)" + stockColumnNames[columnName] + "/(基金)" + fundColumnNames[columnName];
+        listItem.setAttribute('draggable', 'true');
+        listItem.setAttribute('data-column', columnName);
+        columnList.appendChild(listItem);
+    });
+    addDragAndDropListeners();
+}
+// 可以拖拽改列展示顺序的列表的事件监听
+function addDragAndDropListeners() {
+    var columnList = document.getElementById('sortable-column-table');
+    columnList.addEventListener('dragstart', function (e) {
+        e.dataTransfer.setData('text/plain', e.target.dataset.column);
+    });
+    columnList.addEventListener('dragover', function (e) {
+        e.preventDefault();
+    });
+    columnList.addEventListener('drop', function (e) {
+        e.preventDefault();
+        var draggedColumn = e.dataTransfer.getData('text/plain');
+        var newIndex = Array.from(columnList.children).indexOf(e.target);
+        columnOrder = arrayMove(columnOrder, columnOrder.findIndex(col => col[draggedColumn] !== undefined), newIndex);
+        console.log("columnOrder=", columnOrder);
+        saveCacheData('column-order', columnOrder);
+        $("#setting-modal").modal("hide");
+        reloadDataAndHtml();
+    });
+}
+// 拖拽完成后切换列表的顺序
+function arrayMove(arr, oldIndex, newIndex) {
+    var element = arr[oldIndex];
+    arr.splice(oldIndex, 1);
+    arr.splice(newIndex, 0, element);
+    return arr;
+}
+// 恢复默认列顺序
+function recoveryColumnOrder() {
+    columnOrder = [
+        {"name-th": 0},
+        {"day-income-th": 0},
+        {"change-percent-th": 0},
+        {"change-th": 0},
+        {"price-th": 0},
+        {"cost-price-th": 0},
+        {"bonds-th": 0},
+        {"market-value-th": 0},
+        {"market-value-percent-th": 0},
+        {"cost-price-value-th": 0},
+        {"income-percent-th": 0},
+        {"income-th": 0},
+        {"add-time-price-th": 0},
+    ];
+    saveCacheData('column-order', columnOrder);
+    $("#setting-modal").modal("hide");
+    reloadDataAndHtml();
 }
