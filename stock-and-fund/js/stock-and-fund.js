@@ -2129,33 +2129,37 @@ async function stockMonitor () {
     if (monitorStockCode != null && monitorStockCode != '' 
     && monitorStockCode != undefined && monitorStockCode != 'undefined' && monitorStockCode == code) {
         saveCacheData("MONITOR_STOCK_CODE", '');
-        chrome.action.setBadgeText({ text: '' });
+        // chrome.action.setBadgeText({ text: '' });
+        sendChromeBadge('#FFFFFF', '#FFFFFF', '');
         return;
     }
     let stock = checkStockExsit(code);
-    try {
-        chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-    } catch(error){
-        console.error(error);
-    }
+    // try {
+    //     chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+    // } catch(error){
+    //     console.error(error);
+    // }
     let now = stock.now;
     let openPrice = stock.openPrice;
+    let badgeBackgroundColor;
     if (parseFloat(now) >= parseFloat(openPrice)) {
-        chrome.action.setBadgeBackgroundColor({ color: '#c12e2a' });
+        badgeBackgroundColor = '#c12e2a';
     } else {
-        chrome.action.setBadgeBackgroundColor({ color: '#3e8f3e' });
+        badgeBackgroundColor = '#3e8f3e';
     }
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));
     }
-    chrome.action.setBadgeText({ text: "" + now });
+    // chrome.action.setBadgeText({ text: "" + now });
+    sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
     saveCacheData("MONITOR_STOCK_CODE", code);
 }
 
 // 清理角标
 async function removeBadgeText() {
     saveCacheData("MONITOR_STOCK_CODE", '');
-    chrome.action.setBadgeText({ text: '' });
+    // chrome.action.setBadgeText({ text: '' });
+    sendChromeBadge('#FFFFFF', '#FFFFFF', '');
 }
 
 // 获取基金持仓明细
@@ -4007,6 +4011,37 @@ async function changeTimeImage(event) {
     showMinuteImage();
 }
 
+
+// 根据列顺序排序展示标题列
+function swapThColumns() {
+    // var columnOrder = {
+    //     "stock-name-th": 0,
+    //     "stock-day-income-th": 1,
+    //     "stock-change-percent-th": 2,
+    //     "stock-change-th": 3,
+    //     "stock-price-th": 4,
+    //     "stock-cost-price-th": 12,
+    //     "stock-bonds-th": 6,
+    //     "stock-market-value-th": 7,
+    //     "stock-market-value-percent-th": 8,
+    //     "stock-cost-price-value-th": 9,
+    //     "stock-income-percent-th": 10,
+    //     "stock-income-th": 11,
+    //     "stock-add-time-price-th": 5
+    // };
+    // var table = document.getElementById("sortable-table");
+    // var headerRow = table.rows[0];
+    // // 根据 JSON 对象重新排列列
+    // Object.keys(columnOrder).forEach(function (columnName) {
+    //     var columnIndex = getColumnIndexByColumnName(headerRow, columnName);
+    //     // 移动数据列
+    //     for (var i = 0; i < headerRow.length; i++) {
+    //         var dataCell = headerRow.cells[columnOrder[columnName]];
+    //         dataCell.parentNode.insertBefore(headerRow.cells[columnIndex], dataCell);
+    //     }
+    // });
+}
+
 // 根据列顺序排序展示
 function swapColumns() {
     var columnOrder = {
@@ -4015,14 +4050,14 @@ function swapColumns() {
         "stock-change-percent-th": 2,
         "stock-change-th": 3,
         "stock-price-th": 4,
-        "stock-cost-price-th": 5,
+        "stock-cost-price-th": 12,
         "stock-bonds-th": 6,
         "stock-market-value-th": 7,
         "stock-market-value-percent-th": 8,
         "stock-cost-price-value-th": 9,
         "stock-income-percent-th": 10,
         "stock-income-th": 11,
-        "stock-add-time-price-th": 12
+        "stock-add-time-price-th": 5
     };
     var table = document.getElementById("sortable-table");
     var headerRow = table.rows[0];
@@ -4032,14 +4067,13 @@ function swapColumns() {
         // 移动数据列
         for (var i = 0; i < table.rows.length; i++) {
             var dataCell = table.rows[i].cells[columnOrder[columnName]];
-            dataCell.parentNode.insertBefore(dataCell, table.rows[i].cells[columnIndex]);
+            dataCell.parentNode.insertBefore(table.rows[i].cells[columnIndex], dataCell);
         }
     });
 }
 // 通过列名获取列的索引位置
 function getColumnIndexByColumnName(headerRow, columnName) {
     for (var i = 0; i < headerRow.cells.length; i++) {
-        // console.log('headerRow.cells[i].textContent', headerRow.cells[i].outerHTML);
         if (headerRow.cells[i].outerHTML.indexOf(columnName) > -1) {
             return i;
         }

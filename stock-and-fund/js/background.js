@@ -111,9 +111,10 @@ function monitorStockPrice(stockList) {
                             // monitorStock.monitorHighPrice = '';
                             monitorStock.monitorAlert = '1';
                             monitorStock.monitorAlertDate = Date.now();
-                            chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            chrome.action.setBadgeBackgroundColor({ color: 'red' });
-                            chrome.action.setBadgeText({ text: "" + now });
+                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                            // chrome.action.setBadgeBackgroundColor({ color: 'red' });
+                            // chrome.action.setBadgeText({ text: "" + now });
+                            sendChromeBadge('#FFFFFF', 'red', "" + now);
                             var text = name + "涨破监控价格" + highPrice + "，达到" + now;
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
@@ -128,9 +129,10 @@ function monitorStockPrice(stockList) {
                             // monitorStock.monitorLowPrice = '';
                             monitorStock.monitorAlert = '2';
                             monitorStock.monitorAlertDate = Date.now();
-                            chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            chrome.action.setBadgeBackgroundColor({ color: 'green' });
-                            chrome.action.setBadgeText({ text: "" + now });
+                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                            // chrome.action.setBadgeBackgroundColor({ color: 'green' });
+                            // chrome.action.setBadgeText({ text: "" + now });
+                            sendChromeBadge('#FFFFFF', 'green', "" + now);
                             var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
@@ -147,9 +149,10 @@ function monitorStockPrice(stockList) {
                         if (currentPercent >= upperPercent) {
                             monitorStock.monitorAlert = '3';
                             monitorStock.monitorAlertDate = Date.now();
-                            chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            chrome.action.setBadgeBackgroundColor({ color: 'red' });
-                            chrome.action.setBadgeText({ text: upperPercent + "%" });
+                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                            // chrome.action.setBadgeBackgroundColor({ color: 'red' });
+                            // chrome.action.setBadgeText({ text: upperPercent + "%" });
+                            sendChromeBadge('#FFFFFF', 'red', upperPercent + "%");
                             var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
@@ -166,9 +169,10 @@ function monitorStockPrice(stockList) {
                         if (currentPercent >= lowerPercent) {
                             monitorStock.monitorAlert = '4';
                             monitorStock.monitorAlertDate = Date.now();
-                            chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            chrome.action.setBadgeBackgroundColor({ color: 'green' });
-                            chrome.action.setBadgeText({ text: lowerPercent + "%" });
+                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                            // chrome.action.setBadgeBackgroundColor({ color: 'green' });
+                            // chrome.action.setBadgeText({ text: lowerPercent + "%" });
+                            sendChromeBadge('#FFFFFF', 'green', lowerPercent + "%");
                             var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
                             // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
@@ -263,20 +267,22 @@ function monitorStock(code) {
                 var values = dataStr.split("~");
                 var now = values[3];
                 var openPrice = values[4];
+                var badgeBackgroundColor;
                 if (parseFloat(now) >= parseFloat(openPrice)) {
-                    chrome.action.setBadgeBackgroundColor({ color: '#c12e2a' });
+                    badgeBackgroundColor = '#c12e2a';
                 } else {
-                    chrome.action.setBadgeBackgroundColor({ color: '#3e8f3e' });
+                    badgeBackgroundColor = '#3e8f3e';
                 }
                 if (now.length >= 5) {
                     now = parseFloat(now.substring(0, 5));
                 }
-                try {
-                    chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                } catch (error){
-                    console.error(error);
-                }
-                chrome.action.setBadgeText({ text: "" + now });
+                // try {
+                //     chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+                // } catch (error){
+                //     console.error(error);
+                // }
+                // chrome.action.setBadgeText({ text: "" + now });
+                sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
             })
             .catch(error => {
                 // 处理请求错误
@@ -318,4 +324,14 @@ async function showNotification(title, body) {
     } else {
         console.log("不允许发送浏览器通知");
     }
+}
+// 统一发送chrome角标
+function sendChromeBadge(badgeTextColor, badgeBackgroundColor, badgeText) {
+    try {
+        chrome.action.setBadgeTextColor({ color: badgeTextColor });
+    } catch (error) {
+        console.info("BadgeTextColor Error: ", error);
+    }
+    chrome.action.setBadgeBackgroundColor({ color: badgeBackgroundColor });
+    chrome.action.setBadgeText({ text: badgeText });
 }
