@@ -33,6 +33,21 @@ var s2nDate;
 var n2sDate;
 var bigStockMoneyDate;
 var timeImageNewOrOld;
+var columnOrder = {
+    "name-th": 0,
+    "add-time-price-th": 0,
+    "day-income-th": 0,
+    "change-percent-th": 0,
+    "change-th": 0,
+    "price-th": 0,
+    "cost-price-th": 0,
+    "bonds-th": 0,
+    "market-value-th": 0,
+    "market-value-percent-th": 0,
+    "cost-price-value-th": 0,
+    "income-percent-th": 0,
+    "income-th": 0
+};
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -243,38 +258,53 @@ async function initHtml() {
     } else {
         document.getElementById('import-from-local-springboot-div').style.display = 'none';
     }
+    // 旧顺序拼接TH行HTML
     // 股票标题
-    var stockHead = " <tr id=\"stock-tr-title\"> " +
-        " <th id=\"stock-name-th\" class=\"order\">股票名称</th> " +
-        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"stock-day-income-th\" class=\"order\">当日盈利</th> " : "") + 
-        " <th id=\"stock-change-percent-th\" class=\"order\">涨跌幅</th> " +
-        (changeDisplay == 'DISPLAY' ? " <th id=\"stock-change-th\" class=\"order\">涨跌</th>" : "") + 
-        " <th id=\"stock-price-th\" class=\"order\">当前价</th> " +
-        (costPriceDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-th\" class=\"order\">成本价</th> " : "") + 
-        (bondsDisplay == 'DISPLAY' ? " <th id=\"stock-bonds-th\" class=\"order\">持仓</th> " : "") + 
-        (marketValueDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-th\" class=\"order\">市值/金额</th> " : "") + 
-        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-percent-th\" class=\"order\">持仓占比</th> " : "") + 
-        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-value-th\" class=\"order\">成本</th> " : "") + 
-        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"stock-income-percent-th\" class=\"order\">收益率</th> " : "") + 
-        (incomeDisplay == 'DISPLAY' ? " <th id=\"stock-income-th\" class=\"order\">收益</th> " : "") + 
-        (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"stock-add-time-price-th\">自选价格</th> " : "") + 
-        " </tr>";
+    // var stockHead = " <tr id=\"stock-tr-title\"> " +
+    //     " <th id=\"stock-name-th\" class=\"order\">股票名称</th> " +
+    //     (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"stock-day-income-th\" class=\"order\">当日盈利</th> " : "") + 
+    //     " <th id=\"stock-change-percent-th\" class=\"order\">涨跌幅</th> " +
+    //     (changeDisplay == 'DISPLAY' ? " <th id=\"stock-change-th\" class=\"order\">涨跌</th>" : "") + 
+    //     " <th id=\"stock-price-th\" class=\"order\">当前价</th> " +
+    //     (costPriceDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-th\" class=\"order\">成本价</th> " : "") + 
+    //     (bondsDisplay == 'DISPLAY' ? " <th id=\"stock-bonds-th\" class=\"order\">持仓</th> " : "") + 
+    //     (marketValueDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-th\" class=\"order\">市值/金额</th> " : "") + 
+    //     (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"stock-market-value-percent-th\" class=\"order\">持仓占比</th> " : "") + 
+    //     (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-value-th\" class=\"order\">成本</th> " : "") + 
+    //     (incomePercentDisplay == 'DISPLAY' ? " <th id=\"stock-income-percent-th\" class=\"order\">收益率</th> " : "") + 
+    //     (incomeDisplay == 'DISPLAY' ? " <th id=\"stock-income-th\" class=\"order\">收益</th> " : "") + 
+    //     (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"stock-add-time-price-th\">自选价格</th> " : "") + 
+    //     " </tr>";
+
     // 基金标题
-    var fundHead = " <tr id=\"fund-tr-title\">" +
-        " <th id=\"fund-name-th\" class=\"order\">基金名称</th>" +
-        (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"fund-day-income-th\" class=\"order\">当日盈利</th>" : "") + 
-        " <th id=\"fund-change-percent-th\" class=\"order\">涨跌幅</th>" +
-        (changeDisplay == 'DISPLAY' ? " <th id=\"fund-change-th\" class=\"order\">涨跌</th>" : "") + 
-        " <th id=\"fund-price-th\" class=\"order\">估算净值</th>" +
-        (costPriceDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-th\" class=\"order\">持仓成本单价</th>" : "") + 
-        (bondsDisplay == 'DISPLAY' ? " <th id=\"fund-bonds-th\" class=\"order\">持有份额</th>" : "") + 
-        (marketValueDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-th\" class=\"order\">市值/金额</th> " : "") + 
-        (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-percent-th\" class=\"order\">持仓占比</th> " : "") + 
-        (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-value-th\" class=\"order\">成本</th> " : "") + 
-        (incomePercentDisplay == 'DISPLAY' ? " <th id=\"fund-income-percent-th\" class=\"order\">收益率</th> " : "") + 
-        (incomeDisplay == 'DISPLAY' ? " <th id=\"fund-income-th\" class=\"order\">收益</th> " : "") + 
-        (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"fund-addtime-price-th\">自选价格</th> " : "") + 
-        " </tr>";
+    // var fundHead = " <tr id=\"fund-tr-title\">" +
+    //     " <th id=\"fund-name-th\" class=\"order\">基金名称</th>" +
+    //     (dayIncomeDisplay == 'DISPLAY' ? " <th id=\"fund-day-income-th\" class=\"order\">当日盈利</th>" : "") + 
+    //     " <th id=\"fund-change-percent-th\" class=\"order\">涨跌幅</th>" +
+    //     (changeDisplay == 'DISPLAY' ? " <th id=\"fund-change-th\" class=\"order\">涨跌</th>" : "") + 
+    //     " <th id=\"fund-price-th\" class=\"order\">估算净值</th>" +
+    //     (costPriceDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-th\" class=\"order\">持仓成本单价</th>" : "") + 
+    //     (bondsDisplay == 'DISPLAY' ? " <th id=\"fund-bonds-th\" class=\"order\">持有份额</th>" : "") + 
+    //     (marketValueDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-th\" class=\"order\">市值/金额</th> " : "") + 
+    //     (marketValuePercentDisplay == 'DISPLAY' ? " <th id=\"fund-market-value-percent-th\" class=\"order\">持仓占比</th> " : "") + 
+    //     (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"fund-cost-price-value-th\" class=\"order\">成本</th> " : "") + 
+    //     (incomePercentDisplay == 'DISPLAY' ? " <th id=\"fund-income-percent-th\" class=\"order\">收益率</th> " : "") + 
+    //     (incomeDisplay == 'DISPLAY' ? " <th id=\"fund-income-th\" class=\"order\">收益</th> " : "") + 
+    //     (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"fund-addtime-price-th\">自选价格</th> " : "") + 
+    //     " </tr>";
+    
+    // 新顺序拼接TH行HTML
+    // 股票标题
+    var stockHeadOrder = Object.keys(columnOrder).map(function (columnName) {
+        return getThColumnHtml(columnName, 'STOCK');
+    }).join("");
+    var stockHead = " <tr id=\"stock-tr-title\"> " + stockHeadOrder + " </tr>";
+    // 基金标题
+    var fundHeadOrder = Object.keys(columnOrder).map(function (columnName) {
+        return getThColumnHtml(columnName, 'FUND');
+    }).join("");
+    var fundHead = " <tr id=\"fund-tr-title\"> " + fundHeadOrder + " </tr>";
+
     // 持仓明细标题
     var fundInversPositionHead = " <tr >" +
         " <th >股票名称（代码）</th>" +
@@ -1208,21 +1238,56 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     dayIncome = dayIncome + "(港币)";
                 }
             }
-            str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
-                + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
-                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
-                + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
-                + (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].change + "</td>" : "")
-                + "<td>" + now + "</td>"
-                + (costPriceDisplay == 'DISPLAY' ? "<td>" + costPrise + "</td>" : "")
-                + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-                + (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue + "</td>" : "")
-                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "")
-                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
-                + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
-                + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "")
-                + (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "")
-                + "</tr>";
+            // 新顺序拼接TR行HTML
+            var stockStrOrder = Object.keys(columnOrder).map(function (columnName) {
+                var html;
+                if (columnName == 'name-th') {
+                    html = "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
+                } else if(columnName == 'day-income-th') {
+                    html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "");
+                } else if(columnName == 'change-percent-th') {
+                    html = "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>";
+                } else if(columnName == 'change-th') {
+                    html = (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].change + "</td>" : "");
+                } else if(columnName == 'price-th') {
+                    html = "<td>" + now + "</td>";
+                } else if(columnName == 'cost-price-th') {
+                    html = (costPriceDisplay == 'DISPLAY' ? "<td>" + costPrise + "</td>" : "");
+                } else if(columnName == 'bonds-th') {
+                    html = (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "");
+                } else if(columnName == 'market-value-th') {
+                    html = (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue + "</td>" : "");
+                } else if(columnName == 'market-value-percent-th') {
+                    html = (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "");
+                } else if(columnName == 'cost-price-value-th') {
+                    html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "");
+                } else if(columnName == 'income-percent-th') {
+                    html = (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "");
+                } else if(columnName == 'income-th') {
+                    html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "");
+                } else if(columnName == 'add-time-price-th') {
+                    html = (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "");
+                }
+                return html;
+            }).join("");
+            str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">" + stockStrOrder + "</tr>";
+
+            // 旧顺序拼接TR行HTML
+            // str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">"
+                // + "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
+                // + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "")
+                // + "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>"
+                // + (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].change + "</td>" : "")
+                // + "<td>" + now + "</td>"
+                // + (costPriceDisplay == 'DISPLAY' ? "<td>" + costPrise + "</td>" : "")
+                // + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
+                // + (marketValueDisplay == 'DISPLAY' ? "<td>" + marketValue + "</td>" : "")
+                // + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "")
+                // + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "")
+                // + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
+                // + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "")
+                // + (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "")
+                // + "</tr>";
             stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
             stockDayIncome = stockDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
             stockTotalmarketValue = stockTotalmarketValue.add(new BigDecimal(result[k].marketValue + ""));
@@ -1240,21 +1305,56 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     }
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr id=\"stock-tr-total\">"
-        + "<td>合计</td>"
-        + (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "") 
-        + "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>"
-        + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
-        + "<td></td>"
-        + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
-        + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "") 
-        + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(stockTotalmarketValue + "").toFixed(2) + "</td>" : "") 
-        + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
-        + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + stockTotalCostValue + "</td>" : "") 
-        + (incomePercentDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td>" : "") 
-        + (incomeDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome + "</td>" : "") 
-        + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
-        + "</tr>";
+    // 新顺序拼接TR行HTML
+    var stockTotalStrOrder = Object.keys(columnOrder).map(function (columnName) {
+        var html;
+        if (columnName == 'name-th') {
+            html = "<td>合计</td>";
+        } else if(columnName == 'day-income-th') {
+            html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "");
+        } else if(columnName == 'change-percent-th') {
+            html = "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>";
+        } else if(columnName == 'change-th') {
+            html = (changeDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'price-th') {
+            html = "<td></td>";
+        } else if(columnName == 'cost-price-th') {
+            html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'bonds-th') {
+            html = (bondsDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'market-value-th') {
+            html = (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(stockTotalmarketValue + "").toFixed(2) + "</td>" : "");
+        } else if(columnName == 'market-value-percent-th') {
+            html = (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" );
+        } else if(columnName == 'cost-price-value-th') {
+            html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + stockTotalCostValue + "</td>" : "");
+        } else if(columnName == 'income-percent-th') {
+            html = (incomePercentDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td>" : "");
+        } else if(columnName == 'income-th') {
+            html = (incomeDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome + "</td>" : "");
+        } else if(columnName == 'add-time-price-th') {
+            html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "");
+        }
+        return html;
+    }).join("");
+    str += "<tr id=\"stock-tr-total\">" + stockTotalStrOrder + "</tr>";
+
+    // 旧顺序拼接TR行HTML
+    // str += "<tr id=\"stock-tr-total\">"
+        // + "<td>合计</td>"
+        // + (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "") 
+        // + "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>"
+        // + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
+        // + "<td></td>"
+        // + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
+        // + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "") 
+        // + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(stockTotalmarketValue + "").toFixed(2) + "</td>" : "") 
+        // + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
+        // + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + stockTotalCostValue + "</td>" : "") 
+        // + (incomePercentDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td>" : "") 
+        // + (incomeDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome + "</td>" : "") 
+        // + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
+        // + "</tr>";
     return str;
 }
 
@@ -1278,21 +1378,56 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             if (showMinuteImageMini == 'open') {
                 minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
             }
-            str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
-                + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
-                + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + "</td>" : "")
-                + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
-                + (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">--</td>" : "")
-                + "<td>" + result[k].gsz + "</td>"
-                + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
-                + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
-                + (marketValueDisplay == 'DISPLAY' ? "<td>" + result[k].marketValue + "</td>" : "")
-                + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "")
-                + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "")
-                + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
-                + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
-                + (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "")
-                + "</tr>";
+            // 新顺序拼接TR行HTML
+            var fundStrOrder = Object.keys(columnOrder).map(function (columnName) {
+                var html;
+                if (columnName == 'name-th') {
+                    html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>";
+                } else if(columnName == 'day-income-th') {
+                    html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + "</td>" : "");
+                } else if(columnName == 'change-percent-th') {
+                    html = "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>";
+                } else if(columnName == 'change-th') {
+                    html = (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">--</td>" : "");
+                } else if(columnName == 'price-th') {
+                    html = "<td>" + result[k].gsz + "</td>";
+                } else if(columnName == 'cost-price-th') {
+                    html = (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "");
+                } else if(columnName == 'bonds-th') {
+                    html = (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "");
+                } else if(columnName == 'market-value-th') {
+                    html = (marketValueDisplay == 'DISPLAY' ? "<td>" + result[k].marketValue + "</td>" : "");
+                } else if(columnName == 'market-value-percent-th') {
+                    html = (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "");
+                } else if(columnName == 'cost-price-value-th') {
+                    html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "");
+                } else if(columnName == 'income-percent-th') {
+                    html = (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "");
+                } else if(columnName == 'income-th') {
+                    html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "");
+                } else if(columnName == 'add-time-price-th') {
+                    html = (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "");
+                }
+                return html;
+            }).join("");
+            str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">" + fundStrOrder + "</tr>";
+
+            // 旧顺序拼接TR行HTML
+            // str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">"
+            //     + "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>"
+            //     + (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + "</td>" : "")
+            //     + "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>"
+            //     + (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">--</td>" : "")
+            //     + "<td>" + result[k].gsz + "</td>"
+            //     + (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "")
+            //     + (bondsDisplay == 'DISPLAY' ? "<td>" + result[k].bonds + "</td>" : "")
+            //     + (marketValueDisplay == 'DISPLAY' ? "<td>" + result[k].marketValue + "</td>" : "")
+            //     + (marketValuePercentDisplay == 'DISPLAY' ? "<td>" + result[k].marketValuePercent + "%</td>" : "")
+            //     + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "")
+            //     + (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "")
+            //     + (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "")
+            //     + (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "")
+            //     + "</tr>";
             fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
             fundDayIncome = fundDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
             fundTotalmarketValue = fundTotalmarketValue.add(new BigDecimal(result[k].marketValue + ""));
@@ -1310,20 +1445,55 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     }
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr id=\"fund-tr-total\">"
-        + "<td>合计</td>"
-        + (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "") 
-        + "<td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
-        + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
-        + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
-        + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "")
-        + (marketValueDisplay == 'DISPLAY' ? "<td>" + fundTotalmarketValue + "</td>" : "") 
-        + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" )
-        + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + fundTotalCostValue + "</td>" : "") 
-        + (incomePercentDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td>" : "") 
-        + (incomeDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>" : "") 
-        + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
-        + "</tr>";
+    // 新顺序拼接TR行HTML
+    var fundTotalStrOrder = Object.keys(columnOrder).map(function (columnName) {
+        var html;
+        if (columnName == 'name-th') {
+            html = "<td>合计</td>";
+        } else if(columnName == 'day-income-th') {
+            html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "");
+        } else if(columnName == 'change-percent-th') {
+            html = "<td " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
+        } else if(columnName == 'change-th') {
+            html = (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
+        } else if(columnName == 'price-th') {
+            html = "<td></td>";
+        } else if(columnName == 'cost-price-th') {
+            html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
+        } else if(columnName == 'bonds-th') {
+            html = (bondsDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'market-value-th') {
+            html = (marketValueDisplay == 'DISPLAY' ? "<td>" + fundTotalmarketValue + "</td>" : "") 
+        } else if(columnName == 'market-value-percent-th') {
+            html = (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" );
+        } else if(columnName == 'cost-price-value-th') {
+            html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + fundTotalCostValue + "</td>" : "");
+        } else if(columnName == 'income-percent-th') {
+            html = (incomePercentDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td>" : "");
+        } else if(columnName == 'income-th') {
+            html = (incomeDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>" : "");
+        } else if(columnName == 'add-time-price-th') {
+            html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "");
+        }
+        return html;
+    }).join("");
+    str += "<tr id=\"fund-tr-total\">" + fundTotalStrOrder + "</tr>";
+
+    // 旧顺序拼接TR行HTML
+    // str += "<tr id=\"fund-tr-total\">"
+    //     + "<td>合计</td>"
+    //     + (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "") 
+    //     + "<td colspan='2' " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
+    //     + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
+    //     + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
+    //     + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "")
+    //     + (marketValueDisplay == 'DISPLAY' ? "<td>" + fundTotalmarketValue + "</td>" : "") 
+    //     + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" )
+    //     + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + fundTotalCostValue + "</td>" : "") 
+    //     + (incomePercentDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td>" : "") 
+    //     + (incomeDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>" : "") 
+    //     + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
+    //     + "</tr>";
     return str;
 }
 
@@ -1343,20 +1513,55 @@ function getTotalTableHtml(totalMarketValueResult) {
     }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    str += "<tr id=\"total-tr-total\">"
-        + "<td>汇总合计</td>"
-        + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" )
-        + "<td colspan='2' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
-        + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
-        + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" )
-        + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "" )
-        + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(totalMarketValueResult + "").toFixed(2) + "</td>" : "" )
-        + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
-        + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + totalCostPrice + "</td>" : "" ) 
-        + (incomePercentDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td>" : "" ) 
-        + (incomeDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" : "" ) 
-        + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
-        + "</tr>";
+    // 新顺序拼接TR行HTML
+    var totalStrOrder = Object.keys(columnOrder).map(function (columnName) {
+        var html;
+        if (columnName == 'name-th') {
+            html = "<td>汇总合计</td>";
+        } else if(columnName == 'day-income-th') {
+            html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" );
+        } else if(columnName == 'change-percent-th') {
+            html = "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>";
+        } else if(columnName == 'change-th') {
+            html = (changeDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'price-th') {
+            html = "<td></td>";
+        } else if(columnName == 'cost-price-th') {
+            html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" );
+        } else if(columnName == 'bonds-th') {
+            html = (bondsDisplay == 'DISPLAY' ? "<td></td>" : "" );
+        } else if(columnName == 'market-value-th') {
+            html = (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(totalMarketValueResult + "").toFixed(2) + "</td>" : "" );
+        } else if(columnName == 'market-value-percent-th') {
+            html = (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" );
+        } else if(columnName == 'cost-price-value-th') {
+            html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + totalCostPrice + "</td>" : "" );
+        } else if(columnName == 'income-percent-th') {
+            html = (incomePercentDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td>" : "" );
+        } else if(columnName == 'income-th') {
+            html = (incomeDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" : "" );
+        } else if(columnName == 'add-time-price-th') {
+            html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "" );
+        }
+        return html;
+    }).join("");
+    str += "<tr id=\"total-tr-total\">" + totalStrOrder + "</tr>";
+
+    // 旧顺序拼接TR行HTML
+    // str += "<tr id=\"total-tr-total\">"
+    //     + "<td>汇总合计</td>"
+    //     + (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" )
+    //     + "<td colspan='2' " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>"
+    //     + (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
+    //     + (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" )
+    //     + (bondsDisplay == 'DISPLAY' ? "<td></td>" : "" )
+    //     + (marketValueDisplay == 'DISPLAY' ? "<td>" + parseFloat(totalMarketValueResult + "").toFixed(2) + "</td>" : "" )
+    //     + (marketValuePercentDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
+    //     + (costPriceValueDisplay == 'DISPLAY' ? "<td>" + totalCostPrice + "</td>" : "" ) 
+    //     + (incomePercentDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td>" : "" ) 
+    //     + (incomeDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" : "" ) 
+    //     + (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "" ) 
+    //     + "</tr>";
     return str;
 }
 
@@ -4011,72 +4216,64 @@ async function changeTimeImage(event) {
     showMinuteImage();
 }
 
-
-// 根据列顺序排序展示标题列
-function swapThColumns() {
-    // var columnOrder = {
-    //     "stock-name-th": 0,
-    //     "stock-day-income-th": 1,
-    //     "stock-change-percent-th": 2,
-    //     "stock-change-th": 3,
-    //     "stock-price-th": 4,
-    //     "stock-cost-price-th": 12,
-    //     "stock-bonds-th": 6,
-    //     "stock-market-value-th": 7,
-    //     "stock-market-value-percent-th": 8,
-    //     "stock-cost-price-value-th": 9,
-    //     "stock-income-percent-th": 10,
-    //     "stock-income-th": 11,
-    //     "stock-add-time-price-th": 5
-    // };
-    // var table = document.getElementById("sortable-table");
-    // var headerRow = table.rows[0];
-    // // 根据 JSON 对象重新排列列
-    // Object.keys(columnOrder).forEach(function (columnName) {
-    //     var columnIndex = getColumnIndexByColumnName(headerRow, columnName);
-    //     // 移动数据列
-    //     for (var i = 0; i < headerRow.length; i++) {
-    //         var dataCell = headerRow.cells[columnOrder[columnName]];
-    //         dataCell.parentNode.insertBefore(headerRow.cells[columnIndex], dataCell);
-    //     }
-    // });
-}
-
-// 根据列顺序排序展示
-function swapColumns() {
-    var columnOrder = {
-        "stock-name-th": 0,
-        "stock-day-income-th": 1,
-        "stock-change-percent-th": 2,
-        "stock-change-th": 3,
-        "stock-price-th": 4,
-        "stock-cost-price-th": 12,
-        "stock-bonds-th": 6,
-        "stock-market-value-th": 7,
-        "stock-market-value-percent-th": 8,
-        "stock-cost-price-value-th": 9,
-        "stock-income-percent-th": 10,
-        "stock-income-th": 11,
-        "stock-add-time-price-th": 5
+// 根据顺序拼接html信息
+function getThColumnHtml(columnId, type) {
+    // 这里可以根据需要定义每个列的显示名称
+    var stockColumnNames = {
+        "name-th": "股票名称",
+        "day-income-th": "当日盈利",
+        "change-percent-th": "涨跌幅",
+        "change-th": "涨跌",
+        "price-th": "当前价",
+        "cost-price-th": "成本价",
+        "bonds-th": "持仓",
+        "market-value-th": "市值/金额",
+        "market-value-percent-th": "持仓占比",
+        "cost-price-value-th": "成本",
+        "income-percent-th": "收益率",
+        "income-th": "收益",
+        "add-time-price-th": "自选价格"
     };
-    var table = document.getElementById("sortable-table");
-    var headerRow = table.rows[0];
-    // 根据 JSON 对象重新排列列
-    Object.keys(columnOrder).forEach(function (columnName) {
-        var columnIndex = getColumnIndexByColumnName(headerRow, columnName);
-        // 移动数据列
-        for (var i = 0; i < table.rows.length; i++) {
-            var dataCell = table.rows[i].cells[columnOrder[columnName]];
-            dataCell.parentNode.insertBefore(table.rows[i].cells[columnIndex], dataCell);
-        }
-    });
-}
-// 通过列名获取列的索引位置
-function getColumnIndexByColumnName(headerRow, columnName) {
-    for (var i = 0; i < headerRow.cells.length; i++) {
-        if (headerRow.cells[i].outerHTML.indexOf(columnName) > -1) {
-            return i;
-        }
+    var fundColumnNames = {
+        "name-th": "基金名称",
+        "day-income-th": "当日盈利",
+        "change-percent-th": "涨跌幅",
+        "change-th": "涨跌",
+        "price-th": "估算净值",
+        "cost-price-th": "持仓成本单价",
+        "bonds-th": "持有份额",
+        "market-value-th": "市值/金额",
+        "market-value-percent-th": "持仓占比",
+        "cost-price-value-th": "成本",
+        "income-percent-th": "收益率",
+        "income-th": "收益",
+        "add-time-price-th": "自选价格"
+    };
+    var html;
+    if (columnId == 'day-income-th' && dayIncomeDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'change-th' && changeDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'cost-price-th' && costPriceDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'bonds-th' && bondsDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'market-value-th' && marketValueDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'market-value-percent-th' && marketValuePercentDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'cost-price-value-th' && costPriceValueDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'income-percent-th' && incomePercentDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'income-th' && incomeDisplay != 'DISPLAY') {
+        html = "";
+    } else if (columnId == 'add-time-price-th' && addtimePriceDisplay != 'DISPLAY') {
+        html = "";
+    } else {
+        html = type == 'STOCK' ? 
+            " <th id=\"stock-" + columnId + "\" class=\"order\">" + stockColumnNames[columnId] || columnId + "</th> " :
+            " <th id=\"fund-" + columnId + "\" class=\"order\">" + fundColumnNames[columnId] || columnId + "</th> ";
     }
-    return -1; // 如果没找到，返回 -1 表示未找到
+    return html;
 }
