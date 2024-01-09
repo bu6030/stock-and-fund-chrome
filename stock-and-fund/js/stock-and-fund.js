@@ -33,21 +33,21 @@ var s2nDate;
 var n2sDate;
 var bigStockMoneyDate;
 var timeImageNewOrOld;
-var columnOrder = {
-    "name-th": 0,
-    "add-time-price-th": 0,
-    "day-income-th": 0,
-    "change-percent-th": 0,
-    "change-th": 0,
-    "price-th": 0,
-    "cost-price-th": 0,
-    "bonds-th": 0,
-    "market-value-th": 0,
-    "market-value-percent-th": 0,
-    "cost-price-value-th": 0,
-    "income-percent-th": 0,
-    "income-th": 0
-};
+var columnOrder = [
+    {"add-time-price-th": 0},
+    {"name-th": 0},
+    {"day-income-th": 0},
+    {"change-percent-th": 0},
+    {"change-th": 0},
+    {"price-th": 0},
+    {"cost-price-th": 0},
+    {"bonds-th": 0},
+    {"market-value-th": 0},
+    {"market-value-percent-th": 0},
+    {"cost-price-value-th": 0},
+    {"income-percent-th": 0},
+    {"income-th": 0},
+];
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -292,15 +292,17 @@ async function initHtml() {
     //     (incomeDisplay == 'DISPLAY' ? " <th id=\"fund-income-th\" class=\"order\">收益</th> " : "") + 
     //     (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"fund-addtime-price-th\">自选价格</th> " : "") + 
     //     " </tr>";
-    
+
     // 新顺序拼接TH行HTML
     // 股票标题
-    var stockHeadOrder = Object.keys(columnOrder).map(function (columnName) {
+    var stockHeadOrder = columnOrder.map(function (column) {
+        var columnName = Object.keys(column)[0];
         return getThColumnHtml(columnName, 'STOCK');
     }).join("");
     var stockHead = " <tr id=\"stock-tr-title\"> " + stockHeadOrder + " </tr>";
     // 基金标题
-    var fundHeadOrder = Object.keys(columnOrder).map(function (columnName) {
+    var fundHeadOrder = columnOrder.map(function (column) {
+        var columnName = Object.keys(column)[0];
         return getThColumnHtml(columnName, 'FUND');
     }).join("");
     var fundHead = " <tr id=\"fund-tr-title\"> " + fundHeadOrder + " </tr>";
@@ -1239,7 +1241,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 }
             }
             // 新顺序拼接TR行HTML
-            var stockStrOrder = Object.keys(columnOrder).map(function (columnName) {
+            var stockStrOrder = columnOrder.map(function (column) {
+                var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
                     html = "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
@@ -1306,7 +1309,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     var stockDayIncomePercentStyle = stockDayIncome == 0 ? "" : (stockDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var stockTotalIncomePercentStyle = stockTotalIncome == 0 ? "" : (stockTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     // 新顺序拼接TR行HTML
-    var stockTotalStrOrder = Object.keys(columnOrder).map(function (columnName) {
+    var stockTotalStrOrder = columnOrder.map(function (column) {
+        var columnName = Object.keys(column)[0];
         var html;
         if (columnName == 'name-th') {
             html = "<td>合计</td>";
@@ -1379,7 +1383,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
             }
             // 新顺序拼接TR行HTML
-            var fundStrOrder = Object.keys(columnOrder).map(function (columnName) {
+            var fundStrOrder = columnOrder.map(function (column) {
+                var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
                     html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>";
@@ -1446,7 +1451,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     var fundDayIncomePercentStyle = fundDayIncome == 0 ? "" : (fundDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var fundTotalIncomePercentStyle = fundTotalIncome == 0 ? "" : (fundTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     // 新顺序拼接TR行HTML
-    var fundTotalStrOrder = Object.keys(columnOrder).map(function (columnName) {
+    var fundTotalStrOrder = columnOrder.map(function (column) {
+        var columnName = Object.keys(column)[0];
         var html;
         if (columnName == 'name-th') {
             html = "<td>合计</td>";
@@ -1514,7 +1520,8 @@ function getTotalTableHtml(totalMarketValueResult) {
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     // 新顺序拼接TR行HTML
-    var totalStrOrder = Object.keys(columnOrder).map(function (columnName) {
+    var totalStrOrder = columnOrder.map(function (column) {
+        var columnName = Object.keys(column)[0];
         var html;
         if (columnName == 'name-th') {
             html = "<td>汇总合计</td>";
