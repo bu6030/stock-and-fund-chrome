@@ -47,7 +47,7 @@ var stockColumnNames = {
     "cost-price-value-th": "成本",
     "income-percent-th": "收益率",
     "income-th": "收益",
-    "add-time-price-th": "自选价格"
+    "addtime-price-th": "自选价格"
 };
 var fundColumnNames = {
     "name-th": "基金名称",
@@ -62,7 +62,7 @@ var fundColumnNames = {
     "cost-price-value-th": "成本",
     "income-percent-th": "收益率",
     "income-th": "收益",
-    "add-time-price-th": "自选价格"
+    "addtime-price-th": "自选价格"
 };
 
 // 整个程序的初始化
@@ -119,77 +119,77 @@ async function initLoad() {
         windowSize = 'NORMAL';
     }
     marketValueDisplay = await readCacheData('market-value-display');
-    if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
-        marketValueDisplay = 'DISPLAY';
-        $("#market-value-display-checkbox").prop("checked", true);
-    } else {
-        marketValueDisplay = 'HIDDEN';
-        $("#market-value-display-checkbox").prop("checked", false);
-    }
+    // if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
+    //     marketValueDisplay = 'DISPLAY';
+    //     $("#market-value-display-checkbox").prop("checked", true);
+    // } else {
+    //     marketValueDisplay = 'HIDDEN';
+    //     $("#market-value-display-checkbox").prop("checked", false);
+    // }
     marketValuePercentDisplay = await readCacheData('market-value-percent-display');
-    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
-        marketValuePercentDisplay = 'DISPLAY';
-        $("#market-value-percent-display-checkbox").prop("checked", true);
-    } else {
-        marketValuePercentDisplay = 'HIDDEN';
-        $("#market-value-percent-display-checkbox").prop("checked", false);
-    }
+    // if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
+    //     marketValuePercentDisplay = 'DISPLAY';
+    //     $("#market-value-percent-display-checkbox").prop("checked", true);
+    // } else {
+    //     marketValuePercentDisplay = 'HIDDEN';
+    //     $("#market-value-percent-display-checkbox").prop("checked", false);
+    // }
     costPriceValueDisplay = await readCacheData('cost-price-value-display');
-    if (costPriceValueDisplay == null || costPriceValueDisplay == 'DISPLAY') {
-        costPriceValueDisplay = 'DISPLAY';
-        $("#cost-price-value-display-checkbox").prop("checked", true);
-    } else {
-        costPriceValueDisplay = 'HIDDEN';
-        $("#cost-price-value-display-checkbox").prop("checked", false);
-    }
+    // if (costPriceValueDisplay == null || costPriceValueDisplay == 'DISPLAY') {
+    //     costPriceValueDisplay = 'DISPLAY';
+    //     $("#cost-price-value-display-checkbox").prop("checked", true);
+    // } else {
+    //     costPriceValueDisplay = 'HIDDEN';
+    //     $("#cost-price-value-display-checkbox").prop("checked", false);
+    // }
     incomePercentDisplay = await readCacheData('income-percent-display');
-    if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
-        incomePercentDisplay = 'DISPLAY';
-        $("#income-percent-display-checkbox").prop("checked", true);
-    } else {
-        incomePercentDisplay = 'HIDDEN';
-        $("#income-percent-display-checkbox").prop("checked", false);
-    }
+    // if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
+    //     incomePercentDisplay = 'DISPLAY';
+    //     $("#income-percent-display-checkbox").prop("checked", true);
+    // } else {
+    //     incomePercentDisplay = 'HIDDEN';
+    //     $("#income-percent-display-checkbox").prop("checked", false);
+    // }
     addtimePriceDisplay = await readCacheData('addtime-price-display');
-    if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
-        addtimePriceDisplay = 'DISPLAY';
-        $("#addtime-price-display-checkbox").prop("checked", true);
-    } else {
-        addtimePriceDisplay = 'HIDDEN';
-        $("#addtime-price-display-checkbox").prop("checked", false);
-    }
+    // if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
+    //     addtimePriceDisplay = 'DISPLAY';
+    //     $("#addtime-price-display-checkbox").prop("checked", true);
+    // } else {
+    //     addtimePriceDisplay = 'HIDDEN';
+    //     $("#addtime-price-display-checkbox").prop("checked", false);
+    // }
     dayIncomeDisplay = await readCacheData('day-income-display');
-    if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
-        dayIncomeDisplay = 'DISPLAY';
-        $("#day-income-display-checkbox").prop("checked", true);
-    } else {
-        dayIncomeDisplay = 'HIDDEN';
-        $("#day-income-display-checkbox").prop("checked", false);
-    }
+    // if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
+    //     dayIncomeDisplay = 'DISPLAY';
+    //     $("#day-income-display-checkbox").prop("checked", true);
+    // } else {
+    //     dayIncomeDisplay = 'HIDDEN';
+    //     $("#day-income-display-checkbox").prop("checked", false);
+    // }
     costPriceDisplay = await readCacheData('cost-price-display');
-    if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
-        costPriceDisplay = 'DISPLAY';
-        $("#cost-price-display-checkbox").prop("checked", true);
-    } else {
-        costPriceDisplay = 'HIDDEN';
-        $("#cost-price-display-checkbox").prop("checked", false);
-    }
+    // if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
+    //     costPriceDisplay = 'DISPLAY';
+    //     $("#cost-price-display-checkbox").prop("checked", true);
+    // } else {
+    //     costPriceDisplay = 'HIDDEN';
+    //     $("#cost-price-display-checkbox").prop("checked", false);
+    // }
     bondsDisplay = await readCacheData('bonds-display');
-    if (bondsDisplay == null || bondsDisplay == 'DISPLAY') {
-        bondsDisplay = 'DISPLAY';
-        $("#bonds-display-checkbox").prop("checked", true);
-    } else {
-        bondsDisplay = 'HIDDEN';
-        $("#bonds-display-checkbox").prop("checked", false);
-    }
+    // if (bondsDisplay == null || bondsDisplay == 'DISPLAY') {
+    //     bondsDisplay = 'DISPLAY';
+    //     $("#bonds-display-checkbox").prop("checked", true);
+    // } else {
+    //     bondsDisplay = 'HIDDEN';
+    //     $("#bonds-display-checkbox").prop("checked", false);
+    // }
     incomeDisplay = await readCacheData('income-display');
-    if (incomeDisplay == null || incomeDisplay == 'DISPLAY') {
-        incomeDisplay = 'DISPLAY';
-        $("#income-display-checkbox").prop("checked", true);
-    } else {
-        incomeDisplay = 'HIDDEN';
-        $("#income-display-checkbox").prop("checked", false);
-    }
+    // if (incomeDisplay == null || incomeDisplay == 'DISPLAY') {
+    //     incomeDisplay = 'DISPLAY';
+    //     $("#income-display-checkbox").prop("checked", true);
+    // } else {
+    //     incomeDisplay = 'HIDDEN';
+    //     $("#income-display-checkbox").prop("checked", false);
+    // }
     allDisplay = await readCacheData('all-display');
     if (allDisplay == null || allDisplay == 'DISPLAY') {
         allDisplay = 'DISPLAY';
@@ -207,13 +207,13 @@ async function initLoad() {
         $("#code-display-checkbox").prop("checked", true);
     }
     changeDisplay = await readCacheData('change-display');
-    if (changeDisplay == null || changeDisplay == 'HIDDEN') {
-        changeDisplay = 'HIDDEN';
-        $("#change-display-checkbox").prop("checked", false);
-    } else {
-        changeDisplay = 'DISPLAY';
-        $("#change-display-checkbox").prop("checked", true);
-    }
+    // if (changeDisplay == null || changeDisplay == 'HIDDEN') {
+    //     changeDisplay = 'HIDDEN';
+    //     $("#change-display-checkbox").prop("checked", false);
+    // } else {
+    //     changeDisplay = 'DISPLAY';
+    //     $("#change-display-checkbox").prop("checked", true);
+    // }
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
         largeMarketScroll = 'STOP';
@@ -250,7 +250,7 @@ async function initLoad() {
             {"cost-price-value-th": 0},
             {"income-percent-th": 0},
             {"income-th": 0},
-            {"add-time-price-th": 0},
+            {"addtime-price-th": 0},
         ];
     }
     var funds = await readCacheData('funds');
@@ -307,7 +307,7 @@ async function initHtml() {
     //     (costPriceValueDisplay == 'DISPLAY' ? " <th id=\"stock-cost-price-value-th\" class=\"order\">成本</th> " : "") + 
     //     (incomePercentDisplay == 'DISPLAY' ? " <th id=\"stock-income-percent-th\" class=\"order\">收益率</th> " : "") + 
     //     (incomeDisplay == 'DISPLAY' ? " <th id=\"stock-income-th\" class=\"order\">收益</th> " : "") + 
-    //     (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"stock-add-time-price-th\">自选价格</th> " : "") + 
+    //     (addtimePriceDisplay == 'DISPLAY' ? " <th id=\"stock-addtime-price-th\">自选价格</th> " : "") + 
     //     " </tr>";
 
     // 基金标题
@@ -634,28 +634,28 @@ document.addEventListener(
         document.getElementById('window-normal-size-change-button').addEventListener('click',  changeWindowSize);
         document.getElementById('window-small-size-change-button').addEventListener('click',  changeWindowSize);
         document.getElementById('window-mini-size-change-button').addEventListener('click',  changeWindowSize);
-        // 设置页面，隐藏/展示页面展示项，编码
-        document.getElementById("code-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，市值/金额
-        document.getElementById("market-value-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，持仓占比
-        document.getElementById("market-value-percent-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，成本
-        document.getElementById("cost-price-value-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，收益率
-        document.getElementById("income-percent-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，自选价格
-        document.getElementById("addtime-price-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，当日盈利
-        document.getElementById("day-income-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，成本价/持仓成本单价
-        document.getElementById("cost-price-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，持仓/持有份额
-        document.getElementById("bonds-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，收益
-        document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
-        // 设置页面，隐藏/展示页面展示项，涨跌
-        document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，编码
+        // document.getElementById("code-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，市值/金额
+        // document.getElementById("market-value-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，持仓占比
+        // document.getElementById("market-value-percent-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，成本
+        // document.getElementById("cost-price-value-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，收益率
+        // document.getElementById("income-percent-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，自选价格
+        // document.getElementById("addtime-price-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，当日盈利
+        // document.getElementById("day-income-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，成本价/持仓成本单价
+        // document.getElementById("cost-price-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，持仓/持有份额
+        // document.getElementById("bonds-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，收益
+        // document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
+        // // 设置页面，隐藏/展示页面展示项，涨跌
+        // document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，隐藏/展示页面展示项，一键全选
         document.getElementById("all-display-checkbox").addEventListener('change', setDisplayTr);
         // 设置页面，点击打赏按钮
@@ -1305,7 +1305,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "");
                 } else if(columnName == 'income-th') {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "");
-                } else if(columnName == 'add-time-price-th') {
+                } else if(columnName == 'addtime-price-th') {
                     html = (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "");
                 }
                 return html;
@@ -1373,7 +1373,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = (incomePercentDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td>" : "");
         } else if(columnName == 'income-th') {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome + "</td>" : "");
-        } else if(columnName == 'add-time-price-th') {
+        } else if(columnName == 'addtime-price-th') {
             html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "");
         }
         return html;
@@ -1447,7 +1447,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "");
                 } else if(columnName == 'income-th') {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "");
-                } else if(columnName == 'add-time-price-th') {
+                } else if(columnName == 'addtime-price-th') {
                     html = (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "");
                 }
                 return html;
@@ -1515,7 +1515,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = (incomePercentDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td>" : "");
         } else if(columnName == 'income-th') {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>" : "");
-        } else if(columnName == 'add-time-price-th') {
+        } else if(columnName == 'addtime-price-th') {
             html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "");
         }
         return html;
@@ -1584,7 +1584,7 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = (incomePercentDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td>" : "" );
         } else if(columnName == 'income-th') {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" : "" );
-        } else if(columnName == 'add-time-price-th') {
+        } else if(columnName == 'addtime-price-th') {
             html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "" );
         }
         return html;
@@ -2594,6 +2594,11 @@ async function setDisplayTr(event) {
     } else {
         dispaly = 'HIDDEN';
     }
+    if (type != 'all-display-checkbox' && dispaly == 'HIDDEN') {
+        allDisplay = dispaly;
+        $("#all-display-checkbox").prop("checked", false);
+        saveCacheData('all-display', dispaly);
+    }
     if (type == 'market-value-display-checkbox') {
         marketValueDisplay = dispaly;
         saveCacheData('market-value-display', dispaly);
@@ -2627,7 +2632,7 @@ async function setDisplayTr(event) {
     } else if(type == 'change-display-checkbox') {
         changeDisplay = dispaly;
         saveCacheData('change-display', dispaly);
-    } else if(type == 'all-display-checkbox'){
+    } else if(type == 'all-display-checkbox') {
         $("#setting-modal").modal("hide");
         marketValueDisplay = dispaly;
         marketValuePercentDisplay = dispaly;
@@ -2639,6 +2644,8 @@ async function setDisplayTr(event) {
         bondsDisplay = dispaly;
         incomeDisplay = dispaly;
         codeDisplay = dispaly;
+        changeDisplay = dispaly;
+        allDisplay = dispaly;
         saveCacheData('all-display', dispaly);
         saveCacheData('code-display', dispaly);
         saveCacheData('market-value-display', dispaly);
@@ -2650,6 +2657,7 @@ async function setDisplayTr(event) {
         saveCacheData('cost-price-display', dispaly);
         saveCacheData('bonds-display', dispaly);
         saveCacheData('income-display', dispaly);
+        saveCacheData('change-display', dispaly);
         if(dispaly == 'DISPLAY') {
             $("#all-display-checkbox").prop("checked", true);
             $("#code-display-checkbox").prop("checked", true);
@@ -2662,6 +2670,7 @@ async function setDisplayTr(event) {
             $("#cost-price-display-checkbox").prop("checked", true);
             $("#bonds-display-checkbox").prop("checked", true);
             $("#income-display-checkbox").prop("checked", true);
+            $("#change-display-checkbox").prop("checked", true);
         } else {
             $("#all-display-checkbox").prop("checked", false);
             $("#code-display-checkbox").prop("checked", false);
@@ -2674,6 +2683,7 @@ async function setDisplayTr(event) {
             $("#cost-price-display-checkbox").prop("checked", false);
             $("#bonds-display-checkbox").prop("checked", false);
             $("#income-display-checkbox").prop("checked", false);
+            $("#change-display-checkbox").prop("checked", false);
         }
     }
     initHtml();
@@ -4282,7 +4292,7 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'income-th' && incomeDisplay != 'DISPLAY') {
         html = "";
-    } else if (columnId == 'add-time-price-th' && addtimePriceDisplay != 'DISPLAY') {
+    } else if (columnId == 'addtime-price-th' && addtimePriceDisplay != 'DISPLAY') {
         html = "";
     } else {
         html = type == 'STOCK' ? 
@@ -4298,7 +4308,40 @@ function generateColumnList() {
     columnOrder.forEach(function (column) {
         var columnName = Object.keys(column)[0];
         var listItem = document.createElement('li');
-        listItem.textContent = "(股票)" + stockColumnNames[columnName] + "/(基金)" + fundColumnNames[columnName];
+
+        // Create checkbox
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = '';
+        checkbox.id = columnName.replace('-th', '') + '-display-checkbox';
+        if (columnName == 'name-th' || columnName == 'change-percent-th' || columnName == 'price-th') {
+            checkbox.disabled = true;
+        }
+        // Create label for checkbox
+        var label = document.createElement('label');
+        label.htmlFor = columnName.replace('-th', '') + '-display-checkbox';
+        label.textContent = stockColumnNames[columnName] == fundColumnNames[columnName] ? stockColumnNames[columnName] : stockColumnNames[columnName] + "/" + fundColumnNames[columnName];
+
+        // Create outer div
+        var outerDiv = document.createElement('div');
+        outerDiv.className = 'input-group-prepend';
+
+        // Create inner div for the input group text
+        var innerDiv = document.createElement('div');
+        innerDiv.className = 'input-group-text-new';
+
+        // Append the label and checkbox to the inner div
+        innerDiv.appendChild(checkbox);
+        innerDiv.appendChild(label);
+
+
+        // Append the inner div to the outer div
+        outerDiv.appendChild(innerDiv);
+
+        // Append the outer div to the list item
+        listItem.appendChild(checkbox);
+        listItem.appendChild(label);
+
         listItem.setAttribute('draggable', 'true');
         listItem.setAttribute('data-column', columnName);
         columnList.appendChild(listItem);
@@ -4318,12 +4361,129 @@ function addDragAndDropListeners() {
         e.preventDefault();
         var draggedColumn = e.dataTransfer.getData('text/plain');
         var newIndex = Array.from(columnList.children).indexOf(e.target);
+        console.log('parentNode=', e.target.parentNode);
+        if(newIndex == -1) newIndex = Array.from(columnList.children).indexOf(e.target.parentNode);
+        console.log('newIndex2=', newIndex);
         columnOrder = arrayMove(columnOrder, columnOrder.findIndex(col => col[draggedColumn] !== undefined), newIndex);
         console.log("columnOrder=", columnOrder);
         saveCacheData('column-order', columnOrder);
         $("#setting-modal").modal("hide");
         reloadDataAndHtml();
     });
+    if (allDisplay == null || allDisplay == 'DISPLAY') {
+        allDisplay = 'DISPLAY';
+        $("#all-display-checkbox").prop("checked", true);
+    } else {
+        marketValueDisplay = 'HIDDEN';
+        $("#market-value-display-checkbox").prop("checked", false);
+    }
+    if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
+        marketValueDisplay = 'DISPLAY';
+        $("#market-value-display-checkbox").prop("checked", true);
+    } else {
+        marketValueDisplay = 'HIDDEN';
+        $("#market-value-display-checkbox").prop("checked", false);
+    }
+    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
+        marketValuePercentDisplay = 'DISPLAY';
+        $("#market-value-percent-display-checkbox").prop("checked", true);
+    } else {
+        marketValuePercentDisplay = 'HIDDEN';
+        $("#market-value-percent-display-checkbox").prop("checked", false);
+    }
+    if (costPriceValueDisplay == null || costPriceValueDisplay == 'DISPLAY') {
+        costPriceValueDisplay = 'DISPLAY';
+        $("#cost-price-value-display-checkbox").prop("checked", true);
+    } else {
+        costPriceValueDisplay = 'HIDDEN';
+        $("#cost-price-value-display-checkbox").prop("checked", false);
+    }
+    if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
+        incomePercentDisplay = 'DISPLAY';
+        $("#income-percent-display-checkbox").prop("checked", true);
+    } else {
+        incomePercentDisplay = 'HIDDEN';
+        $("#income-percent-display-checkbox").prop("checked", false);
+    }
+    if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
+        addtimePriceDisplay = 'DISPLAY';
+        $("#addtime-price-display-checkbox").prop("checked", true);
+    } else {
+        addtimePriceDisplay = 'HIDDEN';
+        $("#addtime-price-display-checkbox").prop("checked", false);
+    }
+    if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
+        dayIncomeDisplay = 'DISPLAY';
+        $("#day-income-display-checkbox").prop("checked", true);
+    } else {
+        dayIncomeDisplay = 'HIDDEN';
+        $("#day-income-display-checkbox").prop("checked", false);
+    }
+    if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
+        costPriceDisplay = 'DISPLAY';
+        $("#cost-price-display-checkbox").prop("checked", true);
+    } else {
+        costPriceDisplay = 'HIDDEN';
+        $("#cost-price-display-checkbox").prop("checked", false);
+    }
+    if (bondsDisplay == null || bondsDisplay == 'DISPLAY') {
+        bondsDisplay = 'DISPLAY';
+        $("#bonds-display-checkbox").prop("checked", true);
+    } else {
+        bondsDisplay = 'HIDDEN';
+        $("#bonds-display-checkbox").prop("checked", false);
+    }
+    if (incomeDisplay == null || incomeDisplay == 'DISPLAY') {
+        incomeDisplay = 'DISPLAY';
+        $("#income-display-checkbox").prop("checked", true);
+    } else {
+        incomeDisplay = 'HIDDEN';
+        $("#income-display-checkbox").prop("checked", false);
+    }
+    if (allDisplay == null || allDisplay == 'DISPLAY') {
+        allDisplay = 'DISPLAY';
+        $("#all-display-checkbox").prop("checked", true);
+    } else {
+        allDisplay = 'HIDDEN';
+        $("#all-display-checkbox").prop("checked", false);
+    }
+    if (codeDisplay == null || codeDisplay == 'HIDDEN') {
+        codeDisplay = 'HIDDEN';
+        $("#code-display-checkbox").prop("checked", false);
+    } else {
+        codeDisplay = 'DISPLAY';
+        $("#code-display-checkbox").prop("checked", true);
+    }
+    if (changeDisplay == null || changeDisplay == 'HIDDEN') {
+        changeDisplay = 'HIDDEN';
+        $("#change-display-checkbox").prop("checked", false);
+    } else {
+        changeDisplay = 'DISPLAY';
+        $("#change-display-checkbox").prop("checked", true);
+    }
+    // 设置页面，隐藏/展示页面展示项，编码
+    document.getElementById("code-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，市值/金额
+    document.getElementById("market-value-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，持仓占比
+    document.getElementById("market-value-percent-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，成本
+    document.getElementById("cost-price-value-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，收益率
+    document.getElementById("income-percent-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，自选价格
+    document.getElementById("addtime-price-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，当日盈利
+    document.getElementById("day-income-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，成本价/持仓成本单价
+    document.getElementById("cost-price-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，持仓/持有份额
+    document.getElementById("bonds-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，收益
+    document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，涨跌
+    document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
+ 
 }
 // 拖拽完成后切换列表的顺序
 function arrayMove(arr, oldIndex, newIndex) {
@@ -4347,7 +4507,7 @@ function recoveryColumnOrder() {
         {"cost-price-value-th": 0},
         {"income-percent-th": 0},
         {"income-th": 0},
-        {"add-time-price-th": 0},
+        {"addtime-price-th": 0},
     ];
     saveCacheData('column-order', columnOrder);
     $("#setting-modal").modal("hide");

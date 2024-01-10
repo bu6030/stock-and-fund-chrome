@@ -188,6 +188,7 @@
 168. 兼容老版本edge通知文字颜色不兼容 2024/1/8
 169. 统一chrome角标发送方法 2024/1/9
 170. 设置页面增加拖拽可以修改展示列顺序 2024/1/9
+171. 设置页面，隐藏/展示页面选项和拖拽结合 2024/1/10
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

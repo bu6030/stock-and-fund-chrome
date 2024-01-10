@@ -540,7 +540,7 @@
                                 </button>  需要先打开同花顺/雪球/东方财富自选股页面之后，读取才能成功
                             </div>
                         </div>
-                        <div class="am-form-group am-cf">
+                        <!-- <div class="am-form-group am-cf">
                             <div class="you"><h5 class="modal-title">隐藏/展示页面展示项</h5></div>
                             <div class="you">
                                 <div class="input-group mb-3">
@@ -618,7 +618,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
@@ -734,13 +734,17 @@
                         </div>
                         <div class="am-form-group am-cf">
                             <div class="you">
-                                <h5 class="modal-title">拖拽可以修改列展示顺序&nbsp;&nbsp;&nbsp;
+                                <h5 class="modal-title">隐藏/展示/拖拽调整页面展示项顺序&nbsp;&nbsp;&nbsp;
                                     <button type="button" id="column-order-recovery-button" class="btn btn-outline-primary"
-                                        data-toggle="modal">恢复默认顺序</button>
+                                        data-toggle="modal">恢复默认顺序</button>&nbsp;&nbsp;&nbsp;
                                 </h5>
                             </div>
                             <div class="you">
                                 <h6 class="modal-title">
+                                    <ul>
+                                        <input type="checkbox" value="" id="all-display-checkbox">一键全选
+                                        <input type="checkbox" value="" id="code-display-checkbox">股票/基金编码
+                                    </ul>
                                     <ul id="sortable-column-table">
                                     </ul>
                                 </h6>

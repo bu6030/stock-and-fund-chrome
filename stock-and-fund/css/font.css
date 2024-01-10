@@ -165,3 +165,12 @@
 .stock-fund-name-and-code {
     white-space: pre;
 }
+
+input[type="checkbox"] {
+    vertical-align: middle;
+    width: 40px;
+}
+
+#sortable-column-table {
+    list-style-type: none;
+}
