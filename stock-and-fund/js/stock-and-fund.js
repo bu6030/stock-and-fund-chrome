@@ -34,6 +34,7 @@ var n2sDate;
 var bigStockMoneyDate;
 var timeImageNewOrOld;
 var columnOrder;
+var columnOrderTemp;
 var stockColumnNames = {
     "name-th": "股票名称",
     "day-income-th": "当日盈利",
@@ -253,6 +254,7 @@ async function initLoad() {
             {"addtime-price-th": 0},
         ];
     }
+    columnOrderTemp = columnOrder;
     var funds = await readCacheData('funds');
     if (funds == null) {
         fundList = [];
@@ -698,6 +700,8 @@ document.addEventListener(
         document.getElementById('huilv-dont-convert-change-button').addEventListener('click', changeHuilvConvert);
         // 设置页面，点击恢复默认顺序按钮
         document.getElementById('column-order-recovery-button').addEventListener('click', recoveryColumnOrder);
+        // 设置页面，点击保存顺序按钮
+        document.getElementById('column-order-save-button').addEventListener('click', saveColumnOrder);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -4354,25 +4358,34 @@ function generateColumnList() {
 // 可以拖拽改列展示顺序的列表的事件监听
 function addDragAndDropListeners() {
     var columnList = document.getElementById('sortable-column-table');
-    columnList.addEventListener('dragstart', function (e) {
-        e.dataTransfer.setData('text/plain', e.target.dataset.column);
-    });
-    columnList.addEventListener('dragover', function (e) {
-        e.preventDefault();
-    });
-    columnList.addEventListener('drop', function (e) {
-        e.preventDefault();
-        var draggedColumn = e.dataTransfer.getData('text/plain');
-        var newIndex = Array.from(columnList.children).indexOf(e.target);
-        console.log('parentNode=', e.target.parentNode);
-        if(newIndex == -1) newIndex = Array.from(columnList.children).indexOf(e.target.parentNode);
-        console.log('newIndex2=', newIndex);
-        columnOrder = arrayMove(columnOrder, columnOrder.findIndex(col => col[draggedColumn] !== undefined), newIndex);
-        console.log("columnOrder=", columnOrder);
-        saveCacheData('column-order', columnOrder);
-        $("#setting-modal").modal("hide");
-        reloadDataAndHtml();
-    });
+    if (!columnList.hasDragstartListener) {
+        columnList.addEventListener('dragstart', function (e) {
+            e.dataTransfer.setData('drage-column-order-start', e.target.dataset.column);
+        });
+        columnList.hasDragstartListener = true; // 标记为已添加
+    }
+    if (!columnList.hasDragoverListener) {
+        columnList.addEventListener('dragover', function (e) {
+            e.preventDefault();
+        });
+        columnList.hasDragoverListener = true; // 标记为已添加
+    }
+    if (!columnList.hasDropListener) {
+        columnList.addEventListener('drop', function (e) {
+            e.preventDefault();
+            var draggedColumn = e.dataTransfer.getData('drage-column-order-start');
+            var newIndex = Array.from(columnList.children).indexOf(e.target);
+            console.log('newIndex1=', newIndex, '==', e.target, Array.from(columnList.children));
+            if(newIndex == -1) newIndex = Array.from(columnList.children).indexOf(e.target.parentNode);
+            console.log('newIndex2=', newIndex, '==', e.target.parentNode, Array.from(columnList.children));
+            columnOrderTemp = arrayMove(columnOrderTemp, columnOrderTemp.findIndex(col => col[draggedColumn] !== undefined), newIndex);
+            // saveCacheData('column-order', columnOrder);
+            // $("#setting-modal").modal("hide");
+            // reloadDataAndHtml();
+            generateColumnList();
+        });
+        columnList.hasDropListener = true; // 标记为已添加
+    }
     if (allDisplay == null || allDisplay == 'DISPLAY') {
         allDisplay = 'DISPLAY';
         $("#all-display-checkbox").prop("checked", true);
@@ -4486,8 +4499,8 @@ function addDragAndDropListeners() {
     document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，涨跌
     document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
- 
 }
+
 // 拖拽完成后切换列表的顺序
 function arrayMove(arr, oldIndex, newIndex) {
     var element = arr[oldIndex];
@@ -4495,6 +4508,7 @@ function arrayMove(arr, oldIndex, newIndex) {
     arr.splice(newIndex, 0, element);
     return arr;
 }
+
 // 恢复默认列顺序
 function recoveryColumnOrder() {
     columnOrder = [
@@ -4512,6 +4526,15 @@ function recoveryColumnOrder() {
         {"income-th": 0},
         {"addtime-price-th": 0},
     ];
+    columnOrderTemp = columnOrder;
+    saveCacheData('column-order', columnOrder);
+    $("#setting-modal").modal("hide");
+    reloadDataAndHtml();
+}
+
+// 保存页面展示项顺序
+function saveColumnOrder() {
+    columnOrder = columnOrderTemp;
     saveCacheData('column-order', columnOrder);
     $("#setting-modal").modal("hide");
     reloadDataAndHtml();
