@@ -4229,6 +4229,9 @@ function getSecid(code) {
         secid = '0';
     } else if(code.startsWith('hk') || code.startsWith('HK')) {
         secid = '116';
+        if (code == 'hkHSI') {
+            secid = '100';
+        }
     } else if(code.startsWith('us') || code.startsWith('US')) {
         try {
             let stock;

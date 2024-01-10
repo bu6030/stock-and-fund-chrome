@@ -1,6 +1,6 @@
 // 初始化首页大盘股数据
 function initLargeMarketData() {
-    var stocks = "sh000001,sz399001,sz399006,hkHSI"
+    var stocks = "sh000001,sz399001,sz399006,hkHSI";
     $.ajax({
         url: Env.GET_STOCK_FROM_GTIMG + "q=" + stocks,
         type: "get",
@@ -45,6 +45,11 @@ function initLargeMarketData() {
                 // 点击创业板指
                 document.getElementById('large-market-sz399006').addEventListener('click', function () {
                     timeImageCode = "sz399006";
+                    initLargeMarketClick();
+                });
+                // 点击恒生指数
+                document.getElementById('large-market-hkHSI').addEventListener('click', function () {
+                    timeImageCode = "hkHSI";
                     initLargeMarketClick();
                 });
             }, 300);
