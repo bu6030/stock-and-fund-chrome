@@ -120,77 +120,59 @@ async function initLoad() {
         windowSize = 'NORMAL';
     }
     marketValueDisplay = await readCacheData('market-value-display');
-    // if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
-    //     marketValueDisplay = 'DISPLAY';
-    //     $("#market-value-display-checkbox").prop("checked", true);
-    // } else {
-    //     marketValueDisplay = 'HIDDEN';
-    //     $("#market-value-display-checkbox").prop("checked", false);
-    // }
+    if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
+        marketValueDisplay = 'DISPLAY';
+    } else {
+        marketValueDisplay = 'HIDDEN';
+    }
     marketValuePercentDisplay = await readCacheData('market-value-percent-display');
-    // if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
-    //     marketValuePercentDisplay = 'DISPLAY';
-    //     $("#market-value-percent-display-checkbox").prop("checked", true);
-    // } else {
-    //     marketValuePercentDisplay = 'HIDDEN';
-    //     $("#market-value-percent-display-checkbox").prop("checked", false);
-    // }
+    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
+        marketValuePercentDisplay = 'DISPLAY';
+    } else {
+        marketValuePercentDisplay = 'HIDDEN';
+    }
     costPriceValueDisplay = await readCacheData('cost-price-value-display');
-    // if (costPriceValueDisplay == null || costPriceValueDisplay == 'DISPLAY') {
-    //     costPriceValueDisplay = 'DISPLAY';
-    //     $("#cost-price-value-display-checkbox").prop("checked", true);
-    // } else {
-    //     costPriceValueDisplay = 'HIDDEN';
-    //     $("#cost-price-value-display-checkbox").prop("checked", false);
-    // }
+    if (costPriceValueDisplay == null || costPriceValueDisplay == 'DISPLAY') {
+        costPriceValueDisplay = 'DISPLAY';
+    } else {
+        costPriceValueDisplay = 'HIDDEN';
+    }
     incomePercentDisplay = await readCacheData('income-percent-display');
-    // if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
-    //     incomePercentDisplay = 'DISPLAY';
-    //     $("#income-percent-display-checkbox").prop("checked", true);
-    // } else {
-    //     incomePercentDisplay = 'HIDDEN';
-    //     $("#income-percent-display-checkbox").prop("checked", false);
-    // }
+    if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
+        incomePercentDisplay = 'DISPLAY';
+    } else {
+        incomePercentDisplay = 'HIDDEN';
+    }
     addtimePriceDisplay = await readCacheData('addtime-price-display');
-    // if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
-    //     addtimePriceDisplay = 'DISPLAY';
-    //     $("#addtime-price-display-checkbox").prop("checked", true);
-    // } else {
-    //     addtimePriceDisplay = 'HIDDEN';
-    //     $("#addtime-price-display-checkbox").prop("checked", false);
-    // }
+    if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
+        addtimePriceDisplay = 'DISPLAY';
+    } else {
+        addtimePriceDisplay = 'HIDDEN';
+    }
     dayIncomeDisplay = await readCacheData('day-income-display');
-    // if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
-    //     dayIncomeDisplay = 'DISPLAY';
-    //     $("#day-income-display-checkbox").prop("checked", true);
-    // } else {
-    //     dayIncomeDisplay = 'HIDDEN';
-    //     $("#day-income-display-checkbox").prop("checked", false);
-    // }
+    if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
+        dayIncomeDisplay = 'DISPLAY';
+    } else {
+        dayIncomeDisplay = 'HIDDEN';
+    }
     costPriceDisplay = await readCacheData('cost-price-display');
-    // if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
-    //     costPriceDisplay = 'DISPLAY';
-    //     $("#cost-price-display-checkbox").prop("checked", true);
-    // } else {
-    //     costPriceDisplay = 'HIDDEN';
-    //     $("#cost-price-display-checkbox").prop("checked", false);
-    // }
+    if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
+        costPriceDisplay = 'DISPLAY';
+    } else {
+        costPriceDisplay = 'HIDDEN';
+    }
     bondsDisplay = await readCacheData('bonds-display');
-    // if (bondsDisplay == null || bondsDisplay == 'DISPLAY') {
-    //     bondsDisplay = 'DISPLAY';
-    //     $("#bonds-display-checkbox").prop("checked", true);
-    // } else {
-    //     bondsDisplay = 'HIDDEN';
-    //     $("#bonds-display-checkbox").prop("checked", false);
-    // }
+    if (bondsDisplay == null || bondsDisplay == 'DISPLAY') {
+        bondsDisplay = 'DISPLAY';
+    } else {
+        bondsDisplay = 'HIDDEN';
+    }
     incomeDisplay = await readCacheData('income-display');
-    // if (incomeDisplay == null || incomeDisplay == 'DISPLAY') {
-    //     incomeDisplay = 'DISPLAY';
-    //     $("#income-display-checkbox").prop("checked", true);
-    // } else {
-    //     incomeDisplay = 'HIDDEN';
-    //     $("#income-display-checkbox").prop("checked", false);
-    // }
+    if (incomeDisplay == null || incomeDisplay == 'DISPLAY') {
+        incomeDisplay = 'DISPLAY';
+    } else {
+        incomeDisplay = 'HIDDEN';
+    }
     allDisplay = await readCacheData('all-display');
     if (allDisplay == null || allDisplay == 'DISPLAY') {
         allDisplay = 'DISPLAY';
@@ -208,13 +190,11 @@ async function initLoad() {
         $("#code-display-checkbox").prop("checked", true);
     }
     changeDisplay = await readCacheData('change-display');
-    // if (changeDisplay == null || changeDisplay == 'HIDDEN') {
-    //     changeDisplay = 'HIDDEN';
-    //     $("#change-display-checkbox").prop("checked", false);
-    // } else {
-    //     changeDisplay = 'DISPLAY';
-    //     $("#change-display-checkbox").prop("checked", true);
-    // }
+    if (changeDisplay == null || changeDisplay == 'HIDDEN') {
+        changeDisplay = 'HIDDEN';
+    } else {
+        changeDisplay = 'DISPLAY';
+    }
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
         largeMarketScroll = 'STOP';
