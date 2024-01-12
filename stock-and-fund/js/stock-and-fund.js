@@ -552,6 +552,7 @@ document.addEventListener(
                 $("#stock-bonds").val('');
                 $("#stock-monitor-high-price").val('');
                 $("#stock-monitor-low-price").val('');
+                $("#new-buy-checkbox").prop("checked", false);
                 await saveStock();
             }
         });
@@ -788,29 +789,35 @@ async function initData() {
                     var dayIncome = new BigDecimal("0");
                     var marketValue = new BigDecimal("0");
                     var maxBuyOrSellBonds = 0;
-                    for (var g in buyOrSells) {
-                        let beijingDate = getBeijingDate();
-                        // 当天购买过
-                        if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
-                            maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
-                            var buyIncome = (new BigDecimal(stockList[l].now))
-                                .subtract(new BigDecimal(buyOrSells[g].price + ""))
-                                .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
-                                .subtract(new BigDecimal(buyOrSells[g].cost + ""));
-                            todayBuyIncom = todayBuyIncom.add(buyIncome);
-                        }
-                        // 当天卖出过
-                        if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
-                            todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[g].income + ""));
-                        }
-                    }
-                    if (maxBuyOrSellBonds < stockList[l].bonds) {
-                        var restBonds = (new BigDecimal(stockList[l].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-                        dayIncome = (new BigDecimal(stockList[l].change)).multiply(restBonds);
+                    //当天新买，计算当日收益，（最新价格-成本价格）*持仓数
+                    if (stockList[l].newBuy && stockList[l].newBuyDate == getBeijingDate()) {
+                        dayIncome = (now.add(costPrise.negate())).multiply(new BigDecimal(stockList[l].bonds));
+                    //不是当天新买
                     } else {
-                        dayIncome = new BigDecimal("0");
+                        for (var g in buyOrSells) {
+                            let beijingDate = getBeijingDate();
+                            // 当天购买过
+                            if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
+                                maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
+                                var buyIncome = (new BigDecimal(stockList[l].now))
+                                    .subtract(new BigDecimal(buyOrSells[g].price + ""))
+                                    .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
+                                    .subtract(new BigDecimal(buyOrSells[g].cost + ""));
+                                todayBuyIncom = todayBuyIncom.add(buyIncome);
+                            }
+                            // 当天卖出过
+                            if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
+                                todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[g].income + ""));
+                            }
+                        }
+                        if (maxBuyOrSellBonds < stockList[l].bonds) {
+                            var restBonds = (new BigDecimal(stockList[l].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+                            dayIncome = (new BigDecimal(stockList[l].change)).multiply(restBonds);
+                        } else {
+                            dayIncome = new BigDecimal("0");
+                        }
+                        dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
                     }
-                    dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
                     if (huilvConvert) {
                         if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
                             dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
@@ -1079,6 +1086,11 @@ async function initStockAndFundHtml() {
                 $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
                 $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
                 $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
+                if (stockList[this.sectionRowIndex].newBuy == true && stockList[this.sectionRowIndex].newBuyDate == getBeijingDate()) {
+                    $("#new-buy-checkbox").prop("checked", true);
+                } else {
+                    $("#new-buy-checkbox").prop("checked", false);
+                }
                 $("#stock-monitor-upper-percent").val(stockList[this.sectionRowIndex].monitorUpperPercent);
                 $("#stock-monitor-lower-percent").val(stockList[this.sectionRowIndex].monitorLowerPercent);
                 $("#stock-show-time-image-button")[0].style.display = 'inline';
@@ -1699,6 +1711,8 @@ async function saveStock() {
     var monitorLowPrice = $("#stock-monitor-low-price").val();
     var monitorUpperPercent = $("#stock-monitor-upper-percent").val();
     var monitorLowerPercent = $("#stock-monitor-lower-percent").val();
+    var newBuy = $("#new-buy-checkbox").prop("checked");
+    var newBuyDate = getBeijingDate();
     
     var code = $("#stock-code").val();
     if (code == null || code == '') {
@@ -1719,6 +1733,8 @@ async function saveStock() {
         "monitorLowPrice": monitorLowPrice,
         "monitorUpperPercent": monitorUpperPercent,
         "monitorLowerPercent": monitorLowerPercent,
+        "newBuy": newBuy,
+        "newBuyDate": newBuyDate,
     }
     var stocks = await readCacheData('stocks');
     if (stocks == null) {
@@ -1735,6 +1751,8 @@ async function saveStock() {
             stocks[k].monitorLowPrice = stock.monitorLowPrice;
             stocks[k].monitorUpperPercent = stock.monitorUpperPercent;
             stocks[k].monitorLowerPercent = stock.monitorLowerPercent;
+            stocks[k].newBuy = stock.newBuy;
+            stocks[k].newBuyDate = stock.newBuyDate;
             stocks[k].monitorAlert = '';
             if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stocks[k].code);
@@ -2456,6 +2474,7 @@ async function getFundInversPosition() {
                 $("#stock-bonds").val('');
                 $("#stock-monitor-high-price").val('');
                 $("#stock-monitor-low-price").val('');
+                $("#new-buy-checkbox").prop("checked", false);
                 await saveStock();
                 $("#stock-code").val('');
                 $("#fund-invers-position-modal").modal("hide");
