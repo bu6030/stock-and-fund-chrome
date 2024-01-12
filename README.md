@@ -2,8 +2,8 @@
 
 [加入股票基金神器群](#attend-wechat-group)  
 [版本更新历史记录](#develop-history)  
-[Chrome应用市场安装](#chrome-plugin-stock-and-fund) 
-[Edge应用市场安装](#edge-plugin-stock-and-fund) 
+[Chrome应用市场安装](#chrome-plugin-stock-and-fund)  
+[Edge应用市场安装](#edge-plugin-stock-and-fund)  
 [chrome安装步骤](#chrome-stock-and-fund)  
 [Edge安装步骤](#edge-stock-and-fund)  
 [狐猴浏览器安装步骤](#huhou-stock-and-fund)  
