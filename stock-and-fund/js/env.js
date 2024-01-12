@@ -28,7 +28,7 @@ let Env = {
     // 下面这两个地址可以通过本地启动stock-and-fund项目
     // github地址为：https://github.com/bu6030/stock-and-fund
     // GET_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/fund",
-    GET_HELP_DOCUMENT: "https://zhuanlan.zhihu.com/p/640002036",
+    GET_HELP_DOCUMENT: "https://zhuanlan.zhihu.com/p/677540725",
     WECHAT_GROUP_QR_CODE: "https://bu6030.github.io/images/wechat-group-qr-code.png",
     WECHAT_PAY_QR_CODE: "/img/wechat-pay-qr-code.png",
     ALI_PAY_QR_CODE: "/img/ali-pay-qr-code.png",
