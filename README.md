@@ -196,6 +196,9 @@
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
 如果没有科学上网工具，可以通过下面的几种下载程序包方式安装
 
+## <span id="chrome-plugin-stock-and-fund">Edge应用市场安装</span>
+点击这个[链接到Edge应用市场安装，国内国外均可用，无需科学上网](https://microsoftedge.microsoft.com/addons/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/nlekkaghplahbknlhefkempopljodhee)  
+
 ## <span id="chrome-stock-and-fund">chrome安装步骤</span>
  1. 代码下载完成后，在chrome浏览器中选择扩展程序进入扩展程序页面    
 ![image](https://user-images.githubusercontent.com/11482988/220873576-c1234b8c-d66b-4059-94a1-4681ba728c2a.png)  
