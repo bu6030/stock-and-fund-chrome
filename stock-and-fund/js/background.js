@@ -365,14 +365,9 @@ function monitorTop5StockChromeTitle() {
         console.log("交易时间，执行任务...");
         getData('stocks').then((stockArr) => {
             var stockList = JSON.parse(stockArr);
-            var stocks = "";
-            var count = 0;
+            var stocks = "sh000001,sz399001,sz399006,hkHSI,";
             for (let k in stockList) {
-                if (count == 5) {
-                    break;
-                }
                 stocks += stockList[k].code + ",";
-                count ++;
             }
             if (stocks == "") {
                 console.log("没有执行扩展程序图标鼠标悬停后展示前5个股票价格任务的股票，返回...");
@@ -395,8 +390,9 @@ function monitorTop5StockChromeTitle() {
                     }
                     var now = parseFloat(values[3]);
                     var changePercent = parseFloat(values[32]);
-                    title += (name + ' 价格：' + now + ' 涨跌幅：' + changePercent + "%\n");
+                    title += (name + ' ' + now + '(' + changePercent + "%)\n");
                 }
+                title = title.substring(0, title.length - 1);
                 setChromeTitle(title);
             });
         });
