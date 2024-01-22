@@ -285,7 +285,7 @@ function setStockMinitesImage() {
     timerId = setTimeout(function () {
         console.log('20s执行');
         setStockMinitesImage();
-    }, 10000);
+    }, 20000);
     console.log("下一次分时图timerId:", timerId);
 }
 // 展示日线/周线/月线图
