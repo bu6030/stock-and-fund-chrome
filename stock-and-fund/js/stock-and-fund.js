@@ -544,6 +544,8 @@ document.addEventListener(
         // 走势图页面，切换新旧走势图
         document.getElementById('time-image-new-button').addEventListener('click', changeTimeImage);
         document.getElementById('time-image-old-button').addEventListener('click', changeTimeImage);
+        // 走势图页面，分时图关闭监听
+        $("#time-image-modal").on("hidden.bs.modal", clearTimeImageTimeout);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -4593,4 +4595,12 @@ async function changeMonitorTop5Stock(event) {
     saveCacheData('monitor-top-5-stock', monitorTop5Stock);
     $("#setting-modal").modal("hide");
     reloadDataAndHtml();
+}
+
+// 清理分时图timeout，不再刷新分时图
+async function clearTimeImageTimeout() {
+    if(timerId != undefined && timerId != '') {
+        console.log("清理分时图timeId=", timerId);
+        clearTimeout(timerId);
+    }
 }

@@ -1,8 +1,10 @@
 //分时图/日线/周线/月线使用
 let timeImageCode;
 let timeImageType;
+var timerId;
 // 展示分时图
 function showMinuteImage() {
+    clearTimeImageTimeout();
     let path = "";
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006") {
         $("#update-stock-fund-button")[0].style.display = 'block';
@@ -36,6 +38,7 @@ function showMinuteImage() {
 }
 // 展示日线图
 function showDayImage() {
+    clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
@@ -82,6 +85,7 @@ function showWeekImage() {
 }
 // 展示月线图
 function showMonthImage() {
+    clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
@@ -277,6 +281,12 @@ function setStockMinitesImage() {
     };
     myChart.setOption(option);
     $("#time-image-modal").modal();
+    // 20s刷新
+    timerId = setTimeout(function () {
+        console.log('20s执行');
+        setStockMinitesImage();
+    }, 10000);
+    console.log("下一次分时图timerId:", timerId);
 }
 // 展示日线/周线/月线图
 function setStockImage(type) {
