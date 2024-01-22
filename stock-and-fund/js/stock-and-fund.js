@@ -1569,7 +1569,7 @@ function getTotalTableHtml(totalMarketValueResult) {
     var allTotalIncomePercent = new BigDecimal("0");
     var totalCostPrice = fundTotalCostValue.add(stockTotalCostValue);
     if (totalMarketValueResult != 0) {
-        allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult.add(allDayIncome), 4);
+        allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult.subtract(allDayIncome), 4);
     }
     if (totalCostPrice > 0) {
         allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalCostPrice, 4);
@@ -4577,6 +4577,8 @@ async function changeMonitorPriceOrPercent(event) {
         monitorPriceOrPercent = 'PERCENT';
     }
     saveCacheData('monitor-price-or-percent', monitorPriceOrPercent);
+    $("#setting-modal").modal("hide");
+    reloadDataAndHtml();
 }
 
 // 修改鼠标悬停扩展程序图标，展示/不展示前5只股票
@@ -4586,6 +4588,9 @@ async function changeMonitorTop5Stock(event) {
         monitorTop5Stock = true;
     } else {
         monitorTop5Stock = false;
+        setChromeTitle('股票基金神器');
     }
     saveCacheData('monitor-top-5-stock', monitorTop5Stock);
+    $("#setting-modal").modal("hide");
+    reloadDataAndHtml();
 }
