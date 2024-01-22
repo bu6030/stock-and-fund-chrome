@@ -24,7 +24,6 @@ chrome.runtime.onMessage.addListener(async function(message, sender, sendRespons
         sendResponse('已收到消息');
     } else if(message.action == 'sendTonghuashunXueqiuStockCodes') {
         let stockCodes = message.content;
-        console.log("stockCodes == ", stockCodes);
         saveData("tonghuashun-xueqiu-stock", stockCodes);
     }
 });
@@ -50,6 +49,14 @@ function performTask() {
             monitorFundCycleInvest(JSON.parse(fundArr));
         } else {
             monitorFundCycleInvest(JSON.parse("[]"));
+        }
+    });
+    getData('monitor-top-5-stock').then((monitoTop5Stock) => {
+        if (monitoTop5Stock != null && monitoTop5Stock == true) {
+            console.log('扩展程序图标鼠标悬停后展示前5个股票价格');
+            monitorTop5StockChromeTitle();
+        } else {
+            console.log('扩展程序图标鼠标悬停后不展示前5个股票价格');
         }
     });
 }
@@ -251,7 +258,7 @@ function monitorFundCycleInvest(fundList) {
     }
 }
 
-// 后台监控突破价格并提示
+// 后台监控实时价格并在角标实时显示
 function monitorStock(code) {
     var date = new Date();
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
@@ -259,15 +266,19 @@ function monitorStock(code) {
         console.log("交易时间，执行任务...");
 
         fetch("http://qt.gtimg.cn/q=" + code)
-            .then(response => response.text())
+            .then(response => response.arrayBuffer())
             .then(data => {
+                const decoder = new TextDecoder('GBK');
+                data = decoder.decode(data);
                 // 在这里处理返回的数据
                 var stoksArr = data.split("\n");
                 var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
                 var values = dataStr.split("~");
+                var name = values[1];
                 var now = values[3];
                 var openPrice = values[4];
                 var badgeBackgroundColor;
+                var changePercent = parseFloat(values[32]);
                 if (parseFloat(now) >= parseFloat(openPrice)) {
                     badgeBackgroundColor = '#c12e2a';
                 } else {
@@ -276,13 +287,14 @@ function monitorStock(code) {
                 if (now.length >= 5) {
                     now = parseFloat(now.substring(0, 5));
                 }
-                // try {
-                //     chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                // } catch (error){
-                //     console.error(error);
-                // }
-                // chrome.action.setBadgeText({ text: "" + now });
-                sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
+                getData('monitor-price-or-percent').then((monitorPriceOrPercent) => {
+                    if (monitorPriceOrPercent == null || monitorPriceOrPercent == "PRICE") {
+                        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
+                    } else {
+                        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent);
+                    }
+                });
+                // setChromeTitle(name + '\n价格：' + now + '\n涨跌幅：' + changePercent + "%" +"================"+"================"+"================"+"================"+"================");
             })
             .catch(error => {
                 // 处理请求错误
@@ -334,4 +346,59 @@ function sendChromeBadge(badgeTextColor, badgeBackgroundColor, badgeText) {
     }
     chrome.action.setBadgeBackgroundColor({ color: badgeBackgroundColor });
     chrome.action.setBadgeText({ text: badgeText });
+}
+// 统一设置chrome标题
+function setChromeTitle(title) {
+    try {
+        chrome.action.setTitle({ 
+            title: title
+        });
+    } catch (error) {
+        console.info("setChromeTitle Error: ", error);
+    }
+}
+// 扩展程序图标鼠标悬停后展示前5个股票价格
+function monitorTop5StockChromeTitle() {
+    var date = new Date();
+    console.log("执行扩展程序图标鼠标悬停后展示前5个股票价格任务...", date.toLocaleString());
+    if (isTradingTime(date)) {
+        console.log("交易时间，执行任务...");
+        getData('stocks').then((stockArr) => {
+            var stockList = JSON.parse(stockArr);
+            var stocks = "";
+            var count = 0;
+            for (let k in stockList) {
+                if (count == 5) {
+                    break;
+                }
+                stocks += stockList[k].code + ",";
+                count ++;
+            }
+            if (stocks == "") {
+                console.log("没有执行扩展程序图标鼠标悬停后展示前5个股票价格任务的股票，返回...");
+                return;
+            }
+            fetch("http://qt.gtimg.cn/q=" + stocks)
+            .then(response => response.arrayBuffer())
+            .then(data => {
+                const decoder = new TextDecoder('GBK');
+                data = decoder.decode(data);
+                // 在这里处理返回的数据
+                var title = '';
+                var stoksArr = data.split("\n");
+                for (let k in stoksArr) {
+                    var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
+                    var values = dataStr.split("~");
+                    var name = values[1];
+                    if (name == undefined) {
+                        continue;
+                    }
+                    var now = parseFloat(values[3]);
+                    var changePercent = parseFloat(values[32]);
+                    title += (name + ' 价格：' + now + ' 涨跌幅：' + changePercent + "%\n");
+                }
+                setChromeTitle(title);
+            });
+        });
+    }
 }

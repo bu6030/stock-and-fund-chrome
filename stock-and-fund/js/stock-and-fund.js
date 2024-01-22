@@ -27,6 +27,8 @@ var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var changeDisplay = 'DISPLAY';
 var largeMarketScroll = 'STOP';
+var monitorPriceOrPercent = 'PRICE';
+var monitorTop5Stock = false;
 var lastSort;
 var huilvConvert = false;
 var s2nDate;
@@ -194,6 +196,20 @@ async function initLoad() {
         changeDisplay = 'HIDDEN';
     } else {
         changeDisplay = 'DISPLAY';
+    }
+    monitorPriceOrPercent = await readCacheData('monitor-price-or-percent');
+    if (monitorPriceOrPercent == null) {
+        monitorPriceOrPercent = 'PRICE';
+    } else {
+        monitorPriceOrPercent = 'PERCENT';
+    }
+    monitorTop5Stock  = await readCacheData('monitor-top-5-stock');
+    if (monitorTop5Stock == null) {
+        monitorTop5Stock = false;
+    } else if(monitorTop5Stock == "true") {
+        monitorTop5Stock = true;
+    } else if(monitorTop5Stock == "false") {
+        monitorTop5Stock = false;
     }
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
@@ -683,6 +699,14 @@ document.addEventListener(
         document.getElementById('column-order-recovery-button').addEventListener('click', recoveryColumnOrder);
         // 设置页面，点击保存顺序按钮
         document.getElementById('column-order-save-button').addEventListener('click', saveColumnOrder);
+        // 设置页面，点击实时价格按钮
+        document.getElementById('monitor-price-change-button').addEventListener('click', changeMonitorPriceOrPercent);
+        // 设置页面，点击涨跌幅按钮
+        document.getElementById('monitor-percent-change-button').addEventListener('click', changeMonitorPriceOrPercent);
+
+        // 设置页面，点击展示/不展示前5个股票价格
+        document.getElementById('monitor-dont-top-5-stock-change-button').addEventListener('click', changeMonitorTop5Stock);
+        document.getElementById('monitor-top-5-stock-change-button').addEventListener('click', changeMonitorTop5Stock);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -2402,7 +2426,12 @@ async function stockMonitor () {
         now = parseFloat(now.substring(0, 5));
     }
     // chrome.action.setBadgeText({ text: "" + now });
-    sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
+    if (monitorPriceOrPercent == null || monitorPriceOrPercent == 'PRICE') {
+        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
+    } else {
+        let changePercent = stock.changePercent;
+        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent);
+    }
     saveCacheData("MONITOR_STOCK_CODE", code);
 }
 
@@ -4537,4 +4566,26 @@ function saveColumnOrder() {
     saveCacheData('column-order', columnOrder);
     $("#setting-modal").modal("hide");
     reloadDataAndHtml();
+}
+
+// 修改角标显示监控实时价格/涨跌幅
+async function changeMonitorPriceOrPercent(event) {
+    let targetId = event.target.id;
+    if (targetId == 'monitor-price-change-button') {
+        monitorPriceOrPercent = 'PRICE';
+    } else {
+        monitorPriceOrPercent = 'PERCENT';
+    }
+    saveCacheData('monitor-price-or-percent', monitorPriceOrPercent);
+}
+
+// 修改鼠标悬停扩展程序图标，展示/不展示前5只股票
+async function changeMonitorTop5Stock(event) {
+    let targetId = event.target.id;
+    if (targetId == 'monitor-top-5-stock-change-button') {
+        monitorTop5Stock = true;
+    } else {
+        monitorTop5Stock = false;
+    }
+    saveCacheData('monitor-top-5-stock', monitorTop5Stock);
 }

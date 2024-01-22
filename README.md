@@ -192,6 +192,8 @@
 171. 设置页面，隐藏/展示页面选项和拖拽结合 2024/1/10
 172. 大盘指数恒生指数可以点击展示走势图 2024/1/10
 173. 股票增加当日新买入状态，当日盈利计算方式修改 2024/1/12 -- version 1.9.5 -- end
+174. 角标显示监控实时价格/监控涨跌幅切换 2024/1/22
+175. 扩展程序图标鼠标悬停后展示/不展示前5个股票价格 2024/1/22
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
