@@ -403,7 +403,7 @@ function monitorTop20StockChromeTitle() {
                             continue;
                         }
                         var now = parseFloat(values[3]);
-                        var changePercent = parseFloat(values[32]);
+                        var changePercent = parseFloat(values[32]).toFixed(2);
                         var dayIncome = 0.00;
                         if (stock != undefined) {
                             dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
@@ -414,7 +414,7 @@ function monitorTop20StockChromeTitle() {
                         console.info("MonitorTop20StockChromeTitle Error: ", error);
                     }
                 }
-                title += '\n当日前20只股票收益：' + totalDayIncome.toFixed(2);
+                title += '\n当日股票收益：' + totalDayIncome.toFixed(2);
                 setChromeTitle(title);
             });
         });
