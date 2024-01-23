@@ -51,12 +51,12 @@ function performTask() {
             monitorFundCycleInvest(JSON.parse("[]"));
         }
     });
-    getData('monitor-top-5-stock').then((monitoTop5Stock) => {
-        if (monitoTop5Stock != null && monitoTop5Stock == true) {
-            console.log('扩展程序图标鼠标悬停后展示前5个股票价格');
-            monitorTop5StockChromeTitle();
+    getData('monitor-top-20-stock').then((monitoTop20Stock) => {
+        if (monitoTop20Stock != null && monitoTop20Stock == true) {
+            console.log('扩展程序图标鼠标悬停后展示前20个股票价格');
+            monitorTop20StockChromeTitle();
         } else {
-            console.log('扩展程序图标鼠标悬停后不展示前5个股票价格');
+            console.log('扩展程序图标鼠标悬停后不展示前20个股票价格');
         }
     });
 }
@@ -357,20 +357,25 @@ function setChromeTitle(title) {
         console.info("setChromeTitle Error: ", error);
     }
 }
-// 扩展程序图标鼠标悬停后展示前5个股票价格
-function monitorTop5StockChromeTitle() {
+// 扩展程序图标鼠标悬停后展示前20个股票价格
+function monitorTop20StockChromeTitle() {
     var date = new Date();
-    console.log("执行扩展程序图标鼠标悬停后展示前5个股票价格任务...", date.toLocaleString());
+    console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         getData('stocks').then((stockArr) => {
             var stockList = JSON.parse(stockArr);
             var stocks = "sh000001,sz399001,sz399006,hkHSI,";
+            var count = 0;
             for (let k in stockList) {
+                if (count == 20) {
+                    break;
+                }
                 stocks += stockList[k].code + ",";
+                count ++;
             }
             if (stocks == "") {
-                console.log("没有执行扩展程序图标鼠标悬停后展示前5个股票价格任务的股票，返回...");
+                console.log("没有执行扩展程序图标鼠标悬停后展示前20个股票价格任务的股票，返回...");
                 return;
             }
             fetch("http://qt.gtimg.cn/q=" + stocks)

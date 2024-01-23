@@ -28,7 +28,7 @@ var codeDisplay = 'HIDDEN';
 var changeDisplay = 'DISPLAY';
 var largeMarketScroll = 'STOP';
 var monitorPriceOrPercent = 'PRICE';
-var monitorTop5Stock = false;
+var monitorTop20Stock = false;
 var lastSort;
 var huilvConvert = false;
 var s2nDate;
@@ -203,13 +203,13 @@ async function initLoad() {
     } else {
         monitorPriceOrPercent = 'PERCENT';
     }
-    monitorTop5Stock  = await readCacheData('monitor-top-5-stock');
-    if (monitorTop5Stock == null) {
-        monitorTop5Stock = false;
-    } else if(monitorTop5Stock == "true") {
-        monitorTop5Stock = true;
-    } else if(monitorTop5Stock == "false") {
-        monitorTop5Stock = false;
+    monitorTop20Stock  = await readCacheData('monitor-top-20-stock');
+    if (monitorTop20Stock == null) {
+        monitorTop20Stock = false;
+    } else if(monitorTop20Stock == "true") {
+        monitorTop20Stock = true;
+    } else if(monitorTop20Stock == "false") {
+        monitorTop20Stock = false;
     }
     largeMarketScroll = await readCacheData('large-market-scrool');
     if (largeMarketScroll == null) {
@@ -707,8 +707,8 @@ document.addEventListener(
         document.getElementById('monitor-percent-change-button').addEventListener('click', changeMonitorPriceOrPercent);
 
         // 设置页面，点击展示/不展示前5个股票价格
-        document.getElementById('monitor-dont-top-5-stock-change-button').addEventListener('click', changeMonitorTop5Stock);
-        document.getElementById('monitor-top-5-stock-change-button').addEventListener('click', changeMonitorTop5Stock);
+        document.getElementById('monitor-dont-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
+        document.getElementById('monitor-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -4584,15 +4584,15 @@ async function changeMonitorPriceOrPercent(event) {
 }
 
 // 修改鼠标悬停扩展程序图标，展示/不展示前5只股票
-async function changeMonitorTop5Stock(event) {
+async function changemonitorTop20Stock(event) {
     let targetId = event.target.id;
-    if (targetId == 'monitor-top-5-stock-change-button') {
-        monitorTop5Stock = true;
+    if (targetId == 'monitor-top-20-stock-change-button') {
+        monitorTop20Stock = true;
     } else {
-        monitorTop5Stock = false;
+        monitorTop20Stock = false;
         setChromeTitle('股票基金神器');
     }
-    saveCacheData('monitor-top-5-stock', monitorTop5Stock);
+    saveCacheData('monitor-top-20-stock', monitorTop20Stock);
     $("#setting-modal").modal("hide");
     reloadDataAndHtml();
 }
