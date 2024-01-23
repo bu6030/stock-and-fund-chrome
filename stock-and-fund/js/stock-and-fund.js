@@ -200,8 +200,6 @@ async function initLoad() {
     monitorPriceOrPercent = await readCacheData('monitor-price-or-percent');
     if (monitorPriceOrPercent == null) {
         monitorPriceOrPercent = 'PRICE';
-    } else {
-        monitorPriceOrPercent = 'PERCENT';
     }
     monitorTop20Stock  = await readCacheData('monitor-top-20-stock');
     if (monitorTop20Stock == null) {

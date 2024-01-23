@@ -386,8 +386,16 @@ function monitorTop20StockChromeTitle() {
                 // 在这里处理返回的数据
                 var title = '';
                 var stoksArr = data.split("\n");
+                var totalDayIncome = 0.00;
                 for (let k in stoksArr) {
                     try {
+                        var stock;
+                        for (let l in stockList) {
+                            if(stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
+                                stock = stockList[l];
+                                break;
+                            }
+                        }
                         var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                         var values = dataStr.split("~");
                         var name = values[1];
@@ -396,12 +404,17 @@ function monitorTop20StockChromeTitle() {
                         }
                         var now = parseFloat(values[3]);
                         var changePercent = parseFloat(values[32]);
+                        var dayIncome = 0.00;
+                        if (stock != undefined) {
+                            dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
+                        }
+                        totalDayIncome += dayIncome;
                         title += (name + ' ' + now + '(' + changePercent + "%)\n");
                     } catch (error) {
                         console.info("MonitorTop20StockChromeTitle Error: ", error);
                     }
                 }
-                title = title.substring(0, title.length - 1);
+                title += '\n当日前20只股票收益：' + totalDayIncome.toFixed(2);
                 setChromeTitle(title);
             });
         });
