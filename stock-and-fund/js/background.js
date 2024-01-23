@@ -387,15 +387,19 @@ function monitorTop20StockChromeTitle() {
                 var title = '';
                 var stoksArr = data.split("\n");
                 for (let k in stoksArr) {
-                    var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                    var values = dataStr.split("~");
-                    var name = values[1];
-                    if (name == undefined) {
-                        continue;
+                    try {
+                        var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
+                        var values = dataStr.split("~");
+                        var name = values[1];
+                        if (name == undefined) {
+                            continue;
+                        }
+                        var now = parseFloat(values[3]);
+                        var changePercent = parseFloat(values[32]);
+                        title += (name + ' ' + now + '(' + changePercent + "%)\n");
+                    } catch (error) {
+                        console.info("MonitorTop20StockChromeTitle Error: ", error);
                     }
-                    var now = parseFloat(values[3]);
-                    var changePercent = parseFloat(values[32]);
-                    title += (name + ' ' + now + '(' + changePercent + "%)\n");
                 }
                 title = title.substring(0, title.length - 1);
                 setChromeTitle(title);
