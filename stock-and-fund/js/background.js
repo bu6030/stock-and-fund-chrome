@@ -408,7 +408,6 @@ function monitorTop20StockChromeTitle() {
                         totalDayIncome += dayIncome;
                         if (count <= 24) {
                             var kongge = '';
-                            console.log("name.length = ", name.length);
                             switch(name.length) {
                                 case 4: 
                                     kongge = '     ';
