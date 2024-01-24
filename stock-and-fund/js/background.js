@@ -366,13 +366,9 @@ function monitorTop20StockChromeTitle() {
         getData('stocks').then((stockArr) => {
             var stockList = JSON.parse(stockArr);
             var stocks = "sh000001,sz399001,sz399006,hkHSI,";
-            var count = 0;
+
             for (let k in stockList) {
-                if (count == 20) {
-                    break;
-                }
                 stocks += stockList[k].code + ",";
-                count ++;
             }
             if (stocks == "") {
                 console.log("没有执行扩展程序图标鼠标悬停后展示前20个股票价格任务的股票，返回...");
@@ -381,6 +377,7 @@ function monitorTop20StockChromeTitle() {
             fetch("http://qt.gtimg.cn/q=" + stocks)
             .then(response => response.arrayBuffer())
             .then(data => {
+                var count = 0;
                 const decoder = new TextDecoder('GBK');
                 data = decoder.decode(data);
                 // 在这里处理返回的数据
@@ -409,7 +406,23 @@ function monitorTop20StockChromeTitle() {
                             dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
                         }
                         totalDayIncome += dayIncome;
-                        title += (name + ' ' + now + '(' + changePercent + "%)\n");
+                        if (count <= 24) {
+                            var kongge = '';
+                            console.log("name.length = ", name.length);
+                            switch(name.length) {
+                                case 4: 
+                                    kongge = '     ';
+                                    break;
+                                case 5: 
+                                    kongge = '     ';
+                                    break;
+                                case 6: 
+                                    kongge = '  ';
+                                    break;
+                            }
+                            title += (name + kongge + now + '(' + changePercent + "%)\n");
+                        }
+                        count++;
                     } catch (error) {
                         console.info("MonitorTop20StockChromeTitle Error: ", error);
                     }
