@@ -4403,13 +4403,8 @@ function addDragAndDropListeners() {
             e.preventDefault();
             var draggedColumn = e.dataTransfer.getData('drage-column-order-start');
             var newIndex = Array.from(columnList.children).indexOf(e.target);
-            console.log('newIndex1=', newIndex, '==', e.target, Array.from(columnList.children));
             if(newIndex == -1) newIndex = Array.from(columnList.children).indexOf(e.target.parentNode);
-            console.log('newIndex2=', newIndex, '==', e.target.parentNode, Array.from(columnList.children));
             columnOrderTemp = arrayMove(columnOrderTemp, columnOrderTemp.findIndex(col => col[draggedColumn] !== undefined), newIndex);
-            // saveCacheData('column-order', columnOrder);
-            // $("#setting-modal").modal("hide");
-            // reloadDataAndHtml();
             generateColumnList();
         });
         columnList.hasDropListener = true; // 标记为已添加
