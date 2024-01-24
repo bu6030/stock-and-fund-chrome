@@ -2053,7 +2053,6 @@ async function initWindowsSize() {
     let helpDocumentButton = document.getElementById('help-document-button');
     let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
     let fullScreenButton2 = document.getElementById('full-screen-button-2');
-    // let timeImageButton = document.getElementById('time-image-button');
     let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
     let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
     let showWechatGroupButton = document.getElementById('show-wechat-group-button');
@@ -2075,7 +2074,6 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
         fullScreenButton2.style.display = "inline";
-        // timeImageButton.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
@@ -2096,7 +2094,6 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
         fullScreenButton2.style.display = "inline";
-        // timeImageButton.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
@@ -2117,7 +2114,6 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.height = '200px';
         helpDocumentButton.style.display = "none";
         fullScreenButton2.style.display = "none";
-        // timeImageButton.style.display = "none";
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
         showDataCenterButton.style.display = "none";
@@ -2348,7 +2344,6 @@ async function changeShowStockOrFundOrAll(event) {
     }
     await saveCacheData('showStockOrFundOrAll', type);
     showStockOrFundOrAll = type;
-    // location.reload();
     initHtml();
     initData();
 }
@@ -2373,7 +2368,6 @@ function removeAllData() {
     let fundsRemove = [];
     saveCacheData('stocks', JSON.stringify(stocksRemove));
     saveCacheData('funds', JSON.stringify(fundsRemove));
-    // location.reload();
     stockList = [];
     fundList = [];
     $("#setting-modal").modal("hide");
@@ -2404,16 +2398,10 @@ async function stockMonitor () {
     if (monitorStockCode != null && monitorStockCode != '' 
     && monitorStockCode != undefined && monitorStockCode != 'undefined' && monitorStockCode == code) {
         saveCacheData("MONITOR_STOCK_CODE", '');
-        // chrome.action.setBadgeText({ text: '' });
         sendChromeBadge('#FFFFFF', '#FFFFFF', '');
         return;
     }
     let stock = checkStockExsit(code);
-    // try {
-    //     chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-    // } catch(error){
-    //     console.error(error);
-    // }
     let now = stock.now;
     let openPrice = stock.openPrice;
     let badgeBackgroundColor;
@@ -2425,7 +2413,6 @@ async function stockMonitor () {
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));
     }
-    // chrome.action.setBadgeText({ text: "" + now });
     if (monitorPriceOrPercent == null || monitorPriceOrPercent == 'PRICE') {
         sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
     } else {
@@ -2438,7 +2425,6 @@ async function stockMonitor () {
 // 清理角标
 async function removeBadgeText() {
     saveCacheData("MONITOR_STOCK_CODE", '');
-    // chrome.action.setBadgeText({ text: '' });
     sendChromeBadge('#FFFFFF', '#FFFFFF', '');
 }
 
@@ -2733,11 +2719,9 @@ async function fileInput (e) {
         saveCacheData('stocks', JSON.stringify(json.stocks));
         saveCacheData('funds', JSON.stringify(json.funds));
         $("#data-import-modal").modal("hide");
-        // location.reload();
         stockList = json.stocks;
         fundList = json.funds;
         reloadDataAndHtml();
-        // $("#setting-modal").modal("hide");
     };
     reader.readAsText(file);
 }
@@ -2748,7 +2732,6 @@ function getStockAndFundFromLocalService () {
     if (result != null && result != '' && result != undefined) {
         saveCacheData('stocks', JSON.stringify(result.stocks));
         saveCacheData('funds', JSON.stringify(result.funds));
-        // location.reload();
         stockList = result.stocks;
         fundList = result.funds;
         reloadDataAndHtml();
@@ -2771,7 +2754,6 @@ async function deleteStockAndFund() {
         saveCacheData('funds', JSON.stringify(funds));
         $("#time-image-modal").modal("hide");
         $("#fund-modal").modal("hide");
-        // location.reload();
         fundList = funds;
     } else {
         var stocks = await readCacheData('stocks');
@@ -2786,7 +2768,6 @@ async function deleteStockAndFund() {
         saveCacheData('stocks', JSON.stringify(stocks));
         $("#time-image-modal").modal("hide");
         $("#stock-modal").modal("hide");
-        // location.reload();
         stockList = stocks;
     }
     reloadDataAndHtml();
@@ -2836,7 +2817,6 @@ async function largeMarketScrollChange(event) {
     }
     saveCacheData('large-market-scrool', largeMarketScroll);
     $("#fund-modal").modal("hide");
-    // location.reload();
     initLargeMarketData();
     $("#setting-modal").modal("hide");
 }
@@ -2887,7 +2867,6 @@ async function setTop() {
     }
     $("#time-image-modal").modal("hide");
     $("#stock-modal").modal("hide");
-    // location.reload();
     reloadDataAndHtml();
 }
 
@@ -2908,7 +2887,6 @@ async function syncDataFromCloud() {
             saveCacheData('funds', JSON.stringify(result.funds));
             stockList = result.stocks;
             fundList = result.funds;
-            // location.reload();
             reloadDataAndHtml();
             $("#sync-data-cloud-modal").modal('hide');
         } else {

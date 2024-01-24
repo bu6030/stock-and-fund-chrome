@@ -115,15 +115,10 @@ function monitorStockPrice(stockList) {
                     if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
                         var highPrice = parseFloat(monitorStock.monitorHighPrice);
                         if (now > highPrice) {
-                            // monitorStock.monitorHighPrice = '';
                             monitorStock.monitorAlert = '1';
                             monitorStock.monitorAlertDate = Date.now();
-                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            // chrome.action.setBadgeBackgroundColor({ color: 'red' });
-                            // chrome.action.setBadgeText({ text: "" + now });
                             sendChromeBadge('#FFFFFF', 'red', "" + now);
                             var text = name + "涨破监控价格" + highPrice + "，达到" + now;
-                            // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
                             showNotification("通知", text);
@@ -133,15 +128,10 @@ function monitorStockPrice(stockList) {
                     if (typeof monitorStock.monitorLowPrice != 'undefined' && monitorStock.monitorLowPrice != '') {
                         var lowPrice = parseFloat(monitorStock.monitorLowPrice);
                         if (now < lowPrice) {
-                            // monitorStock.monitorLowPrice = '';
                             monitorStock.monitorAlert = '2';
                             monitorStock.monitorAlertDate = Date.now();
-                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            // chrome.action.setBadgeBackgroundColor({ color: 'green' });
-                            // chrome.action.setBadgeText({ text: "" + now });
                             sendChromeBadge('#FFFFFF', 'green', "" + now);
                             var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
-                            // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
                             showNotification("通知", text);
@@ -156,12 +146,8 @@ function monitorStockPrice(stockList) {
                         if (currentPercent >= upperPercent) {
                             monitorStock.monitorAlert = '3';
                             monitorStock.monitorAlertDate = Date.now();
-                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            // chrome.action.setBadgeBackgroundColor({ color: 'red' });
-                            // chrome.action.setBadgeText({ text: upperPercent + "%" });
                             sendChromeBadge('#FFFFFF', 'red', upperPercent + "%");
                             var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
-                            // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
                             showNotification("通知", text);
@@ -176,12 +162,8 @@ function monitorStockPrice(stockList) {
                         if (currentPercent >= lowerPercent) {
                             monitorStock.monitorAlert = '4';
                             monitorStock.monitorAlertDate = Date.now();
-                            // chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-                            // chrome.action.setBadgeBackgroundColor({ color: 'green' });
-                            // chrome.action.setBadgeText({ text: lowerPercent + "%" });
                             sendChromeBadge('#FFFFFF', 'green', lowerPercent + "%");
                             var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
-                            // saveData("MONITOR_TEXT", text);
                             saveData('stocks', JSON.stringify(stockList));
                             saveData("MONITOR_STOCK_CODE", '');
                             showNotification("通知", text);
@@ -294,7 +276,6 @@ function monitorStock(code) {
                         sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent);
                     }
                 });
-                // setChromeTitle(name + '\n价格：' + now + '\n涨跌幅：' + changePercent + "%" +"================"+"================"+"================"+"================"+"================");
             })
             .catch(error => {
                 // 处理请求错误
