@@ -1,5 +1,6 @@
 let isCycleInvest = false;
 let performTaskId;
+let count = 0;
 // 定时执行任务的函数
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
@@ -52,13 +53,15 @@ function performTask() {
         }
     });
     getData('monitor-top-20-stock').then((monitoTop20Stock) => {
-        if (monitoTop20Stock != null && monitoTop20Stock == true) {
-            console.log('扩展程序图标鼠标悬停后展示前20个股票价格');
-            monitorTop20StockChromeTitle();
-        } else {
-            console.log('扩展程序图标鼠标悬停后不展示前20个股票价格');
+        if (count % 3 == 0) {
+            if (monitoTop20Stock == null || monitoTop20Stock == undefined) {
+                monitoTop20Stock = false;
+            }
+            count = 0;
+            monitorTop20StockChromeTitle(monitoTop20Stock);
         }
     });
+    count++;
 }
 // 从 chrome 本地缓存获取数据
 function getData(key) {
@@ -339,21 +342,24 @@ function setChromeTitle(title) {
     }
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
-function monitorTop20StockChromeTitle() {
+function monitorTop20StockChromeTitle(monitoTop20Stock) {
     var date = new Date();
     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         getData('stocks').then((stockArr) => {
+            if (stockArr == null || stockArr == undefined) {
+                stockArr = '[]';
+            }
             var stockList = JSON.parse(stockArr);
             var stocks = "sh000001,sz399001,sz399006,hkHSI,";
-
-            for (let k in stockList) {
-                stocks += stockList[k].code + ",";
-            }
-            if (stocks == "") {
-                console.log("没有执行扩展程序图标鼠标悬停后展示前20个股票价格任务的股票，返回...");
-                return;
+            if (monitoTop20Stock != null && monitoTop20Stock == true) {
+                console.log('扩展程序图标鼠标悬停后展示前20个股票价格');
+                for (let k in stockList) {
+                    stocks += stockList[k].code + ",";
+                }
+            } else {
+                console.log('扩展程序图标鼠标悬停后展示大盘股');
             }
             fetch("http://qt.gtimg.cn/q=" + stocks)
             .then(response => response.arrayBuffer())
@@ -407,7 +413,10 @@ function monitorTop20StockChromeTitle() {
                         console.info("MonitorTop20StockChromeTitle Error: ", error);
                     }
                 }
-                title += '\n当日股票收益：' + totalDayIncome.toFixed(2);
+                title = title.substring(0, title.length - 1);
+                if (monitoTop20Stock != null && monitoTop20Stock == true) {
+                    title += '\n\n当日股票收益：' + totalDayIncome.toFixed(2);
+                }
                 setChromeTitle(title);
             });
         });
