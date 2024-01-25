@@ -67,6 +67,18 @@ var fundColumnNames = {
     "income-th": "收益",
     "addtime-price-th": "自选价格"
 };
+const defaultIconPath = {
+    "16": "img/128.png",
+    "48": "img/128.png",
+    "128": "img/128.png"
+};
+const hiddenIconPath = {
+    "16": "img/128_hidden.png",
+    "48": "img/128_hidden.png",
+    "128": "img/128_hidden.png"
+};
+// 初始状态为默认图标
+var defaultIcon;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -216,6 +228,12 @@ async function initLoad() {
     timeImageNewOrOld = await readCacheData('time-image-new-or-old');
     if (timeImageNewOrOld == null) {
         timeImageNewOrOld = 'OLD';
+    }
+    defaultIcon = await readCacheData('default-icon');
+    if (defaultIcon == null || defaultIcon == "true") {
+        defaultIcon = true;
+    } else if(defaultIcon == "false") {
+        defaultIcon = false;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -703,10 +721,12 @@ document.addEventListener(
         document.getElementById('monitor-price-change-button').addEventListener('click', changeMonitorPriceOrPercent);
         // 设置页面，点击涨跌幅按钮
         document.getElementById('monitor-percent-change-button').addEventListener('click', changeMonitorPriceOrPercent);
-
         // 设置页面，点击展示/不展示前5个股票价格
         document.getElementById('monitor-dont-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
         document.getElementById('monitor-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
+        // 设置页面，点击切换隐蔽/默认图标按钮
+        document.getElementById('change-icon-default-button').addEventListener('click', changeIcon);
+        document.getElementById('change-icon-hidden-button').addEventListener('click', changeIcon);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -4574,4 +4594,19 @@ async function clearTimeImageTimeout() {
         console.log("清理分时图timeId=", timerId);
         clearTimeout(timerId);
     }
+}
+
+// 切换隐蔽/默认图标
+async function changeIcon(event) {
+    let targetId = event.target.id;
+    let iconPath = defaultIconPath;
+    if (targetId == 'change-icon-default-button') {
+        iconPath = defaultIconPath;
+        defaultIcon = true;
+    } else {
+        iconPath = hiddenIconPath;
+        defaultIcon = false;
+    }
+    chrome.action.setIcon({path: iconPath});
+    saveCacheData('default-icon', defaultIcon);
 }

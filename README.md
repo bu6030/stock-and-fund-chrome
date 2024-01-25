@@ -198,6 +198,7 @@
 177. 分时图实时刷新 2024/1/22
 178. 扩展程序图标鼠标悬停后展示修改为20个股票 2024/1/23
 179. 扩展程序图标鼠标悬停后展示当日前20只股票收益 2024/1/23
+180. 切换默认/隐藏图标 2024/1/23
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
