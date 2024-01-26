@@ -6,8 +6,8 @@ function initLargeMarketData() {
     for(let k in bigStocks) {
         var name = bigStocks[k].f14;
         var change = bigStocks[k].f4;
-        var now = bigStocks[k].f2;
-        var changePercent = bigStocks[k].f3;
+        var now = parseFloat(bigStocks[k].f2).toFixed(2);
+        var changePercent = parseFloat(bigStocks[k].f3).toFixed(2);
         var aId = "id = 'large-market-" + bigStocks[k].f12 + "'";
         var style = "style=\""
             + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
