@@ -37,6 +37,7 @@ var bigStockMoneyDate;
 var timeImageNewOrOld;
 var columnOrder;
 var columnOrderTemp;
+var largeMarketCode;
 var stockColumnNames = {
     "name-th": "股票名称",
     "day-income-th": "当日盈利",
@@ -248,6 +249,13 @@ async function initLoad() {
             }
         };
     }
+    largeMarketCode = await readCacheData('large-market-code');
+    if (largeMarketCode == null) {
+        largeMarketCode = ['1.000001','0.399001','0.399006','100.HSI'];
+    } else {
+        largeMarketCode = jQuery.parseJSON(largeMarketCode)
+    }
+    console.log('largeMarketCode==', largeMarketCode);
     columnOrder = await readCacheData('column-order');
     if (columnOrder == null) {
         columnOrder = [
@@ -464,6 +472,7 @@ document.addEventListener(
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
             generateColumnList();
+            selectLargeMarketCodeCheckbox();
         });
         // 首页，底部全部按钮，股票基金全部显示
         document.getElementById('show-all-button').addEventListener('click', changeShowStockOrFundOrAll);
@@ -727,6 +736,8 @@ document.addEventListener(
         // 设置页面，点击切换隐蔽/默认图标按钮
         document.getElementById('change-icon-default-button').addEventListener('click', changeIcon);
         document.getElementById('change-icon-hidden-button').addEventListener('click', changeIcon);
+        // 设置页面，点击保存大盘指数
+        document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -4320,6 +4331,9 @@ function getSecid(code) {
         }
     } else {
         secid = '0';
+        if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX'){
+            secid = '100';
+        }
     }
     return secid;
 }
@@ -4685,10 +4699,39 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
             case 'usSPX':
                 name = '标普500';
                 break;
+            case 'N225':
+                name = '日经225';
+                break;
+            case 'KS11':
+                name = '韩国KOSPI';
+                break;
+            case 'FTSE':
+                name = '英国富时100';
+                break;
+            case 'KS11':
+                name = '韩国KOSPI';
+                break;
+            case 'GDAXI':
+                name = '德国DAX30';
+                break;
+            case 'FCHI':
+                name = '法国CAC40';
+                break;
+            case 'SENSEX':
+                name = '印度孟买SENSEX';
+                break;
             default:
                 name = timeImageCode;
                 break;
         }
     }
     return name;
+}
+
+function selectLargeMarketCodeCheckbox() {
+    // 遍历 checkboxGroupList 数组
+    largeMarketCode.forEach(function(value) {
+        // 使用属性选择器选择对应值的复选框，并将其设置为选中状态
+        $('input#large-market-code-checkbox[value="' + value + '"]').prop('checked', true);
+    });
 }

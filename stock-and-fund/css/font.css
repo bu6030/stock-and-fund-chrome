@@ -172,10 +172,6 @@ input[type="checkbox"] {
     width: 40px;
 }
 
-#sortable-column-table {
-    list-style-type: none;
-}
-
 .stock-large-market-container {
     display: flex;
     justify-content: space-between;
