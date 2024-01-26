@@ -4300,15 +4300,19 @@ function getSecid(code) {
                     break;
                 }
             }
-            let name = stock.name;
-            let result = ajaxGetStockCodeByNameFromGtimg(name);
-            let sec = result.split("^")[0].split('~')[1];
-            if (sec.endsWith('.oq')) {
-                secid = '105';
-            }else if (sec.endsWith('.ps')) {
-                secid = '153';
-            } else {
-                secid = '106';
+            if (stock != null && stock != undefined) {
+                let name = stock.name;
+                let result = ajaxGetStockCodeByNameFromGtimg(name);
+                let sec = result.split("^")[0].split('~')[1];
+                if (sec.endsWith('.oq')) {
+                    secid = '105';
+                }else if (sec.endsWith('.ps')) {
+                    secid = '153';
+                } else {
+                    secid = '106';
+                }
+            } else if(code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
+                secid = '100';
             }
         } catch (error) {
             console.error(error);
@@ -4671,6 +4675,15 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'hkHSI':
                 name = '恒生指数'
+                break;
+            case 'usNDX':
+                name = '纳斯达克'
+                break;
+            case 'usDJIA':
+                name = '道琼斯';
+                break;
+            case 'usSPX':
+                name = '标普500';
                 break;
             default:
                 name = timeImageCode;

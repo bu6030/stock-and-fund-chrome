@@ -43,6 +43,21 @@ function initLargeMarketData() {
             timeImageCode = "hkHSI";
             initLargeMarketClick();
         });
+        // 点击纳斯达克指数
+        document.getElementById('large-market-NDX').addEventListener('click', function () {
+            timeImageCode = "usNDX";
+            initLargeMarketClick();
+        });
+        // 点击道琼斯指数
+        document.getElementById('large-market-DJIA').addEventListener('click', function () {
+            timeImageCode = "usDJIA";
+            initLargeMarketClick();
+        });
+        // 点击标普500指数
+        document.getElementById('large-market-SPX').addEventListener('click', function () {
+            timeImageCode = "usSPX";
+            initLargeMarketClick();
+        });
     }, 300);
     // var stocks = "sh000001,sz399001,sz399006,hkHSI";
     // $.ajax({
