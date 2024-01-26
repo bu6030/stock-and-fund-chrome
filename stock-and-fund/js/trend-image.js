@@ -177,6 +177,7 @@ function setStockMinitesImage() {
     if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US")) {
         interval = 59;
     }
+    let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     option = {
         // resize: true,
         lineStyle: {
@@ -248,7 +249,7 @@ function setStockMinitesImage() {
                         left: '5%',
                         top: '5%',
                         style: {
-                            text: result.data.name,
+                            text: fundOrStockName,
                             textAlign: 'left',
                             fill: '#333',
                             fontSize: 14
@@ -318,6 +319,7 @@ function setStockImage(type) {
     } else if (type == 'MONTH'){
         kType = '月K';
     }
+    let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     option = {
         xAxis: {
             data: data0.categoryData,
@@ -365,7 +367,7 @@ function setStockImage(type) {
                     left: '5%',
                     top: '5%',
                     style: {
-                        text: result.data.name,
+                        text: fundOrStockName,
                         textAlign: 'left',
                         fill: '#333',
                         fontSize: 14

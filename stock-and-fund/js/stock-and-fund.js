@@ -2490,6 +2490,8 @@ async function getFundInversPosition() {
     $("#stock-modal").modal("hide");
     $("#fund-modal").modal("hide");
     $("#time-image-modal").modal("hide");
+    let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
+    $("#fund-invers-position-name").html(fundOrStockName);
     // 设置监听点击持仓明细事件
     for (k in fundStocksDetail) {
         let fundStocksDetailTr = document.getElementById('fund-stock-detail-tr-' + k);
@@ -2558,6 +2560,7 @@ async function setFundNetDiagram(event) {
     if (targetId == 'fund-net-diagram-allyear-button') {
         interval = Math.floor(fundNetDiagram.length / 3);
     }
+    let fundNetDiagramName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
     option = {
@@ -2615,6 +2618,32 @@ async function setFundNetDiagram(event) {
             return '';
             }
         },
+        graphic: [
+            {
+                type: 'line',
+                shape: {
+                    x1: '10%', y1: '10%',
+                    x2: '90%', y2: '10%'
+                },
+                style: {
+                    stroke: 'green',
+                    lineWidth: 2
+                },
+                elements: [
+                    {
+                        type: 'text',
+                        left: '5%',
+                        top: '5%',
+                        style: {
+                            text: fundNetDiagramName,
+                            textAlign: 'left',
+                            fill: '#333',
+                            fontSize: 14
+                        }
+                    }
+                ]
+            }
+        ],
     };
     myChart.setOption(option);
     $("#fund-net-diagram-modal").modal();
@@ -4609,4 +4638,25 @@ async function changeIcon(event) {
     }
     chrome.action.setIcon({path: iconPath});
     saveCacheData('default-icon', defaultIcon);
+}
+
+// 获取基金/股票名称
+function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
+    let name = '';
+    if (timeImageType == "FUND") {
+        for (var k in fundList) {
+            if (fundList[k].fundCode == timeImageCode) {
+                name = fundList[k].fundName;
+                break;
+            }
+        }
+    } else {
+        for (var k in stockList) {
+            if (stockList[k].code == timeImageCode) {
+                name = stockList[k].name;
+                break;
+            }
+        }
+    }
+    return name;
 }
