@@ -25,66 +25,79 @@ function initLargeMarketData() {
     setTimeout(function() {
         // html 渲染完毕后 1s 执行
         // 点击上证指数
+        if(document.getElementById('large-market-000001'))
         document.getElementById('large-market-000001').addEventListener('click', function () {
             timeImageCode = "sh000001";
             initLargeMarketClick();
         });
         // 点击深证成指
+        if(document.getElementById('large-market-399001'))
         document.getElementById('large-market-399001').addEventListener('click', function () {
             timeImageCode = "sz399001";
             initLargeMarketClick();
         });
         // 点击创业板指
+        if(document.getElementById('large-market-399006'))
         document.getElementById('large-market-399006').addEventListener('click', function () {
             timeImageCode = "sz399006";
             initLargeMarketClick();
         });
         // 点击恒生指数
+        if(document.getElementById('large-market-HSI'))
         document.getElementById('large-market-HSI').addEventListener('click', function () {
             timeImageCode = "hkHSI";
             initLargeMarketClick();
         });
         // 点击纳斯达克指数
+        if(document.getElementById('large-market-NDX'))
         document.getElementById('large-market-NDX').addEventListener('click', function () {
             timeImageCode = "usNDX";
             initLargeMarketClick();
         });
         // 点击道琼斯指数
+        if(document.getElementById('large-market-DJIA'))
         document.getElementById('large-market-DJIA').addEventListener('click', function () {
             timeImageCode = "usDJIA";
             initLargeMarketClick();
         });
         // 点击标普500指数
+        if(document.getElementById('large-market-SPX'))
         document.getElementById('large-market-SPX').addEventListener('click', function () {
             timeImageCode = "usSPX";
             initLargeMarketClick();
         });
         // 点击日经225指数
+        if(document.getElementById('large-market-N225'))
         document.getElementById('large-market-N225').addEventListener('click', function () {
             timeImageCode = "N225";
             initLargeMarketClick();
         });
         // 点击韩国KOSPI指数
+        if(document.getElementById('large-market-KS11'))
         document.getElementById('large-market-KS11').addEventListener('click', function () {
             timeImageCode = "KS11";
             initLargeMarketClick();
         });
         // 点击英国富时100指数
+        if(document.getElementById('large-market-FTSE'))
         document.getElementById('large-market-FTSE').addEventListener('click', function () {
             timeImageCode = "FTSE";
             initLargeMarketClick();
         });
         // 点击德国DAX30指数
+        if(document.getElementById('large-market-GDAXI'))
         document.getElementById('large-market-GDAXI').addEventListener('click', function () {
             timeImageCode = "GDAXI";
             initLargeMarketClick();
         });
         // 点击法国CAC40指数
+        if(document.getElementById('large-market-FCHI'))
         document.getElementById('large-market-FCHI').addEventListener('click', function () {
             timeImageCode = "FCHI";
             initLargeMarketClick();
         });
         // 点击印度孟买SENSEX指数
+        if(document.getElementById('large-market-SENSEX'))
         document.getElementById('large-market-SENSEX').addEventListener('click', function () {
             timeImageCode = "SENSEX";
             initLargeMarketClick();

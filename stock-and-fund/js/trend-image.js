@@ -14,7 +14,9 @@ function showMinuteImage() {
         }
     }
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
+        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
         if (timeImageType == "FUND") {
             path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
             $("#fund-modal").modal("hide");
@@ -41,7 +43,9 @@ function showDayImage() {
     clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
+        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -65,7 +69,9 @@ function showDayImage() {
 function showWeekImage() {
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
+        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=W&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -88,7 +94,9 @@ function showMonthImage() {
     clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
-        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")) {
+        && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
+        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=M&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
