@@ -4658,5 +4658,24 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
             }
         }
     }
+    if (name == '') {
+        switch(timeImageCode) {
+            case 'sh000001':
+                name = '上证指数'
+                break;
+            case 'sz399001':
+                name = '深证成指'
+                break;
+            case 'sz399006':
+                name = '创业板指'
+                break;
+            case 'hkHSI':
+                name = '恒生指数'
+                break;
+            default:
+                name = timeImageCode;
+                break;
+        }
+    }
     return name;
 }
