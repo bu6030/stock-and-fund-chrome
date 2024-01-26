@@ -27,7 +27,7 @@
     width: 100%;
     height: 30px;
     bottom: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .my-form-input {
@@ -54,7 +54,7 @@
 }
 
 .my-header {
-    height: 30px;
+    height: 80px;
     /* line-height: 90px; */
     position: fixed;
     top: 0;
@@ -69,7 +69,8 @@
 }
 
 .my-body {
-    margin-top: 60px;
+    margin-top: 90px;
+    margin-bottom: 55px;
 }
 
 .my-table-tbody-font {
@@ -159,4 +160,23 @@
 
 .stock-fund-name-and-code {
     white-space: pre;
+}
+
+.stock-large-market-container {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.stock-large-market-box {
+    font-size:11px;
+    font-weight:600;
+    margin-top: 5px;
+    width: 25%;
+    /* border: 1px solid #ccc; */
+    text-align: center;
+}
+
+.stock-large-market-box p {
+    line-height: 0.5; /* 调整行高，控制换行高度 */
 }

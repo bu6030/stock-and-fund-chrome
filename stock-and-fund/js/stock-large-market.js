@@ -9,7 +9,7 @@ function initLargeMarketData() {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             var stoksArr = data.split("\n");
-            var str = "";
+            var str = "<div class=\"stock-large-market-container\">";
             for (var k in stoksArr) {
                 var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                 var stockCode = stoksArr[k].substring(2, stoksArr[k].indexOf("="));
@@ -22,13 +22,20 @@ function initLargeMarketData() {
                 var now = values[3] + "";
                 var changePercent = values[32] + "";
                 var aId = "id = 'large-market-" + stockCode + "'";
-                var style = "style=\"font-size:11px;font-weight:600;"
+                var style = "style=\""
                     + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
-                str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;" + changePercent + "%） </a>";
+                // str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;" + changePercent + "%） </a>";
+                str = str + 
+                    '<div class=\"stock-large-market-box\"' + aId + '>' +
+                        '<p>' + name +'</p>' +
+                        '<p ' + style + '>' + now + '</p>' +
+                        '<p ' + style + '>' + changePercent + '%</p>' +
+                    '</div>';
             }
-            if (largeMarketScroll == 'SCROOL') {
-                str = '<span>' + str + '</span>';
-            }
+            str = str + '</div>';
+            // if (largeMarketScroll == 'SCROOL') {
+            //     str = '<span>' + str + '</span>';
+            // }
             $("#stock-large-market").html(str);
             setTimeout(function() {
                 // html 渲染完毕后 1s 执行

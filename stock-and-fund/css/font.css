@@ -11,10 +11,10 @@
 
 .my-div {
     /* width: 100%; */
-    min-height: 450px;
-    height: 450px;
+    min-height: 400px;
+    height: 400px;
     overflow-x: auto;
-    margin-bottom: 40px;
+    margin-bottom: 45px;
 }
 
 .fund-net-diagram-div {
@@ -28,7 +28,7 @@
     width: 800px;
     height: 30px;
     bottom: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .my-form-input {
@@ -55,7 +55,7 @@
 }
 
 .my-header {
-    height: 30px;
+    height: 80px;
     /* line-height: 90px; */
     position: fixed;
     top: 0;
@@ -70,7 +70,8 @@
 }
 
 .my-body {
-    margin-top: 60px;
+    margin-top: 90px;
+    margin-bottom: 55px;
 }
 
 .my-table-tbody-font {
@@ -173,4 +174,23 @@ input[type="checkbox"] {
 
 #sortable-column-table {
     list-style-type: none;
+}
+
+.stock-large-market-container {
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.stock-large-market-box {
+    font-size:11px;
+    font-weight:600;
+    margin-top: 5px;
+    width: 25%;
+    /* border: 1px solid #ccc; */
+    text-align: center;
+}
+
+.stock-large-market-box p {
+    line-height: 0.5; /* 调整行高，控制换行高度 */
 }
