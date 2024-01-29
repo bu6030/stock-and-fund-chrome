@@ -2066,6 +2066,7 @@ async function initFontStyle() {
 
 // 修改窗口大小，普通/缩小/迷你
 async function initWindowsSize() {
+    console.log('改变windowsSize');
     var currentURL = window.location.href;
     if (currentURL.indexOf('full-screen.html') > 0) {
         return;
@@ -2088,6 +2089,9 @@ async function initWindowsSize() {
     let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
     let showWechatGroupButton = document.getElementById('show-wechat-group-button');
     let showDataCenterButton = document.getElementById('show-data-center-button');
+    let timeImageDialog = document.getElementById('time-image-dialog');
+    let timeImageNew = document.getElementById('time-image-new');
+    let timeImageBody = document.getElementById('time-image-body');
     if (windowSize == 'NORMAL') {
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
@@ -2108,6 +2112,10 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
+        timeImageDialog.style.maxWidth = '650px';
+        timeImageDialog.style.maxHeight = '430px';
+        timeImageNew.style.width = '650px';
+        timeImageNew.style.height = '430px';
     } else if (windowSize == 'SMALL') {
         // 设置首页各项内容宽度 600px
         myWindows.style.width = '600px';
@@ -2128,6 +2136,9 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
+        timeImageDialog.style.maxWidth = '550px';
+        timeImageNew.style.width = '530px';
+        timeImageNew.style.height = '400px';
     } else if (windowSize == 'MINI') {
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';
@@ -2148,6 +2159,9 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
         showDataCenterButton.style.display = "none";
+        timeImageDialog.style.maxWidth = '400px';
+        timeImageNew.style.width = '380px';
+        timeImageNew.style.height = '280px';
     }
 }
 

@@ -134,7 +134,9 @@ function setStockMinitesImage() {
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
     var myChart = echarts.init(document.getElementById(elementId));
-    myChart.clear();
+    myChart.dispose();
+    myChart = echarts.init(document.getElementById(elementId));
+    setEchartsSize(myChart);
     $("#time-image").html('');
     let result = ajaxGetStockTimeImageMinuteMini(timeImageCode);
     let dataStr = [];
@@ -262,15 +264,6 @@ function setStockMinitesImage() {
         ],
         graphic: [
             {
-                type: 'line',
-                shape: {
-                    x1: '10%', y1: '10%',
-                    x2: '90%', y2: '10%'
-                },
-                style: {
-                    stroke: 'green',
-                    lineWidth: 2
-                },
                 elements: [
                     {
                         type: 'text',
@@ -456,4 +449,19 @@ function splitData(rawData) {
         categoryData: categoryData,
         values: values
     };
+}
+
+function setEchartsSize(myChart) {
+    console.log('改变echartSize');
+    // 设置容器的宽度和高度
+    if (windowSize == 'NORMAL') {
+        myChart.getDom().style.width = '650px';
+        myChart.getDom().style.height = '430px';
+    } else if (windowSize == 'SMALL') {
+        myChart.getDom().style.width = '530px';
+        myChart.getDom().style.height = '400px';
+    } else if (windowSize == 'MINI') {
+        myChart.getDom().style.width = '380px';
+        myChart.getDom().style.height = '280px';
+    }
 }

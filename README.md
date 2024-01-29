@@ -204,6 +204,7 @@
 183. 大盘指数增加美股指数 2024/1/26
 184. 大盘指数可以选择显示 2024/1/27 -- version 1.9.7 -- end
 185. 分时图增加昨日收盘价格线，并显示最新价格 2024/1/29
+186. 扩大走势图大小 2024/1/29
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
