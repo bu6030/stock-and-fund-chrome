@@ -236,9 +236,9 @@ function setStockMinitesImage() {
                     symbol: 'none',
                     label: {
                         show: false,  // 设置为 true，使标签一开始就可见
-                        position: 'start',  // 调整标签位置，可以根据需要调整
+                        position: 'middle',  // 调整标签位置，可以根据需要调整
                         color: 'darkblue',  // 标签文本颜色
-                        fontWeight: 'bold'  // 标签文本粗细
+                        fontWeight: 'bold',  // 标签文本粗细
                     },
                     lineStyle: {
                         color: 'darkblue',
