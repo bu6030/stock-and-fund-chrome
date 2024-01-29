@@ -231,6 +231,26 @@ function setStockMinitesImage() {
                 smooth: true,
                 yAxisIndex: 0,  // 关联左侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
+                markLine: {
+                    silent: false,
+                    symbol: 'none',
+                    label: {
+                        show: false,  // 设置为 true，使标签一开始就可见
+                        position: 'start',  // 调整标签位置，可以根据需要调整
+                        color: 'darkblue',  // 标签文本颜色
+                        fontWeight: 'bold'  // 标签文本粗细
+                    },
+                    lineStyle: {
+                        color: 'darkblue',
+                        width: 2,
+                        type: 'dotted'
+                    },
+                    data: [
+                        {
+                            yAxis: preClose  // 在 y 轴上的 150 处添加一条横线
+                        }
+                    ]
+                },
             },
             {
                 data: dataStr,
@@ -238,7 +258,7 @@ function setStockMinitesImage() {
                 smooth: true,
                 yAxisIndex: 1,  // 关联侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
-            }  
+            },
         ],
         graphic: [
             {
@@ -257,14 +277,14 @@ function setStockMinitesImage() {
                         left: '5%',
                         top: '5%',
                         style: {
-                            text: fundOrStockName,
+                            text: fundOrStockName + "（最新：" + now + "）",
                             textAlign: 'left',
                             fill: '#333',
                             fontSize: 14
                         }
                     }
                 ]
-            }
+            },
         ],
         tooltip: {
             trigger: 'axis',
