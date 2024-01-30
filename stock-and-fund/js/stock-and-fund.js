@@ -26,7 +26,6 @@ var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var changeDisplay = 'DISPLAY';
-var largeMarketScroll = 'STOP';
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
 var lastSort;
@@ -221,10 +220,6 @@ async function initLoad() {
         monitorTop20Stock = true;
     } else if(monitorTop20Stock == "false") {
         monitorTop20Stock = false;
-    }
-    largeMarketScroll = await readCacheData('large-market-scrool');
-    if (largeMarketScroll == null) {
-        largeMarketScroll = 'STOP';
     }
     timeImageNewOrOld = await readCacheData('time-image-new-or-old');
     if (timeImageNewOrOld == null) {
@@ -687,9 +682,6 @@ document.addEventListener(
         // 设置页面，点击打赏按钮
         document.getElementById("show-donate-button").addEventListener('click',  showDonate);
         document.getElementById("show-donate-button-2").addEventListener('click',  showDonate);
-        // 设置页面，点击滚动/停止
-        document.getElementById("large-market-scrool-button").addEventListener('click', largeMarketScrollChange);
-        document.getElementById("large-market-stop-button").addEventListener('click', largeMarketScrollChange);
         // 设置页面，点击分时图按钮
         document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
         // 设置页面，点击颜色切换按钮
@@ -2610,6 +2602,7 @@ async function setFundNetDiagram(event) {
                 type: 'line',
                 smooth: true,
                 color: 'blue',
+                showSymbol: false,  // 不显示小圆点
             },
             {
                 name: '累计净值',
@@ -2617,6 +2610,7 @@ async function setFundNetDiagram(event) {
                 type: 'line',
                 smooth: true,
                 color: 'red',
+                showSymbol: false,  // 不显示小圆点
             }
         ],
         // 添加事件监听器，鼠标放在上面显示横纵坐标值
@@ -2879,20 +2873,6 @@ async function showDonate(event) {
     $("#donate-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
     $("#setting-modal").modal('hide');
     $("#donate-modal").modal();
-}
-
-// 大盘滚动/停止设定
-async function largeMarketScrollChange(event) {
-    let targetId = event.target.id;
-    if (targetId == 'large-market-scrool-button') {
-        largeMarketScroll = 'SCROOL';
-    } else {
-        largeMarketScroll = 'STOP';
-    }
-    saveCacheData('large-market-scrool', largeMarketScroll);
-    $("#fund-modal").modal("hide");
-    initLargeMarketData();
-    $("#setting-modal").modal("hide");
 }
 
 // 监控价格是否允许推送浏览器通知
