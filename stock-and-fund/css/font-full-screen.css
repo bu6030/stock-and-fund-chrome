@@ -130,29 +130,6 @@
     margin-left: 10px;
 }
 
-/*
-大盘指数滚动效果
-*/
-.marquee {
-    width: 100%;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.marquee span {
-    display: inline-block;
-    animation: marquee 20s linear infinite;
-}
-
-@keyframes marquee {
-    0% {
-      transform: translateX(30%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
-}
-
 .setting-modal-style {
     height: 400px;
     overflow-y: auto;
