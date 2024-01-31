@@ -188,6 +188,34 @@ function setStockMinitesImage() {
         interval = 59;
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
+    let markLine;
+    if (fundOrStockName.indexOf('ETF') < 0) {
+        markLine =  {
+            silent: false,
+            symbol: 'none',
+            label: {
+                show: true,  // 设置为 true，使标签一开始就可见
+                position: 'middle',  // 调整标签位置，可以根据需要调整
+                color: 'darkblue',  // 标签文本颜色
+                fontWeight: 'bold',  // 标签文本粗细
+                formatter : function() {
+                    return "开盘价格：" + preClose;
+                },
+            },
+            lineStyle: {
+                color: 'darkblue',
+                width: 2,
+                type: 'dotted'
+            },
+            data: [
+                {
+                    yAxis: preClose  // 在 y 轴上的 150 处添加一条横线
+                }
+            ]
+        };
+    } else {
+        markLine = {};
+    }
     option = {
         // resize: true,
         lineStyle: {
@@ -233,26 +261,7 @@ function setStockMinitesImage() {
                 smooth: true,
                 yAxisIndex: 0,  // 关联左侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
-                markLine: {
-                    silent: false,
-                    symbol: 'none',
-                    label: {
-                        show: true,  // 设置为 true，使标签一开始就可见
-                        position: 'middle',  // 调整标签位置，可以根据需要调整
-                        color: 'darkblue',  // 标签文本颜色
-                        fontWeight: 'bold',  // 标签文本粗细
-                    },
-                    lineStyle: {
-                        color: 'darkblue',
-                        width: 2,
-                        type: 'dotted'
-                    },
-                    data: [
-                        {
-                            yAxis: preClose  // 在 y 轴上的 150 处添加一条横线
-                        }
-                    ]
-                },
+                markLine: markLine,
             },
             {
                 data: dataStr,
