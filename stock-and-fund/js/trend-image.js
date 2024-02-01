@@ -148,6 +148,10 @@ function setStockMinitesImage() {
         return;
     }
     var preClose = parseFloat(result.data.preClose);
+    let toFixedVolume = 2;
+    if (preClose <= 5) {
+        toFixedVolume = 3;
+    }
     let maxPrice = preClose;
     let minPrice = preClose;
     for (var k = 0; k < result.data.trends.length; k++) {
@@ -188,6 +192,14 @@ function setStockMinitesImage() {
         interval = 59;
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
+    if (preClose >= maxPrice) {
+        maxPrice = parseFloat(maxPrice) * 1.01;
+    }
+    if (preClose <= minPrice) {
+        minPrice = parseFloat(minPrice) * 0.99;
+    }
+    maxPrice = maxPrice.toFixed(toFixedVolume);
+    minPrice = minPrice.toFixed(toFixedVolume);
     option = {
         // resize: true,
         lineStyle: {
@@ -208,9 +220,11 @@ function setStockMinitesImage() {
                 scale: true,
                 type: 'value',
                 position: 'left',  // 左侧 Y 轴
+                min: minPrice,
+                max: maxPrice,
                 axisLabel: {
                     formatter: function(value) {
-                        return parseFloat(value).toFixed(3);  // 左侧 Y 轴刻度显示价格
+                        return parseFloat(value).toFixed(toFixedVolume);  // 左侧 Y 轴刻度显示价格
                     },
                 },
 
@@ -219,6 +233,8 @@ function setStockMinitesImage() {
                 scale: true,
                 type: 'value',
                 position: 'right',  // 右侧 Y 轴
+                min: minPrice,
+                max: maxPrice,
                 axisLabel: {
                     formatter: function(value) {
                         // 计算涨跌比例，假设初始价格为 prePrice
@@ -244,7 +260,7 @@ function setStockMinitesImage() {
                         color: 'darkblue',  // 标签文本颜色
                         fontWeight: 'bold',  // 标签文本粗细
                         formatter : function() {
-                            return "开盘价格：" + preClose;
+                            return "开盘价格：" + parseFloat(preClose).toFixed(toFixedVolume);
                         },
                     },
                     lineStyle: {
@@ -254,7 +270,7 @@ function setStockMinitesImage() {
                     },
                     data: [
                         {
-                            yAxis: parseFloat(preClose).toFixed(3)  // 在 y 轴上的 150 处添加一条横线
+                            yAxis: parseFloat(preClose).toFixed(toFixedVolume)  // 在 y 轴上的 150 处添加一条横线
                         }
                     ]
                 },
