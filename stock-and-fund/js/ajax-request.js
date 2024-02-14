@@ -495,3 +495,29 @@ function ajaxGetHuiLv(type) {
     });
     return result;
 }
+
+// 接口调用
+function ajaxPostAdvice(adviceContent) {
+    let result;
+    var url = Env.POST_SAVE_ADVICE_URL;
+    $.ajax({
+        url: url,
+        type: "post",
+        data: {
+            'adviceContent' : adviceContent
+        },
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.code;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+            result = "-1";
+        }
+    });
+    return result;
+}

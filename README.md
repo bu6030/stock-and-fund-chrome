@@ -206,6 +206,7 @@
 185. 分时图增加昨日收盘价格线，并显示最新价格 2024/1/29
 186. 扩大走势图大小 2024/1/29
 187. 分时图昨日收盘价格线位置不准确 2024/2/1 -- version 1.9.8 -- end
+188. 增加反馈建议页面 2024/2/15
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

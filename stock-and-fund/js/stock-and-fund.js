@@ -730,6 +730,8 @@ document.addEventListener(
         document.getElementById('change-icon-hidden-button').addEventListener('click', changeIcon);
         // 设置页面，点击保存大盘指数
         document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
+        // 设置页面，点击反馈建议按钮
+        document.getElementById('show-advice-button').addEventListener('click', showAdvice);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -751,6 +753,9 @@ document.addEventListener(
         document.getElementById('nanxiang-money-button').addEventListener('click', showNanXiang);
         // 数据中心页面，点击行业板块
         document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
+
+        // 反馈建议页面，点击保存
+        document.getElementById('save-advice-button').addEventListener('click', saveAdvice);
     }
 );
 
@@ -4728,4 +4733,21 @@ function selectLargeMarketCodeCheckbox() {
         // 使用属性选择器选择对应值的复选框，并将其设置为选中状态
         $('input#large-market-code-checkbox[value="' + value + '"]').prop('checked', true);
     });
+}
+
+function showAdvice() {
+    $("#advice-content").val('');
+    $("#advice-modal").modal();
+    $("#setting-modal").modal('hide');
+}
+
+async function saveAdvice() {
+    let adviceContent = $("#advice-content").val();
+    let result = ajaxPostAdvice(adviceContent);
+    $("#advice-modal").modal('hide');
+    if (result == "0") {
+        alertMessage('保存成功');
+    } else {
+        alertMessage('保存失败');
+    }
 }
