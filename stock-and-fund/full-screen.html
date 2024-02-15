@@ -539,6 +539,14 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
+                                <button type="button" id="show-advice-button" class="btn btn-outline-primary"
+                                data-toggle="modal">反馈建议
+                                </button>  您觉得哪里不舒服，用起来不爽，提出您的建议来
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
                                 <button type="button" id="add-stock-from-tonghuashun-xueqiu" class="btn btn-outline-primary"
                                     data-toggle="modal">读取同花顺/雪球/东方财富自选股
                                 </button>  需要先打开同花顺/雪球/东方财富自选股页面之后，读取才能成功
@@ -923,6 +931,38 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
 
+                </div>
+            </div>
+        </div>
+        <!-- 反馈建议模态框 -->
+        <div class="modal fade" id="advice-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">反馈建议</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <ul id="advice-list-ul">
+                        </ul>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">反馈内容：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm my-text" id="advice-content" placeholder="请输入反馈内容">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" id="save-advice-button" class="btn btn-outline-danger"
+                            data-toggle="modal">保存
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
                 </div>
             </div>
         </div>

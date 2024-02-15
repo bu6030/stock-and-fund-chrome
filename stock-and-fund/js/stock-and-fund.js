@@ -4736,6 +4736,7 @@ function selectLargeMarketCodeCheckbox() {
 }
 
 function showAdvice() {
+    getAdvice();
     $("#advice-content").val('');
     $("#advice-modal").modal();
     $("#setting-modal").modal('hide');
@@ -4745,9 +4746,23 @@ async function saveAdvice() {
     let adviceContent = $("#advice-content").val();
     let result = ajaxPostAdvice(adviceContent);
     $("#advice-modal").modal('hide');
-    if (result == "0") {
+    if (result == "00000000") {
         alertMessage('保存成功');
     } else {
         alertMessage('保存失败');
     }
+}
+
+async function getAdvice() {
+    let advices = ajaxGetAdvice();
+    var columnList = document.getElementById('advice-list-ul');
+    columnList.innerHTML = '';
+    advices.forEach(function (advice) {
+        var listItem = document.createElement('li');
+        // Create label for checkbox
+        var adviceDevelopVersion = advice.adviceDevelopVersion == null ? '' : ' 计划修改版本：' + advice.adviceDevelopVersion;
+        var textContent = advice.adviceContent + '\n 提交时间：' + advice.date + adviceDevelopVersion;
+        listItem.innerText = textContent;
+        columnList.appendChild(listItem);
+    });
 }
