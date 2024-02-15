@@ -4736,10 +4736,10 @@ function selectLargeMarketCodeCheckbox() {
 }
 
 function showAdvice() {
-    getAdvice();
     $("#advice-content").val('');
     $("#advice-modal").modal();
     $("#setting-modal").modal('hide');
+    getAdvice();
 }
 
 async function saveAdvice() {

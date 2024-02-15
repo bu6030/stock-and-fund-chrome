@@ -500,15 +500,16 @@ function ajaxGetHuiLv(type) {
 function ajaxPostAdvice(adviceContent) {
     let result;
     var url = Env.ADVICE_URL;
+    let request = {
+        'adviceContent' : adviceContent
+    }
     $.ajax({
         url: url,
         type: "post",
-        data: {
-            'adviceContent' : adviceContent
-        },
+        data: JSON.stringify(request),
         async: false,
         dataType: 'json',
-        contentType: 'application/x-www-form-urlencoded',
+        contentType: 'application/json',
         success: function (data) {
             result = data.code;
         },
