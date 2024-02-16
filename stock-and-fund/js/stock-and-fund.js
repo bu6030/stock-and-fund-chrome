@@ -4457,8 +4457,8 @@ function addDragAndDropListeners() {
         allDisplay = 'DISPLAY';
         $("#all-display-checkbox").prop("checked", true);
     } else {
-        marketValueDisplay = 'HIDDEN';
-        $("#market-value-display-checkbox").prop("checked", false);
+        allDisplay = 'HIDDEN';
+        $("#all-display-checkbox").prop("checked", false);
     }
     if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
         marketValueDisplay = 'DISPLAY';
