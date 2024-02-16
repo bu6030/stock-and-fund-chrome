@@ -499,12 +499,11 @@ function ajaxGetHuiLv(type) {
 // 接口调用
 function ajaxPostAdvice(adviceContent) {
     let result;
-    var url = Env.ADVICE_URL;
     let request = {
         'adviceContent' : adviceContent
     }
     $.ajax({
-        url: url,
+        url: Env.ADVICE_URL,
         type: "post",
         data: JSON.stringify(request),
         async: false,
@@ -524,25 +523,21 @@ function ajaxPostAdvice(adviceContent) {
 }
 
 // 接口调用
-function ajaxGetAdvice() {
-    let result;
-    var url = Env.ADVICE_URL;
+async function ajaxGetAdvice() {
     $.ajax({
-        url: url,
+        url: Env.ADVICE_URL,
         type: "get",
         data: {},
         async: false,
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            result = data.value;
+            setAdviceUl(data.value);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            result = "-1";
         }
     });
-    return result;
 }

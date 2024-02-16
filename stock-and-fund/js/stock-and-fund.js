@@ -2800,7 +2800,7 @@ async function fileInput (e) {
 }
 
 // 从本地 SpringBoot 项目获取数据
-function getStockAndFundFromLocalService () {
+async function getStockAndFundFromLocalService () {
     let result = ajaxGetStockAndFundFromLocalService();
     if (result != null && result != '' && result != undefined) {
         saveCacheData('stocks', JSON.stringify(result.stocks));
@@ -4727,7 +4727,7 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
     return name;
 }
 
-function selectLargeMarketCodeCheckbox() {
+async function selectLargeMarketCodeCheckbox() {
     // 遍历 checkboxGroupList 数组
     largeMarketCode.forEach(function(value) {
         // 使用属性选择器选择对应值的复选框，并将其设置为选中状态
@@ -4735,13 +4735,15 @@ function selectLargeMarketCodeCheckbox() {
     });
 }
 
+// 展示反馈建议页面
 function showAdvice() {
     $("#advice-content").val('');
     $("#advice-modal").modal();
     $("#setting-modal").modal('hide');
-    getAdvice();
+    ajaxGetAdvice();
 }
 
+// 保存反馈建议
 async function saveAdvice() {
     let adviceContent = $("#advice-content").val();
     let result = ajaxPostAdvice(adviceContent);
@@ -4753,8 +4755,8 @@ async function saveAdvice() {
     }
 }
 
-async function getAdvice() {
-    let advices = ajaxGetAdvice();
+// ajax获取反馈建议后，异步回调设置列表
+function setAdviceUl(advices) {
     var columnList = document.getElementById('advice-list-ul');
     columnList.innerHTML = '';
     advices.forEach(function (advice) {
