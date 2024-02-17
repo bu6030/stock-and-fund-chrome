@@ -36,7 +36,7 @@ let Env = {
     TIME_CACHED_SEVEN_DAY: 7 * 24 * 60 * 60 * 1000,
     TIME_CACHED_ONE_DAY: 24 * 60 * 60 * 1000,
     TIME_CACHED_ONE_HOUR: 1 * 60 * 60 * 1000,
-    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/stockAndFund",
+    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://1.117.221.208:8080/chrome/stockAndFund",
 }
 
 let develop = false;
