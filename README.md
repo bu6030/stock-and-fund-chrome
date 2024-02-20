@@ -208,7 +208,7 @@
 187. 分时图昨日收盘价格线位置不准确 2024/2/1 -- version 1.9.8 -- end
 188. 增加反馈建议页面 2024/2/15
 189. 市值/金额列显示问题修改 2024/2/16 -- version 1.9.9 -- end
-190. 增加大盘指数，沪深300，中证500，科创50，中证1000 2024/2/20
+190. 增加大盘指数，沪深300，中证500，科创50，中证1000，北证50，行业指数 2024/2/20
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
