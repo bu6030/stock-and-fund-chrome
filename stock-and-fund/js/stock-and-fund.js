@@ -1822,31 +1822,36 @@ async function saveStock() {
         "newBuy": newBuy,
         "newBuyDate": newBuyDate,
     }
-    var stocks = await readCacheData('stocks');
-    if (stocks == null) {
-        stocks = [];
-    } else {
-        stocks = jQuery.parseJSON(stocks);
-    }
-    for (var k in stocks) {
-        if (stocks[k].code == stock.code) {
-            stocks[k].code = stock.code;
-            stocks[k].costPrise = stock.costPrise;
-            stocks[k].bonds = stock.bonds;
-            stocks[k].monitorHighPrice = stock.monitorHighPrice;
-            stocks[k].monitorLowPrice = stock.monitorLowPrice;
-            stocks[k].monitorUpperPercent = stock.monitorUpperPercent;
-            stocks[k].monitorLowerPercent = stock.monitorLowerPercent;
-            stocks[k].newBuy = stock.newBuy;
-            stocks[k].newBuyDate = stock.newBuyDate;
-            stocks[k].monitorAlert = '';
-            if (stocks[k].addTimePrice == null || stocks[k].addTimePrice == '') {
-                let checkStockExsitResult = checkStockExsit(stocks[k].code);
-                stocks[k].addTimePrice = checkStockExsitResult.now;
-                stocks[k].addTime = getCurrentDate();
+    // var stocks = await readCacheData('stocks');
+    // if (stocks == null) {
+    //     stocks = [];
+    // } else {
+    //     stocks = jQuery.parseJSON(stocks);
+    // }
+    for (var k in stockList) {
+        if (stockList[k].code == stock.code) {
+            stockList[k].code = stock.code;
+            stockList[k].costPrise = stock.costPrise;
+            stockList[k].bonds = stock.bonds;
+            stockList[k].monitorHighPrice = stock.monitorHighPrice;
+            stockList[k].monitorLowPrice = stock.monitorLowPrice;
+            stockList[k].monitorUpperPercent = stock.monitorUpperPercent;
+            stockList[k].monitorLowerPercent = stock.monitorLowerPercent;
+            stockList[k].newBuy = stock.newBuy;
+            stockList[k].newBuyDate = stock.newBuyDate;
+            stockList[k].monitorAlert = '';
+            if (stockList[k].addTimePrice == null || stockList[k].addTimePrice == '') {
+                let checkStockExsitResult = checkStockExsit(stockList[k].code);
+                stockList[k].addTimePrice = checkStockExsitResult.now;
+                stockList[k].addTime = getCurrentDate();
             }
-            saveCacheData('stocks', JSON.stringify(stocks));
-            stockList = stocks;
+            if (currentGroup == 'default-group') {
+                saveCacheData('stocks', JSON.stringify(stockList));
+            } else {
+                saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+            }
+            // saveCacheData('stocks', JSON.stringify(stockList));
+            // stockList = stocks;
             $("#stock-modal").modal("hide");
             $("#search-stock-modal").modal("hide");
             initData();
@@ -1862,9 +1867,14 @@ async function saveStock() {
     }
     stock.addTimePrice = checkStockExsitResult.now;
     stock.addTime = getCurrentDate();
-    stocks.push(stock);
-    saveCacheData('stocks', JSON.stringify(stocks));
-    stockList = stocks;
+    stockList.push(stock);
+    if (currentGroup == 'default-group') {
+        saveCacheData('stocks', JSON.stringify(stockList));
+    } else {
+        saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+    }
+    // saveCacheData('stocks', JSON.stringify(stockList));
+    // stockList = stocks;
     $("#stock-modal").modal("hide");
     $("#search-stock-modal").modal("hide");
     initData();
@@ -1924,30 +1934,34 @@ async function saveFund() {
             "bonds": bonds,
         }
     }
-    var funds = await readCacheData('funds');
-    if (funds == null) {
-        funds = [];
-    } else {
-        funds = jQuery.parseJSON(funds);
-    }
-    for (var k in funds) {
-        if (funds[k].fundCode == fund.fundCode) {
-            funds[k].fundCode = fund.fundCode;
-            funds[k].costPrise = fund.costPrise;
-            funds[k].bonds = fund.bonds;
+    // var funds = await readCacheData('funds');
+    // if (funds == null) {
+    //     funds = [];
+    // } else {
+    //     funds = jQuery.parseJSON(funds);
+    // }
+    for (var k in fundList) {
+        if (fundList[k].fundCode == fund.fundCode) {
+            fundList[k].fundCode = fund.fundCode;
+            fundList[k].costPrise = fund.costPrise;
+            fundList[k].bonds = fund.bonds;
             if (isCycleInvest) {
-                funds[k].fundCycleInvestType = fund.fundCycleInvestType;
-                funds[k].fundCycleInvestDate = fund.fundCycleInvestDate;
-                funds[k].fundCycleInvestValue = fund.fundCycleInvestValue;
-                funds[k].fundCycleInvestRate = fund.fundCycleInvestRate;
+                fundList[k].fundCycleInvestType = fund.fundCycleInvestType;
+                fundList[k].fundCycleInvestDate = fund.fundCycleInvestDate;
+                fundList[k].fundCycleInvestValue = fund.fundCycleInvestValue;
+                fundList[k].fundCycleInvestRate = fund.fundCycleInvestRate;
             }
-            if (funds[k].addTimePrice == null || funds[k].addTimePrice == '') {
-                let checkFundExsitReuslt = checkFundExsit(funds[k].fundCode);
-                funds[k].addTimePrice = checkFundExsitReuslt.now;
-                funds[k].addTime = getCurrentDate();
+            if (fundList[k].addTimePrice == null || fundList[k].addTimePrice == '') {
+                let checkFundExsitReuslt = checkFundExsit(fundList[k].fundCode);
+                fundList[k].addTimePrice = checkFundExsitReuslt.now;
+                fundList[k].addTime = getCurrentDate();
             }
-            saveCacheData('funds', JSON.stringify(funds));
-            fundList = funds;
+            if (currentGroup == 'default-group') {
+                saveCacheData('funds', JSON.stringify(fundList));
+            } else {
+                saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+            }
+            // fundList = funds;
             $("#fund-modal").modal("hide");
             $("#search-fund-modal").modal("hide");
             initData();
@@ -1965,9 +1979,14 @@ async function saveFund() {
     }
     fund.addTimePrice = checkFundExsitReuslt.now;
     fund.addTime = getCurrentDate();
-    funds.push(fund);
-    saveCacheData('funds', JSON.stringify(funds));
-    fundList = funds;
+    fundList.push(fund);
+    if (currentGroup == 'default-group') {
+        saveCacheData('funds', JSON.stringify(fundList));
+    } else {
+        saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+    }
+    // saveCacheData('funds', JSON.stringify(funds));
+    // fundList = funds;
     $("#fund-modal").modal("hide");
     $("#search-fund-modal").modal("hide");
     initData();
@@ -2442,8 +2461,15 @@ function dataExport() {
 function removeAllData() {
     let stocksRemove = [];
     let fundsRemove = [];
-    saveCacheData('stocks', JSON.stringify(stocksRemove));
-    saveCacheData('funds', JSON.stringify(fundsRemove));
+    if (currentGroup == 'default-group') {
+        saveCacheData('stocks', JSON.stringify(stocksRemove));
+        saveCacheData('funds', JSON.stringify(fundsRemove));
+    } else {
+        saveCacheData(currentGroup + '_stocks', JSON.stringify(stocksRemove));
+        saveCacheData(currentGroup + '_funds', JSON.stringify(fundsRemove));
+    }
+    // saveCacheData('stocks', JSON.stringify(stocksRemove));
+    // saveCacheData('funds', JSON.stringify(fundsRemove));
     stockList = [];
     fundList = [];
     $("#setting-modal").modal("hide");
@@ -2823,8 +2849,15 @@ async function fileInput (e) {
         var contents = e.target.result;
         var json = JSON.parse(contents);
         // 在这里处理您的 JSON 数据
-        saveCacheData('stocks', JSON.stringify(json.stocks));
-        saveCacheData('funds', JSON.stringify(json.funds));
+        if (currentGroup == 'default-group') {
+            saveCacheData('stocks', JSON.stringify(json.stocks));
+            saveCacheData('funds', JSON.stringify(json.funds));
+        } else {
+            saveCacheData(currentGroup + '_stocks', JSON.stringify(json.stocks));
+            saveCacheData(currentGroup + '_funds', JSON.stringify(json.funds));
+        }
+        // saveCacheData('stocks', JSON.stringify(json.stocks));
+        // saveCacheData('funds', JSON.stringify(json.funds));
         $("#data-import-modal").modal("hide");
         stockList = json.stocks;
         fundList = json.funds;
@@ -2837,8 +2870,15 @@ async function fileInput (e) {
 async function getStockAndFundFromLocalService () {
     let result = ajaxGetStockAndFundFromLocalService();
     if (result != null && result != '' && result != undefined) {
-        saveCacheData('stocks', JSON.stringify(result.stocks));
-        saveCacheData('funds', JSON.stringify(result.funds));
+        if (currentGroup == 'default-group') {
+            saveCacheData('stocks', JSON.stringify(result.stocks));
+            saveCacheData('funds', JSON.stringify(result.funds));
+        } else {
+            saveCacheData(currentGroup + '_stocks', JSON.stringify(result.stocks));
+            saveCacheData(currentGroup + '_funds', JSON.stringify(result.funds));
+        }
+        // saveCacheData('stocks', JSON.stringify(result.stocks));
+        // saveCacheData('funds', JSON.stringify(result.funds));
         stockList = result.stocks;
         fundList = result.funds;
         reloadDataAndHtml();
@@ -2849,33 +2889,43 @@ async function getStockAndFundFromLocalService () {
 // 删除基金或股票
 async function deleteStockAndFund() {
     if (timeImageType == "FUND") {
-        var funds = await readCacheData('funds');
-        funds = jQuery.parseJSON(funds);
-        for (var k in funds) {
-            if (funds[k].fundCode == timeImageCode) {
+        // var funds = await readCacheData('funds');
+        // funds = jQuery.parseJSON(funds);
+        for (var k in fundList) {
+            if (fundList[k].fundCode == timeImageCode) {
                 // delete funds[k];
-                funds.splice(k, 1)
+                fundList.splice(k, 1)
                 break;
             }
         }
-        saveCacheData('funds', JSON.stringify(funds));
+        if (currentGroup == 'default-group') {
+            saveCacheData('funds', JSON.stringify(fundList));
+        } else {
+            saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+        }
+        // saveCacheData('funds', JSON.stringify(fundList));
         $("#time-image-modal").modal("hide");
         $("#fund-modal").modal("hide");
-        fundList = funds;
+        // fundList = funds;
     } else {
-        var stocks = await readCacheData('stocks');
-        stocks = jQuery.parseJSON(stocks);
-        for (var k in stocks) {
-            if (stocks[k].code == timeImageCode) {
+        // var stocks = await readCacheData('stocks');
+        // stocks = jQuery.parseJSON(stocks);
+        for (var k in stockList) {
+            if (stockList[k].code == timeImageCode) {
                 // delete stocks[k];
-                stocks.splice(k, 1)
+                stockList.splice(k, 1)
                 break;
             }
         }
-        saveCacheData('stocks', JSON.stringify(stocks));
+        if (currentGroup == 'default-group') {
+            saveCacheData('stocks', JSON.stringify(stockList));
+        } else {
+            saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+        }
+        // saveCacheData('stocks', JSON.stringify(stockList));
         $("#time-image-modal").modal("hide");
         $("#stock-modal").modal("hide");
-        stockList = stocks;
+        // stockList = stocks;
     }
     reloadDataAndHtml();
 }
@@ -2929,34 +2979,44 @@ async function enableChromeNotice(event) {
 async function setTop() {
     // 基金编辑页面/基金分时图页面点击置顶
     if (timeImageType == 'FUND') {
-        var funds = await readCacheData('funds');
-        funds = jQuery.parseJSON(funds);
+        // var funds = await readCacheData('funds');
+        // funds = jQuery.parseJSON(funds);
         let currentFund;
-        for (var k in funds) {
-            if (funds[k].fundCode == timeImageCode) {
-                currentFund = funds[k];
-                funds.splice(k, 1)
+        for (var k in fundList) {
+            if (fundList[k].fundCode == timeImageCode) {
+                currentFund = fundList[k];
+                fundList.splice(k, 1)
                 break;
             }
         }
-        funds.unshift(currentFund);
-        saveCacheData('funds', JSON.stringify(funds));
-        fundList = funds;
+        fundList.unshift(currentFund);
+        if (currentGroup == 'default-group') {
+            saveCacheData('funds', JSON.stringify(fundList));
+        } else {
+            saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+        }
+        // saveCacheData('funds', JSON.stringify(fundList));
+        // fundList = funds;
     // 股票编辑页面/股票分时图页面点击置顶
     } else {
-        var stocks = await readCacheData('stocks');
-        stocks = jQuery.parseJSON(stocks);
+        // var stocks = await readCacheData('stocks');
+        // stocks = jQuery.parseJSON(stocks);
         let currentStock;
-        for (var k in stocks) {
-            if (stocks[k].code == timeImageCode) {
-                currentStock = stocks[k];
-                stocks.splice(k, 1)
+        for (var k in stockList) {
+            if (stockList[k].code == timeImageCode) {
+                currentStock = stockList[k];
+                stockList.splice(k, 1)
                 break;
             }
         }
-        stocks.unshift(currentStock);
-        saveCacheData('stocks', JSON.stringify(stocks));
-        stockList = stocks;
+        stockList.unshift(currentStock);
+        if (currentGroup == 'default-group') {
+            saveCacheData('stocks', JSON.stringify(stockList));
+        } else {
+            saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+        }
+        // saveCacheData('stocks', JSON.stringify(stockList));
+        // stockList = stocks;
     }
     $("#time-image-modal").modal("hide");
     $("#stock-modal").modal("hide");
@@ -2976,8 +3036,15 @@ async function syncDataFromCloud() {
     if (result != null && result != '' && result != undefined) {
         var checkResult = confirm("这些云同步数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
         if (checkResult) {
-            saveCacheData('stocks', JSON.stringify(result.stocks));
-            saveCacheData('funds', JSON.stringify(result.funds));
+            if (currentGroup == 'default-group') {
+                saveCacheData('stocks', JSON.stringify(result.stocks));
+                saveCacheData('funds', JSON.stringify(result.funds));
+            } else {
+                saveCacheData(currentGroup + '_stocks', JSON.stringify(result.stocks));
+                saveCacheData(currentGroup + '_funds', JSON.stringify(result.funds));
+            }
+            // saveCacheData('stocks', JSON.stringify(result.stocks));
+            // saveCacheData('funds', JSON.stringify(result.funds));
             stockList = result.stocks;
             fundList = result.funds;
             reloadDataAndHtml();
@@ -3218,7 +3285,12 @@ async function buyOrSell() {
         stock.bonds = restBound + "";
         stock.costPrise = newCostPrice + "";
     }
-    saveCacheData('stocks', JSON.stringify(stockList));
+    if (currentGroup == 'default-group') {
+        saveCacheData('stocks', JSON.stringify(stockList));
+    } else {
+        saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+    }
+    // saveCacheData('stocks', JSON.stringify(stockList));
     $("#buy-or-sell-modal").modal("hide");
     initData();
 }
@@ -3254,7 +3326,12 @@ function sortedByDrag() {
                 let currentFund = fundList[sourceIndex];
                 fundList.splice(sourceIndex, 1);
                 fundList.splice(targetIndex, 0, currentFund);
-                saveCacheData('funds', JSON.stringify(fundList));
+                if (currentGroup == 'default-group') {
+                    saveCacheData('funds', JSON.stringify(fundList));
+                } else {
+                    saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+                }
+                // saveCacheData('funds', JSON.stringify(fundList));
                 if (lastSort.fund.targetId.indexOf('fund') >= 0) {
                     lastSort.fund.targetId = '';
                     lastSort.fund.sortType = 'order';
@@ -3270,7 +3347,12 @@ function sortedByDrag() {
                 let currentStock = stockList[sourceIndex];
                 stockList.splice(sourceIndex, 1);
                 stockList.splice(targetIndex, 0, currentStock);
-                saveCacheData('stocks', JSON.stringify(stockList));
+                if (currentGroup == 'default-group') {
+                    saveCacheData('stocks', JSON.stringify(stockList));
+                } else {
+                    saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+                }
+                // saveCacheData('stocks', JSON.stringify(stockList));
                 if (lastSort.stock.targetId.indexOf('stock') >= 0) {
                     lastSort.stock.targetId = '';
                     lastSort.stock.sortType = 'order';
@@ -3287,12 +3369,12 @@ function sortedByDrag() {
 async function addStockFromTonghuashunXueqiu() {
     let data = await readCacheData('tonghuashun-xueqiu-stock');
     console.log('从同花顺/雪球/东方财富导入的数据：', data );
-    let stocks = await readCacheData('stocks');
-    if (stocks == null) {
-        stocks = [];
-    } else {
-        stocks = jQuery.parseJSON(stocks);
-    }
+    // let stocks = await readCacheData('stocks');
+    // if (stocks == null) {
+    //     stocks = [];
+    // } else {
+    //     stocks = jQuery.parseJSON(stocks);
+    // }
     for (let k in data) {
         let code = data[k];
         let stock = {
@@ -3301,8 +3383,8 @@ async function addStockFromTonghuashunXueqiu() {
             "bonds": "0"
         }
         let existInStockList = false;
-        for (let l in stocks) {
-            if (stocks[l].code == stock.code) {
+        for (let l in stockList) {
+            if (stockList[l].code == stock.code) {
                 existInStockList = true;
                 break;
             }
@@ -3317,10 +3399,15 @@ async function addStockFromTonghuashunXueqiu() {
         }
         stock.addTimePrice = checkStockExsitResult.now;
         stock.addTime = getCurrentDate();
-        stocks.push(stock);
+        stockList.push(stock);
     }
-    saveCacheData('stocks', JSON.stringify(stocks));
-    stockList = stocks;
+    if (currentGroup == 'default-group') {
+        saveCacheData('stocks', JSON.stringify(stockList));
+    } else {
+        saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+    }
+    // saveCacheData('stocks', JSON.stringify(stockList));
+    // stockList = stocks;
     $("#setting-modal").modal("hide");
     initData();
 }
@@ -3411,12 +3498,24 @@ async function clickSortStockAndFund(event) {
         if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'order';
             lastSort.stock.targetId = '';
-            var stocks = await readCacheData('stocks');
+            var stocks;
+            if (currentGroup == 'default-group') {
+                stocks = await readCacheData('stocks');
+            }
+            if (currentGroup != 'default-group') {
+                stocks = await readCacheData(currentGroup + '_stocks');
+            }
             stockList = jQuery.parseJSON(stocks);
         } else {
             lastSort.fund.sortType = 'order';
             lastSort.fund.targetId = '';
-            var funds = await readCacheData('funds')
+            var funds;
+            if (currentGroup == 'default-group') {
+                funds = await readCacheData('funds');
+            }
+            if (currentGroup != 'default-group') {
+                funds = await readCacheData(currentGroup + '_funds');
+            }
             fundList = jQuery.parseJSON(funds);
         }
     }
