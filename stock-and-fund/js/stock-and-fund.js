@@ -819,7 +819,11 @@ async function initData() {
                 console.log('huilvUS=', huilvUS);
             }
         }
-        let result = ajaxGetStockFromGtimg(stocks);
+        let result = "";
+        // 没有股票不调用接口请求
+        if (stocks != "") {
+            result = ajaxGetStockFromGtimg(stocks);
+        }
         var stoksArr = result.split("\n");
         for (var k in stoksArr) {
             for (var l in stockList) {
@@ -2450,10 +2454,16 @@ function showImportData() {
 }
 
 // 数据导出
-function dataExport() {
+async function dataExport() {
     var data = {};
-    data.stocks = stockList;
-    data.funds = fundList;
+    data.stocks = jQuery.parseJSON(await readCacheData('stocks'));
+    data.funds = jQuery.parseJSON(await readCacheData('funds'));
+    data.groups = await readCacheData('groups');
+    // 遍历json.groups获取所有value
+    await Promise.all(Object.keys(groups).map(async (id) => {
+        data[groups[id] + '_stocks'] = jQuery.parseJSON(await readCacheData(groups[id] + '_stocks'));
+        data[groups[id] + '_funds'] = jQuery.parseJSON(await readCacheData(groups[id] + '_funds'));
+    }));
     downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
 }
 
@@ -2849,18 +2859,26 @@ async function fileInput (e) {
         var contents = e.target.result;
         var json = JSON.parse(contents);
         // 在这里处理您的 JSON 数据
-        if (currentGroup == 'default-group') {
+        // if (currentGroup == 'default-group') {
             saveCacheData('stocks', JSON.stringify(json.stocks));
             saveCacheData('funds', JSON.stringify(json.funds));
-        } else {
-            saveCacheData(currentGroup + '_stocks', JSON.stringify(json.stocks));
-            saveCacheData(currentGroup + '_funds', JSON.stringify(json.funds));
-        }
+            saveCacheData('groups', json.groups);
+            // 遍历json.groups获取所有value
+            Object.keys(groups).forEach(id => {
+                const groupName = groups[id];
+                
+            });
+
+        // } else {
+            // saveCacheData(currentGroup + '_stocks', JSON.stringify(json.stocks));
+            // saveCacheData(currentGroup + '_funds', JSON.stringify(json.funds));
+        // }
         // saveCacheData('stocks', JSON.stringify(json.stocks));
         // saveCacheData('funds', JSON.stringify(json.funds));
         $("#data-import-modal").modal("hide");
         stockList = json.stocks;
         fundList = json.funds;
+        groups = json.groups;
         reloadDataAndHtml();
     };
     reader.readAsText(file);
