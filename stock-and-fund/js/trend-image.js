@@ -6,7 +6,14 @@ var timerId;
 function showMinuteImage() {
     clearTimeImageTimeout();
     let path = "";
-    if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006") {
+    if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006"
+        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
+        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
+        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
+        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
+        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
+        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941') {
         $("#update-stock-fund-button")[0].style.display = 'block';
         $("#set-top-button-3")[0].style.display = 'block';
         if (timeImageType == "STOCK") {
@@ -16,7 +23,12 @@ function showMinuteImage() {
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
         && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
+        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
+        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
+        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
+        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
+        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941') {
         if (timeImageType == "FUND") {
             path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
             $("#fund-modal").modal("hide");
@@ -45,7 +57,12 @@ function showDayImage() {
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
         && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
+        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
+        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
+        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
+        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
+        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -71,7 +88,12 @@ function showWeekImage() {
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
         && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
+        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
+        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
+        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
+        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
+        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=W&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -96,7 +118,12 @@ function showMonthImage() {
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
         && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX') {
+        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
+        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
+        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
+        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
+        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
+        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=M&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;

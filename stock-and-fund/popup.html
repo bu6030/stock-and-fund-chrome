@@ -784,91 +784,143 @@
                         </div>
                         <div class="am-form-group am-cf">
                             <div class="you">
-                                <h5 class="modal-title">大盘指数&nbsp;&nbsp;&nbsp;
+                                <h5 class="modal-title">大盘/行业指数&nbsp;&nbsp;&nbsp;
                                     <button type="button" id="large-market-code-save-button" class="btn btn-outline-primary"
-                                        data-toggle="modal">保存大盘指数</button>
+                                        data-toggle="modal">保存大盘/行业指数</button>
                                 </h5>
                             </div>
                             <div class="you">
                                 <h6 class="modal-title">
-                                    <ul id="large-market-code-table">
-                                        <li>
-                                            <input type="checkbox" value="1.000001" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">上证指数</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="0.399001" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">深证成指</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="0.399006" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">创业板指</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="1.000300" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">沪深300</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="0.399905" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">中证500</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="1.000852" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">中证1000</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="0.899050" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">北证50</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="1.000688" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">科创50</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.HSI" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">恒生指数</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.SPX" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">标普500</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.DJIA" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">道琼斯</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.NDX" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">纳斯达克</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.N225" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">日经225</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.KS11" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">韩国KOSPI</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.FTSE" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">英国富时100</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.GDAXI" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">德国DAX30</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.FCHI" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">法国CAC40</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="100.SENSEX" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">印度孟买SENSEX</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" value="1.000928" id="large-market-code-checkbox">
-                                            <label for="large-market-code-checkbox">中证能源</label>
-                                        </li>
-                                    </ul>
+                                    <div class="three_column_container">
+                                        <div class="three_column">
+                                            <ul id="large-market-code-table" class="large-market-code-table">
+                                                <li>
+                                                    <input type="checkbox" value="1.000001" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">上证指数</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="0.399001" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">深证成指</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="0.399006" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">创业板指</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.HSI" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">恒生指数</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.SPX" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">标普500</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.DJIA" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">道琼斯</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.NDX" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">纳斯达克</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.N225" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">日经225</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.KS11" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">韩国KOSPI</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.FTSE" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">英国富时100</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.GDAXI" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">德国DAX30</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.FCHI" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">法国CAC40</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="100.SENSEX" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">印度孟买SENSEX</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="three_column">
+                                            <ul class="large-market-code-table">
+                                                <li>
+                                                    <input type="checkbox" value="1.000300" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">沪深300</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="0.399905" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证500</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="1.000852" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证1000</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="0.899050" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">北证50</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="1.000688" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">科创50</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="1.000928" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证能源</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="0.399997" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证白酒</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="1.000933" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证医药</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="2.930641" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证中药</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="1.000926" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证央企</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="2.930708" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证有色</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="0.399989" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证医疗</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="0.399986" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">中证银行</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="three_column">
+                                            <ul class="large-market-code-table">
+                                                <li>
+                                                    <input type="checkbox" value="1.000941" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">新能源</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="2.931071" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">人工智能</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" value="2.931582" id="large-market-code-checkbox">
+                                                    <label for="large-market-code-checkbox">数字经济</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </h6>
                             </div>
                         </div>

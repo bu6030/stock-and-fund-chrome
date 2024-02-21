@@ -4719,6 +4719,39 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
             case 'SENSEX':
                 name = '印度孟买SENSEX';
                 break;
+            case 'sh000300':
+                name = '沪深300';
+                break;
+            case 'sz399905':
+                name = '中证500';
+                break;
+            case 'sh000852':
+                name = '中证1000';
+                break;
+            case 'sh000688':
+                name = '科创50';
+                break;
+            case 'sh000928':
+                name = '中证能源';
+                break;
+            case 'sz399997':
+                name = '中证白酒';
+                break;
+            case 'sh000933':
+                name = '中证医药';
+                break;
+            case 'sh000926':
+                name = '中证央企';
+                break;
+            case 'sz399989':
+                name = '中证医疗';
+                break;
+            case 'sz399986':
+                name = '中证银行';
+                break;
+            case 'sh000941':
+                name = '新能源';
+                break;
             default:
                 name = timeImageCode;
                 break;

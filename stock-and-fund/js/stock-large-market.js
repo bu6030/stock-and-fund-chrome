@@ -101,6 +101,72 @@ function initLargeMarketData() {
             timeImageCode = "SENSEX";
             initLargeMarketClick();
         });
+        // 点击沪深300指数
+        if(document.getElementById('large-market-000300'))
+        document.getElementById('large-market-000300').addEventListener('click', function () {
+            timeImageCode = "sh000300";
+            initLargeMarketClick();
+        });
+        // 点击中证500指数
+        if(document.getElementById('large-market-399905'))
+        document.getElementById('large-market-399905').addEventListener('click', function () {
+            timeImageCode = "sz399905";
+            initLargeMarketClick();
+        });
+        // 点击中证1000指数
+        if(document.getElementById('large-market-000852'))
+        document.getElementById('large-market-000852').addEventListener('click', function () {
+            timeImageCode = "sh000852";
+            initLargeMarketClick();
+        });
+        // 点击科创50指数
+        if(document.getElementById('large-market-000688'))
+        document.getElementById('large-market-000688').addEventListener('click', function () {
+            timeImageCode = "sh000688";
+            initLargeMarketClick();
+        });
+        // 点击中证能源
+        if(document.getElementById('large-market-000928'))
+        document.getElementById('large-market-000928').addEventListener('click', function () {
+            timeImageCode = "sh000928";
+            initLargeMarketClick();
+        });
+        // 点击中证白酒
+        if(document.getElementById('large-market-399997'))
+        document.getElementById('large-market-399997').addEventListener('click', function () {
+            timeImageCode = "sz399997";
+            initLargeMarketClick();
+        });
+        // 点击中证医药
+        if(document.getElementById('large-market-000933'))
+        document.getElementById('large-market-000933').addEventListener('click', function () {
+            timeImageCode = "sh000933";
+            initLargeMarketClick();
+        });
+        // 点击中证央企
+        if(document.getElementById('large-market-000926'))
+        document.getElementById('large-market-000926').addEventListener('click', function () {
+            timeImageCode = "sh000926";
+            initLargeMarketClick();
+        });
+        // 点击中证医疗
+        if(document.getElementById('large-market-399989'))
+        document.getElementById('large-market-399989').addEventListener('click', function () {
+            timeImageCode = "sz399989";
+            initLargeMarketClick();
+        });
+        // 点击中证银行
+        if(document.getElementById('large-market-399986'))
+        document.getElementById('large-market-399986').addEventListener('click', function () {
+            timeImageCode = "sz399986";
+            initLargeMarketClick();
+        });
+        // 点击新能源
+        if(document.getElementById('large-market-000941'))
+        document.getElementById('large-market-000941').addEventListener('click', function () {
+            timeImageCode = "sh000941";
+            initLargeMarketClick();
+        });
     }, 300);
 }
 
