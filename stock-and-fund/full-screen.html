@@ -18,6 +18,13 @@
     <script src="js/trend-image.js"></script>
     <script src="js/ajax-request.js"></script>
     <script src="js/echarts.min.js"></script>
+    <!-- 分组模板 -->
+    <script id="group-template" type="text/template">
+        <button type="button" class="btn btn-outline-primary group-button" data-id="{id}">
+            {name}
+            <span class="delete-group" data-id="{id}">&times;</span>
+        </button>
+    </script>
 </head>
 
 <body>
@@ -511,6 +518,38 @@
                         <button type="button" id="sync-data-to-cloud-button" class="btn btn-outline-danger"
                             data-toggle="modal">向云服务器同步数据
                         </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 分组模态框 -->
+        <div class="modal fade" id="group-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">分组</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div>点击分组名切换分组</div>
+                            <div id="group-list">
+                                <button type="button" class="btn btn-outline-primary group-button" data-id="default-group">
+                                    默认分组
+                                </button>
+                                <!-- 动态分组列表 -->
+                            </div>
+                            <input type="text" class="form-control mt-3" id="group-name" placeholder="新增分组名"/>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" id="add-group-button" class="btn btn-outline-danger">新建分组</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
                 </div>
@@ -1099,6 +1138,9 @@
             </button>
             <button type="button" id="show-fund-button" class="btn btn-info"
                 data-toggle="modal">基金
+            </button>
+            <button type="button" id="show-group-button" class="btn btn-info"
+                data-toggle="modal">分组
             </button>
             <button type="button" id="refresh-button" class="btn btn-info"
                 data-toggle="modal">刷新
