@@ -5106,17 +5106,22 @@ async function showDayIncomeHistory() {
     // 每日盈利标题
     var dayIncomeHistoryHead = " <tr >" +
         " <th >日期</th>" +
-        " <th >盈利</th>" +
-        // " <th >涨跌幅</th>" +
+        " <th >基金盈利</th>" +
+        " <th >股票盈利</th>" +
+        " <th >总盈利</th>" +
         " </tr>";
     $("#day-income-history-head").html(dayIncomeHistoryHead);
     let str = "";
     // 遍历 dayIncomeHistory 数组
+    if (dayIncomeHistory != null && dayIncomeHistory != '' && dayIncomeHistory != undefined)
     dayIncomeHistory.forEach(item => {
+        let dayIncome = parseFloat(item.fundDayIncome) + parseFloat(item.stockDayIncome);
         // 对于数组中的每个项目，拼接一个表格行
         str += "<tr>"
             + "<td>" + item.date + "</td>"
-            + "<td>" + item.dayIncome + "</td>"
+            + "<td>" + item.fundDayIncome + "</td>"
+            + "<td>" + item.stockDayIncome + "</td>"
+            + "<td>" + dayIncome.toFixed(2) + "</td>"
             + "</tr>";
     });
     $("#day-income-history-nr").html(str);

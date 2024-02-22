@@ -293,7 +293,7 @@ function isTradingTime(date) {
     return (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
     || (date.toLocaleTimeString() >= "09:15:00 AM" && date.toLocaleTimeString() <= "11:31:00 AM")
     || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "16:01:00")
-    || (date.toLocaleTimeString() >= "1:00:00 PM" && date.toLocaleTimeString() <= "1:01:00 PM")
+    || (date.toLocaleTimeString() >= "1:00:00 PM" && date.toLocaleTimeString() <= "4:01:00 PM")
     || (date.toLocaleTimeString() >= "21:30:00" && date.toLocaleTimeString() <= "23:59:59")
     || (date.toLocaleTimeString() >= "9:30:00 PM" && date.toLocaleTimeString() <= "11:59:59 PM")
     || (date.toLocaleTimeString() >= "00:00:00" && date.toLocaleTimeString() <= "04:01:00")
@@ -342,108 +342,136 @@ function setChromeTitle(title) {
     }
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
-function monitorTop20StockChromeTitle(monitoTop20Stock) {
+async function monitorTop20StockChromeTitle(monitoTop20Stock) {
     var date = new Date();
     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
-        getData('stocks').then((stockArr) => {
-            if (stockArr == null || stockArr == undefined) {
-                stockArr = '[]';
+        let stockArr = await getData('stocks');
+        if (stockArr == null || stockArr == undefined) {
+            stockArr = '[]';
+        }
+        var stockList = JSON.parse(stockArr);
+        var stocks = "sh000001,sz399001,sz399006,hkHSI,";
+        if (monitoTop20Stock != null && monitoTop20Stock == true) {
+            console.log('扩展程序图标鼠标悬停后展示前20个股票价格');
+            for (let k in stockList) {
+                stocks += stockList[k].code + ",";
             }
-            var stockList = JSON.parse(stockArr);
-            var stocks = "sh000001,sz399001,sz399006,hkHSI,";
-            if (monitoTop20Stock != null && monitoTop20Stock == true) {
-                console.log('扩展程序图标鼠标悬停后展示前20个股票价格');
-                for (let k in stockList) {
-                    stocks += stockList[k].code + ",";
-                }
-            } else {
-                console.log('扩展程序图标鼠标悬停后展示大盘股');
-            }
-            fetch("http://qt.gtimg.cn/q=" + stocks)
-            .then(response => response.arrayBuffer())
-            .then(data => {
-                var count = 0;
-                const decoder = new TextDecoder('GBK');
-                data = decoder.decode(data);
-                // 在这里处理返回的数据
-                var title = '';
-                var stoksArr = data.split("\n");
-                var totalDayIncome = 0.00;
-                for (let k in stoksArr) {
-                    try {
-                        var stock;
-                        for (let l in stockList) {
-                            if(stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
-                                stock = stockList[l];
-                                break;
-                            }
-                        }
-                        var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                        var values = dataStr.split("~");
-                        var name = values[1];
-                        if (name == undefined) {
-                            continue;
-                        }
-                        var now = parseFloat(values[3]);
-                        var changePercent = parseFloat(values[32]).toFixed(2);
-                        var dayIncome = 0.00;
-                        if (stock != undefined) {
-                            dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
-                        }
-                        totalDayIncome += dayIncome;
-                        if (count <= 24) {
-                            var kongge = '';
-                            switch(name.length) {
-                                case 4: 
-                                    kongge = '     ';
-                                    break;
-                                case 5: 
-                                    kongge = '     ';
-                                    break;
-                                case 6: 
-                                    kongge = '  ';
-                                    break;
-                            }
-                            title += (name + kongge + now + '(' + changePercent + "%)\n");
-                        }
-                        count++;
-                    } catch (error) {
-                        console.info("MonitorTop20StockChromeTitle Error: ", error);
+        } else {
+            console.log('扩展程序图标鼠标悬停后展示大盘股');
+        }
+        let response = await fetch("http://qt.gtimg.cn/q=" + stocks);
+        let data = await response.arrayBuffer();
+        var count = 0;
+        const decoder = new TextDecoder('GBK');
+        data = decoder.decode(data);
+        // 在这里处理返回的数据
+        var title = '';
+        var stoksArr = data.split("\n");
+        var stockDayIncome = 0.00;
+        var date = '';
+        for (let k in stoksArr) {
+            try {
+                var stock;
+                for (let l in stockList) {
+                    if(stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
+                        stock = stockList[l];
+                        break;
                     }
                 }
-                title = title.substring(0, title.length - 1);
-                if (monitoTop20Stock != null && monitoTop20Stock == true) {
-                    title += '\n\n当日股票收益：' + totalDayIncome.toFixed(2);
+                var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
+                var values = dataStr.split("~");
+                var name = values[1];
+                if (name == undefined) {
+                    continue;
                 }
-                saveDayIncomehistory(totalDayIncome.toFixed(2));
-                setChromeTitle(title);
-            });
-        });
+                var now = parseFloat(values[3]);
+                var changePercent = parseFloat(values[32]).toFixed(2);
+                var dayIncome = 0.00;
+                if (stock != undefined) {
+                    dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
+                }
+                stockDayIncome += dayIncome;
+                if (count <= 24) {
+                    var kongge = '';
+                        switch(name.length) {
+                            case 4: 
+                                kongge = '     ';
+                                break;
+                            case 5: 
+                                kongge = '     ';
+                                break;
+                            case 6: 
+                                kongge = '  ';
+                                break;
+                        }
+                    title += (name + kongge + now + '(' + changePercent + "%)\n");
+                }
+                date = values[30].substring(0, 8);
+                count++;
+            } catch (error) {
+                console.info("MonitorTop20StockChromeTitle Error: ", error);
+            }
+        }
+        title = title.substring(0, title.length - 1);
+        let funcDayIncome = await getFundDayIncome();
+        let totalDayIncome = funcDayIncome + stockDayIncome;
+        if (monitoTop20Stock != null && monitoTop20Stock == true) {
+            title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
+            title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
+            title += '\n总收益：' + totalDayIncome.toFixed(2);
+        }
+        saveDayIncomehistory(stockDayIncome.toFixed(2), funcDayIncome.toFixed(2), date);
+        setChromeTitle(title);
     }
 }
 // 统计每日盈利
-async function saveDayIncomehistory(totalDayIncome) {
-    // 获取 date 的日期
-    var date = new Date();
-    date = date.toLocaleDateString().substring(0, 10);
+async function saveDayIncomehistory(stockDayIncome, fundDayIncome, date) {
     let dayIncomeHistory = await getData('DAY_INCOME_HISTORY');
     if (dayIncomeHistory == null || dayIncomeHistory == undefined) {
         dayIncomeHistory = [];
     }
+    dayIncomeHistory = [];
     let existingEntryIndex = dayIncomeHistory.findIndex(entry => entry.date === date);
     if (existingEntryIndex !== -1) {
         // 如果存在，更新该条目的 dayIncome
-        dayIncomeHistory[existingEntryIndex].dayIncome = totalDayIncome;
+        dayIncomeHistory[existingEntryIndex].stockDayIncome = stockDayIncome;
+        dayIncomeHistory[existingEntryIndex].fundDayIncome = fundDayIncome;
     } else {
         // 如果不存在，创建新的条目并添加到数组中
         let dayIncome = {
             'date': date,
-            'dayIncome': totalDayIncome
+            'stockDayIncome': stockDayIncome,
+            'fundDayIncome': fundDayIncome
         };
         dayIncomeHistory.push(dayIncome);
     }
     console.log('dayIncomeHistory==', dayIncomeHistory);
     saveData('DAY_INCOME_HISTORY', dayIncomeHistory);
+}
+// 统计基金当日盈利
+async function getFundDayIncome() {
+    let fundList = JSON.parse(await getData('funds'));
+    let fundDayIncome = parseFloat("0");
+    let promises = fundList.map(async (fund) => {
+        if (fund.bonds !== null && parseFloat(fund.bonds) > 0) {
+            try {
+                let response = await fetch(`http://fundgz.1234567.com.cn/js/${fund.fundCode}.js`);
+                let data = await response.text();
+                var json = JSON.parse(data.substring(8, data.length - 2));
+                let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
+                fundDayIncome = fundDayIncome + dayIncome;
+                // 在这里可以处理接口返回的数据
+                console.log(data);
+            } catch (error) {
+                console.error(`Error fetching data for fund ${fund.fundCode}: ${error}`);
+            }
+        }
+    });
+    // 等待所有基金的收益计算完成
+    await Promise.all(promises);
+    // 输出总收益
+    console.log("fundDayIncome = ", fundDayIncome);
+    return fundDayIncome;
 }
