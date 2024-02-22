@@ -417,8 +417,33 @@ function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 if (monitoTop20Stock != null && monitoTop20Stock == true) {
                     title += '\n\n当日股票收益：' + totalDayIncome.toFixed(2);
                 }
+                saveDayIncomehistory(totalDayIncome.toFixed(2));
                 setChromeTitle(title);
             });
         });
     }
+}
+// 统计每日盈利
+async function saveDayIncomehistory(totalDayIncome) {
+    // 获取 date 的日期
+    var date = new Date();
+    date = date.toLocaleDateString().substring(0, 10);
+    let dayIncomeHistory = await getData('DAY_INCOME_HISTORY');
+    if (dayIncomeHistory == null || dayIncomeHistory == undefined) {
+        dayIncomeHistory = [];
+    }
+    let existingEntryIndex = dayIncomeHistory.findIndex(entry => entry.date === date);
+    if (existingEntryIndex !== -1) {
+        // 如果存在，更新该条目的 dayIncome
+        dayIncomeHistory[existingEntryIndex].dayIncome = totalDayIncome;
+    } else {
+        // 如果不存在，创建新的条目并添加到数组中
+        let dayIncome = {
+            'date': date,
+            'dayIncome': totalDayIncome
+        };
+        dayIncomeHistory.push(dayIncome);
+    }
+    console.log('dayIncomeHistory==', dayIncomeHistory);
+    saveData("DAY_INCOME_HISTORY", dayIncomeHistory);
 }
