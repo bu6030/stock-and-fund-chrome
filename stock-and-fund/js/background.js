@@ -445,5 +445,5 @@ async function saveDayIncomehistory(totalDayIncome) {
         dayIncomeHistory.push(dayIncome);
     }
     console.log('dayIncomeHistory==', dayIncomeHistory);
-    saveData("DAY_INCOME_HISTORY", dayIncomeHistory);
+    saveData('DAY_INCOME_HISTORY', dayIncomeHistory);
 }

@@ -784,6 +784,8 @@ document.addEventListener(
         document.getElementById('nanxiang-money-button').addEventListener('click', showNanXiang);
         // 数据中心页面，点击行业板块
         document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
+        // 数据中心页面，点击每日盈利
+        document.getElementById('day-income-history-button').addEventListener('click', showDayIncomeHistory);
 
         // 反馈建议页面，点击保存
         document.getElementById('save-advice-button').addEventListener('click', saveAdvice);
@@ -5094,4 +5096,28 @@ function bindClickGroup() {
             reloadDataAndHtml();
         });
     });
+}
+
+async function showDayIncomeHistory() {
+    $("#day-income-history-modal").modal();
+    $("#data-center-modal").modal('hide');
+    let dayIncomeHistory = await readCacheData('DAY_INCOME_HISTORY');
+    console.log('dayIncomeHistory===', dayIncomeHistory);
+    // 每日盈利标题
+    var dayIncomeHistoryHead = " <tr >" +
+        " <th >日期</th>" +
+        " <th >盈利</th>" +
+        // " <th >涨跌幅</th>" +
+        " </tr>";
+    $("#day-income-history-head").html(dayIncomeHistoryHead);
+    let str = "";
+    // 遍历 dayIncomeHistory 数组
+    dayIncomeHistory.forEach(item => {
+        // 对于数组中的每个项目，拼接一个表格行
+        str += "<tr>"
+            + "<td>" + item.date + "</td>"
+            + "<td>" + item.dayIncome + "</td>"
+            + "</tr>";
+    });
+    $("#day-income-history-nr").html(str);
 }
