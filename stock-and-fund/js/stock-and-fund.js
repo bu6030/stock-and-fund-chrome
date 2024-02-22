@@ -2461,8 +2461,9 @@ async function dataExport() {
     data.groups = await readCacheData('groups');
     // 遍历json.groups获取所有value
     await Promise.all(Object.keys(groups).map(async (id) => {
-        data[groups[id] + '_stocks'] = jQuery.parseJSON(await readCacheData(groups[id] + '_stocks'));
-        data[groups[id] + '_funds'] = jQuery.parseJSON(await readCacheData(groups[id] + '_funds'));
+        if (id == 'default-group') return;
+        data[id + '_stocks'] = jQuery.parseJSON(await readCacheData(id + '_stocks'));
+        data[id + '_funds'] = jQuery.parseJSON(await readCacheData(id + '_funds'));
     }));
     downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
 }
@@ -2859,25 +2860,28 @@ async function fileInput (e) {
         var contents = e.target.result;
         var json = JSON.parse(contents);
         // 在这里处理您的 JSON 数据
-        // if (currentGroup == 'default-group') {
-            saveCacheData('stocks', JSON.stringify(json.stocks));
-            saveCacheData('funds', JSON.stringify(json.funds));
-            saveCacheData('groups', json.groups);
-            // 遍历json.groups获取所有value
-            Object.keys(groups).forEach(id => {
-                const groupName = groups[id];
-                
-            });
-
-        // } else {
-            // saveCacheData(currentGroup + '_stocks', JSON.stringify(json.stocks));
-            // saveCacheData(currentGroup + '_funds', JSON.stringify(json.funds));
-        // }
+        saveCacheData('stocks', JSON.stringify(json.stocks));
+        saveCacheData('funds', JSON.stringify(json.funds));
+        saveCacheData('groups', json.groups);
+        // 遍历json.groups获取所有value
+        Object.keys(groups).forEach(id => {
+            if (id == 'default-group') return;
+            // console.log('json[id + _stocks]', json[id + '_stocks']);
+            saveCacheData(id + '_stocks', JSON.stringify(json[id + '_stocks']));
+            saveCacheData(id + '_funds', JSON.stringify(json[id + '_funds']));
+        });
         // saveCacheData('stocks', JSON.stringify(json.stocks));
         // saveCacheData('funds', JSON.stringify(json.funds));
         $("#data-import-modal").modal("hide");
-        stockList = json.stocks;
-        fundList = json.funds;
+        if (currentGroup == 'default-group') {
+            stockList = json.stocks;
+            fundList = json.funds;
+        } else if (json.groups.contains(currentGroup)) {
+            stockList = json[currentGroup + '_stocks'];
+            fundList = json[currentGroup + '_funds'];
+        }
+        // stockList = json.stocks;
+        // fundList = json.funds;
         groups = json.groups;
         reloadDataAndHtml();
     };
@@ -3054,17 +3058,31 @@ async function syncDataFromCloud() {
     if (result != null && result != '' && result != undefined) {
         var checkResult = confirm("这些云同步数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
         if (checkResult) {
-            if (currentGroup == 'default-group') {
-                saveCacheData('stocks', JSON.stringify(result.stocks));
-                saveCacheData('funds', JSON.stringify(result.funds));
-            } else {
-                saveCacheData(currentGroup + '_stocks', JSON.stringify(result.stocks));
-                saveCacheData(currentGroup + '_funds', JSON.stringify(result.funds));
+            saveCacheData('stocks', JSON.stringify(result.stocks));
+            saveCacheData('funds', JSON.stringify(result.funds));
+            if (result.groups != null && result.groups != undefined
+                 && result.groups != '') {
+                groups = result.groups;
+                saveCacheData('groups', result.groups);
+                // 遍历json.groups获取所有value
+                Object.keys(groups).forEach(id => {
+                    if (id == 'default-group') return;
+                    // console.log('json[id + _stocks]', json[id + '_stocks']);
+                    saveCacheData(id + '_stocks', JSON.stringify(result[id + '_stocks']));
+                    saveCacheData(id + '_funds', JSON.stringify(result[id + '_funds']));
+                });
             }
+                // saveCacheData(currentGroup + '_stocks', JSON.stringify(result.stocks));
+                // saveCacheData(currentGroup + '_funds', JSON.stringify(result.funds));
             // saveCacheData('stocks', JSON.stringify(result.stocks));
             // saveCacheData('funds', JSON.stringify(result.funds));
-            stockList = result.stocks;
-            fundList = result.funds;
+            if (currentGroup == 'default-group') {
+                stockList = result.stocks;
+                fundList = result.funds;
+            } else if((currentGroup + '_stocks') in result && (currentGroup + '_funds') in result) {
+                stockList = result[currentGroup + '_stocks'];
+                fundList = result[currentGroup + '_funds'];
+            }
             reloadDataAndHtml();
             $("#sync-data-cloud-modal").modal('hide');
         } else {
@@ -3095,29 +3113,38 @@ async function syncDataToCloud() {
     var data = {};
     let syncStocks = [];
     let syncFunds = [];
-    for (k in stockList) {
+    let stockListCache = jQuery.parseJSON(await readCacheData('stocks'));
+    for (k in stockListCache) {
         let syncStock = {
-            "code" : stockList[k].code,
-            "costPrise" : stockList[k].costPrise,
-            "bonds" : stockList[k].bonds,
-            "monitorHighPrice" : stockList[k].monitorHighPrice,
-            "monitorLowPrice" : stockList[k].monitorLowPrice,
-            "monitorUpperPercent" : stockList[k].monitorUpperPercent,
-            "monitorLowerPercent" : stockList[k].monitorLowerPercent,
+            "code" : stockListCache[k].code,
+            "costPrise" : stockListCache[k].costPrise,
+            "bonds" : stockListCache[k].bonds,
+            "monitorHighPrice" : stockListCache[k].monitorHighPrice,
+            "monitorLowPrice" : stockListCache[k].monitorLowPrice,
+            "monitorUpperPercent" : stockListCache[k].monitorUpperPercent,
+            "monitorLowerPercent" : stockListCache[k].monitorLowerPercent,
         }
         syncStocks.push(syncStock);
     }
-    for (k in fundList) {
+    let fundListCache = jQuery.parseJSON(await readCacheData('funds'));
+    for (k in fundListCache) {
         let syncFund = {
-            "fundCode" : fundList[k].fundCode,
-            "costPrise" : fundList[k].costPrise,
-            "bonds" : fundList[k].bonds
+            "fundCode" : fundListCache[k].fundCode,
+            "costPrise" : fundListCache[k].costPrise,
+            "bonds" : fundListCache[k].bonds
         }
         syncFunds.push(syncFund);
     }
     data.stocks = syncStocks;
     data.funds = syncFunds;
     data.updateTime = getBeijingTime();
+    data.groups = groups;
+    // 遍历json.groups获取所有value
+    await Promise.all(Object.keys(groups).map(async (id) => {
+        if (id == 'default-group') return;
+        data[id + '_stocks'] = jQuery.parseJSON(await readCacheData(id + '_stocks'));
+        data[id + '_funds'] = jQuery.parseJSON(await readCacheData(id + '_funds'));
+    }));
     let result = ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     if (result == 'fail') {
