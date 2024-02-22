@@ -119,6 +119,12 @@ function initLargeMarketData() {
             timeImageCode = "sh000852";
             initLargeMarketClick();
         });
+        // 点击北证50指数
+        if(document.getElementById('large-market-899050'))
+        document.getElementById('large-market-899050').addEventListener('click', function () {
+            timeImageCode = "899050";
+            initLargeMarketClick();
+        });
         // 点击科创50指数
         if(document.getElementById('large-market-000688'))
         document.getElementById('large-market-000688').addEventListener('click', function () {
@@ -143,10 +149,22 @@ function initLargeMarketData() {
             timeImageCode = "sh000933";
             initLargeMarketClick();
         });
+        // 点击中证中药
+        if(document.getElementById('large-market-930641'))
+        document.getElementById('large-market-930641').addEventListener('click', function () {
+            timeImageCode = "930641";
+            initLargeMarketClick();
+        });
         // 点击中证央企
         if(document.getElementById('large-market-000926'))
         document.getElementById('large-market-000926').addEventListener('click', function () {
             timeImageCode = "sh000926";
+            initLargeMarketClick();
+        });
+        // 点击中证有色
+        if(document.getElementById('large-market-930708'))
+        document.getElementById('large-market-930708').addEventListener('click', function () {
+            timeImageCode = "930708";
             initLargeMarketClick();
         });
         // 点击中证医疗
@@ -165,6 +183,18 @@ function initLargeMarketData() {
         if(document.getElementById('large-market-000941'))
         document.getElementById('large-market-000941').addEventListener('click', function () {
             timeImageCode = "sh000941";
+            initLargeMarketClick();
+        });
+        // 点击人工智能
+        if(document.getElementById('large-market-931071'))
+        document.getElementById('large-market-931071').addEventListener('click', function () {
+            timeImageCode = "931071";
+            initLargeMarketClick();
+        });
+        // 点击数字经济
+        if(document.getElementById('large-market-931582'))
+        document.getElementById('large-market-931582').addEventListener('click', function () {
+            timeImageCode = "931582";
             initLargeMarketClick();
         });
     }, 300);

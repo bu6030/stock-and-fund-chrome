@@ -4506,6 +4506,8 @@ function getSecid(code) {
             console.error(error);
             secid = '106';
         }
+    } else if(code.startsWith('9')) {
+        secid = '2';
     } else {
         secid = '0';
         if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX'){
@@ -4906,6 +4908,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
             case 'sh000852':
                 name = '中证1000';
                 break;
+            case '899050':
+                name = '北证50';
+                break;
             case 'sh000688':
                 name = '科创50';
                 break;
@@ -4918,8 +4923,14 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
             case 'sh000933':
                 name = '中证医药';
                 break;
+            case '930641':
+                name = '中证中药';
+                break;
             case 'sh000926':
                 name = '中证央企';
+                break;
+            case '930708':
+                name = '中证有色';
                 break;
             case 'sz399989':
                 name = '中证医疗';
@@ -4929,6 +4940,12 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'sh000941':
                 name = '新能源';
+                break;
+            case '931071':
+                name = '人工智能';
+                break;
+            case '931582':
+                name = '数字经济';
                 break;
             default:
                 name = timeImageCode;
