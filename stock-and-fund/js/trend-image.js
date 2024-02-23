@@ -180,6 +180,10 @@ function setStockMinitesImage() {
     let dataVolumnStr = [];
     let dataAxis = [];
     let now;
+    let imageTextSize = 12;
+    if (windowSize == 'MINI') {
+        imageTextSize = 8;
+    }
     if (result.data == null) {
         alertMessage('无法提供该股票/基金的走势图信息');
         return;
@@ -249,6 +253,9 @@ function setStockMinitesImage() {
             data: dataAxis,
             type: 'category',
             axisLabel: {
+                textStyle: {
+                    fontSize: imageTextSize // 调小字体大小使其适应空间
+                },
                 interval: interval, // 调整刻度显示间隔
             },
         },
@@ -260,6 +267,9 @@ function setStockMinitesImage() {
                 min: minPrice,
                 max: maxPrice,
                 axisLabel: {
+                    textStyle: {
+                        fontSize: imageTextSize // 调小字体大小使其适应空间
+                    },
                     formatter: function(value) {
                         return parseFloat(value).toFixed(toFixedVolume);  // 左侧 Y 轴刻度显示价格
                     },
@@ -273,6 +283,9 @@ function setStockMinitesImage() {
                 min: minPrice,
                 max: maxPrice,
                 axisLabel: {
+                    textStyle: {
+                        fontSize: imageTextSize // 调小字体大小使其适应空间
+                    },
                     formatter: function(value) {
                         // 计算涨跌比例，假设初始价格为 prePrice
                         var changePercent = ((value - preClose) / preClose * 100).toFixed(2) + '%';
