@@ -273,7 +273,8 @@ async function initLoad() {
     }
     columnOrderTemp = columnOrder;
     currentGroup  = await readCacheData('current-group');
-    if (currentGroup == null) {
+    if (currentGroup == null || currentGroup == '' || currentGroup == undefined
+        || currentGroup == 'undefined') {
         currentGroup = 'default-group';
     }
     if (currentGroup == 'default-group') {
@@ -304,7 +305,8 @@ async function initLoad() {
         }
     }
     var groupsCache = await readCacheData('groups');
-    if (groupsCache == null) {
+    if (groupsCache == null || groupsCache == '' || groupsCache == undefined
+        || groupsCache == 'undefined') {
         groups = {
             'default-group': '默认分组' // 预设一个默认分组
         };
