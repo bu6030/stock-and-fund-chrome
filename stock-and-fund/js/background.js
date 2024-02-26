@@ -435,7 +435,6 @@ async function saveDayIncomehistory(stockDayIncome, fundDayIncome, date) {
     if (dayIncomeHistory == null || dayIncomeHistory == undefined) {
         dayIncomeHistory = [];
     }
-    dayIncomeHistory = [];
     let existingEntryIndex = dayIncomeHistory.findIndex(entry => entry.date === date);
     if (existingEntryIndex !== -1) {
         // 如果存在，更新该条目的 dayIncome
