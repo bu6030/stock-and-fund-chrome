@@ -1,6 +1,11 @@
 // 初始化首页大盘股数据
 function initLargeMarketData() {
     var codes = largeMarketCode.join(',');
+    // 如果没设置大盘指数，则设置大盘指数DIV为空
+    if (codes == "") {
+        $("#stock-large-market").html('<div class=\"stock-large-market-container\"></div>');
+        return;
+    }
     var bigStocks = ajaxGetFundInvesterPositionDetail(codes);
     var str = "<div class=\"stock-large-market-container\">";
     for(let k in bigStocks) {

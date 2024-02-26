@@ -213,6 +213,7 @@
 192. 分组数据导入/导出/云同步 2024/2/22
 193. 统计每日盈利 2024/2/22
 194. 迷你模式下，分时图字体变小 2024/2/23
+195. 如果没设置大盘指数，则设置大盘指数DIV为空 2024/2/26
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
