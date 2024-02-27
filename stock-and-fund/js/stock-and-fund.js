@@ -4862,7 +4862,7 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
     if (timeImageType == "FUND") {
         for (var k in fundList) {
             if (fundList[k].fundCode == timeImageCode) {
-                name = fundList[k].fundName;
+                name = fundList[k].name;
                 break;
             }
         }
