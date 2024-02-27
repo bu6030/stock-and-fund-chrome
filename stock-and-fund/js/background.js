@@ -353,13 +353,8 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         }
         var stockList = JSON.parse(stockArr);
         var stocks = "sh000001,sz399001,sz399006,hkHSI,";
-        if (monitoTop20Stock != null && monitoTop20Stock == true) {
-            console.log('扩展程序图标鼠标悬停后展示前20个股票价格');
-            for (let k in stockList) {
-                stocks += stockList[k].code + ",";
-            }
-        } else {
-            console.log('扩展程序图标鼠标悬停后展示大盘股');
+        for (let k in stockList) {
+            stocks += stockList[k].code + ",";
         }
         let response = await fetch("http://qt.gtimg.cn/q=" + stocks);
         let data = await response.arrayBuffer();
@@ -383,6 +378,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                 var values = dataStr.split("~");
                 var name = values[1];
+                var code = values[2];
                 if (name == undefined) {
                     continue;
                 }
@@ -406,7 +402,10 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                                 kongge = '  ';
                                 break;
                         }
-                    title += (name + kongge + now + '(' + changePercent + "%)\n");
+                    if (code == '000001' || code =='399001' || code =='399006' || code == 'HSI' 
+                        || (monitoTop20Stock != null && monitoTop20Stock == true)) {
+                        title += (name + kongge + now + '(' + changePercent + "%)\n");
+                    }
                 }
                 if (values[30].substring(0, 8) > date) {
                     // 如果当前日期大于之前存储的最大日期，则更新最大日期
@@ -420,11 +419,10 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         title = title.substring(0, title.length - 1);
         let funcDayIncome = await getFundDayIncome(date);
         let totalDayIncome = funcDayIncome + stockDayIncome;
-        if (monitoTop20Stock != null && monitoTop20Stock == true) {
-            title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
-            title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
-            title += '\n总收益：' + totalDayIncome.toFixed(2);
-        }
+        title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
+        title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
+        title += '\n总收益：' + totalDayIncome.toFixed(2);
+        
         saveDayIncomehistory(stockDayIncome.toFixed(2), funcDayIncome.toFixed(2), date);
         setChromeTitle(title);
     }
