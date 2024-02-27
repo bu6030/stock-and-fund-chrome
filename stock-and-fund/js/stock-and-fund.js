@@ -26,6 +26,7 @@ var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var changeDisplay = 'DISPLAY';
+var largetMarketTotalDisplay;
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
 var lastSort;
@@ -232,6 +233,12 @@ async function initLoad() {
         defaultIcon = true;
     } else if(defaultIcon == "false") {
         defaultIcon = false;
+    }
+    largetMarketTotalDisplay = await readCacheData('larget-market-total-display');
+    if (largetMarketTotalDisplay == null || largetMarketTotalDisplay == "false") {
+        largetMarketTotalDisplay = false;
+    } else if(largetMarketTotalDisplay == "true") {
+        largetMarketTotalDisplay = true;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -765,6 +772,9 @@ document.addEventListener(
         document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
         // 设置页面，点击反馈建议按钮
         document.getElementById('show-advice-button').addEventListener('click', showAdvice);
+        // 设置页面，点击在大盘指数位置展示/不展示持仓盈亏
+        document.getElementById('larget-market-total-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
+        document.getElementById('larget-market-total-dont-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -1680,7 +1690,12 @@ function getTotalTableHtml(totalMarketValueResult) {
         return html;
     }).join("");
     str += "<tr id=\"total-tr-total\">" + totalStrOrder + "</tr>";
-
+    if (largetMarketTotalDisplay) {
+        let str2 = '<p>持仓盈亏</p>' +
+            '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncome + '</p>' +
+            '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncomePercent + '%</p>';
+        $("#larget-market-total").html(str2);
+    }
     // 旧顺序拼接TR行HTML
     // str += "<tr id=\"total-tr-total\">"
     //     + "<td>汇总合计</td>"
@@ -5127,4 +5142,18 @@ async function showDayIncomeHistory() {
             + "</tr>";
     });
     $("#day-income-history-nr").html(str);
+}
+
+// 切换/隐藏持仓盈亏
+async function changeLargeMarketTotalDisplay(event) {
+    let targetId = event.target.id;
+    if (targetId == 'larget-market-total-display-change-button') {
+        largetMarketTotalDisplay = true;
+    } else {
+        largetMarketTotalDisplay = false;
+    }
+    saveCacheData('larget-market-total-display', largetMarketTotalDisplay);
+    $("#setting-modal").modal('hide');
+    reloadDataAndHtml();
+    initLargeMarketData();
 }
