@@ -276,7 +276,10 @@ function monitorStock(code) {
                     if (monitorPriceOrPercent == null || monitorPriceOrPercent == "PRICE") {
                         sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
                     } else {
-                        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent);
+                        if(changePercent < 0) {
+                            changePercent = 0 - changePercent;
+                        }
+                        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent.toFixed(2));
                     }
                 });
             })

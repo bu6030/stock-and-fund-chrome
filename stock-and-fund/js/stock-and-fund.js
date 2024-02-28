@@ -2548,8 +2548,11 @@ async function stockMonitor () {
     if (monitorPriceOrPercent == null || monitorPriceOrPercent == 'PRICE') {
         sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
     } else {
-        let changePercent = stock.changePercent;
-        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent);
+        let changePercent = parseFloat(stock.changePercent);
+        if(changePercent < 0) {
+            changePercent = 0 - changePercent;
+        }
+        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent.toFixed(2));
     }
     saveCacheData("MONITOR_STOCK_CODE", code);
 }
