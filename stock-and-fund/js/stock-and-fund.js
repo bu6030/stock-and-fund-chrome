@@ -612,14 +612,17 @@ document.addEventListener(
             let stockCode = $("#search-stock-select").val();
             for (var k in stockCode) {
                 let existInStockList = false;
+                let index;
                 for (let l in stockList) {
                     if (stockList[l].code == stockCode) {
                         existInStockList = true;
+                        index = l;
                         break;
                     }
                 }
                 if (existInStockList) {
                     alertMessage("您已经添加过" + stockCode);
+                    scrollToTableRow(index, 'STOCK');
                     $("#search-stock-modal").modal("hide");
                     continue;
                 }
@@ -639,14 +642,17 @@ document.addEventListener(
             let fundCode = $("#search-fund-select").val();
             for (var k in fundCode) {
                 let existInFundList = false;
+                let index;
                 for (let l in fundList) {
                     if (fundList[l].fundCode == fundCode) {
+                        index = l;
                         existInFundList = true;
                         break;
                     }
                 }
                 if (existInFundList) {
                     alertMessage("您已经添加过" + fundCode);
+                    scrollToTableRow(index, 'FUND');
                     $("#search-fund-modal").modal("hide");
                     continue;
                 }
@@ -5159,4 +5165,17 @@ async function changeLargeMarketTotalDisplay(event) {
     $("#setting-modal").modal('hide');
     reloadDataAndHtml();
     initLargeMarketData();
+}
+
+// 滚动到指定行
+function scrollToTableRow(rowIndex, type) {
+    // 获取表格元素
+    var table = document.getElementById("sortable-table");
+    // 获取表格所有行
+    var rows = table.getElementsByTagName("tr");
+    if (type == 'FUND' && showStockOrFundOrAll == 'all') {
+        rowIndex = parseInt(rowIndex) + stockList.length + 2;
+    }
+    // 滚动到指定行
+    rows[rowIndex].scrollIntoView();
 }
