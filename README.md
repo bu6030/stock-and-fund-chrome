@@ -217,7 +217,7 @@
 196. 分时图，基金名称显示undefind 2024/2/27 -- version 2.0.0 -- end
 197. 每日盈利数据汇总问题修改 2024/2/28
 198. 角标显示涨跌幅，去掉负号，颜色区分涨跌 2024/2/28
-199. 股票/基金过多，再次添加页面滑动至该股票/基金 2024/2/29
+199. 股票/基金过多，再次添加页面滑动至该股票/基金 2024/2/29 -- version 2.0.1 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
