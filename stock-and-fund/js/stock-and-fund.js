@@ -5128,7 +5128,9 @@ async function showDayIncomeHistory() {
     $("#day-income-history-modal").modal();
     $("#data-center-modal").modal('hide');
     let dayIncomeHistory = await readCacheData('DAY_INCOME_HISTORY');
-    console.log('dayIncomeHistory===', dayIncomeHistory);
+    // console.log('dayIncomeHistory===', dayIncomeHistory);
+    // dayIncomeHistory数组倒序排列
+    dayIncomeHistory = dayIncomeHistory.reverse();
     // 每日盈利标题
     var dayIncomeHistoryHead = " <tr >" +
         " <th >日期</th>" +
