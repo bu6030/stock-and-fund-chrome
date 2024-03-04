@@ -845,6 +845,7 @@ async function initData() {
             result = ajaxGetStockFromGtimg(stocks);
         }
         var stoksArr = result.split("\n");
+        turnOverRate = "";
         for (var k in stoksArr) {
             for (var l in stockList) {
                 if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
@@ -955,9 +956,8 @@ async function initData() {
                         }
                     }
                     stockList[l].costPriceValue = costPriceValue + "";
-                    if (timeImageCode == stockList[l].code) {
-                        turnOverRate = stockList[l].code + '~' + values[38];
-                    }
+                    // 设置换手率
+                    turnOverRate += stockList[l].code + '~' + values[38] + '-';
                 }
             }
         }

@@ -547,8 +547,13 @@ function setTotalVolumnAndTurnOverRate(totalVolumn) {
     if (totalVolumn != 0) {
         totalVolumn = (totalVolumn / 10000).toFixed(2) + " 万";
         contentHtml = "成交量: " + totalVolumn + "";
-        if (turnOverRate != undefined && turnOverRate != '' && turnOverRate.split("~")[0] == timeImageCode) {
-            contentHtml += "<br>换手率: " + turnOverRate.split("~")[1] + "%";
+        if (turnOverRate != undefined && turnOverRate != '') {
+            let turnOverRateArr = turnOverRate.split("-");
+            for (let i = 0; i < turnOverRateArr.length; i++) {
+                if (turnOverRateArr[i].split("~")[0] == timeImageCode) {
+                    contentHtml += "<br>换手率: " + turnOverRateArr[i].split("~")[1] + "%";
+                }
+            }
         }
     }
     $("#time-image-content").html(contentHtml);
