@@ -2,6 +2,7 @@
 let timeImageCode;
 let timeImageType;
 var timerId;
+let turnOverRate = '';
 // 展示分时图
 function showMinuteImage() {
     clearTimeImageTimeout();
@@ -195,10 +196,12 @@ function setStockMinitesImage() {
     }
     let maxPrice = preClose;
     let minPrice = preClose;
+    let totalVolumn = 0;
     for (var k = 0; k < result.data.trends.length; k++) {
         let str = result.data.trends[k];
         let price = parseFloat(str.split(",")[1]);
         let volumn = parseFloat(str.split(",")[2]);
+        totalVolumn = totalVolumn + volumn;
         if (price > maxPrice) {
             maxPrice = price;
         }
@@ -241,6 +244,7 @@ function setStockMinitesImage() {
     }
     maxPrice = maxPrice.toFixed(toFixedVolume);
     minPrice = minPrice.toFixed(toFixedVolume);
+    setTotalVolumnAndTurnOverRate(totalVolumn);
     option = {
         // resize: true,
         lineStyle: {
@@ -383,6 +387,7 @@ function setStockMinitesImage() {
 }
 // 展示日线/周线/月线图
 function setStockImage(type) {
+    setTotalVolumnAndTurnOverRate(0);
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
     var myChart = echarts.init(document.getElementById(elementId));
@@ -535,4 +540,16 @@ function setEchartsSize(myChart) {
         myChart.getDom().style.width = '380px';
         myChart.getDom().style.height = '280px';
     }
+}
+// 设置成交量
+function setTotalVolumnAndTurnOverRate(totalVolumn) {
+    let contentHtml = "";
+    if (totalVolumn != 0) {
+        totalVolumn = (totalVolumn / 10000).toFixed(2) + " 万";
+        contentHtml = "成交量: " + totalVolumn + "";
+        if (turnOverRate != undefined && turnOverRate != '' && turnOverRate.split("~")[0] == timeImageCode) {
+            contentHtml += "<br>换手率: " + turnOverRate.split("~")[1] + "%";
+        }
+    }
+    $("#time-image-content").html(contentHtml);
 }

@@ -955,6 +955,9 @@ async function initData() {
                         }
                     }
                     stockList[l].costPriceValue = costPriceValue + "";
+                    if (timeImageCode == stockList[l].code) {
+                        turnOverRate = stockList[l].code + '~' + values[38];
+                    }
                 }
             }
         }
