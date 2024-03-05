@@ -5145,10 +5145,10 @@ async function showDayIncomeHistory() {
     let str = "";
     // 遍历 dayIncomeHistory 数组
     if (dayIncomeHistory != null && dayIncomeHistory != '' && dayIncomeHistory != undefined)
-    dayIncomeHistory.forEach(item => {
+    dayIncomeHistory.forEach((item, index) => {
         let dayIncome = parseFloat(item.fundDayIncome) + parseFloat(item.stockDayIncome);
         // 对于数组中的每个项目，拼接一个表格行
-        str += "<tr>"
+        str += "<tr id='day-income-history-tr-" + index + "'>"
             + "<td>" + item.date + "</td>"
             + "<td>" + item.fundDayIncome + "</td>"
             + "<td>" + item.stockDayIncome + "</td>"
@@ -5156,6 +5156,25 @@ async function showDayIncomeHistory() {
             + "</tr>";
     });
     $("#day-income-history-nr").html(str);
+    dayIncomeHistory.forEach((item, index) => {
+        let dayIncomeHistoryTr = document.getElementById('day-income-history-tr-' + index);
+        dayIncomeHistoryTr.addEventListener('click', async function () {
+            var result = confirm('是否删除了日期：' + item.date);
+            if (result) {
+                console.log('您删除了第' + (index + 1) + '行，日期：' + item.date);
+                let dayIncomeHistory = await readCacheData('DAY_INCOME_HISTORY');
+                for (var k in dayIncomeHistory) {
+                    if (dayIncomeHistory[k].date == item.date) {
+                        // delete funds[k];
+                        dayIncomeHistory.splice(k, 1)
+                        break;
+                    }
+                }
+                saveCacheData('DAY_INCOME_HISTORY', dayIncomeHistory);
+                showDayIncomeHistory();
+            }
+        });
+    });
 }
 
 // 切换/隐藏持仓盈亏
