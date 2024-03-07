@@ -2086,11 +2086,97 @@ async function saveFund() {
                 fundList[k].addTimePrice = checkFundExsitReuslt.now;
                 fundList[k].addTime = getCurrentDate();
             }
-            if (currentGroup == 'default-group') {
-                saveCacheData('funds', JSON.stringify(fundList));
+            // 如果新设置的group是currentGroup则默认保存
+            if (belongGroup == currentGroup) {
+                if (currentGroup == 'default-group') {
+                    saveCacheData('funds', JSON.stringify(fundList));
+                } else {
+                    saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+                }
+            // 如果新设置的group不是currentGroup需要特殊处理
             } else {
-                saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+                // 如果当前分组是默认分组，则需要先保存到新的其他分组中，再从默认分组删除
+                if (currentGroup == 'default-group') {
+                    // 保存到新的group中
+                    var funds = await readCacheData(belongGroup + '_funds');
+                    if (funds == null) {
+                        funds = [];
+                    } else {
+                        funds = jQuery.parseJSON(funds);
+                    }
+                    for (var l in funds) {
+                        if (funds[l].fundCode == fundList[k].fundCode) {
+                            alertMessage("新的分组中包含该基金");
+                            return;
+                        }
+                    }
+                    funds.push(fundList[k]);
+                    saveCacheData(belongGroup + '_funds', JSON.stringify(funds));
+                    // 从默认分组删除
+                    for (var l in fundList) {
+                        if (fundList[l].fundCode == fundList[k].fundCode) {
+                            fundList.splice(l, 1)
+                            break;
+                        }
+                    }
+                    saveCacheData('funds', JSON.stringify(fundList));
+                // 如果当前分组不是默认分组，并且新分组是默认分组，则需要先保存到默认分组，再从其他分组删除
+                } else if(belongGroup == 'default-group') {
+                    // 保存到默认分组
+                    var funds = await readCacheData('funds');
+                    if (funds == null) {
+                        funds = [];
+                    } else {
+                        funds = jQuery.parseJSON(funds);
+                    }
+                    for (var l in funds) {
+                        if (funds[l].fundCode == fundList[k].fundCode) {
+                            alertMessage("新的分组中包含该基金");
+                            return;
+                        }
+                    }
+                    funds.push(fundList[k]);
+                    saveCacheData('funds', JSON.stringify(funds));
+                    // 从其他分组删除
+                    for (var l in fundList) {
+                        if (fundList[l].fundCode == fundList[k].fundCode) {
+                            fundList.splice(l, 1)
+                            break;
+                        }
+                    }
+                    saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+                // 如果当前分组不是默认分组，并且新分组也不是默认分组，则需要先保存到新的其他分组，再从旧的其他分组删除
+                } else {
+                    // 保存到新的其他分组
+                    var funds = await readCacheData(belongGroup + '_funds');
+                    if (funds == null) {
+                        funds = [];
+                    } else {
+                        funds = jQuery.parseJSON(funds);
+                    }
+                    for (var l in funds) {
+                        if (funds[l].fundCode == fundList[k].fundCode) {
+                            alertMessage("新的分组中包含该基金");
+                            return;
+                        }
+                    }
+                    funds.push(fundList[k]);
+                    saveCacheData(belongGroup + '_funds', JSON.stringify(funds));
+                    // 从旧的其他分组删除
+                    for (var l in fundList) {
+                        if (fundList[l].fundCode == fundList[k].fundCode) {
+                            fundList.splice(l, 1)
+                            break;
+                        }
+                    }
+                    saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+                }
             }
+            // if (currentGroup == 'default-group') {
+            //     saveCacheData('funds', JSON.stringify(fundList));
+            // } else {
+            //     saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+            // }
             // fundList = funds;
             $("#fund-modal").modal("hide");
             $("#search-fund-modal").modal("hide");
