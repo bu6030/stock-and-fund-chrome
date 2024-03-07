@@ -1894,10 +1894,91 @@ async function saveStock() {
                 stockList[k].addTimePrice = checkStockExsitResult.now;
                 stockList[k].addTime = getCurrentDate();
             }
-            if (currentGroup == 'default-group') {
-                saveCacheData('stocks', JSON.stringify(stockList));
+            // 如果新设置的group是currentGroup则默认保存
+            if (belongGroup == currentGroup) {
+                if (currentGroup == 'default-group') {
+                    saveCacheData('stocks', JSON.stringify(stockList));
+                } else {
+                    saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+                }
+            // 如果新设置的group不是currentGroup需要特殊处理
             } else {
-                saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+                // 如果当前分组是默认分组，则需要先保存到新的其他分组中，再从默认分组删除
+                if (currentGroup == 'default-group') {
+                    // 保存到新的group中
+                    var stocks = await readCacheData(belongGroup + '_stocks');
+                    if (stocks == null) {
+                        stocks = [];
+                    } else {
+                        stocks = jQuery.parseJSON(stocks);
+                    }
+                    for (var l in stocks) {
+                        if (stocks[l].code == stockList[k].code) {
+                            alertMessage("新的分组中包含该股票");
+                            return;
+                        }
+                    }
+                    stocks.push(stockList[k]);
+                    saveCacheData(belongGroup + '_stocks', JSON.stringify(stocks));
+                    // 从默认分组删除
+                    for (var l in stockList) {
+                        if (stockList[l].code == stockList[k].code) {
+                            stockList.splice(l, 1)
+                            break;
+                        }
+                    }
+                    saveCacheData('stocks', JSON.stringify(stockList));
+                // 如果当前分组不是默认分组，并且新分组是默认分组，则需要先保存到默认分组，再从其他分组删除
+                } else if(belongGroup == 'default-group') {
+                    // 保存到默认分组
+                    var stocks = await readCacheData('stocks');
+                    if (stocks == null) {
+                        stocks = [];
+                    } else {
+                        stocks = jQuery.parseJSON(stocks);
+                    }
+                    for (var l in stocks) {
+                        if (stocks[l].code == stockList[k].code) {
+                            alertMessage("新的分组中包含该股票");
+                            return;
+                        }
+                    }
+                    stocks.push(stockList[k]);
+                    saveCacheData('stocks', JSON.stringify(stocks));
+                    // 从其他分组删除
+                    for (var l in stockList) {
+                        if (stockList[l].code == stockList[k].code) {
+                            stockList.splice(l, 1)
+                            break;
+                        }
+                    }
+                    saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+                // 如果当前分组不是默认分组，并且新分组也不是默认分组，则需要先保存到新的其他分组，再从旧的其他分组删除
+                } else {
+                    // 保存到新的其他分组
+                    var stocks = await readCacheData(belongGroup + '_stocks');
+                    if (stocks == null) {
+                        stocks = [];
+                    } else {
+                        stocks = jQuery.parseJSON(stocks);
+                    }
+                    for (var l in stocks) {
+                        if (stocks[l].code == stockList[k].code) {
+                            alertMessage("新的分组中包含该股票");
+                            return;
+                        }
+                    }
+                    stocks.push(stockList[k]);
+                    saveCacheData(belongGroup + '_stocks', JSON.stringify(stocks));
+                    // 从旧的其他分组删除
+                    for (var l in stockList) {
+                        if (stockList[l].code == stockList[k].code) {
+                            stockList.splice(l, 1)
+                            break;
+                        }
+                    }
+                    saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+                }
             }
             // saveCacheData('stocks', JSON.stringify(stockList));
             // stockList = stocks;
