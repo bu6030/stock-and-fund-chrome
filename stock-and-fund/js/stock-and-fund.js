@@ -2890,6 +2890,14 @@ async function fileInput (e) {
     reader.onload = function (e) {
         var contents = e.target.result;
         var json = JSON.parse(contents);
+        if (json.stocks == null || json.stocks == '' 
+            || json.stocks == undefined || json.stocks == 'undefined'){
+            json.stocks = [];
+        }
+        if (json.funds == null || json.funds == '' 
+            || json.funds == undefined || json.funds == 'undefined'){
+            json.funds = [];
+        }
         // 在这里处理您的 JSON 数据
         saveCacheData('stocks', JSON.stringify(json.stocks));
         saveCacheData('funds', JSON.stringify(json.funds));
@@ -2897,7 +2905,14 @@ async function fileInput (e) {
         // 遍历json.groups获取所有value
         Object.keys(groups).forEach(id => {
             if (id == 'default-group') return;
-            // console.log('json[id + _stocks]', json[id + '_stocks']);
+            if (json[id + '_stocks'] == null || json[id + '_stocks'] == '' 
+                || json[id + '_stocks'] == undefined || json[id + '_stocks'] == 'undefined'){
+                json[id + '_stocks'] = [];
+            }
+            if (json[id + '_funds'] == null || json[id + '_funds'] == '' 
+                || json[id + '_funds'] == undefined || json[id + '_funds'] == 'undefined'){
+                json[id + '_funds'] = [];
+            }
             saveCacheData(id + '_stocks', JSON.stringify(json[id + '_stocks']));
             saveCacheData(id + '_funds', JSON.stringify(json[id + '_funds']));
         });
