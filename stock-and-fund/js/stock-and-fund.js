@@ -572,11 +572,27 @@ document.addEventListener(
         // 走势图页面，点击股票基金按钮
         document.getElementById('stock-fund-delete-button').addEventListener('click', deleteStockAndFund);
         // 走势图页面，点击编辑按钮
-        document.getElementById('update-stock-fund-button').addEventListener('click', function () {
+        document.getElementById('update-stock-fund-button').addEventListener('click', async function () {
             $("#time-image-modal").modal("hide");
             if (timeImageType == "FUND") {
+                // 初始化页面的belong-group
+                $("#fund-belong-group-select").find("option").remove();
+                Object.keys(groups).forEach(id => {
+                    const groupName = groups[id];
+                    var option = $("<option></option>").val(id).text(groupName);
+                    $("#fund-belong-group-select").append(option);
+                });
+                $("#fund-belong-group-select").val(currentGroup);
                 $("#fund-modal").modal();
             } else {
+                // 初始化页面的belong-group
+                $("#stcok-belong-group-select").find("option").remove();
+                Object.keys(groups).forEach(id => {
+                    const groupName = groups[id];
+                    var option = $("<option></option>").val(id).text(groupName);
+                    $("#stcok-belong-group-select").append(option);
+                });
+                $("#stcok-belong-group-select").val(currentGroup);
                 $("#stock-modal").modal();
             }
         });
@@ -1823,6 +1839,7 @@ async function searchFundByName(name) {
 
 // 保存股票
 async function saveStock() {
+    var belongGroup = $("#stock-belong-group-select").val();
     var costPrise = $("#stock-costPrise").val();
     var bonds = $("#stock-bonds").val();
     var monitorHighPrice = $("#stock-monitor-high-price").val();
