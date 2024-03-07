@@ -586,13 +586,13 @@ document.addEventListener(
                 $("#fund-modal").modal();
             } else {
                 // 初始化页面的belong-group
-                $("#stcok-belong-group-select").find("option").remove();
+                $("#stock-belong-group-select").find("option").remove();
                 Object.keys(groups).forEach(id => {
                     const groupName = groups[id];
                     var option = $("<option></option>").val(id).text(groupName);
-                    $("#stcok-belong-group-select").append(option);
+                    $("#stock-belong-group-select").append(option);
                 });
-                $("#stcok-belong-group-select").val(currentGroup);
+                $("#stock-belong-group-select").val(currentGroup);
                 $("#stock-modal").modal();
             }
         });
