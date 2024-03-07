@@ -2012,6 +2012,7 @@ async function saveStock() {
 
 // 保存基金
 async function saveFund() {
+    var belongGroup = $("#fund-belong-group-select").val();
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     if (isCycleInvest) {
