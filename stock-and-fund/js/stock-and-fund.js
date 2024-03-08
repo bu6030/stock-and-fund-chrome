@@ -3753,6 +3753,10 @@ function changeBlackButton() {
     document.getElementById('refresh-button').classList.remove(btnLightCss);
     document.getElementById('refresh-button').classList.add(blackCss);
 
+    document.getElementById('show-group-button').classList.remove(btnInfoCss);
+    document.getElementById('show-group-button').classList.remove(btnLightCss);
+    document.getElementById('show-group-button').classList.add(blackCss);
+
     document.getElementById('remove-badgetext-button').classList.remove(btnInfoCss);
     document.getElementById('remove-badgetext-button').classList.remove(btnLightCss);
     document.getElementById('remove-badgetext-button').classList.add(blackCss);
