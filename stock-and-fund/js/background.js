@@ -293,14 +293,15 @@ function monitorStock(code) {
 }
 // 是否交易时间
 function isTradingTime(date) {
-    return (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
-    || (date.toLocaleTimeString() >= "09:15:00 AM" && date.toLocaleTimeString() <= "11:31:00 AM")
-    || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "16:01:00")
-    || (date.toLocaleTimeString() >= "1:00:00 PM" && date.toLocaleTimeString() <= "4:01:00 PM")
-    || (date.toLocaleTimeString() >= "21:30:00" && date.toLocaleTimeString() <= "23:59:59")
-    || (date.toLocaleTimeString() >= "9:30:00 PM" && date.toLocaleTimeString() <= "11:59:59 PM")
-    || (date.toLocaleTimeString() >= "00:00:00" && date.toLocaleTimeString() <= "04:01:00")
-    || (date.toLocaleTimeString() >= "0:00:00 AM" && date.toLocaleTimeString() <= "4:01:00 AM");
+    // return (date.toLocaleTimeString() >= "09:15:00" && date.toLocaleTimeString() <= "11:31:00")
+    // || (date.toLocaleTimeString() >= "09:15:00 AM" && date.toLocaleTimeString() <= "11:31:00 AM")
+    // || (date.toLocaleTimeString() >= "13:00:00" && date.toLocaleTimeString() <= "16:01:00")
+    // || (date.toLocaleTimeString() >= "1:00:00 PM" && date.toLocaleTimeString() <= "4:01:00 PM")
+    // || (date.toLocaleTimeString() >= "21:30:00" && date.toLocaleTimeString() <= "23:59:59")
+    // || (date.toLocaleTimeString() >= "9:30:00 PM" && date.toLocaleTimeString() <= "11:59:59 PM")
+    // || (date.toLocaleTimeString() >= "00:00:00" && date.toLocaleTimeString() <= "04:01:00")
+    // || (date.toLocaleTimeString() >= "0:00:00 AM" && date.toLocaleTimeString() <= "4:01:00 AM");
+    return true;
 }
 // 发送 chrome 通知
 async function showNotification(title, body) {

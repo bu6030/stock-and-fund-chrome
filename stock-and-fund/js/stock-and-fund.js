@@ -26,6 +26,7 @@ var incomeDisplay = 'DISPLAY';
 var allDisplay = 'DISPLAY';
 var codeDisplay = 'HIDDEN';
 var changeDisplay = 'DISPLAY';
+var updateTimeDisplay = 'DISPLAY';
 var largetMarketTotalDisplay;
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
@@ -53,6 +54,7 @@ var stockColumnNames = {
     "cost-price-value-th": "成本",
     "income-percent-th": "收益率",
     "income-th": "收益",
+    "update-time-th": "更新时间",
     "addtime-price-th": "自选价格"
 };
 var fundColumnNames = {
@@ -68,6 +70,7 @@ var fundColumnNames = {
     "cost-price-value-th": "成本",
     "income-percent-th": "收益率",
     "income-th": "收益",
+    "update-time-th": "更新时间",
     "addtime-price-th": "自选价格"
 };
 const defaultIconPath = {
@@ -212,6 +215,12 @@ async function initLoad() {
     } else {
         changeDisplay = 'DISPLAY';
     }
+    updateTimeDisplay = await readCacheData('update-time-display');
+    if (updateTimeDisplay == null || updateTimeDisplay == 'DISPLAY') {
+        updateTimeDisplay = 'DISPLAY';
+    } else {
+        updateTimeDisplay = 'HIDDEN';
+    }
     monitorPriceOrPercent = await readCacheData('monitor-price-or-percent');
     if (monitorPriceOrPercent == null) {
         monitorPriceOrPercent = 'PRICE';
@@ -275,6 +284,7 @@ async function initLoad() {
             {"cost-price-value-th": 0},
             {"income-percent-th": 0},
             {"income-th": 0},
+            {"update-time-th": 0},
             {"addtime-price-th": 0},
         ];
     }
@@ -868,6 +878,7 @@ async function initData() {
                     var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                     var values = dataStr.split("~");
                     stockList[l].name = values[1] + "";
+                    stockList[l].gztime = changeTimeFormate(values[30]) + "";
                     // 可转债上市前加格默认为 0
                     if (parseFloat(values[3]) == 0 && (values[1].indexOf("发债") != -1 || values[1].indexOf("转债") != -1)) {
                         stockList[l].now = "100.00";
@@ -994,6 +1005,7 @@ async function initFund() {
                         let fund = checkFundExsitFromEastMoney(fundCode);
                         fundList[k].dwjz = fund.dwjz;
                         fundList[k].gsz = fund.dwjz;
+                        fundList[k].gztime = fund.gztime;
                         if (fund.gszzl == "--" || fund.gszzl == '' || fund.gszzl == undefined || fund.gszzl == null) {
                             fundList[k].gszzl = "0";
                         } else if(cheatMeFlag && parseFloat(fund.gszzl) < 0) {
@@ -1031,6 +1043,7 @@ async function initFund() {
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");
                         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                         fundList[k].costPriceValue = costPriceValue + "";
+                        break;
                     }
                 }
             } else {
@@ -1072,6 +1085,7 @@ async function initFund() {
                             let fund = checkFundExsitFromEastMoney(fundCode);
                             fundList[k].dwjz = fund.dwjz;
                             fundList[k].gsz = fund.dwjz;
+                            fundList[k].gztime = fund.gztime;
                             if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
                                 var gszzl = 0 - parseFloat(fund.gszzl);
                                 fundList[k].gszzl = gszzl + "";
@@ -1432,6 +1446,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "");
                 } else if(columnName == 'addtime-price-th') {
                     html = (addtimePriceDisplay == 'DISPLAY' ? "<td >" + addTimePrice + "</td>" : "");
+                } else if(columnName == 'update-time-th'){
+                    html = (updateTimeDisplay == 'DISPLAY' ? "<td >" + result[k].gztime + "</td>" : "");
                 }
                 return html;
             }).join("");
@@ -1500,6 +1516,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome + "</td>" : "");
         } else if(columnName == 'addtime-price-th') {
             html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'update-time-th'){
+            html = (updateTimeDisplay == 'DISPLAY' ? "<td ></td>" : "");
         }
         return html;
     }).join("");
@@ -1574,6 +1592,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "");
                 } else if(columnName == 'addtime-price-th') {
                     html = (addtimePriceDisplay == 'DISPLAY' ? "<td>" + addTimePrice + "</td>" : "");
+                } else if(columnName == 'update-time-th'){
+                    html = (updateTimeDisplay == 'DISPLAY' ? "<td >" + result[k].gztime + "</td>" : "");
                 }
                 return html;
             }).join("");
@@ -1642,6 +1662,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>" : "");
         } else if(columnName == 'addtime-price-th') {
             html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'update-time-th'){
+            html = (updateTimeDisplay == 'DISPLAY' ? "<td ></td>" : "");
         }
         return html;
     }).join("");
@@ -1711,6 +1733,8 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" : "" );
         } else if(columnName == 'addtime-price-th') {
             html = (addtimePriceDisplay == 'DISPLAY' ? "<td></td>" : "" );
+        } else if(columnName == 'update-time-th'){
+            html = (updateTimeDisplay == 'DISPLAY' ? "<td ></td>" : "");
         }
         return html;
     }).join("");
@@ -3010,6 +3034,9 @@ async function setDisplayTr(event) {
     } else if(type == 'change-display-checkbox') {
         changeDisplay = dispaly;
         saveCacheData('change-display', dispaly);
+    } else if(type == 'update-time-display-checkbox') {
+        updateTimeDisplay = dispaly;
+        saveCacheData('update-time-display', dispaly);
     } else if(type == 'all-display-checkbox') {
         $("#setting-modal").modal("hide");
         marketValueDisplay = dispaly;
@@ -3023,6 +3050,7 @@ async function setDisplayTr(event) {
         incomeDisplay = dispaly;
         codeDisplay = dispaly;
         changeDisplay = dispaly;
+        updateTimeDisplay = dispaly;
         allDisplay = dispaly;
         saveCacheData('all-display', dispaly);
         saveCacheData('code-display', dispaly);
@@ -3036,6 +3064,7 @@ async function setDisplayTr(event) {
         saveCacheData('bonds-display', dispaly);
         saveCacheData('income-display', dispaly);
         saveCacheData('change-display', dispaly);
+        saveCacheData('update-time-display', dispaly);
         if(dispaly == 'DISPLAY') {
             $("#all-display-checkbox").prop("checked", true);
             $("#code-display-checkbox").prop("checked", true);
@@ -3049,6 +3078,7 @@ async function setDisplayTr(event) {
             $("#bonds-display-checkbox").prop("checked", true);
             $("#income-display-checkbox").prop("checked", true);
             $("#change-display-checkbox").prop("checked", true);
+            $("#update-time-display-checkbox").prop("checked", true);
         } else {
             $("#all-display-checkbox").prop("checked", false);
             $("#code-display-checkbox").prop("checked", false);
@@ -3062,6 +3092,7 @@ async function setDisplayTr(event) {
             $("#bonds-display-checkbox").prop("checked", false);
             $("#income-display-checkbox").prop("checked", false);
             $("#change-display-checkbox").prop("checked", false);
+            $("#update-time-display-checkbox").prop("checked", false);
         }
     }
     initHtml();
@@ -3213,7 +3244,7 @@ async function showDonate(event) {
         path = Env.WECHAT_PAY_QR_CODE;
     }
     $("#donate-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
-    $("#setting-modal").modal('hide');
+    // $("#setting-modal").modal('hide');
     $("#donate-modal").modal();
 }
 
@@ -4784,6 +4815,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'addtime-price-th' && addtimePriceDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'update-time-th' && updateTimeDisplay != 'DISPLAY') {
+        html = "";
     } else {
         html = type == 'STOCK' ? 
             " <th id=\"stock-" + columnId + "\" class=\"order\">" + stockColumnNames[columnId] || columnId + "</th> " :
@@ -4955,6 +4988,13 @@ function addDragAndDropListeners() {
         changeDisplay = 'DISPLAY';
         $("#change-display-checkbox").prop("checked", true);
     }
+    if (updateTimeDisplay == null || updateTimeDisplay == 'HIDDEN') {
+        updateTimeDisplay = 'HIDDEN';
+        $("#update-time-display-checkbox").prop("checked", false);
+    } else {
+        updateTimeDisplay = 'DISPLAY';
+        $("#update-time-display-checkbox").prop("checked", true);
+    }
     // 设置页面，隐藏/展示页面展示项，编码
     document.getElementById("code-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，市值/金额
@@ -4977,6 +5017,8 @@ function addDragAndDropListeners() {
     document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，涨跌
     document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，更新时间
+    document.getElementById("update-time-display-checkbox").addEventListener('change', setDisplayTr);
 }
 
 // 拖拽完成后切换列表的顺序
@@ -5402,4 +5444,11 @@ function scrollToTableRow(rowIndex, type) {
     }
     // 滚动到指定行
     rows[rowIndex].scrollIntoView();
+}
+
+function changeTimeFormate(dateTime){
+    // dateTime格式为20240508100525，格式化为2024-05-08 10:05:25
+    return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 
+        + "-" + dateTime.substring(6,8) + " " + dateTime.substring(8,10) 
+        + ":" + dateTime.substring(10,12) + ":" + dateTime.substring(12,14);
 }
