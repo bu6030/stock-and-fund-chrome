@@ -2667,7 +2667,7 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
                         show: false,  // 设置为 false，使标签上的文字不显示
                     },
                     lineStyle: {
-                        color: 'darkblue',
+                        color: 'gray',
                         width: 2,
                         type: 'dotted'
                     },
