@@ -224,6 +224,7 @@
 203. 文件导入数据问题修改 2024/3/7
 204. 分组可以在编辑页面修改 2024/3/7
 205. 主页增加更新时间 2024/3/8 -- version 2.0.2 -- end
+206. 价格监控涨跌幅，涨跌至指定价格页面提示精简 2024/3/11
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

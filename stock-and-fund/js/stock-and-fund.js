@@ -1368,13 +1368,13 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             let alertStyle = "";
             if ((nowTimestamp - monitorAlertDate) <= Env.TIME_CACHED_ONE_DAY) {
                 if (result[k].monitorAlert == '1') {
-                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破最高价格" + result[k].monitorHighPrice + "提醒)</span>";
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破" + result[k].monitorHighPrice + ")</span>";
                 } else if(result[k].monitorAlert == '2') {
-                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破最低价格" + result[k].monitorLowPrice + "提醒)</span>";
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破" + result[k].monitorLowPrice + ")</span>";
                 } else if(result[k].monitorAlert == '3') {
-                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(日涨幅" + result[k].monitorUpperPercent + "%提醒)</span>";
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(日涨幅" + result[k].monitorUpperPercent + "%)</span>";
                 } else if(result[k].monitorAlert == '4') {
-                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(日跌幅" + result[k].monitorLowerPercent + "%提醒)</span>";
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(日跌幅" + result[k].monitorLowerPercent + "%)</span>";
                 }
             }
             let stockName = result[k].name;
