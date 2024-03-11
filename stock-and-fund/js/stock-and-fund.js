@@ -2509,23 +2509,45 @@ function setStockMinitesImageMini(){
         if (result.data == null){
             continue;
         }
+        let preClose = parseFloat(result.data.preClose);
+        let maxPrice = preClose;
+        let minPrice = preClose;
         for (var k = 0; k < result.data.trends.length; k++) {
             let str = result.data.trends[k];
-            dataStr.push(parseFloat(str.split(",")[1]));
+            let price = parseFloat(str.split(",")[1]);
+            dataStr.push(price);
             if (k == result.data.trends.length - 1) {
                 now = dataStr[k];
+            }
+            if (price > maxPrice) {
+                maxPrice = price;
+            }
+            if (price < minPrice) {
+                minPrice = price;
             }
         }
         if(dataStr.length == 0){
             continue;
         }
         let color;
-        if (parseFloat(now) >= parseFloat(result.data.preClose)) {
+        if (parseFloat(now) >= preClose) {
             color = redColor;
         } else {
             color = blueColor;
         }
-        setDetailChart(elementId, dataStr, color);
+        if (preClose >= maxPrice) {
+            maxPrice = parseFloat(maxPrice) * 1.01;
+        }
+        if (preClose <= minPrice) {
+            minPrice = parseFloat(minPrice) * 0.99;
+        }
+        let toFixedVolume = 2;
+        if (preClose <= 5) {
+            toFixedVolume = 3;
+        }
+        maxPrice = maxPrice.toFixed(toFixedVolume);
+        minPrice = minPrice.toFixed(toFixedVolume);
+        setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume);
     }
 }
 
@@ -2539,25 +2561,47 @@ function setFundMinitesImageMini(){
         if (result.data == null){
             continue;
         }
+        let preClose = parseFloat(result.data.preClose);
+        let maxPrice = preClose;
+        let minPrice = preClose;
         for (var k = 0; k < result.data.trends.length; k++) {
             let str = result.data.trends[k];
-            dataStr.push(parseFloat(str.split(",")[1]));
+            let price = parseFloat(str.split(",")[1]);
+            dataStr.push(price);
             if (k == result.data.trends.length - 1) {
                 now = dataStr[k];
             }
+            if (price > maxPrice) {
+                maxPrice = price;
+            }
+            if (price < minPrice) {
+                minPrice = price;
+            }
         }
         let color;
-        if (parseFloat(now) >= parseFloat(result.data.preClose)) {
+        if (parseFloat(now) >= preClose) {
             color = redColor;
         } else {
             color = blueColor;
         }
-        setDetailChart(elementId, dataStr, color, result.data.preClose);
+        if (preClose >= maxPrice) {
+            maxPrice = parseFloat(maxPrice) * 1.01;
+        }
+        if (preClose <= minPrice) {
+            minPrice = parseFloat(minPrice) * 0.99;
+        }
+        let toFixedVolume = 2;
+        if (preClose <= 5) {
+            toFixedVolume = 3;
+        }
+        maxPrice = maxPrice.toFixed(toFixedVolume);
+        minPrice = minPrice.toFixed(toFixedVolume);
+        setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume);
     }
 }
 
 // 展示首页迷你分时图
-function setDetailChart(elementId, dataStr, color, preClose) {
+function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume) {
     // 如果分时数据长度小于240填充空值
     if (dataStr.length < 241) {
         const diffLength = 241 - dataStr.length;
@@ -2589,6 +2633,8 @@ function setDetailChart(elementId, dataStr, color, preClose) {
         yAxis: {
             scale: true,
             type: 'value',
+            min: minPrice,
+            max: maxPrice,
             axisLabel: {
                 show: false // 隐藏x轴坐标标签
             },
@@ -2615,6 +2661,22 @@ function setDetailChart(elementId, dataStr, color, preClose) {
                 data: dataStr,
                 type: 'line',
                 smooth: true,
+                markLine: {
+                    symbol: 'none',
+                    label: {
+                        show: false,  // 设置为 false，使标签上的文字不显示
+                    },
+                    lineStyle: {
+                        color: 'darkblue',
+                        width: 2,
+                        type: 'dotted'
+                    },
+                    data: [
+                        {
+                            yAxis: parseFloat(preClose).toFixed(toFixedVolume)  // 在 y 轴上的 150 处添加一条横线
+                        }
+                    ]
+                },
             }
         ]
     };
