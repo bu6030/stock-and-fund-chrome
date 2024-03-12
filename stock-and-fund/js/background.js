@@ -455,7 +455,12 @@ async function saveDayIncomehistory(stockDayIncome, fundDayIncome, date) {
 }
 // 统计基金当日盈利
 async function getFundDayIncome(date) {
-    let fundList = JSON.parse(await getData('funds'));
+    let fundList = await getData('funds');
+    if (fundList == null || fundList == '' || fundList == undefined || fundList == 'undefined') {
+        fundList = [];
+    } else {
+        fundList = JSON.parse(fundList);
+    }
     let fundDayIncome = parseFloat("0");
     let promises = fundList.map(async (fund) => {
         try {
