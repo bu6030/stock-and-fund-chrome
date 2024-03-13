@@ -2499,11 +2499,11 @@ function alertMessage(message) {
 
 // 第一次安装后没有数据，展示使用说明
 function initFirstInstall() {
-    // if (stockList.length == 0 && fundList.length == 0) {
-    //     $("#help-document-alert")[0].style.display = 'block';
-    // } else {
-    //     $("#help-document-alert")[0].style.display = 'none';
-    // }
+    if (stockList.length == 0 && fundList.length == 0) {
+        $("#help-document-alert")[0].style.display = 'block';
+    } else {
+        $("#help-document-alert")[0].style.display = 'none';
+    }
 }
 
 // 遍历股票，展示主页迷你分时图
