@@ -22,6 +22,7 @@ let Env = {
     GET_FUND_NET_DIAGRAM: "https://fundmobapi.eastmoney.com/FundMApi/FundNetDiagram.ashx",
     GET_FUND_POSITION_LIST: "https://fundwebapi.eastmoney.com/FundMEApi/FundPositionList",
     GO_TO_EASTMONEY_1_URL: "https://quote.eastmoney.com/basic/h5chart-iframe.html",
+    GET_UP_DOWN_COUNTS_URL: "https://push2ex.eastmoney.com/getTopicZDFenBu",
     GO_TO_EASTMONEY_2_URL: "https://quote.eastmoney.com",
     ADVICE_URL: "http://1.117.221.208:8080/chrome/advice",
     CLOUD_SERVER_DATA_SYNC: "https://dav.jianguoyun.com/dav/stock-and-fund/",

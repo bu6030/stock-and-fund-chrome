@@ -831,6 +831,8 @@ document.addEventListener(
         document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
         // 数据中心页面，点击每日盈利
         document.getElementById('day-income-history-button').addEventListener('click', showDayIncomeHistory);
+        // 数据中心页面，点击涨跌分布
+        document.getElementById('up-down-counts-button').addEventListener('click', showUpDownCounts);
 
         // 反馈建议页面，点击保存
         document.getElementById('save-advice-button').addEventListener('click', saveAdvice);
@@ -5538,4 +5540,90 @@ async function changeGroup(groupId) {
     }
     $("#group-modal").modal('hide');
     reloadDataAndHtml();
+}
+
+// 展示涨跌分布图表
+async function showUpDownCounts() {
+    let result = ajaxGetUpDownCounts();
+    let upDownCountsDate = result.data.qdate;
+    var fenbuValues = [];
+    // 将对象转换为数组并排序
+    var sortedFenbu = result.data.fenbu.map(obj => {
+        var key = Object.keys(obj)[0]; // 获取对象的键
+        var value = obj[key]; // 获取对象的值
+        return { key: parseInt(key), value: value }; // 返回包含键值对的新对象
+    }).sort((a, b) => {
+        return a.key - b.key; // 按键值排序
+    });
+    sortedFenbu.forEach(item => {
+        fenbuValues.push(item.value);
+    });
+    // 输出排序后的结果
+    console.log(fenbuValues);
+    let elementId = 'data-center-chart';
+    $("#data-center-content").html("");
+    if(fenbuValues.length == 0) {
+        return;
+    }
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
+    option = {
+        title: {
+            text: '涨跌分布', // 设置整个图表的标题
+            left: 'center', // 标题水平居中
+            top: 0 // 标题距离图表顶部的距离
+        },
+        xAxis: {
+            type: 'category',
+            data: ['跌停', '-10%', '-9%', '-8%', '-7%', '-6%', '-5%', '-4%', '-3%', '-2%', '-1%', '0%', '1%', '2%', '3%', '4%', '5%', '6%', '7%', '8%', '9%', '10%', '涨停']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: fenbuValues,
+                type: 'bar',
+                label: {
+                    show: true, // 显示标签
+                    position: 'top' // 标签位置，可根据需要调整
+                },
+                itemStyle: {
+                    color: function(params) {
+                        // 判断条件：前 10 个绿色，后 10 个微红色
+                        if (params.dataIndex < 11) {
+                            return blueColor; // 绿色
+                        } else if(params.dataIndex == 11) {
+                            return "#545454"; // 灰色
+                        } else {
+                            return redColor; // 红色
+                        }
+                    }
+                },
+            }
+        ],
+        tooltip: {
+            trigger: 'axis',  // 触发类型，可以是 'item'（单项）或 'axis'（坐标轴）
+            axisPointer: {     // 坐标轴指示器配置项
+                type: 'shadow'  // 使用阴影表示坐标轴指示器
+            },
+            formatter: function(params) {
+                let desc = "";
+                if (params[0].axisValue == "跌停") {
+                    desc = "跌停 ";
+                } else if (params[0].axisValue == "涨停") {
+                    desc = "涨停 ";
+                } else if (params[0].axisValue.startsWith("-")) {
+                    desc = "下跌 " + params[0].axisValue;
+                } else if(params[0].axisValue == "0%") {
+                    desc = "平盘 ";
+                } else {
+                    desc = "上涨 " + params[0].axisValue;
+                }
+                return desc + "<br> 共有："  + params[0].data+ '家';
+            }
+        },
+    };
+    myChart.setOption(option);
 }

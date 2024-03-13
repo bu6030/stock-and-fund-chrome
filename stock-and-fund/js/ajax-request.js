@@ -542,3 +542,31 @@ async function ajaxGetAdvice() {
         }
     });
 }
+
+// 接口调用
+function ajaxGetUpDownCounts() {
+    var result = null;
+    $.ajax({
+        url: Env.GET_UP_DOWN_COUNTS_URL + "?cb=callbackdata7930743&ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt",
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            // 使用正则表达式提取 JSON 数据部分
+            var jsonStart = data.indexOf('(') + 1;
+            var jsonEnd = data.lastIndexOf(')');
+            var jsonData = data.substring(jsonStart, jsonEnd);
+            // 将提取出的 JSON 字符串转换为 JSON 对象
+            result = JSON.parse(jsonData);
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
