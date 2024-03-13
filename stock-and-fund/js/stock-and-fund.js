@@ -5474,11 +5474,18 @@ function scrollToTableRow(rowIndex, type) {
     rows[rowIndex].scrollIntoView();
 }
 
-function changeTimeFormate(dateTime){
+// 格式化日期
+function changeTimeFormate(dateTime) {
     // dateTime格式为20240508100525，格式化为2024-05-08 10:05:25
-    return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 
-        + "-" + dateTime.substring(6,8) + " " + dateTime.substring(8,10) 
-        + ":" + dateTime.substring(10,12) + ":" + dateTime.substring(12,14);
+    if(dateTime.length > 8) {
+        return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 
+            + "-" + dateTime.substring(6,8) + " " + dateTime.substring(8,10) 
+            + ":" + dateTime.substring(10,12) + ":" + dateTime.substring(12,14);
+    // dateTime格式为20240508，格式化为2024-05-08
+    } else {
+        return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 
+            + "-" + dateTime.substring(6,8);
+    }
 }
 
 // 初始化首页分组按钮一键切换
@@ -5545,7 +5552,7 @@ async function changeGroup(groupId) {
 // 展示涨跌分布图表
 async function showUpDownCounts() {
     let result = ajaxGetUpDownCounts();
-    let upDownCountsDate = result.data.qdate;
+    let upDownCountsDate = changeTimeFormate(result.data.qdate + "");
     var fenbuValues = [];
     // 将对象转换为数组并排序
     var sortedFenbu = result.data.fenbu.map(obj => {
@@ -5570,7 +5577,7 @@ async function showUpDownCounts() {
     myChart.clear();
     option = {
         title: {
-            text: '涨跌分布', // 设置整个图表的标题
+            text: upDownCountsDate + ' 涨跌分布', // 设置整个图表的标题
             left: 'center', // 标题水平居中
             top: 0 // 标题距离图表顶部的距离
         },
