@@ -337,6 +337,7 @@ async function initLoad() {
     initHtml();
     initData();
     initLargeMarketData();
+    initGroupButton();
     // 20s刷新
     setInterval(autoRefresh, 20000);
 }
@@ -526,7 +527,7 @@ document.addEventListener(
         // 首页，点击数据中心
         document.getElementById('show-data-center-button').addEventListener('click', showDataCenter);
         // 首页，点击分组
-        document.getElementById('show-group-button').addEventListener('click', showGroup);
+        // document.getElementById('show-group-button').addEventListener('click', showGroup);
         // 首页，在股票搜索名称输入框中点击回车
         document.getElementById('input-stock-name-search').addEventListener('keydown', clickSearchFundAndStockButton);
         // 首页，在基金搜索名称输入框中点击回车
@@ -5354,6 +5355,7 @@ async function addGroup() {
         updateGroupList(); // 更新分组列表
         groupNameInput.value = ''; // 清空输入框
         saveCacheData('groups', groups);
+        initGroupButton();
     } else {
         alert('请输入有效的分组名');
     }
@@ -5369,12 +5371,6 @@ function updateGroupList() {
         const groupHtml = groupTemplate.replace(/{id}/g, id).replace(/{name}/g, groupName);
         groupList.innerHTML += groupHtml;
     });
-    bindDeleteGroup();
-    bindClickGroup(); // 绑定点击分组的事件
-}
-
-// 分组数据列表点击事件，点击删除分组
-function bindDeleteGroup() {
     document.querySelectorAll('.delete-group').forEach(button => {
         button.addEventListener('click', function(event) {
             const groupId = this.getAttribute('data-id');
@@ -5386,51 +5382,10 @@ function bindDeleteGroup() {
             event.stopPropagation(); // 阻止冒泡，避免触发分组切换逻辑
         });
     });
-}
-
-// 分组数据列表点击事件，点击后切换分组
-function bindClickGroup() {
     document.querySelectorAll('.group-button').forEach(button => {
-        button.addEventListener('click', async function() {
-            const groupId = this.getAttribute('data-id');
-            console.log(`分组 ${groups[groupId]} 被选中`); // 这里可以添加切换分组的逻辑
-            if (groupId == 'default-group' && currentGroup == 'default-group') {
-                console.log('未切换分组'); // 这里可以添加切换分组的逻辑
-                return;
-            }
-            currentGroup = groupId;
-            saveCacheData('current-group', currentGroup);
-            // 切换回默认分组
-            if (currentGroup == 'default-group') {
-                var funds = await readCacheData('funds');
-                if (funds == null) {
-                    fundList = [];
-                } else {
-                    fundList = jQuery.parseJSON(funds);
-                }
-                var stocks = await readCacheData('stocks');
-                if (stocks == null) {
-                    stockList = [];
-                } else {
-                    stockList = jQuery.parseJSON(stocks);
-                }
-            }
-            if (currentGroup != 'default-group') {
-                var funds = await readCacheData(currentGroup + '_funds');
-                if (funds == null) {
-                    fundList = [];
-                } else {
-                    fundList = jQuery.parseJSON(funds);
-                }
-                var stocks = await readCacheData(currentGroup + '_stocks');
-                if (stocks == null) {
-                    stockList = [];
-                } else {
-                    stockList = jQuery.parseJSON(stocks);
-                }
-            }
-            $("#group-modal").modal('hide');
-            reloadDataAndHtml();
+        button.addEventListener('click', async function(){
+            let groupId = this.getAttribute('data-id');
+            changeGroup(groupId);
         });
     });
 }
@@ -5517,4 +5472,65 @@ function changeTimeFormate(dateTime){
     return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 
         + "-" + dateTime.substring(6,8) + " " + dateTime.substring(8,10) 
         + ":" + dateTime.substring(10,12) + ":" + dateTime.substring(12,14);
+}
+
+// 初始化首页分组按钮一键切换
+function initGroupButton() {
+    // 清空下拉菜单，以防重复添加
+    $("#group-menu").empty();
+    // 遍历 groups 对象，为每个组名创建一个下拉菜单选项
+    Object.keys(groups).forEach(id => {
+        const groupName = groups[id];
+        var option = $("<a class='dropdown-item'></a>").attr("id", "group-" + id).text(groupName);
+        $("#group-menu").append(option);
+    });
+    var option = $("<a class='dropdown-item'></a>").attr("id", "show-group-button").text("编辑分组");
+    $("#group-menu").append(option);
+    document.getElementById('show-group-button').addEventListener('click', showGroup);
+    Object.keys(groups).forEach(id => {
+        document.getElementById("group-" + id).addEventListener('click', async function(){
+            changeGroup(id);
+        });
+    });
+}
+
+async function changeGroup(groupId) {
+    console.log(`分组 ${groups[groupId]} 被选中`); // 这里可以添加切换分组的逻辑
+    if (groupId == 'default-group' && currentGroup == 'default-group') {
+        console.log('未切换分组'); // 这里可以添加切换分组的逻辑
+        return;
+    }
+    currentGroup = groupId;
+    saveCacheData('current-group', currentGroup);
+    // 切换回默认分组
+    if (currentGroup == 'default-group') {
+        var funds = await readCacheData('funds');
+        if (funds == null) {
+            fundList = [];
+        } else {
+            fundList = jQuery.parseJSON(funds);
+        }
+        var stocks = await readCacheData('stocks');
+        if (stocks == null) {
+            stockList = [];
+        } else {
+            stockList = jQuery.parseJSON(stocks);
+        }
+    }
+    if (currentGroup != 'default-group') {
+        var funds = await readCacheData(currentGroup + '_funds');
+        if (funds == null) {
+            fundList = [];
+        } else {
+            fundList = jQuery.parseJSON(funds);
+        }
+        var stocks = await readCacheData(currentGroup + '_stocks');
+        if (stocks == null) {
+            stockList = [];
+        } else {
+            stockList = jQuery.parseJSON(stocks);
+        }
+    }
+    $("#group-modal").modal('hide');
+    reloadDataAndHtml();
 }
