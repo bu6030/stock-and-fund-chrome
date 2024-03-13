@@ -5382,6 +5382,7 @@ function updateGroupList() {
                 delete groups[groupId];
                 saveCacheData('groups', groups);
                 updateGroupList(); // 更新分组列表
+                initGroupButton();
             }
             event.stopPropagation(); // 阻止冒泡，避免触发分组切换逻辑
         });
