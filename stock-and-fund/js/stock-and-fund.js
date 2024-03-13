@@ -2384,6 +2384,7 @@ async function initWindowsSize() {
     let timeImageDialog = document.getElementById('time-image-dialog');
     let timeImageNew = document.getElementById('time-image-new');
     let timeImageBody = document.getElementById('time-image-body');
+    let groupMenuButton = document.getElementById('group-menu-button');
     if (windowSize == 'NORMAL') {
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
@@ -2404,6 +2405,7 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
+        groupMenuButton.style.display = "inline";
         timeImageDialog.style.maxWidth = '650px';
         timeImageDialog.style.maxHeight = '430px';
         timeImageNew.style.width = '650px';
@@ -2428,6 +2430,7 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
+        groupMenuButton.style.display = "inline";
         timeImageDialog.style.maxWidth = '550px';
         timeImageNew.style.width = '530px';
         timeImageNew.style.height = '400px';
@@ -2451,6 +2454,7 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
         showDataCenterButton.style.display = "none";
+        groupMenuButton.style.display = "none";
         timeImageDialog.style.maxWidth = '400px';
         timeImageNew.style.width = '380px';
         timeImageNew.style.height = '280px';
@@ -2493,11 +2497,11 @@ function alertMessage(message) {
 
 // 第一次安装后没有数据，展示使用说明
 function initFirstInstall() {
-    if (stockList.length == 0 && fundList.length == 0) {
-        $("#help-document-alert")[0].style.display = 'block';
-    } else {
-        $("#help-document-alert")[0].style.display = 'none';
-    }
+    // if (stockList.length == 0 && fundList.length == 0) {
+    //     $("#help-document-alert")[0].style.display = 'block';
+    // } else {
+    //     $("#help-document-alert")[0].style.display = 'none';
+    // }
 }
 
 // 遍历股票，展示主页迷你分时图
@@ -3816,9 +3820,9 @@ function changeBlackButton() {
     document.getElementById('refresh-button').classList.remove(btnLightCss);
     document.getElementById('refresh-button').classList.add(blackCss);
 
-    document.getElementById('show-group-button').classList.remove(btnInfoCss);
-    document.getElementById('show-group-button').classList.remove(btnLightCss);
-    document.getElementById('show-group-button').classList.add(blackCss);
+    document.getElementById('group-menu-button').classList.remove(btnInfoCss);
+    document.getElementById('group-menu-button').classList.remove(btnLightCss);
+    document.getElementById('group-menu-button').classList.add(blackCss);
 
     document.getElementById('remove-badgetext-button').classList.remove(btnInfoCss);
     document.getElementById('remove-badgetext-button').classList.remove(btnLightCss);
