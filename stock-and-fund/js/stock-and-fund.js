@@ -794,6 +794,8 @@ document.addEventListener(
         document.getElementById('monitor-price-change-button').addEventListener('click', changeMonitorPriceOrPercent);
         // 设置页面，点击涨跌幅按钮
         document.getElementById('monitor-percent-change-button').addEventListener('click', changeMonitorPriceOrPercent);
+        // 设置页面，点击当日总收益按钮
+        document.getElementById('monitor-day-income-change-button').addEventListener('click', changeMonitorPriceOrPercent);
         // 设置页面，点击展示/不展示前5个股票价格
         document.getElementById('monitor-dont-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
         document.getElementById('monitor-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
@@ -5137,8 +5139,10 @@ async function changeMonitorPriceOrPercent(event) {
     let targetId = event.target.id;
     if (targetId == 'monitor-price-change-button') {
         monitorPriceOrPercent = 'PRICE';
-    } else {
+    } else if (targetId == 'monitor-percent-change-button') {
         monitorPriceOrPercent = 'PERCENT';
+    } else {
+        monitorPriceOrPercent = 'DAY_INCOME';
     }
     saveCacheData('monitor-price-or-percent', monitorPriceOrPercent);
     $("#setting-modal").modal("hide");

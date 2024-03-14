@@ -275,7 +275,7 @@ function monitorStock(code) {
                 getData('monitor-price-or-percent').then((monitorPriceOrPercent) => {
                     if (monitorPriceOrPercent == null || monitorPriceOrPercent == "PRICE") {
                         sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
-                    } else {
+                    } else if (monitorPriceOrPercent == "PERCENT") {
                         if(changePercent < 0) {
                             changePercent = 0 - changePercent;
                         }
@@ -369,6 +369,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         var title = '';
         var stoksArr = data.split("\n");
         var stockDayIncome = 0.00;
+        var stockTotalIncome = 0.00;
         var date = '';
         for (let k in stoksArr) {
             try {
@@ -391,6 +392,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 var dayIncome = 0.00;
                 if (stock != undefined) {
                     dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
+                    stockTotalIncome += (now - parseFloat(stock.costPrise)) * parseFloat(stock.bonds);
                 }
                 stockDayIncome += dayIncome;
                 if (count <= 24) {
@@ -426,7 +428,11 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
         title += '\n总收益：' + totalDayIncome.toFixed(2);
-        
+        let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
+        if (monitorPriceOrPercent == 'DAY_INCOME') {
+            let color = totalDayIncome > 0 ? 'red' : 'green';
+            sendChromeBadge('#FFFFFF', color, totalDayIncome.toFixed(2) + "");
+        }
         saveDayIncomehistory(stockDayIncome.toFixed(2), funcDayIncome.toFixed(2), date);
         setChromeTitle(title);
     }
