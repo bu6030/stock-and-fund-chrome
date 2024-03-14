@@ -423,11 +423,15 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             }
         }
         title = title.substring(0, title.length - 1);
-        let funcDayIncome = await getFundDayIncome(date);
+        let funcIncome = await getFundIncome(date);
+        let funcDayIncome = funcIncome.fundDayIncome;
+        let fundTotalIncome = funcIncome.fundTotalIncome;
         let totalDayIncome = funcDayIncome + stockDayIncome;
+        let totalIncome = fundTotalIncome + stockTotalIncome;
         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
-        title += '\n总收益：' + totalDayIncome.toFixed(2);
+        title += '\n当日总收益：' + totalDayIncome.toFixed(2);
+        console.log("fundTotalIncome = ", fundTotalIncome.toFixed(2), "; stockTotalIncome = ", stockTotalIncome.toFixed(2));
         let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
         if (monitorPriceOrPercent == 'DAY_INCOME') {
             let color = totalDayIncome > 0 ? 'red' : 'green';
@@ -460,7 +464,7 @@ async function saveDayIncomehistory(stockDayIncome, fundDayIncome, date) {
     saveData('DAY_INCOME_HISTORY', dayIncomeHistory);
 }
 // 统计基金当日盈利
-async function getFundDayIncome(date) {
+async function getFundIncome(date) {
     let fundList = await getData('funds');
     if (fundList == null || fundList == '' || fundList == undefined || fundList == 'undefined') {
         fundList = [];
@@ -468,6 +472,7 @@ async function getFundDayIncome(date) {
         fundList = JSON.parse(fundList);
     }
     let fundDayIncome = parseFloat("0");
+    let fundTotalIncome = parseFloat("0");
     let promises = fundList.map(async (fund) => {
         try {
             if (fund.bonds !== null && parseFloat(fund.bonds) > 0) {
@@ -479,6 +484,8 @@ async function getFundDayIncome(date) {
                 if (date != gztime) return;
                 let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
                 fundDayIncome = fundDayIncome + dayIncome;
+                let totalIncome = (parseFloat(json.gsz) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
+                fundTotalIncome = fundTotalIncome + totalIncome;
             }
         } catch (error) {
             console.error(`Error fetching data for fund ${fund.fundCode}: ${error}`);
@@ -486,5 +493,9 @@ async function getFundDayIncome(date) {
     });
     // 等待所有基金的收益计算完成
     await Promise.all(promises);
-    return fundDayIncome;
+    let result = {
+        "fundDayIncome" : fundDayIncome,
+        "fundTotalIncome" : fundTotalIncome
+    }
+    return result;
 }
