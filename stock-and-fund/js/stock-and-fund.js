@@ -268,7 +268,6 @@ async function initLoad() {
     } else {
         largeMarketCode = jQuery.parseJSON(largeMarketCode)
     }
-    console.log('largeMarketCode==', largeMarketCode);
     columnOrder = await readCacheData('column-order');
     if (columnOrder == null) {
         columnOrder = [
@@ -861,11 +860,9 @@ async function initData() {
         if(huilvConvert){
             if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
                 huilvHK = await getHuilv('HKD');
-                console.log('huilvHK=', huilvHK);
             }
             if (stocks.indexOf('us') || stocks.indexOf('US')) {
                 huilvUS = await getHuilv('USD');
-                console.log('huilvUS=', huilvUS);
             }
         }
         let result = "";
@@ -2294,6 +2291,8 @@ async function searchFundAndStock() {
                 market = "港股"
             } else if (values[0] == 'us') {
                 market = "美股"
+            } else if(values[0] == 'jj') {
+                continue;
             } else {
                 market = "其他"
             }
@@ -5401,7 +5400,6 @@ async function showDayIncomeHistory() {
     $("#day-income-history-modal").modal();
     $("#data-center-modal").modal('hide');
     let dayIncomeHistory = await readCacheData('DAY_INCOME_HISTORY');
-    // console.log('dayIncomeHistory===', dayIncomeHistory);
     // dayIncomeHistory数组倒序排列
     dayIncomeHistory = dayIncomeHistory.reverse();
     // 每日盈利标题
@@ -5476,8 +5474,10 @@ function scrollToTableRow(rowIndex, type) {
 
 // 格式化日期
 function changeTimeFormate(dateTime) {
+    if (dateTime == null || dateTime == '' || dateTime == undefined || dateTime.length < 8) {
+        return '--';
     // dateTime格式为20240508100525，格式化为2024-05-08 10:05:25
-    if(dateTime.length > 8) {
+    } else if(dateTime.length > 8) {
         return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 
             + "-" + dateTime.substring(6,8) + " " + dateTime.substring(8,10) 
             + ":" + dateTime.substring(10,12) + ":" + dateTime.substring(12,14);
@@ -5509,7 +5509,7 @@ function initGroupButton() {
 }
 
 async function changeGroup(groupId) {
-    console.log(`分组 ${groups[groupId]} 被选中`); // 这里可以添加切换分组的逻辑
+    // 这里可以添加切换分组的逻辑
     if (groupId == 'default-group' && currentGroup == 'default-group') {
         console.log('未切换分组'); // 这里可以添加切换分组的逻辑
         return;
@@ -5565,8 +5565,6 @@ async function showUpDownCounts() {
     sortedFenbu.forEach(item => {
         fenbuValues.push(item.value);
     });
-    // 输出排序后的结果
-    console.log(fenbuValues);
     let elementId = 'data-center-chart';
     $("#data-center-content").html("");
     if(fenbuValues.length == 0) {

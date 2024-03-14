@@ -229,6 +229,7 @@
 208. 图标鼠标悬停后展示前20个股票价格异常处理 2024/3/12 -- version 2.0.3 -- end
 209. 首页分组按钮支持一键切换分组 2024/3/13
 210. 增加涨跌分布 2024/3/13
+211. 股票搜索屏蔽场外基金显示 2024/3/14
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

@@ -240,8 +240,6 @@ function largeMarketCodeSave() {
     let selectedData = checkboxes.map(function() {
         return this.value;
     }).get();
-    // 输出选中的数据
-    console.log('=========',selectedData);
     largeMarketCode = selectedData;
     saveCacheData('large-market-code', JSON.stringify(selectedData));
     $("#setting-modal").modal("hide");
