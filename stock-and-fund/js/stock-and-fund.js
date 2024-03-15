@@ -1287,6 +1287,11 @@ async function initStockAndFundHtml() {
                 timeImageType = "STOCK";
                 showMinuteImage();
             });
+            // stockTr.addEventListener('contextmenu', function (event) {
+            //     event.preventDefault();
+            //     let stockName = stockList[this.sectionRowIndex].name;
+            //     console.log("右键了", stockName);
+            // });
         }
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
