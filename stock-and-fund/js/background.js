@@ -435,7 +435,17 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
         if (monitorPriceOrPercent == 'DAY_INCOME') {
             let color = totalDayIncome > 0 ? 'red' : 'green';
-            sendChromeBadge('#FFFFFF', color, totalDayIncome.toFixed(2) + "");
+            if (totalDayIncome < 0) {
+                totalDayIncome = 0 - totalDayIncome;
+            }
+            if (totalDayIncome > 999.99) {
+                totalDayIncome = totalDayIncome.toFixed(0);
+            } else if (totalDayIncome > 99.99) {
+                totalDayIncome = totalDayIncome.toFixed(1);
+            } else {
+                totalDayIncome = totalDayIncome.toFixed(2);
+            }
+            sendChromeBadge('#FFFFFF', color, totalDayIncome + "");
         }
         saveDayIncomehistory(stockDayIncome.toFixed(2), funcDayIncome.toFixed(2), date);
         setChromeTitle(title);
