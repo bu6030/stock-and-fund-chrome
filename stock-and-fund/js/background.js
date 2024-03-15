@@ -438,8 +438,10 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             if (totalDayIncome < 0) {
                 totalDayIncome = 0 - totalDayIncome;
             }
-            if (totalDayIncome > 999.99) {
-                totalDayIncome = totalDayIncome.toFixed(0);
+            if (totalDayIncome > 9999.99) {
+                totalDayIncome = Math.floor(totalDayIncome/10000) + "w";
+            } else if (totalDayIncome > 999.99) {
+                totalDayIncome = Math.floor(totalDayIncome);
             } else if (totalDayIncome > 99.99) {
                 totalDayIncome = totalDayIncome.toFixed(1);
             } else {
