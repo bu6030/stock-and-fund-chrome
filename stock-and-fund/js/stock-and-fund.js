@@ -5416,7 +5416,7 @@ async function showDayIncomeHistory() {
         " <th >日期</th>" +
         " <th >基金盈利</th>" +
         " <th >股票盈利</th>" +
-        " <th >总盈利</th>" +
+        " <th >当日总盈利</th>" +
         " </tr>";
     $("#day-income-history-head").html(dayIncomeHistoryHead);
     let str = "";
