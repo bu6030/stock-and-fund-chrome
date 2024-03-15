@@ -248,11 +248,11 @@ function setStockMinitesImage() {
         $("#stock-fund-delete-button")[0].style.display = 'none';
         $("#add-stock-button")[0].style.display = 'inline';
         fundOrStockName = timeImageName;
-    } else {
+    } else if(timeImageType == "STOCK") {
         $("#set-top-button-3")[0].style.display = 'inline';
         $("#stock-fund-monitor-button")[0].style.display = 'inline';
-        $("#fund-invers-position-button-3")[0].style.display = 'inline';
-        $("#fund-net-diagram-button-3")[0].style.display = 'inline';
+        // $("#fund-invers-position-button-3")[0].style.display = 'inline';
+        // $("#fund-net-diagram-button-3")[0].style.display = 'inline';
         $("#update-stock-fund-button")[0].style.display = 'inline';
         $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
         $("#stock-fund-delete-button")[0].style.display = 'inline';
@@ -450,11 +450,11 @@ function setStockImage(type) {
         $("#stock-fund-delete-button")[0].style.display = 'none';
         $("#add-stock-button")[0].style.display = 'inline';
         fundOrStockName = timeImageName;
-    } else {
+    } else if(timeImageType == "STOCK") {
         $("#set-top-button-3")[0].style.display = 'inline';
         $("#stock-fund-monitor-button")[0].style.display = 'inline';
-        $("#fund-invers-position-button-3")[0].style.display = 'inline';
-        $("#fund-net-diagram-button-3")[0].style.display = 'inline';
+        // $("#fund-invers-position-button-3")[0].style.display = 'inline';
+        // $("#fund-net-diagram-button-3")[0].style.display = 'inline';
         $("#update-stock-fund-button")[0].style.display = 'inline';
         $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
         $("#stock-fund-delete-button")[0].style.display = 'inline';
