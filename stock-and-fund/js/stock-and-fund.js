@@ -632,6 +632,8 @@ document.addEventListener(
         document.getElementById('time-image-old-button').addEventListener('click', changeTimeImage);
         // 走势图页面，分时图关闭监听
         $("#time-image-modal").on("hidden.bs.modal", clearTimeImageTimeout);
+        // 走势图页面，点击添加自选
+        document.getElementById('add-stock-button').addEventListener('click', addStock);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -2904,26 +2906,38 @@ async function getFundInversPosition() {
     for (k in fundStocksDetail) {
         let fundStocksDetailTr = document.getElementById('fund-stock-detail-tr-' + k);
         fundStocksDetailTr.addEventListener('click', async function () {
-            var result = confirm("是否添加" + fundStocksDetail[this.sectionRowIndex].f14 + "?");
-            if (result) {
-                let stockCode = fundStocksDetail[this.sectionRowIndex].f12;
-                if (stockCode.length == 6 && stockCode.startsWith("6")) {
-                    stockCode = "sh" + stockCode;
-                } else if (stockCode.length == 6 && (stockCode.startsWith("0") || stockCode.startsWith("3"))) {
-                    stockCode = "sz" + stockCode;
-                } else if(stockCode.length == 5) {
-                    stockCode = "hk" + stockCode;
-                }
-                $("#stock-code").val(stockCode);
-                $("#stock-costPrise").val('');
-                $("#stock-bonds").val('');
-                $("#stock-monitor-high-price").val('');
-                $("#stock-monitor-low-price").val('');
-                $("#new-buy-checkbox").prop("checked", false);
-                await saveStock();
-                $("#stock-code").val('');
-                $("#fund-invers-position-modal").modal("hide");
+            let stockCode = fundStocksDetail[this.sectionRowIndex].f12;
+            if (stockCode.length == 6 && stockCode.startsWith("6")) {
+                stockCode = "sh" + stockCode;
+            } else if (stockCode.length == 6 && (stockCode.startsWith("0") || stockCode.startsWith("3"))) {
+                stockCode = "sz" + stockCode;
+            } else if(stockCode.length == 5) {
+                stockCode = "hk" + stockCode;
             }
+            timeImageCode = stockCode;
+            timeImageType = "STOCK";
+            timeImageName = fundStocksDetail[this.sectionRowIndex].f14;
+            showMinuteImage();
+            // var result = confirm("是否添加" + fundStocksDetail[this.sectionRowIndex].f14 + "?");
+            // if (result) {
+            //     let stockCode = fundStocksDetail[this.sectionRowIndex].f12;
+            //     if (stockCode.length == 6 && stockCode.startsWith("6")) {
+            //         stockCode = "sh" + stockCode;
+            //     } else if (stockCode.length == 6 && (stockCode.startsWith("0") || stockCode.startsWith("3"))) {
+            //         stockCode = "sz" + stockCode;
+            //     } else if(stockCode.length == 5) {
+            //         stockCode = "hk" + stockCode;
+            //     }
+            //     $("#stock-code").val(stockCode);
+            //     $("#stock-costPrise").val('');
+            //     $("#stock-bonds").val('');
+            //     $("#stock-monitor-high-price").val('');
+            //     $("#stock-monitor-low-price").val('');
+            //     $("#new-buy-checkbox").prop("checked", false);
+            //     await saveStock();
+            //     $("#stock-code").val('');
+            //     $("#fund-invers-position-modal").modal("hide");
+            // }
         });
     }
 }
@@ -5644,4 +5658,20 @@ async function showUpDownCounts() {
         },
     };
     myChart.setOption(option);
+}
+
+// 持仓明细弹出的分时图添加股票
+async function addStock() {
+    var result = confirm("是否添加" + timeImageName + "?");
+    if (result) {
+        $("#stock-code").val(timeImageCode);
+        $("#stock-costPrise").val('');
+        $("#stock-bonds").val('');
+        $("#stock-monitor-high-price").val('');
+        $("#stock-monitor-low-price").val('');
+        $("#new-buy-checkbox").prop("checked", false);
+        await saveStock();
+        $("#stock-code").val('');
+        $("#time-image-modal").modal("hide");
+    }
 }
