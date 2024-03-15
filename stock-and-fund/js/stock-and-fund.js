@@ -2833,8 +2833,13 @@ async function stockMonitor () {
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));
     }
-    if (monitorPriceOrPercent == null || monitorPriceOrPercent == 'PRICE') {
+    if (monitorPriceOrPercent == null || monitorPriceOrPercent == 'PRICE'
+        || monitorPriceOrPercent == 'DAY_INCOME') {
         sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
+        if (monitorPriceOrPercent == null || monitorPriceOrPercent == 'DAY_INCOME') {
+            let param = {target:{id:'monitor-price-change-button'}};
+            changeMonitorPriceOrPercent(param);
+        }
     } else {
         let changePercent = parseFloat(stock.changePercent);
         if(changePercent < 0) {
