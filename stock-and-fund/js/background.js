@@ -439,11 +439,11 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 totalDayIncome = 0 - totalDayIncome;
             }
             if (totalDayIncome > 9999.99) {
-                totalDayIncome = Math.floor(totalDayIncome/10000) + "w";
+                totalDayIncome = Math.floor(totalDayIncome/10000*10)/10 + "w";
             } else if (totalDayIncome > 999.99) {
                 totalDayIncome = Math.floor(totalDayIncome);
             } else if (totalDayIncome > 99.99) {
-                totalDayIncome = totalDayIncome.toFixed(1);
+                totalDayIncome = Math.floor(totalDayIncome * 10) / 10;
             } else {
                 totalDayIncome = totalDayIncome.toFixed(2);
             }
