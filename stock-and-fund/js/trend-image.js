@@ -2,6 +2,7 @@
 let timeImageCode;
 let timeImageType;
 let timeImageName;
+let timeImageSecid;
 var timerId;
 let turnOverRate = '';
 // 展示分时图

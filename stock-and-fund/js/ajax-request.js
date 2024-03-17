@@ -140,6 +140,9 @@ function ajaxGetFundFromTiantianjijin(code) {
 // 接口调用
 function ajaxGetStockTimeImageMinuteMini(code) {
     let secid = getSecid(code);
+    if (secid == null || secid == '' || secid == undefined) {
+        secid = timeImageSecid;
+    }
     code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('.', '_');
     let result;
     $.ajax({
@@ -194,6 +197,9 @@ function ajaxGetStockTimeImage(code, type, end) {
         klt = 103;
     }
     let secid = getSecid(code);
+    if (secid == null || secid == '' || secid == undefined) {
+        secid = timeImageSecid;
+    }
     code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('.', '_');
     let result;
     $.ajax({

@@ -2912,14 +2912,18 @@ async function getFundInversPosition() {
         let fundStocksDetailTr = document.getElementById('fund-stock-detail-tr-' + k);
         fundStocksDetailTr.addEventListener('click', async function () {
             let stockCode = fundStocksDetail[this.sectionRowIndex].f12;
+            let secid = fundStocksDetail[this.sectionRowIndex].f13;
             if (stockCode.length == 6 && stockCode.startsWith("6")) {
                 stockCode = "sh" + stockCode;
             } else if (stockCode.length == 6 && (stockCode.startsWith("0") || stockCode.startsWith("3"))) {
                 stockCode = "sz" + stockCode;
-            } else if(stockCode.length == 5) {
+            } else if(stockCode.length == 5 || secid == 116) {
                 stockCode = "hk" + stockCode;
+            } else if(secid == 105 || secid == 106 || secid == 153) {
+                stockCode = "us" + stockCode;
             }
             timeImageCode = stockCode;
+            timeImageSecid = secid;
             timeImageType = "STOCK";
             timeImageName = fundStocksDetail[this.sectionRowIndex].f14;
             showMinuteImage();
