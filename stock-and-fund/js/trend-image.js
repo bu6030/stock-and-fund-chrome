@@ -254,7 +254,7 @@ function setStockMinitesImage() {
         $("#stock-fund-monitor-button")[0].style.display = 'inline';
         // $("#fund-invers-position-button-3")[0].style.display = 'inline';
         // $("#fund-net-diagram-button-3")[0].style.display = 'inline';
-        $("#update-stock-fund-button")[0].style.display = 'inline';
+        // $("#update-stock-fund-button")[0].style.display = 'inline';
         $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
         $("#stock-fund-delete-button")[0].style.display = 'inline';
         $("#add-stock-button")[0].style.display = 'none';
