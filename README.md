@@ -233,6 +233,7 @@
 212. 角标增加当日总收益显示 2024/3/14
 213. 持仓明细点击某个股票后，弹出走势图 2024/3/15
 214. 导入数据分组非空处理 2024/3/18 -- version 2.0.4 -- end
+215. 当日净值出来后通过净值准确计算基金收益 2024/3/18
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

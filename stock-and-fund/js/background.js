@@ -488,16 +488,40 @@ async function getFundIncome(date) {
     let promises = fundList.map(async (fund) => {
         try {
             if (fund.bonds !== null && parseFloat(fund.bonds) > 0) {
-                let response = await fetch(`http://fundgz.1234567.com.cn/js/${fund.fundCode}.js`);
-                let data = await response.text();
-                var json = JSON.parse(data.substring(8, data.length - 2));
-                let gztime = json.gztime.substring(0, 10).replaceAll('-', '');
-                // 如果日期不一致不在计算
-                if (date != gztime) return;
-                let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
-                fundDayIncome = fundDayIncome + dayIncome;
-                let totalIncome = (parseFloat(json.gsz) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
-                fundTotalIncome = fundTotalIncome + totalIncome;
+                let fundNetDiagramResponse = await fetch(`https://fundmobapi.eastmoney.com/FundMApi/FundNetDiagram.ashx?FCODE=${fund.fundCode}&RANGE=y&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=`);
+                let fundNetDiagramData = await fundNetDiagramResponse.text();
+                let fundNetDiagramJson = JSON.parse(fundNetDiagramData);
+                console.log('fundNetDiagramJson==', fundNetDiagramJson);
+                let currentDayNetDiagram = null;
+                for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
+                    if (fundNetDiagramJson.Datas[i].FSRQ == date) {
+                        currentDayNetDiagram = fundNetDiagramJson.Datas[i];
+                        break;
+                    }
+                }
+                if (currentDayNetDiagram != null) {
+                    // 找到前一个交易日的index，通过index取出前一个交易日的净值
+                    let currentDayNetDiagramIndex = fundNetDiagramJson.Datas.indexOf(currentDayNetDiagram);
+                    let previousDayNetDiagramIndex = currentDayNetDiagramIndex - 1;
+                    let previousDayNetDiagram = fundNetDiagramJson.Datas[previousDayNetDiagramIndex];
+                    console.log("=======", currentDayNetDiagram, previousDayNetDiagram);
+                    let dayIncome = (parseFloat(currentDayNetDiagram.DWJZ) - parseFloat(previousDayNetDiagram.DWJZ))
+                        * parseFloat(fund.bonds);
+                    fundDayIncome = fundDayIncome + dayIncome;
+                    let totalIncome = (parseFloat(currentDayNetDiagram.DWJZ) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
+                    fundTotalIncome = fundTotalIncome + totalIncome;
+                } else {
+                    let response = await fetch(`http://fundgz.1234567.com.cn/js/${fund.fundCode}.js`);
+                    let data = await response.text();
+                    var json = JSON.parse(data.substring(8, data.length - 2));
+                    let gztime = json.gztime.substring(0, 10).replaceAll('-', '');
+                    // 如果日期不一致不在计算
+                    if (date != gztime) return;
+                    let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
+                    fundDayIncome = fundDayIncome + dayIncome;
+                    let totalIncome = (parseFloat(json.gsz) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
+                    fundTotalIncome = fundTotalIncome + totalIncome;
+                }
             }
         } catch (error) {
             console.error(`Error fetching data for fund ${fund.fundCode}: ${error}`);
