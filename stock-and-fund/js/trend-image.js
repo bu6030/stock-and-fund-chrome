@@ -25,6 +25,7 @@ function showMinuteImage() {
             $("#show-buy-or-sell-button-2")[0].style.display = 'block';
         }
     }
+    fundInvesterPositionSetButton();
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
         && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
@@ -61,6 +62,7 @@ function showMinuteImage() {
 function showDayImage() {
     clearTimeImageTimeout();
     let path = "";
+    fundInvesterPositionSetButton();
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
         && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
@@ -240,24 +242,7 @@ function setStockMinitesImage() {
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     // 说明该基金是从持仓明细进入的
     if (fundOrStockName == timeImageCode) {
-        $("#set-top-button-3")[0].style.display = 'none';
-        $("#stock-fund-monitor-button")[0].style.display = 'none';
-        $("#fund-invers-position-button-3")[0].style.display = 'none';
-        $("#fund-net-diagram-button-3")[0].style.display = 'none';
-        $("#update-stock-fund-button")[0].style.display = 'none';
-        $("#show-buy-or-sell-button-2")[0].style.display = 'none';
-        $("#stock-fund-delete-button")[0].style.display = 'none';
-        $("#add-stock-button")[0].style.display = 'inline';
         fundOrStockName = timeImageName;
-    } else if(timeImageType == "STOCK") {
-        // $("#set-top-button-3")[0].style.display = 'inline';
-        $("#stock-fund-monitor-button")[0].style.display = 'inline';
-        // $("#fund-invers-position-button-3")[0].style.display = 'inline';
-        // $("#fund-net-diagram-button-3")[0].style.display = 'inline';
-        // $("#update-stock-fund-button")[0].style.display = 'inline';
-        // $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
-        // $("#stock-fund-delete-button")[0].style.display = 'inline';
-        $("#add-stock-button")[0].style.display = 'none';
     }
     if (preClose >= maxPrice) {
         maxPrice = parseFloat(maxPrice) * 1.01;
@@ -442,24 +427,7 @@ function setStockImage(type) {
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     // 说明该基金是从持仓明细进入的
     if (fundOrStockName == timeImageCode) {
-        $("#set-top-button-3")[0].style.display = 'none';
-        $("#stock-fund-monitor-button")[0].style.display = 'none';
-        $("#fund-invers-position-button-3")[0].style.display = 'none';
-        $("#fund-net-diagram-button-3")[0].style.display = 'none';
-        $("#update-stock-fund-button")[0].style.display = 'none';
-        $("#show-buy-or-sell-button-2")[0].style.display = 'none';
-        $("#stock-fund-delete-button")[0].style.display = 'none';
-        $("#add-stock-button")[0].style.display = 'inline';
         fundOrStockName = timeImageName;
-    } else if(timeImageType == "STOCK") {
-        // $("#set-top-button-3")[0].style.display = 'inline';
-        $("#stock-fund-monitor-button")[0].style.display = 'inline';
-        // $("#fund-invers-position-button-3")[0].style.display = 'inline';
-        // $("#fund-net-diagram-button-3")[0].style.display = 'inline';
-        // $("#update-stock-fund-button")[0].style.display = 'inline';
-        // $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
-        // $("#stock-fund-delete-button")[0].style.display = 'inline';
-        $("#add-stock-button")[0].style.display = 'none';
     }
     option = {
         xAxis: {
@@ -601,4 +569,23 @@ function setTotalVolumnAndTurnOverRate(totalVolumn) {
         }
     }
     $("#time-image-content").html(contentHtml);
+}
+
+// 持仓明细进入的隐藏部分按钮
+function fundInvesterPositionSetButton() {
+    let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
+    // 说明该基金是从持仓明细进入的
+    if (fundOrStockName == timeImageCode) {
+        $("#set-top-button-3")[0].style.display = 'none';
+        $("#stock-fund-monitor-button")[0].style.display = 'none';
+        $("#fund-invers-position-button-3")[0].style.display = 'none';
+        $("#fund-net-diagram-button-3")[0].style.display = 'none';
+        $("#update-stock-fund-button")[0].style.display = 'none';
+        $("#show-buy-or-sell-button-2")[0].style.display = 'none';
+        $("#stock-fund-delete-button")[0].style.display = 'none';
+        $("#add-stock-button")[0].style.display = 'inline';
+    } else {
+        $("#stock-fund-monitor-button")[0].style.display = 'inline';
+        $("#add-stock-button")[0].style.display = 'none';
+    }
 }
