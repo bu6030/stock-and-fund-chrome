@@ -231,7 +231,8 @@
 210. 增加涨跌分布 2024/3/13
 211. 股票搜索屏蔽场外基金显示 2024/3/14
 212. 角标增加当日总收益显示 2024/3/14
-213. 持仓明细点击某个股票后，弹出走势图 2024/3/15 -- version 2.0.4 -- end
+213. 持仓明细点击某个股票后，弹出走势图 2024/3/15
+214. 导入数据分组非空处理 2024/3/18 -- version 2.0.4 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

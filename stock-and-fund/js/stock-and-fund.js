@@ -3204,13 +3204,17 @@ async function fileInput (e) {
     reader.onload = function (e) {
         var contents = e.target.result;
         var json = JSON.parse(contents);
-        if (json.stocks == null || json.stocks == '' 
-            || json.stocks == undefined || json.stocks == 'undefined'){
+        if (json.stocks == null || json.stocks == '' || json.stocks == "null"
+            || json.stocks == undefined || json.stocks == 'undefined') {
             json.stocks = [];
         }
-        if (json.funds == null || json.funds == '' 
-            || json.funds == undefined || json.funds == 'undefined'){
+        if (json.funds == null || json.funds == '' || json.funds == "null"
+            || json.funds == undefined || json.funds == 'undefined') {
             json.funds = [];
+        }
+        if (json.groups == null || json.groups == '' || json.groups == "null"
+        || json.groups == undefined || json.groups == 'undefined') {
+            json.groups = {"default-group":"默认分组"};
         }
         // 在这里处理您的 JSON 数据
         saveCacheData('stocks', JSON.stringify(json.stocks));
