@@ -1045,6 +1045,7 @@ async function initFund() {
                         if (currentDayNetDiagramDate == getBeijingDateNoSlash()) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
+                            fundList[k].gsz = currentDayJingzhi;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             console.log("=========", dayIncome + "", marketValue +"");
@@ -1134,6 +1135,7 @@ async function initFund() {
                         if (currentDayNetDiagramDate == getBeijingDateNoSlash()) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
+                            fundList[k].gsz = currentDayJingzhi;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             console.log("=========", dayIncome + "", marketValue +"");
