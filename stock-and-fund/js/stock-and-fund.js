@@ -1040,8 +1040,18 @@ async function initFund() {
                         // 计算其他属性
                         let dayIncome = new BigDecimal("0");
                         let marketValue = new BigDecimal("0");
-                        dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
-                        marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        // 获取到当日净值已出
+                        let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
+                        if (currentDayNetDiagramDate == getBeijingDateNoSlash()) {
+                            let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
+                            let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
+                            dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                            marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                            console.log("=========", dayIncome + "", marketValue +"");
+                        } else {
+                            dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+                            marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        }
                         fundList[k].dayIncome = dayIncome + "";
                         fundList[k].marketValue = marketValue + "";
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");
@@ -1119,8 +1129,18 @@ async function initFund() {
                         // 计算其他属性
                         let dayIncome = new BigDecimal("0");
                         let marketValue = new BigDecimal("0");
-                        dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
-                        marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        // 获取到当日净值已出
+                        let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
+                        if (currentDayNetDiagramDate == getBeijingDateNoSlash()) {
+                            let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
+                            let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
+                            dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                            marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                            console.log("=========", dayIncome + "", marketValue +"");
+                        } else {
+                            dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+                            marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        }
                         fundList[k].dayIncome = dayIncome + "";
                         fundList[k].marketValue = marketValue + "";
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");

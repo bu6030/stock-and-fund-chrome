@@ -494,7 +494,7 @@ async function getFundIncome(date) {
                 console.log('fundNetDiagramJson==', fundNetDiagramJson);
                 let currentDayNetDiagram = null;
                 for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
-                    if (fundNetDiagramJson.Datas[i].FSRQ == date) {
+                    if (fundNetDiagramJson.Datas[i].FSRQ.replaceAll('-', '') == date) {
                         currentDayNetDiagram = fundNetDiagramJson.Datas[i];
                         break;
                     }
@@ -510,6 +510,9 @@ async function getFundIncome(date) {
                     fundDayIncome = fundDayIncome + dayIncome;
                     let totalIncome = (parseFloat(currentDayNetDiagram.DWJZ) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
                     fundTotalIncome = fundTotalIncome + totalIncome;
+                    saveData('previous_day_jingzhi_' + fund.fundCode, previousDayNetDiagram.DWJZ);
+                    saveData('current_day_jingzhi_' + fund.fundCode, currentDayNetDiagram.DWJZ);
+                    saveData('current_day_jingzhi_date_' + fund.fundCode, date);
                 } else {
                     let response = await fetch(`http://fundgz.1234567.com.cn/js/${fund.fundCode}.js`);
                     let data = await response.text();
