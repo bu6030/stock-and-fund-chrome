@@ -816,10 +816,10 @@ document.addEventListener(
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
         document.getElementById('sync-data-from-cloud-button').addEventListener('click', syncDataFromCloud);
 
-        // 打赏页面，点击微信
-        document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
-        // 打赏页面，点击支付宝
-        document.getElementById("ali-pay-button").addEventListener('click',  showDonate);
+        // // 打赏页面，点击微信
+        // document.getElementById("wechat-pay-button").addEventListener('click',  showDonate);
+        // // 打赏页面，点击支付宝
+        // document.getElementById("ali-pay-button").addEventListener('click',  showDonate);
 
         // 买/卖股票页面，点击买/卖
         document.getElementById("buy-or-sell-button").addEventListener('click',  buyOrSell);
@@ -3367,15 +3367,7 @@ async function clickSearchFundAndStockButton(event) {
 }
 
 // 展示打赏码
-async function showDonate(event) {
-    let path;
-    let targetId = event.target.id;
-    if (targetId == 'ali-pay-button') {
-        path = Env.ALI_PAY_QR_CODE;
-    } else {
-        path = Env.WECHAT_PAY_QR_CODE;
-    }
-    $("#donate-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
+async function showDonate() {
     // $("#setting-modal").modal('hide');
     $("#donate-modal").modal();
 }
