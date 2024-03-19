@@ -1042,7 +1042,11 @@ async function initFund() {
                         let marketValue = new BigDecimal("0");
                         // 获取到当日净值已出
                         let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
-                        if (currentDayNetDiagramDate == getBeijingDateNoSlash()) {
+                        let gztime = fundList[k].gztime;
+                        if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
+                            gztime = gztime.substring(0, 10).replaceAll('-', '')
+                        }
+                        if (currentDayNetDiagramDate == gztime) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
                             fundList[k].gsz = currentDayJingzhi;
@@ -1132,7 +1136,11 @@ async function initFund() {
                         let marketValue = new BigDecimal("0");
                         // 获取到当日净值已出
                         let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
-                        if (currentDayNetDiagramDate == getBeijingDateNoSlash()) {
+                        let gztime = fundList[k].gztime;
+                        if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
+                            gztime = gztime.substring(0, 10).replaceAll('-', '')
+                        }
+                        if (currentDayNetDiagramDate == gztime) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
                             fundList[k].gsz = currentDayJingzhi;
