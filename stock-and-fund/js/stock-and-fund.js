@@ -5370,7 +5370,7 @@ async function selectLargeMarketCodeCheckbox() {
 function showAdvice() {
     $("#advice-content").val('');
     $("#advice-modal").modal();
-    $("#setting-modal").modal('hide');
+    // $("#setting-modal").modal('hide');
     ajaxGetAdvice();
 }
 
