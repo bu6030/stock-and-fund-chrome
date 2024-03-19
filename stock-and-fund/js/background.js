@@ -424,6 +424,9 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         }
         title = title.substring(0, title.length - 1);
         let funcIncome = await getFundIncome(date);
+        if (funcIncome == null) {
+            return;
+        }
         let funcDayIncome = funcIncome.fundDayIncome;
         let fundTotalIncome = funcIncome.fundTotalIncome;
         let totalDayIncome = funcDayIncome + stockDayIncome;
@@ -485,13 +488,13 @@ async function getFundIncome(date) {
     }
     let fundDayIncome = parseFloat("0");
     let fundTotalIncome = parseFloat("0");
+    let isFailed = false;
     let promises = fundList.map(async (fund) => {
         try {
             if (fund.bonds !== null && parseFloat(fund.bonds) > 0) {
                 let fundNetDiagramResponse = await fetch(`https://fundmobapi.eastmoney.com/FundMApi/FundNetDiagram.ashx?FCODE=${fund.fundCode}&RANGE=y&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=`);
                 let fundNetDiagramData = await fundNetDiagramResponse.text();
                 let fundNetDiagramJson = JSON.parse(fundNetDiagramData);
-                console.log('fundNetDiagramJson==', fundNetDiagramJson);
                 let currentDayNetDiagram = null;
                 for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
                     if (fundNetDiagramJson.Datas[i].FSRQ.replaceAll('-', '') == date) {
@@ -504,7 +507,6 @@ async function getFundIncome(date) {
                     let currentDayNetDiagramIndex = fundNetDiagramJson.Datas.indexOf(currentDayNetDiagram);
                     let previousDayNetDiagramIndex = currentDayNetDiagramIndex - 1;
                     let previousDayNetDiagram = fundNetDiagramJson.Datas[previousDayNetDiagramIndex];
-                    console.log("=======", currentDayNetDiagram, previousDayNetDiagram);
                     let dayIncome = (parseFloat(currentDayNetDiagram.DWJZ) - parseFloat(previousDayNetDiagram.DWJZ))
                         * parseFloat(fund.bonds);
                     fundDayIncome = fundDayIncome + dayIncome;
@@ -528,6 +530,7 @@ async function getFundIncome(date) {
             }
         } catch (error) {
             console.error(`Error fetching data for fund ${fund.fundCode}: ${error}`);
+            isFailed = true;
         }
     });
     // 等待所有基金的收益计算完成
@@ -535,6 +538,9 @@ async function getFundIncome(date) {
     let result = {
         "fundDayIncome" : fundDayIncome,
         "fundTotalIncome" : fundTotalIncome
+    }
+    if (isFailed) {
+        return null;
     }
     return result;
 }
