@@ -360,7 +360,13 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         for (let k in stockList) {
             stocks += stockList[k].code + ",";
         }
-        let response = await fetch("http://qt.gtimg.cn/q=" + stocks);
+        let response;
+        try {
+            response = await fetch("http://qt.gtimg.cn/q=" + stocks);
+        } catch (error) {
+            console.info("监控前20个股票以及计算盈亏获取股票数据错误: ", error);
+            return;
+        }
         let data = await response.arrayBuffer();
         var count = 0;
         const decoder = new TextDecoder('GBK');
@@ -419,7 +425,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 }
                 count++;
             } catch (error) {
-                console.info("MonitorTop20StockChromeTitle Error: ", error);
+                console.info("监控前20个股票以及计算盈亏股票处理错误: ", error);
             }
         }
         title = title.substring(0, title.length - 1);
