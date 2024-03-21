@@ -1605,10 +1605,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             if (showMinuteImageMini == 'open') {
                 minuteImageMiniDiv  = "<div id=\"minute-image-mini-" + result[k].fundCode + "\" class=\"my-echart\"></div>"
             }
-            var exsitJZStr = '';
-            if (result[k].existJZ) {
-                exsitJZStr = '(当日净值已出)';
-            }
+            var exsitJZStr = result[k].existJZ !== null && result[k].existJZ !== undefined
+                && result[k].existJZ ? '(实)' : '(估)';
             // 新顺序拼接TR行HTML
             var fundStrOrder = columnOrder.map(function (column) {
                 var columnName = Object.keys(column)[0];
