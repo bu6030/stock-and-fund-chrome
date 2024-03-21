@@ -1614,7 +1614,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 if (columnName == 'name-th') {
                     html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'day-income-th') {
-                    html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + "</td>" : "");
+                    html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
                     html = "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>";
                 } else if(columnName == 'change-th') {
