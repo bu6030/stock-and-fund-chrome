@@ -41,6 +41,7 @@ var columnOrderTemp;
 var largeMarketCode;
 var groups;
 var currentGroup;
+var mainPageRefreshTime;
 var stockColumnNames = {
     "name-th": "股票名称",
     "day-income-th": "当日盈利",
@@ -329,6 +330,11 @@ async function initLoad() {
     } else {
         groups = groupsCache;
     }
+    mainPageRefreshTime = await readCacheData('main-page-refresh-time');
+    if (mainPageRefreshTime == null || mainPageRefreshTime == '' || mainPageRefreshTime == undefined
+        || mainPageRefreshTime == 'undefined') {
+        mainPageRefreshTime = 20000;
+    }
     // 展示密码保护按钮
     $("#show-password-protect-button")[0].style.display = 'inline';
     $("#data-export-button")[0].style.display = 'inline';
@@ -337,8 +343,8 @@ async function initLoad() {
     initData();
     initLargeMarketData();
     initGroupButton();
-    // 20s刷新
-    setInterval(autoRefresh, 20000);
+    // 默认20s刷新，通过mainPageRefreshTime获取
+    setInterval(autoRefresh, mainPageRefreshTime);
 }
 
 // 20s自动刷新
@@ -811,6 +817,11 @@ document.addEventListener(
         // 设置页面，点击在大盘指数位置展示/不展示持仓盈亏
         document.getElementById('larget-market-total-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
         document.getElementById('larget-market-total-dont-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
+        // 设置页面，点击首页数据自动刷新时间间隔按钮，20秒/10秒/5秒/3秒
+        document.getElementById('main-page-refresh-time-20s-button').addEventListener('click', changeMainPageRefreshTime);
+        document.getElementById('main-page-refresh-time-10s-button').addEventListener('click', changeMainPageRefreshTime);
+        document.getElementById('main-page-refresh-time-5s-button').addEventListener('click', changeMainPageRefreshTime);
+        document.getElementById('main-page-refresh-time-3s-button').addEventListener('click', changeMainPageRefreshTime);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -5715,4 +5726,21 @@ async function addStock() {
         $("#stock-code").val('');
         $("#time-image-modal").modal("hide");
     }
+}
+
+// 修改首页自动刷新时间
+async function changeMainPageRefreshTime(event) {
+    let targetId = event.target.id;
+    if (targetId == 'main-page-refresh-time-20s-button') {
+        mainPageRefreshTime = 20000;
+    } else if (targetId == 'main-page-refresh-time-10s-button') {
+        mainPageRefreshTime = 10000;
+    } else if (targetId == 'main-page-refresh-time-5s-button') {
+        mainPageRefreshTime = 5000;
+    } else if (targetId == 'main-page-refresh-time-3s-button') {
+        mainPageRefreshTime = 3000;
+    }
+    $("#setting-modal").modal("hide");
+    saveCacheData('main-page-refresh-time', mainPageRefreshTime);
+    location.reload();
 }
