@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener(async function(message, sender, sendRespons
     }
 });
 
-chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/677540725");
+chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/688413206");
 
 // 后台定时执行任务的函数
 function performTask() {
