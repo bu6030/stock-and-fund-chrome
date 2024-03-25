@@ -231,12 +231,12 @@ function setStockMinitesImage() {
     if(dataStr.length == 0) {
         return;
     }
-    // let color;
-    // if (parseFloat(now) >= preClose) {
-    //     color = redColor;
-    // } else {
-    //     color = blueColor;
-    // }
+    let color;
+    if (parseFloat(now) >= preClose) {
+        color = redColor;
+    } else {
+        color = blueColor;
+    }
     if (dataStr.length < 241) {
         const diffLength = 241 - dataStr.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
@@ -324,7 +324,7 @@ function setStockMinitesImage() {
                 yAxisIndex: 0,  // 关联左侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
                 lineStyle: {
-                    color: '#0000FF', // 设置线的颜色
+                    color: color, // 设置线的颜色
                     width: 1.3,
                 },
                 markLine: {
@@ -358,7 +358,7 @@ function setStockMinitesImage() {
                 yAxisIndex: 1,  // 关联侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
                 lineStyle: {
-                    color: '#0000FF', // 设置线的颜色
+                    color: color, // 设置线的颜色
                     width: 1.3,
                 },
             },
