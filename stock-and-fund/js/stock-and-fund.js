@@ -1407,10 +1407,11 @@ async function getStockTableHtml(result, totalMarketValueResult) {
     for (var k in result) {
         try {
             let changePercent = parseFloat(result[k].changePercent);
-            var dayIncomeStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
+            var changePercentStyle = changePercent == 0 ? "" : (changePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
+            var incomePercent = parseFloat(result[k].incomePercent);
+            var incomePercentStyle = incomePercent == 0 ? "" : (incomePercent >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
-            
             stockTotalCostValue = stockTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
             let showMinuteImageMini = await readCacheData('show-minute-image-mini');
             let minuteImageMiniDiv = "";
@@ -1433,6 +1434,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             }
             let stockName = result[k].name;
             let dayIncome = parseFloat(result[k].dayIncome + "").toFixed(2);
+            var dayIncomeStyle = parseFloat(result[k].dayIncome + "") == 0 ? "" : (parseFloat(result[k].dayIncome + "") > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             let now = result[k].now;
             let costPrise = result[k].costPrise;
             let marketValue = parseFloat(result[k].marketValue + "").toFixed(2);
@@ -1479,7 +1481,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
-                    html = "<td " + dayIncomeStyle + ">" + result[k].changePercent + "%" + "</td>";
+                    html = "<td " + changePercentStyle + ">" + result[k].changePercent + "%" + "</td>";
                 } else if(columnName == 'change-th') {
                     html = (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].change + "</td>" : "");
                 } else if(columnName == 'price-th') {
@@ -1495,7 +1497,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'cost-price-value-th') {
                     html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "");
                 } else if(columnName == 'income-percent-th') {
-                    html = (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "");
+                    html = (incomePercentDisplay == 'DISPLAY' ? "<td " + incomePercentStyle + ">" + result[k].incomePercent + "%</td>" : "");
                 } else if(columnName == 'income-th') {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "");
                 } else if(columnName == 'addtime-price-th') {
@@ -1606,7 +1608,11 @@ async function getFundTableHtml(result, totalMarketValueResult) {
     for (var k in result) {
         try {
             let gszzl = parseFloat(result[k].gszzl);
-            var dayIncomeStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
+            var gszzlStyle = gszzl == 0 ? "" : (gszzl > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
+            var dayIncome = parseFloat(result[k].dayIncome);
+            var dayIncomeStyle = dayIncome == 0 ? "" : (dayIncome > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
+            var incomePercent = parseFloat(result[k].incomePercent);
+            var incomePercentStyle = incomePercent == 0 ? "" : (incomePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
             // 计算基金总成本
@@ -1627,7 +1633,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
-                    html = "<td " + dayIncomeStyle + ">" + result[k].gszzl + "%</td>";
+                    html = "<td " + gszzlStyle + ">" + result[k].gszzl + "%</td>";
                 } else if(columnName == 'change-th') {
                     html = (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">--</td>" : "");
                 } else if(columnName == 'price-th') {
@@ -1643,7 +1649,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'cost-price-value-th') {
                     html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "");
                 } else if(columnName == 'income-percent-th') {
-                    html = (incomePercentDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].incomePercent + "%</td>" : "");
+                    html = (incomePercentDisplay == 'DISPLAY' ? "<td " + incomePercentStyle + ">" + result[k].incomePercent + "%</td>" : "");
                 } else if(columnName == 'income-th') {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "");
                 } else if(columnName == 'addtime-price-th') {
