@@ -182,6 +182,7 @@ function setStockMinitesImage() {
     $("#time-image").html('');
     let result = ajaxGetStockTimeImageMinuteMini(timeImageCode);
     let dataStr = [];
+    let dataAverageStr = [];
     let dataVolumnStr = [];
     let dataAxis = [];
     let now;
@@ -205,6 +206,7 @@ function setStockMinitesImage() {
         let str = result.data.trends[k];
         let price = parseFloat(str.split(",")[1]);
         let volumn = parseFloat(str.split(",")[2]);
+        let averagePrice = parseFloat(str.split(",")[3]);
         totalVolumn = totalVolumn + volumn;
         if (price > maxPrice) {
             maxPrice = price;
@@ -212,7 +214,14 @@ function setStockMinitesImage() {
         if (price < minPrice) {
             minPrice = price;
         }
+        if (averagePrice > maxPrice) {
+            maxPrice = averagePrice;
+        }
+        if (averagePrice < minPrice) {
+            minPrice = averagePrice;
+        }
         dataStr.push(price);
+        dataAverageStr.push(averagePrice);
         dataAxis.push(str.split(",")[0].split(" ")[1]);
         dataVolumnStr.push(volumn);
         if (k == result.data.trends.length - 1) {
@@ -222,16 +231,17 @@ function setStockMinitesImage() {
     if(dataStr.length == 0) {
         return;
     }
-    let color;
-    if (parseFloat(now) >= preClose) {
-        color = redColor;
-    } else {
-        color = blueColor;
-    }
+    // let color;
+    // if (parseFloat(now) >= preClose) {
+    //     color = redColor;
+    // } else {
+    //     color = blueColor;
+    // }
     if (dataStr.length < 241) {
         const diffLength = 241 - dataStr.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
         dataStr = dataStr.concat(emptyData);
+        dataYellowStr = dataYellowStr.concat(emptyData);
         dataAxis = dataAxis.concat(emptyData);
         dataVolumnStr = dataVolumnStr.concat(emptyData);
     }
@@ -255,12 +265,12 @@ function setStockMinitesImage() {
     setTotalVolumnAndTurnOverRate(totalVolumn);
     option = {
         // resize: true,
-        lineStyle: {
-            color: color, // 设置线的颜色
-            // 其他样式配置
-            width: 0.05,
-            opacity: 0.5
-        },
+        // lineStyle: {
+        //     color: color, // 设置线的颜色
+        //     // 其他样式配置
+        //     width: 0.05,
+        //     opacity: 0.5
+        // },
         xAxis: {
             data: dataAxis,
             type: 'category',
@@ -313,6 +323,10 @@ function setStockMinitesImage() {
                 smooth: true,
                 yAxisIndex: 0,  // 关联左侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
+                lineStyle: {
+                    color: '#0000FF', // 设置线的颜色
+                    width: 1.3,
+                },
                 markLine: {
                     silent: false,
                     symbol: 'none',
@@ -343,6 +357,21 @@ function setStockMinitesImage() {
                 smooth: true,
                 yAxisIndex: 1,  // 关联侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
+                lineStyle: {
+                    color: '#0000FF', // 设置线的颜色
+                    width: 1.3,
+                },
+            },
+            {
+                data: dataAverageStr,
+                type: 'line',
+                smooth: true,
+                yAxisIndex: 1,  // 关联侧 Y 轴
+                showSymbol: false,  // 不显示小圆点
+                lineStyle: {
+                    color: '#FFD700', // 设置线的颜色
+                    width: 1.5,
+                },
             },
         ],
         graphic: [
