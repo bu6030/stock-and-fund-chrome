@@ -296,26 +296,28 @@ async function initLoad() {
     }
     if (currentGroup == 'default-group') {
         var funds = await readCacheData('funds');
-        if (funds == null) {
+        if (funds == null || funds == 'null') {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
         }
         var stocks = await readCacheData('stocks');
-        if (stocks == null) {
+        if (stocks == null || stocks == 'null') {
             stockList = [];
         } else {
             stockList = jQuery.parseJSON(stocks);
         }
     } else {
         var funds = await readCacheData(currentGroup + '_funds');
-        if (funds == null) {
+        console.log('=====funds=', funds);
+        if (funds == null || funds == 'null') {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
+            console.log('=====fundList=', fundList);
         }
         var stocks = await readCacheData(currentGroup + '_stocks');
-        if (stocks == null) {
+        if (stocks == null || stocks == 'null') {
             stockList = [];
         } else {
             stockList = jQuery.parseJSON(stocks);
@@ -5557,13 +5559,13 @@ async function changeGroup(groupId) {
     // 切换回默认分组
     if (currentGroup == 'default-group') {
         var funds = await readCacheData('funds');
-        if (funds == null) {
+        if (funds == null || funds == 'null') {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
         }
         var stocks = await readCacheData('stocks');
-        if (stocks == null) {
+        if (stocks == null || stocks == 'null') {
             stockList = [];
         } else {
             stockList = jQuery.parseJSON(stocks);
@@ -5571,13 +5573,13 @@ async function changeGroup(groupId) {
     }
     if (currentGroup != 'default-group') {
         var funds = await readCacheData(currentGroup + '_funds');
-        if (funds == null) {
+        if (funds == null || funds == 'null') {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
         }
         var stocks = await readCacheData(currentGroup + '_stocks');
-        if (stocks == null) {
+        if (stocks == null || stocks == 'null') {
             stockList = [];
         } else {
             stockList = jQuery.parseJSON(stocks);
