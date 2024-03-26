@@ -241,7 +241,7 @@ function setStockMinitesImage() {
         const diffLength = 241 - dataStr.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
         dataStr = dataStr.concat(emptyData);
-        dataYellowStr = dataYellowStr.concat(emptyData);
+        dataAverageStr = dataAverageStr.concat(emptyData);
         dataAxis = dataAxis.concat(emptyData);
         dataVolumnStr = dataVolumnStr.concat(emptyData);
     }
