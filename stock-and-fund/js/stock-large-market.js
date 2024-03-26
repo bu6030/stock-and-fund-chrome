@@ -25,7 +25,6 @@ function initLargeMarketData() {
         var aId = "id = 'large-market-" + bigStocks[k].f12 + "'";
         var style = "style=\""
             + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
-            // str += "<a " + style + aId + " >" + name + " " + now + "（" + change + "&nbsp;" + changePercent + "%） </a>";
         str = str + 
             '<div class=\"stock-large-market-box\"' + aId + '>' +
                 '<p>' + name +'</p>' +
@@ -243,6 +242,5 @@ function largeMarketCodeSave() {
     largeMarketCode = selectedData;
     saveCacheData('large-market-code', JSON.stringify(selectedData));
     $("#setting-modal").modal("hide");
-    // reloadDataAndHtml();
     initLargeMarketData();
 }

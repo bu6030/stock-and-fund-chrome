@@ -264,13 +264,6 @@ function setStockMinitesImage() {
     minPrice = minPrice.toFixed(toFixedVolume);
     setTotalVolumnAndTurnOverRate(totalVolumn);
     option = {
-        // resize: true,
-        // lineStyle: {
-        //     color: color, // 设置线的颜色
-        //     // 其他样式配置
-        //     width: 0.05,
-        //     opacity: 0.5
-        // },
         xAxis: {
             data: dataAxis,
             type: 'category',
