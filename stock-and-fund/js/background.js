@@ -524,14 +524,16 @@ async function getFundIncome(date) {
                 } else {
                     let response = await fetch(`http://fundgz.1234567.com.cn/js/${fund.fundCode}.js`);
                     let data = await response.text();
-                    var json = JSON.parse(data.substring(8, data.length - 2));
-                    let gztime = json.gztime.substring(0, 10).replaceAll('-', '');
-                    // 如果日期不一致不在计算
-                    if (date != gztime) return;
-                    let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
-                    fundDayIncome = fundDayIncome + dayIncome;
-                    let totalIncome = (parseFloat(json.gsz) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
-                    fundTotalIncome = fundTotalIncome + totalIncome;
+                    if (data != 'jsonpgz();') {
+                        var json = JSON.parse(data.substring(8, data.length - 2));
+                        let gztime = json.gztime.substring(0, 10).replaceAll('-', '');
+                        // 如果日期不一致不在计算
+                        if (date != gztime) return;
+                        let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
+                        fundDayIncome = fundDayIncome + dayIncome;
+                        let totalIncome = (parseFloat(json.gsz) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
+                        fundTotalIncome = fundTotalIncome + totalIncome;
+                    }
                 }
             }
         } catch (error) {
