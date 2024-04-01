@@ -5439,6 +5439,7 @@ function updateGroupList() {
 async function showDayIncomeHistory() {
     $("#day-income-history-modal").modal();
     $("#data-center-modal").modal('hide');
+    // $("#data-center-modal").modal();
     let dayIncomeHistory = await readCacheData('DAY_INCOME_HISTORY');
     // dayIncomeHistory数组倒序排列
     dayIncomeHistory = dayIncomeHistory.reverse();
@@ -5464,7 +5465,16 @@ async function showDayIncomeHistory() {
             + "</tr>";
     });
     $("#day-income-history-nr").html(str);
+    let dataStockStr = [];
+    let dataFundStr = [];
+    let dataAxis = [];
     dayIncomeHistory.forEach((item, index) => {
+        // 只展示前十个
+        if (index <= 10) {
+            dataStockStr.push(parseFloat(item.stockDayIncome));
+            dataFundStr.push(parseFloat(item.fundDayIncome));
+            dataAxis.push(item.date);
+        }
         let dayIncomeHistoryTr = document.getElementById('day-income-history-tr-' + index);
         dayIncomeHistoryTr.addEventListener('click', async function () {
             var result = confirm('是否删除了日期：' + item.date);
@@ -5483,6 +5493,74 @@ async function showDayIncomeHistory() {
             }
         });
     });
+    let elementId = 'day-income-image';
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById(elementId));
+    myChart.clear();
+    var series = [
+        {
+            data: dataStockStr,
+            type: 'bar',
+            stack: 'a',
+            name: '股票盈利',
+            // itemStyle: {
+            //     color: '#17a2b8'
+            // },
+        },
+        {
+            data: dataFundStr,
+            type: 'bar',
+            stack: 'a',
+            name: '基金盈利',
+            // itemStyle: {
+            //     color: '#007bff'
+            // },
+        }
+    ];
+    const stackInfo = {};
+    for (let i = 0; i < series[0].data.length; ++i) {
+        for (let j = 0; j < series.length; ++j) {
+          const stackName = series[j].stack;
+          if (!stackName) {
+            continue;
+          }
+          if (!stackInfo[stackName]) {
+            stackInfo[stackName] = {
+              stackStart: [],
+              stackEnd: []
+            };
+          }
+          const info = stackInfo[stackName];
+          const data = series[j].data[i];
+          if (data && data !== '-') {
+            if (info.stackStart[i] == null) {
+              info.stackStart[i] = j;
+            }
+            info.stackEnd[i] = j;
+          }
+        }
+    }
+    option = {
+        xAxis: {
+            type: 'category',
+            data: dataAxis
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: series,
+        tooltip: {
+            formatter: function(params) {
+                let dataIndex = params.dataIndex;  // 获取柱子的索引
+                let stockIncome = parseFloat(series[0].data[dataIndex]);
+                let fundIncome = parseFloat(series[1].data[dataIndex]);
+                let totalIncome = parseFloat(stockIncome) + parseFloat(fundIncome);
+                return "<br>日期：" + params.name + "<br>股票盈利：" + stockIncome.toFixed(2)
+                    + "<br>基金盈利：" + fundIncome.toFixed(2) + "<br>合计：" + totalIncome.toFixed(2);
+            }
+        }
+    };
+    myChart.setOption(option);
 }
 
 // 切换/隐藏持仓盈亏

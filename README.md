@@ -240,6 +240,7 @@
 219. 当日盈利，涨跌幅，收益率，收益显示涨跌颜色独立计算 2024/3/25
 220. 分时图增加平均线 2024/3/25
 221. 云同步，分组切换报错 2024/3/26 -- version 2.0.5 -- end
+222. 每日盈利增加图像 2024/4/1
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
