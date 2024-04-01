@@ -5469,12 +5469,9 @@ async function showDayIncomeHistory() {
     let dataFundStr = [];
     let dataAxis = [];
     dayIncomeHistory.forEach((item, index) => {
-        // 只展示前十个
-        if (index <= 10) {
-            dataStockStr.push(parseFloat(item.stockDayIncome));
-            dataFundStr.push(parseFloat(item.fundDayIncome));
-            dataAxis.push(item.date);
-        }
+        dataStockStr.push(parseFloat(item.stockDayIncome));
+        dataFundStr.push(parseFloat(item.fundDayIncome));
+        dataAxis.push(item.date);
         let dayIncomeHistoryTr = document.getElementById('day-income-history-tr-' + index);
         dayIncomeHistoryTr.addEventListener('click', async function () {
             var result = confirm('是否删除了日期：' + item.date);
@@ -5540,10 +5537,40 @@ async function showDayIncomeHistory() {
           }
         }
     }
+    if (series[0].data.length <= 20) {
+        // 数据量小于等于 20 条时，不启用 dataZoom
+        dataZoomOption = [];
+    } else if (series[0].data.length <= 40) {
+        // 数据量大于 20 条时，启用 dataZoom
+        dataZoomOption = [
+            {
+                type: 'slider',
+                show: true,
+                xAxisIndex: [0],
+                start: 0,
+                end: 70
+            }
+        ];
+    } else {
+        // 数据量大于 20 条时，启用 dataZoom
+        dataZoomOption = [
+            {
+                type: 'slider',
+                show: true,
+                xAxisIndex: [0],
+                start: 0,
+                end: 30
+            }
+        ];
+    }
     option = {
         xAxis: {
             type: 'category',
-            data: dataAxis
+            data: dataAxis,
+            axisLabel: {
+                interval: 0,
+                rotate: 45, // 旋转角度
+            },
         },
         yAxis: {
             type: 'value'
@@ -5558,7 +5585,8 @@ async function showDayIncomeHistory() {
                 return "<br>日期：" + params.name + "<br>股票盈利：" + stockIncome.toFixed(2)
                     + "<br>基金盈利：" + fundIncome.toFixed(2) + "<br>合计：" + totalIncome.toFixed(2);
             }
-        }
+        },
+        dataZoom: dataZoomOption,
     };
     myChart.setOption(option);
 }
