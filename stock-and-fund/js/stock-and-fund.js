@@ -5537,29 +5537,18 @@ async function showDayIncomeHistory() {
           }
         }
     }
-    if (series[0].data.length <= 20) {
-        // 数据量小于等于 20 条时，不启用 dataZoom
+    // 数据量小于等于 20 条时，不启用 dataZoom，数据量大于 20 条时，启用 dataZoom，并计算end
+    if (series[0].data.length <= 20) { 
         dataZoomOption = [];
-    } else if (series[0].data.length <= 40) {
-        // 数据量大于 20 条时，启用 dataZoom
-        dataZoomOption = [
-            {
-                type: 'slider',
-                show: true,
-                xAxisIndex: [0],
-                start: 0,
-                end: 70
-            }
-        ];
     } else {
-        // 数据量大于 20 条时，启用 dataZoom
+        let endPercent = (20 / series[0].data.length) * 100;
         dataZoomOption = [
             {
                 type: 'slider',
                 show: true,
                 xAxisIndex: [0],
                 start: 0,
-                end: 30
+                end: endPercent
             }
         ];
     }
