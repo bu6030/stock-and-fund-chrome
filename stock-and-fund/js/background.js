@@ -177,7 +177,7 @@ function monitorStockPrice(stockList) {
             })
             .catch(error => {
                 // 处理请求错误
-                console.info("执行突破价格监控任务:", error);
+                console.warn("执行突破价格监控任务:", error);
             });
     } else {
         console.log("非交易时间，停止执行任务...");
@@ -233,7 +233,7 @@ function monitorFundCycleInvest(fundList) {
                         })
                     .catch(error => {
                         // 处理请求错误
-                        console.info("执行定投任务报错:", error);
+                        console.warn("执行定投任务报错:", error);
                     });
                 }
             }
@@ -285,7 +285,7 @@ function monitorStock(code) {
             })
             .catch(error => {
                 // 处理请求错误
-                console.info("执行监控股票实时价格任务:", error);
+                console.warn("执行监控股票实时价格任务:", error);
             });
     } else {
         console.log("非交易时间，停止执行任务...");
@@ -330,7 +330,7 @@ function sendChromeBadge(badgeTextColor, badgeBackgroundColor, badgeText) {
     try {
         chrome.action.setBadgeTextColor({ color: badgeTextColor });
     } catch (error) {
-        console.info("BadgeTextColor Error: ", error);
+        console.warn("BadgeTextColor Error: ", error);
     }
     chrome.action.setBadgeBackgroundColor({ color: badgeBackgroundColor });
     chrome.action.setBadgeText({ text: badgeText });
@@ -342,7 +342,7 @@ function setChromeTitle(title) {
             title: title
         });
     } catch (error) {
-        console.info("setChromeTitle Error: ", error);
+        console.warn("setChromeTitle Error: ", error);
     }
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
@@ -364,7 +364,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         try {
             response = await fetch("http://qt.gtimg.cn/q=" + stocks);
         } catch (error) {
-            console.info("监控前20个股票以及计算盈亏获取股票数据错误: ", error);
+            console.warn("监控前20个股票以及计算盈亏获取股票数据错误: ", error);
             return;
         }
         let data = await response.arrayBuffer();
@@ -425,7 +425,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 }
                 count++;
             } catch (error) {
-                console.info("监控前20个股票以及计算盈亏股票处理错误: ", error);
+                console.warn("监控前20个股票以及计算盈亏股票处理错误: ", error);
             }
         }
         title = title.substring(0, title.length - 1);
@@ -440,7 +440,6 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
         title += '\n当日总收益：' + totalDayIncome.toFixed(2);
-        console.log("fundTotalIncome = ", fundTotalIncome.toFixed(2), "; stockTotalIncome = ", stockTotalIncome.toFixed(2));
         let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
         if (monitorPriceOrPercent == 'DAY_INCOME') {
             let color = totalDayIncome > 0 ? 'red' : 'green';
@@ -449,9 +448,9 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             }
             if (totalDayIncome > 9999.99) {
                 totalDayIncome = Math.floor(totalDayIncome/10000*10)/10 + "w";
-            } else if (totalDayIncome > 999.99) {
-                totalDayIncome = Math.floor(totalDayIncome);
             } else if (totalDayIncome > 99.99) {
+                totalDayIncome = Math.floor(totalDayIncome);
+            } else if (totalDayIncome > 9.99) {
                 totalDayIncome = Math.floor(totalDayIncome * 10) / 10;
             } else {
                 totalDayIncome = totalDayIncome.toFixed(2);
@@ -537,7 +536,7 @@ async function getFundIncome(date) {
                 }
             }
         } catch (error) {
-            console.error(`Error fetching data for fund ${fund.fundCode}: ${error}`);
+            console.warn(`Error fetching data for fund ${fund.fundCode}: ${error}`);
             isFailed = true;
         }
     });
