@@ -286,8 +286,25 @@ function setStockMinitesImage() {
                         fontSize: imageTextSize // 调小字体大小使其适应空间
                     },
                     formatter: function(value) {
-                        return parseFloat(value).toFixed(toFixedVolume);  // 左侧 Y 轴刻度显示价格
+                        let price = parseFloat(value).toFixed(toFixedVolume);  // 左侧 Y 轴刻度显示价格
+                        if (price > preClose) {
+                            return '{a|' + price + '}';
+                        } else if (price < preClose) {
+                            return '{b|' + price + '}';
+                        } else {
+                            return price;
+                        }
                     },
+                    rich: {
+                        a: {
+                            color: redColor,
+                            fontWeight: 'bold'
+                        },
+                        b: {
+                            color: blueColor,
+                            fontWeight: 'bold'
+                        }
+                    }
                 },
 
             },
@@ -303,9 +320,25 @@ function setStockMinitesImage() {
                     },
                     formatter: function(value) {
                         // 计算涨跌比例，假设初始价格为 prePrice
-                        var changePercent = ((value - preClose) / preClose * 100).toFixed(2) + '%';
-                        return changePercent;
+                        var changePercent = ((value - preClose) / preClose * 100);
+                        if (changePercent > 0) {
+                            return '{a|' + changePercent.toFixed(2) + '%' + '}';
+                        } else if (changePercent < 0) {
+                            return '{b|' + changePercent.toFixed(2) + '%' + '}';
+                        } else {
+                            return changePercent.toFixed(2) + '%';
+                        }
                     },
+                    rich: {
+                        a: {
+                            color: redColor,
+                            fontWeight: 'bold'
+                        },
+                        b: {
+                            color: blueColor,
+                            fontWeight: 'bold'
+                        }
+                    }
                 },
             },
         ],
