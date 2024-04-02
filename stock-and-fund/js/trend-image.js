@@ -329,7 +329,7 @@ function setStockMinitesImage() {
                         color: 'darkblue',  // 标签文本颜色
                         fontWeight: 'bold',  // 标签文本粗细
                         formatter : function() {
-                            return "开盘价格：" + parseFloat(preClose).toFixed(toFixedVolume);
+                            return "昨日收盘：" + parseFloat(preClose).toFixed(toFixedVolume);
                         },
                     },
                     lineStyle: {
