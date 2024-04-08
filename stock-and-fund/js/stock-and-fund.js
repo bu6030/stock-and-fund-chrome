@@ -44,6 +44,7 @@ var currentGroup;
 var mainPageRefreshTime;
 var stockColumnNames = {
     "name-th": "股票名称",
+    "mini-image-th": "",
     "day-income-th": "当日盈利",
     "change-percent-th": "涨跌幅",
     "change-th": "涨跌",
@@ -60,6 +61,7 @@ var stockColumnNames = {
 };
 var fundColumnNames = {
     "name-th": "基金名称",
+    "mini-image-th": "",
     "day-income-th": "当日盈利",
     "change-percent-th": "涨跌幅",
     "change-th": "涨跌",
@@ -273,6 +275,7 @@ async function initLoad() {
     if (columnOrder == null) {
         columnOrder = [
             {"name-th": 0},
+            {"mini-image-th": 0},
             {"day-income-th": 0},
             {"change-percent-th": 0},
             {"change-th": 0},
@@ -1479,7 +1482,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") +  minuteImageMiniDiv + "</td>"
+                    html = "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
+                } else if (columnName == 'mini-image-th') {
+                    html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -1550,6 +1555,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         var html;
         if (columnName == 'name-th') {
             html = "<td>合计</td>";
+        } else if (columnName == 'mini-image-th') {
+            html = "<td></td>";
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "");
         } else if(columnName == 'change-percent-th') {
@@ -1631,7 +1638,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + minuteImageMiniDiv + "</td>";
+                    html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
+                } else if (columnName == 'mini-image-th') {
+                    html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -1702,6 +1711,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         var html;
         if (columnName == 'name-th') {
             html = "<td>合计</td>";
+        } else if (columnName == 'mini-image-th') {
+            html = "<td></td>";
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "");
         } else if(columnName == 'change-percent-th') {
@@ -1773,6 +1784,8 @@ function getTotalTableHtml(totalMarketValueResult) {
         var html;
         if (columnName == 'name-th') {
             html = "<td>汇总合计</td>";
+        } else if (columnName == 'mini-image-th') {
+            html = "<td></td>";
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" );
         } else if(columnName == 'change-percent-th') {
@@ -2742,7 +2755,7 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
                     lineStyle: {
                         color: 'gray',
                         width: 0.8,
-                        type: 'dotted'
+                        type: 'dashed'
                     },
                     data: [
                         {

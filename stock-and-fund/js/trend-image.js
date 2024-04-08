@@ -359,16 +359,16 @@ function setStockMinitesImage() {
                     label: {
                         show: true,  // 设置为 true，使标签一开始就可见
                         position: 'middle',  // 调整标签位置，可以根据需要调整
-                        color: 'darkblue',  // 标签文本颜色
+                        color: 'gray',  // 标签文本颜色
                         fontWeight: 'bold',  // 标签文本粗细
                         formatter : function() {
                             return "昨日收盘：" + parseFloat(preClose).toFixed(toFixedVolume);
                         },
                     },
                     lineStyle: {
-                        color: 'darkblue',
+                        color: 'gray',
                         width: 1,
-                        type: 'dotted'
+                        type: 'dashed'
                     },
                     data: [
                         {
