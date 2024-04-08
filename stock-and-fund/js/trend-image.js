@@ -351,7 +351,7 @@ function setStockMinitesImage() {
                 showSymbol: false,  // 不显示小圆点
                 lineStyle: {
                     color: color, // 设置线的颜色
-                    width: 1.3,
+                    width: 1,
                 },
                 markLine: {
                     silent: true,
@@ -385,7 +385,7 @@ function setStockMinitesImage() {
                 showSymbol: false,  // 不显示小圆点
                 lineStyle: {
                     color: color, // 设置线的颜色
-                    width: 1.3,
+                    width: 1,
                 },
             },
             {
