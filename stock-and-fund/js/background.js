@@ -4,8 +4,8 @@ let count = 0;
 // 定时执行任务的函数
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
-    let performTaskId = setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
-    saveData("performTaskId", performTaskId);
+    performTaskId = setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
+    // saveData("performTaskId", performTaskId);
 }
 
 // 当扩展程序安装时触发的事件
@@ -16,8 +16,8 @@ chrome.runtime.onStartup.addListener(scheduleTask);
 chrome.runtime.onMessage.addListener(async function(message, sender, sendResponse) {
     // 在接收到消息时执行的操作
     console.log('收到消息:', message);
-    if(message.message == "scheduleTask"){
-        let performTaskId = await getData("performTaskId");
+    if(message.message == "scheduleTask") {
+        // let performTaskId = await getData("performTaskId");
         console.log('清理performTaskId:', performTaskId);
         clearInterval(performTaskId);
         scheduleTask();
@@ -265,9 +265,9 @@ function monitorStock(code) {
                 var badgeBackgroundColor;
                 var changePercent = parseFloat(values[32]);
                 if (parseFloat(now) >= parseFloat(openPrice)) {
-                    badgeBackgroundColor = '#c12e2a';
+                    badgeBackgroundColor = '#ee2500';
                 } else {
-                    badgeBackgroundColor = '#3e8f3e';
+                    badgeBackgroundColor = '#093';
                 }
                 if (now.length >= 5) {
                     now = parseFloat(now.substring(0, 5));

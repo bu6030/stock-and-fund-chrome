@@ -9,8 +9,8 @@ var fundTotalCostValue;
 var totalMarketValue;
 var fundList;
 var stockList;
-var blueColor = '#3e8f3e';
-var redColor = '#c12e2a';
+var blueColor = '#093';
+var redColor = '#ee2500';
 var cheatMeFlag = false;
 var showStockOrFundOrAll = 'all';
 var windowSize = 'NORMAL'; // 窗口大小
@@ -112,11 +112,11 @@ window.addEventListener("load", async (event) => {
 async function initLoad() {
     blueColor = await readCacheData('blueColor');
     if (blueColor == null) {
-        blueColor = '#3e8f3e';
+        blueColor = '#093';
     }
     redColor = await readCacheData('redColor');
     if (redColor == null) {
-        redColor = '#c12e2a';
+        redColor = '#ee2500';
     }
     cheatMeFlag = await readCacheData('cheatMeFlag');
     if (cheatMeFlag == null) {
@@ -2774,24 +2774,24 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
 async function changeBlueRed(event) {
     let targetId = event.target.id;
     if (targetId == 'change-blue-red-button') {
-        if (blueColor == '#3e8f3e') {
-            blueColor = '#c12e2a';
-        } else if (blueColor == '#c12e2a') {
-            blueColor = '#3e8f3e';
+        if (blueColor == '#093') {
+            blueColor = '#ee2500';
+        } else if (blueColor == '#ee2500') {
+            blueColor = '#093';
         } else { // 隐身模式下，变为红绿模式
-            blueColor = '#3e8f3e'; 
+            blueColor = '#093'; 
         }
-        if (redColor == '#c12e2a') {
-            redColor = '#3e8f3e';
-        } else if (redColor == '#3e8f3e') {
-            redColor = '#c12e2a';
+        if (redColor == '#ee2500') {
+            redColor = '#093';
+        } else if (redColor == '#093') {
+            redColor = '#ee2500';
         } else { // 隐身模式下，变为红绿模式
-            redColor = '#c12e2a';
+            redColor = '#ee2500';
         }
     } else if (targetId == 'change-black-button'){
         if (blueColor == '#545454') {// 已经是隐身模式了点击变更为红绿模式
-            blueColor = '#3e8f3e'; 
-            redColor = '#c12e2a';
+            blueColor = '#093'; 
+            redColor = '#ee2500';
         } else { // 红绿模式下点击变更为隐身模式
             blueColor = '#545454'; 
             redColor = '#545454';
@@ -2903,9 +2903,9 @@ async function stockMonitor () {
     let openPrice = stock.openPrice;
     let badgeBackgroundColor;
     if (parseFloat(now) >= parseFloat(openPrice)) {
-        badgeBackgroundColor = '#c12e2a';
+        badgeBackgroundColor = '#ee2500';
     } else {
-        badgeBackgroundColor = '#3e8f3e';
+        badgeBackgroundColor = '#093';
     }
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));
