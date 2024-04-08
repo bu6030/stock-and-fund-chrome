@@ -354,7 +354,7 @@ function setStockMinitesImage() {
                     width: 1.3,
                 },
                 markLine: {
-                    silent: false,
+                    silent: true,
                     symbol: 'none',
                     label: {
                         show: true,  // 设置为 true，使标签一开始就可见
@@ -367,7 +367,7 @@ function setStockMinitesImage() {
                     },
                     lineStyle: {
                         color: 'darkblue',
-                        width: 2,
+                        width: 1,
                         type: 'dotted'
                     },
                     data: [

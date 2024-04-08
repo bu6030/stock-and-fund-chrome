@@ -2682,12 +2682,11 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
     var myChart = echarts.init(document.getElementById(elementId));
     option = {
         // resize: true,
-        lineStyle: {
-            color: color, // 设置线的颜色
-            // 其他样式配置
-            width: 1,
-            opacity: 0.5
-        },
+        // lineStyle: {
+        //     color: color, // 设置线的颜色
+        //     // 其他样式配置
+        //     width: 0.1
+        // },
         xAxis: {
             axisLabel: {
                 show: false // 隐藏x轴坐标标签
@@ -2731,6 +2730,10 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
                 data: dataStr,
                 type: 'line',
                 smooth: true,
+                lineStyle: {
+                    color: color, // 设置线的颜色
+                    width: 1,
+                },
                 markLine: {
                     symbol: 'none',
                     label: {
@@ -2738,14 +2741,15 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
                     },
                     lineStyle: {
                         color: 'gray',
-                        width: 2,
+                        width: 0.8,
                         type: 'dotted'
                     },
                     data: [
                         {
                             yAxis: parseFloat(preClose).toFixed(toFixedVolume)  // 在 y 轴上的 150 处添加一条横线
                         }
-                    ]
+                    ],
+                    silent: true,  // 禁用鼠标事件
                 },
             }
         ]
