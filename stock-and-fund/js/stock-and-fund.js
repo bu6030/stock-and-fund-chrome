@@ -2474,7 +2474,7 @@ async function initWindowsSize() {
         myBody.style.width = '800px';
         myMainContent.style.width = '800px';
         myMainContent.style.height = '100%';
-        myDiv.style.height = '450px';
+        myDiv.style.height = '100%';
         helpDocumentAlert.style.width = '800px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
@@ -2498,8 +2498,8 @@ async function initWindowsSize() {
         myDiv.style.width = '600px';
         myBody.style.width = '600px';
         myMainContent.style.width = '600px';
-        myMainContent.style.height = '450px';
-        myDiv.style.height = '450px';
+        myMainContent.style.height = '100%';
+        myDiv.style.height = '100%';
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
@@ -2522,8 +2522,8 @@ async function initWindowsSize() {
         myDiv.style.width = '400px';
         myBody.style.width = '400px';
         myMainContent.style.width = '400px';
-        myMainContent.style.height = '450px';
-        myDiv.style.height = '450px';
+        myMainContent.style.height = '100%';
+        myDiv.style.height = '100%';
         helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
