@@ -45,7 +45,7 @@ var currentGroup;
 var mainPageRefreshTime;
 var stockColumnNames = {
     "name-th": "股票名称",
-    "mini-image-th": "",
+    "mini-image-th": "迷你分时图",
     "day-income-th": "当日盈利",
     "change-percent-th": "涨跌幅",
     "turn-over-rate-th": "换手率",
@@ -63,7 +63,7 @@ var stockColumnNames = {
 };
 var fundColumnNames = {
     "name-th": "基金名称",
-    "mini-image-th": "",
+    "mini-image-th": "迷你分时图",
     "day-income-th": "当日盈利",
     "change-percent-th": "涨跌幅",
     "turn-over-rate-th": "换手率",
@@ -4985,6 +4985,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'update-time-th' && updateTimeDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'mini-image-th') {
+        html = "<th></th>";
     } else {
         html = type == 'STOCK' ? 
             " <th id=\"stock-" + columnId + "\" class=\"order\">" + stockColumnNames[columnId] || columnId + "</th> " :
@@ -5005,7 +5007,7 @@ function generateColumnList() {
         checkbox.type = 'checkbox';
         checkbox.value = '';
         checkbox.id = columnName.replace('-th', '') + '-display-checkbox';
-        if (columnName == 'name-th' || columnName == 'change-percent-th' || columnName == 'price-th') {
+        if (columnName == 'name-th' || columnName == 'change-percent-th' || columnName == 'price-th' || columnName == 'mini-image-th') {
             checkbox.disabled = true;
         }
         // Create label for checkbox

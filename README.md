@@ -250,6 +250,7 @@
 229. 首页增加换手率 2024/4/9
 230. 缩小窗口导致无法点击编辑按钮，恢复默认窗口大小 2024/4/9
 231. 换手率显示问题修改 2024/4/10 -- version 2.0.7 -- end
+232. 首页迷你分时图优化 2024/4/10
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
