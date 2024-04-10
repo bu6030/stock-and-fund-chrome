@@ -5163,11 +5163,11 @@ function addDragAndDropListeners() {
         updateTimeDisplay = 'DISPLAY';
         $("#update-time-display-checkbox").prop("checked", true);
     }
-    if (updateTimeDisplay == null || updateTimeDisplay == 'HIDDEN') {
-        updateTimeDisplay = 'HIDDEN';
+    if (turnOverRateDisplay == null || turnOverRateDisplay == 'HIDDEN') {
+        turnOverRateDisplay = 'HIDDEN';
         $("#turn-over-rate-display-checkbox").prop("checked", false);
     } else {
-        updateTimeDisplay = 'DISPLAY';
+        turnOverRateDisplay = 'DISPLAY';
         $("#turn-over-rate-display-checkbox").prop("checked", true);
     }
     // 设置页面，隐藏/展示页面展示项，编码
