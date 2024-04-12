@@ -461,6 +461,7 @@ function setStockMinitesImage() {
             type: 'value',
             position: 'right',
             axisLabel: {
+                show: false, // 不显示 Y 轴坐标数字
                 textStyle: {
                     fontSize: imageTextSize // 调小字体大小使其适应空间
                 },
