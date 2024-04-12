@@ -7,6 +7,7 @@ var timerId;
 let turnOverRate = '';
 // 展示分时图
 function showMinuteImage() {
+    $("#volumn-image-new").show();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006"
@@ -60,6 +61,7 @@ function showMinuteImage() {
 }
 // 展示日线图
 function showDayImage() {
+    $("#volumn-image-new").hide();
     clearTimeImageTimeout();
     let path = "";
     fundInvesterPositionSetButton();
@@ -95,6 +97,7 @@ function showDayImage() {
 }
 // 展示周线图
 function showWeekImage() {
+    $("#volumn-image-new").hide();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
@@ -126,6 +129,7 @@ function showWeekImage() {
 }
 // 展示月线图
 function showMonthImage() {
+    $("#volumn-image-new").hide();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
@@ -440,6 +444,70 @@ function setStockMinitesImage() {
         },
     };
     myChart.setOption(option);
+    // 画成交量图
+    let volumnChart = echarts.init(document.getElementById('volumn-image-new')); 
+    var volumnOption = {
+        xAxis: {
+            data: dataAxis,  // X 轴数据，与主图相同
+            type: 'category',
+            axisLabel: {
+                textStyle: {
+                    fontSize: imageTextSize // 调小字体大小使其适应空间
+                },
+                interval: interval, // 调整刻度显示间隔
+            },
+        },
+        yAxis: {
+            type: 'value',
+            position: 'right',
+            axisLabel: {
+                textStyle: {
+                    fontSize: imageTextSize // 调小字体大小使其适应空间
+                },
+            },
+        },
+        series: [
+            {
+                data: dataVolumnStr, // 成交量数据
+                type: 'bar',
+                itemStyle: {
+                    color: function(params) {
+                        var dataIndex = params.dataIndex;
+                        // 获取主图的数据
+                        var currentPrice = dataStr[dataIndex];
+                        var lastMinitePrice = dataIndex > 1 ? dataStr[dataIndex - 1] : dataStr[dataIndex];
+                        // 设置不同的颜色
+                        if (currentPrice >= lastMinitePrice) {
+                            return redColor; // 比主图线高时的颜色
+                        } else {
+                            return blueColor; // 比主图线低时的颜色
+                        }
+                    },
+                },
+            },
+        ],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'line',
+                lineStyle: {
+                    color: '#999999',
+                    width: 1,
+                    type: 'solid'
+                }
+            },
+            formatter: function(params) {
+                if (params[0].value == '') {
+                    return "";
+                }
+                var dataIndex = params[0].dataIndex;
+                var volumn = parseFloat(dataVolumnStr[dataIndex] / 10000).toFixed(2);
+                return "时间：" + params[0].name + "<br>成交量：" + volumn + "万";
+            }
+        },
+    };
+    // 使用配置项设置成交量图
+    volumnChart.setOption(volumnOption);
     $("#time-image-modal").modal();
     // 20s刷新
     timerId = setTimeout(function () {
