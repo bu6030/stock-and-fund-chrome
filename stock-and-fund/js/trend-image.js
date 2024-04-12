@@ -179,9 +179,13 @@ function toEditPage() {
 function setStockMinitesImage() {
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
+    let volumnElementId = 'volumn-image-new';
     var myChart = echarts.init(document.getElementById(elementId));
+    let volumnChart = echarts.init(document.getElementById(volumnElementId)); 
     myChart.dispose();
+    volumnChart.dispose();
     myChart = echarts.init(document.getElementById(elementId));
+    volumnChart = echarts.init(document.getElementById(volumnElementId)); 
     setEchartsSize(myChart);
     $("#time-image").html('');
     let result = ajaxGetStockTimeImageMinuteMini(timeImageCode);
@@ -445,7 +449,6 @@ function setStockMinitesImage() {
     };
     myChart.setOption(option);
     // 画成交量图
-    let volumnChart = echarts.init(document.getElementById('volumn-image-new')); 
     var volumnOption = {
         xAxis: {
             data: dataAxis,  // X 轴数据，与主图相同
