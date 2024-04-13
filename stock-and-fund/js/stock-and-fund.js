@@ -2510,9 +2510,9 @@ async function initWindowsSize() {
         groupMenuButton.style.display = "inline";
         timeImageDialog.style.maxWidth = '650px';
         timeImageDialog.style.maxHeight = '430px';
-        timeImageNew.style.width = '650px';
-        timeImageNew.style.height = '430px';
-        volumnImageEchart.style.width = '650px';
+        timeImageNew.style.width = '630px';
+        timeImageNew.style.height = '360px';
+        volumnImageEchart.style.width = '630px';
         volumnImageEchart.style.height = '80px';
     } else if (windowSize == 'SMALL') {
         // 设置首页各项内容宽度 600px

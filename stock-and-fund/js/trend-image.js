@@ -272,6 +272,9 @@ function setStockMinitesImage() {
     minPrice = minPrice.toFixed(toFixedVolume);
     setTotalVolumnAndTurnOverRate(totalVolumn);
     option = {
+        grid: {
+            bottom: '7%',   // 距离容器底部的距离
+        },
         xAxis: {
             data: dataAxis,
             type: 'category',
@@ -558,6 +561,9 @@ function setStockImage(type) {
         fundOrStockName = timeImageName;
     }
     option = {
+        grid: {
+            bottom: '7%',   // 距离容器底部的距离
+        },
         xAxis: {
             data: data0.categoryData,
             axisLabel: {
@@ -671,9 +677,9 @@ function setEchartsSize(myChart, volumnChart) {
     console.log('改变echartSize');
     // 设置容器的宽度和高度
     if (windowSize == 'NORMAL') {
-        myChart.getDom().style.width = '650px';
-        myChart.getDom().style.height = '430px';
-        volumnChart.getDom().style.width = '650px';
+        myChart.getDom().style.width = '630px';
+        myChart.getDom().style.height = '360px';
+        volumnChart.getDom().style.width = '630px';
     } else if (windowSize == 'SMALL') {
         myChart.getDom().style.width = '530px';
         myChart.getDom().style.height = '400px';
