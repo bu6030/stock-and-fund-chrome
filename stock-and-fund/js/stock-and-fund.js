@@ -2484,7 +2484,7 @@ async function initWindowsSize() {
     let showDataCenterButton = document.getElementById('show-data-center-button');
     let timeImageDialog = document.getElementById('time-image-dialog');
     let timeImageNew = document.getElementById('time-image-new');
-    let volumnImageNew = document.getElementById('volumn-image-new');
+    let volumnImageEchart = document.getElementById('volumn-image-echart');
     let timeImageBody = document.getElementById('time-image-body');
     let groupMenuButton = document.getElementById('group-menu-button');
     if (windowSize == 'NORMAL') {
@@ -2512,8 +2512,8 @@ async function initWindowsSize() {
         timeImageDialog.style.maxHeight = '430px';
         timeImageNew.style.width = '650px';
         timeImageNew.style.height = '430px';
-        volumnImageNew.style.width = '650px';
-        volumnImageNew.style.height = '80px';
+        volumnImageEchart.style.width = '650px';
+        volumnImageEchart.style.height = '80px';
     } else if (windowSize == 'SMALL') {
         // 设置首页各项内容宽度 600px
         myWindows.style.width = '600px';
@@ -2538,8 +2538,8 @@ async function initWindowsSize() {
         timeImageDialog.style.maxWidth = '550px';
         timeImageNew.style.width = '530px';
         timeImageNew.style.height = '400px';
-        volumnImageNew.style.width = '530px';
-        volumnImageNew.style.height = '80px';
+        volumnImageEchart.style.width = '530px';
+        volumnImageEchart.style.height = '80px';
     } else if (windowSize == 'MINI') {
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';
@@ -2564,8 +2564,8 @@ async function initWindowsSize() {
         timeImageDialog.style.maxWidth = '400px';
         timeImageNew.style.width = '380px';
         timeImageNew.style.height = '280px';
-        volumnImageNew.style.width = '380px';
-        volumnImageNew.style.height = '80px';
+        volumnImageEchart.style.width = '380px';
+        volumnImageEchart.style.height = '80px';
     }
 }
 

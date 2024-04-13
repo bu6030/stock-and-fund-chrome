@@ -164,9 +164,9 @@ input[type="checkbox"] {
     line-height: 0.5; /* 调整行高，控制换行高度 */
 }
 
-.volumn-echart-new {
-    margin-top:0px;
-    width: 650px;
+.volumn-echart {
+    margin-top: 0px;
+    width: 540px;
     height: 80px;
     margin-right:10px;
 }

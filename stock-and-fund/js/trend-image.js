@@ -7,7 +7,7 @@ var timerId;
 let turnOverRate = '';
 // 展示分时图
 function showMinuteImage() {
-    $("#volumn-image-new").show();
+    $("#volumn-image-echart").show();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006"
@@ -61,7 +61,7 @@ function showMinuteImage() {
 }
 // 展示日线图
 function showDayImage() {
-    $("#volumn-image-new").hide();
+    $("#volumn-image-echart").hide();
     clearTimeImageTimeout();
     let path = "";
     fundInvesterPositionSetButton();
@@ -97,7 +97,7 @@ function showDayImage() {
 }
 // 展示周线图
 function showWeekImage() {
-    $("#volumn-image-new").hide();
+    $("#volumn-image-echart").hide();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
@@ -129,7 +129,7 @@ function showWeekImage() {
 }
 // 展示月线图
 function showMonthImage() {
-    $("#volumn-image-new").hide();
+    $("#volumn-image-echart").hide();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
@@ -179,14 +179,14 @@ function toEditPage() {
 function setStockMinitesImage() {
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
-    let volumnElementId = 'volumn-image-new';
+    let volumnElementId = 'volumn-image-echart';
     var myChart = echarts.init(document.getElementById(elementId));
     let volumnChart = echarts.init(document.getElementById(volumnElementId)); 
     myChart.dispose();
     volumnChart.dispose();
     myChart = echarts.init(document.getElementById(elementId));
     volumnChart = echarts.init(document.getElementById(volumnElementId)); 
-    setEchartsSize(myChart);
+    setEchartsSize(myChart, volumnChart);
     $("#time-image").html('');
     let result = ajaxGetStockTimeImageMinuteMini(timeImageCode);
     let dataStr = [];
@@ -526,7 +526,8 @@ function setStockImage(type) {
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
     var myChart = echarts.init(document.getElementById(elementId));
-    myChart.clear();
+    myChart.dispose();
+    myChart = echarts.init(document.getElementById(elementId));
     $("#time-image").html('');
     let end = getBeijingDateNoSlash();
     let result = ajaxGetStockTimeImage(timeImageCode, type, end);
@@ -666,18 +667,21 @@ function splitData(rawData) {
     };
 }
 
-function setEchartsSize(myChart) {
+function setEchartsSize(myChart, volumnChart) {
     console.log('改变echartSize');
     // 设置容器的宽度和高度
     if (windowSize == 'NORMAL') {
         myChart.getDom().style.width = '650px';
         myChart.getDom().style.height = '430px';
+        volumnChart.getDom().style.width = '650px';
     } else if (windowSize == 'SMALL') {
         myChart.getDom().style.width = '530px';
         myChart.getDom().style.height = '400px';
+        volumnChart.getDom().style.width = '530px';
     } else if (windowSize == 'MINI') {
         myChart.getDom().style.width = '380px';
         myChart.getDom().style.height = '280px';
+        volumnChart.getDom().style.width = '380px';
     }
 }
 // 设置成交量
