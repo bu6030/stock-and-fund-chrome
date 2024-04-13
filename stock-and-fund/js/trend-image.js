@@ -601,6 +601,46 @@ function setStockImage(type) {
                     borderColor: null, // 边框颜色，null 表示使用涨跌颜色
                     borderColor0: null, // 跌的边框颜色，null 表示使用涨跌颜色
                 },
+            },
+            {
+                name: 'MA5',
+                type: 'line',
+                data: calculateMA(5, data0.values), // 使用自定义函数计算五日均线数据
+                smooth: true, // 是否平滑曲线
+                showSymbol: false, // 不显示圆点
+                lineStyle: {
+                    width: 1, // 线宽
+                },
+            },
+            {
+                name: 'MA10',
+                type: 'line',
+                data: calculateMA(10, data0.values), // 使用自定义函数计算五日均线数据
+                smooth: true, // 是否平滑曲线
+                showSymbol: false, // 不显示圆点
+                lineStyle: {
+                    width: 1, // 线宽
+                },
+            },
+            {
+                name: 'MA20',
+                type: 'line',
+                data: calculateMA(20, data0.values), // 使用自定义函数计算五日均线数据
+                smooth: true, // 是否平滑曲线
+                showSymbol: false, // 不显示圆点
+                lineStyle: {
+                    width: 1, // 线宽
+                },
+            },
+            {
+                name: 'MA30',
+                type: 'line',
+                data: calculateMA(30, data0.values), // 使用自定义函数计算五日均线数据
+                smooth: true, // 是否平滑曲线
+                showSymbol: false, // 不显示圆点
+                lineStyle: {
+                    width: 1, // 线宽
+                },
             }
         ],
         graphic: {
@@ -632,14 +672,40 @@ function setStockImage(type) {
                 let values = params[0].value;
                 let volumn = (parseFloat(values[5]) / 10000).toFixed(2);
                 let money = (parseFloat(values[6]) / 100000000).toFixed(2);
+                let ma5 = params[1].value;
+                let ma10 = params[2].value;
+                let ma20 = params[3].value;
+                let ma30 = params[4].value;
                 return result.data.name + "<br>时间：" + params[0].name + "<br>开盘：" + values[1]
                     + "<br>收盘：" + values[2] + "<br>最低：" + values[3]
                     + "<br>最高：" + values[4] + "<br>成交量：" + volumn
-                    + "万<br>成交额：" + money + "亿<br>涨跌幅：" + values[7] + "%";
+                    + "万<br>成交额：" + money + "亿<br>涨跌幅：" + values[7] + "%"
+                    + "<br>MA5：" + ma5 + "<br>MA10：" + ma10
+                    + "<br>MA20：" + ma20 + "<br>MA30：" + ma30;
             }
         },
     };
     myChart.setOption(option);
+}
+// 自定义函数，计算五日均线数据
+function calculateMA(dayCount, data) {
+    let toFixedVolume = 2;
+    if (parseFloat(data[0]) <= 5) {
+        toFixedVolume = 3;
+    }
+    let result = [];
+    for (let i = 0, len = data.length; i < len; i++) {
+        if (i < dayCount) {
+            result.push('-');
+            continue;
+        }
+        let sum = 0;
+        for (let j = 0; j < dayCount; j++) {
+            sum += parseFloat(data[i - j][1]); // 这里假设收盘价在数据中的索引为 1
+        }
+        result.push((sum / dayCount).toFixed(toFixedVolume));
+    }
+    return result;
 }
 // 处理分时线数据
 function transformMinuteData(apiData) {
@@ -672,7 +738,7 @@ function splitData(rawData) {
         values: values
     };
 }
-
+// 每次初始化修改分时图图表大小
 function setEchartsSize(myChart, volumnChart) {
     console.log('改变echartSize');
     // 设置容器的宽度和高度
