@@ -561,6 +561,10 @@ function setStockImage(type) {
         fundOrStockName = timeImageName;
     }
     option = {
+        legend: {
+            data: ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30'],
+            top: 30
+        },
         grid: {
             bottom: '7%',   // 距离容器底部的距离
         },
