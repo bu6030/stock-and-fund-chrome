@@ -700,6 +700,20 @@ function setStockImage(type) {
     myChart.setOption(option);
     // 画成交量图
     var volumnOption = {
+        dataZoom: [
+            {
+                type: 'inside',
+                start: 50,
+                end: 100
+            },
+            {
+                show: true,
+                type: 'slider',
+                top: '90%',
+                start: 50,
+                end: 100
+            }
+        ],
         xAxis: {
             data: data0.categoryData,  // X 轴数据，与主图相同
             type: 'category',
@@ -762,6 +776,7 @@ function setStockImage(type) {
     };
     // 使用配置项设置成交量图
     volumnChart.setOption(volumnOption);
+    echarts.connect([volumnChart],[myChart])
 }
 // 自定义函数，计算五日均线数据
 function calculateMA(dayCount, data) {
