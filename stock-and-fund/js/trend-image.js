@@ -7,7 +7,7 @@ var timerId;
 let turnOverRate = '';
 // 展示分时图
 function showMinuteImage() {
-    $("#volumn-image-echart").show();
+    // $("#volumn-image-echart").show();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006"
@@ -61,7 +61,7 @@ function showMinuteImage() {
 }
 // 展示日线图
 function showDayImage() {
-    $("#volumn-image-echart").hide();
+    // $("#volumn-image-echart").hide();
     clearTimeImageTimeout();
     let path = "";
     fundInvesterPositionSetButton();
@@ -97,7 +97,7 @@ function showDayImage() {
 }
 // 展示周线图
 function showWeekImage() {
-    $("#volumn-image-echart").hide();
+    // $("#volumn-image-echart").hide();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
@@ -129,7 +129,7 @@ function showWeekImage() {
 }
 // 展示月线图
 function showMonthImage() {
-    $("#volumn-image-echart").hide();
+    // $("#volumn-image-echart").hide();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
@@ -525,12 +525,20 @@ function setStockMinitesImage() {
 }
 // 展示日线/周线/月线图
 function setStockImage(type) {
+    let imageTextSize = 12;
+    if (windowSize == 'MINI') {
+        imageTextSize = 8;
+    }
     setTotalVolumnAndTurnOverRate(0);
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
+    let volumnElementId = 'volumn-image-echart';
     var myChart = echarts.init(document.getElementById(elementId));
+    let volumnChart = echarts.init(document.getElementById(volumnElementId)); 
     myChart.dispose();
+    volumnChart.dispose();
     myChart = echarts.init(document.getElementById(elementId));
+    volumnChart = echarts.init(document.getElementById(volumnElementId)); 
     $("#time-image").html('');
     let end = getBeijingDateNoSlash();
     let result = ajaxGetStockTimeImage(timeImageCode, type, end);
@@ -690,6 +698,70 @@ function setStockImage(type) {
         },
     };
     myChart.setOption(option);
+    // 画成交量图
+    var volumnOption = {
+        xAxis: {
+            data: data0.categoryData,  // X 轴数据，与主图相同
+            type: 'category',
+            axisLabel: {
+                textStyle: {
+                    fontSize: imageTextSize // 调小字体大小使其适应空间
+                },
+                interval: 6, // 调整刻度显示间隔
+            },
+        },
+        yAxis: {
+            type: 'value',
+            position: 'right',
+            axisLabel: {
+                show: false, // 不显示 Y 轴坐标数字
+                textStyle: {
+                    fontSize: imageTextSize // 调小字体大小使其适应空间
+                },
+            },
+        },
+        series: [
+            {
+                data: data0.volumnData, // 成交量数据
+                type: 'bar',
+                itemStyle: {
+                    color: function(params) {
+                        var dataIndex = params.dataIndex;
+                        // 获取主图的数据
+                        var currentPrice = data0.priceData[dataIndex];
+                        var lastMinitePrice = dataIndex > 1 ? data0.priceData[dataIndex - 1] : data0.priceData[dataIndex];
+                        // 设置不同的颜色
+                        if (currentPrice >= lastMinitePrice) {
+                            return redColor; // 比主图线高时的颜色
+                        } else {
+                            return blueColor; // 比主图线低时的颜色
+                        }
+                    },
+                },
+            },
+        ],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'line',
+                lineStyle: {
+                    color: '#999999',
+                    width: 1,
+                    type: 'solid'
+                }
+            },
+            formatter: function(params) {
+                if (params[0].value == '') {
+                    return "";
+                }
+                var dataIndex = params[0].dataIndex;
+                var volumn = parseFloat(data0.volumnData[dataIndex] / 10000).toFixed(2);
+                return "时间：" + params[0].name + "<br>成交量：" + volumn + "万";
+            }
+        },
+    };
+    // 使用配置项设置成交量图
+    volumnChart.setOption(volumnOption);
 }
 // 自定义函数，计算五日均线数据
 function calculateMA(dayCount, data) {
@@ -732,13 +804,19 @@ function transformDayData(apiData) {
 // 处理分时线数据
 function splitData(rawData) {
     const categoryData = [];
+    const volumnData = [];
+    const priceData = [];
     const values = [];
     for (var i = 0; i < rawData.length; i++) {
         categoryData.push(rawData[i].splice(0, 1)[0]);
         values.push(rawData[i]);
+        volumnData.push(rawData[i][5]);
+        priceData.push(rawData[i][3]);
     }
     return {
         categoryData: categoryData,
+        volumnData: volumnData,
+        priceData: priceData,
         values: values
     };
 }
