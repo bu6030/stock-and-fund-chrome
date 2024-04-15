@@ -595,6 +595,7 @@ function setStockImage(type) {
                 end: 100
             },
             {
+                id: 'dataZoom1',
                 show: true,
                 type: 'slider',
                 top: '90%',
@@ -707,6 +708,7 @@ function setStockImage(type) {
                 end: 100
             },
             {
+                id: 'dataZoom2',
                 show: true,
                 type: 'slider',
                 top: '90%',
@@ -777,6 +779,49 @@ function setStockImage(type) {
     // 使用配置项设置成交量图
     volumnChart.setOption(volumnOption);
     echarts.connect([volumnChart],[myChart])
+
+    // 监听 dataZoom 事件
+    myChart.on('dataZoom', function (event) {
+        if (event.batch) {
+            // 批量操作时，不再次触发
+            let zoomInfo = event.batch[0];
+            volumnChart.dispatchAction({
+                type: 'dataZoom',
+                start: zoomInfo.start,
+                end: zoomInfo.end
+            });
+            return;
+        }
+        // 根据 event.dataZoomId 判断是哪个图表发生了缩放
+        if (event.dataZoomId === 'dataZoom1') {
+            volumnChart.dispatchAction({
+                type: 'dataZoom',
+                start: event.start,
+                end: event.end
+            });
+        }
+    });
+    // 监听 dataZoom 事件
+    volumnChart.on('dataZoom', function (event) {
+        if (event.batch) {
+            let zoomInfo = event.batch[0];
+            myChart.dispatchAction({
+                type: 'dataZoom',
+                start: zoomInfo.start,
+                end: zoomInfo.end
+            });
+            return;
+        }
+        // 根据 event.dataZoomId 判断是哪个图表发生了缩放
+        if (event.dataZoomId === 'dataZoom2') {
+            myChart.dispatchAction({
+                type: 'dataZoom',
+                start: event.start,
+                end: event.end
+            });
+        }
+    });
+
 }
 // 自定义函数，计算五日均线数据
 function calculateMA(dayCount, data) {
@@ -825,7 +870,7 @@ function splitData(rawData) {
     for (var i = 0; i < rawData.length; i++) {
         categoryData.push(rawData[i].splice(0, 1)[0]);
         values.push(rawData[i]);
-        volumnData.push(rawData[i][5]);
+        volumnData.push(rawData[i][4]);
         priceData.push(rawData[i][3]);
     }
     return {
