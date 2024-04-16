@@ -5844,6 +5844,12 @@ async function showUpDownCounts() {
         },
     };
     myChart.setOption(option);
+    let contentHtml = "上涨: <font color=red>" + fenbuValues.slice(12, 22).reduce((a, b) => a + b, 0)+ "</font>";
+    contentHtml += "  下跌: <font color=green>" + fenbuValues.slice(1, 11).reduce((a, b) => a + b, 0) + "</font>";
+    contentHtml += "  平盘:" + fenbuValues[11] + "</font><br>";
+    contentHtml += "涨停: <font color=red>" + fenbuValues[fenbuValues.length - 1] + "</font>";
+    contentHtml += "  跌停: <font color=green>" + fenbuValues[0] + "</font>";
+    $("#data-center-content").html(contentHtml);
 }
 
 // 持仓明细弹出的分时图添加股票
