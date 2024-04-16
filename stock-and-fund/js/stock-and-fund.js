@@ -1663,9 +1663,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'change-percent-th') {
                     html = "<td " + gszzlStyle + ">" + result[k].gszzl + "%</td>";
                 } else if(columnName == 'change-th') {
-                    html = (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">--</td>" : "");
+                    html = (changeDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'turn-over-rate-th') {
-                    html = (turnOverRateDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">--</td>" : "");
+                    html = (turnOverRateDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'price-th') {
                     html = "<td>" + result[k].gsz + exsitJZStr + "</td>";
                 } else if(columnName == 'cost-price-th') {
