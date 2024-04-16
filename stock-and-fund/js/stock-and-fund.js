@@ -3366,6 +3366,26 @@ async function getStockAndFundFromLocalService () {
             saveCacheData(currentGroup + '_stocks', JSON.stringify(result.stocks));
             saveCacheData(currentGroup + '_funds', JSON.stringify(result.funds));
         }
+        if (result.dayIncomeHistorys != null && result.dayIncomeHistorys != ''
+            && result.dayIncomeHistorys != []) {
+            let filteredData = result.dayIncomeHistorys.map(item => {
+                return {
+                    date: item.date.replaceAll('-', ''),
+                    stockDayIncome: item.stockDayIncome,
+                    fundDayIncome: item.fundDayIncome
+                };
+            });
+            filteredData.sort((a, b) => {
+                if (a.date > b.date) {
+                    return 1;
+                }
+                if (a.date < b.date) {
+                    return -1;
+                }
+                return 0;
+            });
+            saveCacheData('DAY_INCOME_HISTORY', filteredData);
+        }
         stockList = result.stocks;
         fundList = result.funds;
         reloadDataAndHtml();
