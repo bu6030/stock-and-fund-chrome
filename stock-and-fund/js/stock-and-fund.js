@@ -3395,6 +3395,10 @@ async function getStockAndFundFromLocalService () {
 
 // 删除基金或股票
 async function deleteStockAndFund() {
+    var checkResult = confirm("是否确认删除？");
+    if (!checkResult) {
+        return;
+    }
     if (timeImageType == "FUND") {
         for (var k in fundList) {
             if (fundList[k].fundCode == timeImageCode) {
