@@ -33,35 +33,39 @@ chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/688413206");
 
 // 后台定时执行任务的函数
 function performTask() {
-    getData('MONITOR_STOCK_CODE').then((monitorStockCode) => {
-        if (monitorStockCode != null && monitorStockCode != '') {
-            monitorStock(monitorStockCode);
-        }
-    });
-    getData('stocks').then((stockArr) => {
-        if (stockArr != null && stockArr != "[]") {
-            monitorStockPrice(JSON.parse(stockArr));
-        } else {
-            monitorStockPrice(JSON.parse("[]"));
-        }
-    });
-    getData('funds').then((fundArr) => {
-        if (fundArr != null && fundArr != "[]") {
-            monitorFundCycleInvest(JSON.parse(fundArr));
-        } else {
-            monitorFundCycleInvest(JSON.parse("[]"));
-        }
-    });
-    getData('monitor-top-20-stock').then((monitoTop20Stock) => {
-        if (count % 3 == 0) {
-            if (monitoTop20Stock == null || monitoTop20Stock == undefined) {
-                monitoTop20Stock = false;
+    try {
+        getData('MONITOR_STOCK_CODE').then((monitorStockCode) => {
+            if (monitorStockCode != null && monitorStockCode != '') {
+                monitorStock(monitorStockCode);
             }
-            count = 0;
-            monitorTop20StockChromeTitle(monitoTop20Stock);
-        }
-    });
-    count++;
+        });
+        getData('stocks').then((stockArr) => {
+            if (stockArr != null && stockArr != "[]") {
+                monitorStockPrice(JSON.parse(stockArr));
+            } else {
+                monitorStockPrice(JSON.parse("[]"));
+            }
+        });
+        getData('funds').then((fundArr) => {
+            if (fundArr != null && fundArr != "[]") {
+                monitorFundCycleInvest(JSON.parse(fundArr));
+            } else {
+                monitorFundCycleInvest(JSON.parse("[]"));
+            }
+        });
+        getData('monitor-top-20-stock').then((monitoTop20Stock) => {
+            if (count % 3 == 0) {
+                if (monitoTop20Stock == null || monitoTop20Stock == undefined) {
+                    monitoTop20Stock = false;
+                }
+                count = 0;
+                monitorTop20StockChromeTitle(monitoTop20Stock);
+            }
+        });
+        count++;
+    } catch (error) {
+        console.error("performTask error: ", error);
+    }
 }
 // 从 chrome 本地缓存获取数据
 function getData(key) {
