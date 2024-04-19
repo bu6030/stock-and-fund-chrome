@@ -2508,11 +2508,11 @@ async function initWindowsSize() {
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
         groupMenuButton.style.display = "inline";
-        timeImageDialog.style.maxWidth = '650px';
+        timeImageDialog.style.maxWidth = '630px';
         timeImageDialog.style.maxHeight = '430px';
-        timeImageNew.style.width = '630px';
+        timeImageNew.style.width = '600px';
         timeImageNew.style.height = '360px';
-        volumnImageEchart.style.width = '630px';
+        volumnImageEchart.style.width = '600px';
         volumnImageEchart.style.height = '80px';
     } else if (windowSize == 'SMALL') {
         // 设置首页各项内容宽度 600px
@@ -2535,11 +2535,11 @@ async function initWindowsSize() {
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
         groupMenuButton.style.display = "inline";
-        timeImageDialog.style.maxWidth = '550px';
-        timeImageNew.style.width = '530px';
-        timeImageNew.style.height = '400px';
-        volumnImageEchart.style.width = '530px';
-        volumnImageEchart.style.height = '80px';
+        timeImageDialog.style.maxWidth = '600px';
+        timeImageNew.style.width = '580px';
+        timeImageNew.style.height = '300px';
+        volumnImageEchart.style.width = '580px';
+        volumnImageEchart.style.height = '60px';
     } else if (windowSize == 'MINI') {
         // 设置首页各项内容宽度 400px
         myWindows.style.width = '400px';

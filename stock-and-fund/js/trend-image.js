@@ -889,9 +889,9 @@ function setEchartsSize(myChart, volumnChart) {
         myChart.getDom().style.height = '360px';
         volumnChart.getDom().style.width = '630px';
     } else if (windowSize == 'SMALL') {
-        myChart.getDom().style.width = '530px';
-        myChart.getDom().style.height = '400px';
-        volumnChart.getDom().style.width = '530px';
+        myChart.getDom().style.width = '580px';
+        myChart.getDom().style.height = '300px';
+        volumnChart.getDom().style.width = '580px';
     } else if (windowSize == 'MINI') {
         myChart.getDom().style.width = '380px';
         myChart.getDom().style.height = '280px';
