@@ -258,6 +258,7 @@
 237. 股票基金删除时提示确认是否删除 2024/4/17
 238. 后端价格监控定时增加异常捕获 2024/4/17
 239. 缩小模式下分时图页面高度优化 2024/4/19
+240. 固定股票/基金标题行固定不动 2024/4/22
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
