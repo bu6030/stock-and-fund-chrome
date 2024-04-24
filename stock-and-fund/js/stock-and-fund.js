@@ -302,6 +302,15 @@ async function initLoad() {
         ];
     }
     columnOrderTemp = columnOrder;
+    var groupsCache = await readCacheData('groups');
+    if (groupsCache == null || groupsCache == '' || groupsCache == undefined
+        || groupsCache == 'undefined') {
+        groups = {
+            'default-group': '默认分组' // 预设一个默认分组
+        };
+    } else {
+        groups = groupsCache;
+    }
     currentGroup  = await readCacheData('current-group');
     if (currentGroup == null || currentGroup == '' || currentGroup == undefined
         || currentGroup == 'undefined') {
@@ -320,6 +329,8 @@ async function initLoad() {
         } else {
             stockList = jQuery.parseJSON(stocks);
         }
+    } else if(currentGroup == 'all-group') {
+        await changeAllGroup();
     } else {
         var funds = await readCacheData(currentGroup + '_funds');
         console.log('=====funds=', funds);
@@ -336,15 +347,7 @@ async function initLoad() {
             stockList = jQuery.parseJSON(stocks);
         }
     }
-    var groupsCache = await readCacheData('groups');
-    if (groupsCache == null || groupsCache == '' || groupsCache == undefined
-        || groupsCache == 'undefined') {
-        groups = {
-            'default-group': '默认分组' // 预设一个默认分组
-        };
-    } else {
-        groups = groupsCache;
-    }
+
     mainPageRefreshTime = await readCacheData('main-page-refresh-time');
     if (mainPageRefreshTime == null || mainPageRefreshTime == '' || mainPageRefreshTime == undefined
         || mainPageRefreshTime == 'undefined') {
@@ -5488,6 +5491,13 @@ function showGroup() {
     $("#group-modal").modal();
 }
 
+// 展示分组页面
+function showAllGroup() {
+    currentGroup = 'all-group';
+    saveCacheData('current-group', currentGroup);
+    changeGroup('all-group');
+}
+
 // 新增分组
 async function addGroup() {
     const groupNameInput = document.getElementById('group-name');
@@ -5725,15 +5735,18 @@ function changeTimeFormate(dateTime) {
 function initGroupButton() {
     // 清空下拉菜单，以防重复添加
     $("#group-menu").empty();
+    var option = $("<a class='dropdown-item'></a>").attr("id", "show-all-group-button").text("全部分组");
+    $("#group-menu").append(option);
     // 遍历 groups 对象，为每个组名创建一个下拉菜单选项
     Object.keys(groups).forEach(id => {
         const groupName = groups[id];
         var option = $("<a class='dropdown-item'></a>").attr("id", "group-" + id).text(groupName);
         $("#group-menu").append(option);
     });
-    var option = $("<a class='dropdown-item'></a>").attr("id", "show-group-button").text("编辑分组");
+    option = $("<a class='dropdown-item'></a>").attr("id", "show-group-button").text("编辑分组");
     $("#group-menu").append(option);
     document.getElementById('show-group-button').addEventListener('click', showGroup);
+    document.getElementById('show-all-group-button').addEventListener('click', showAllGroup);
     Object.keys(groups).forEach(id => {
         document.getElementById("group-" + id).addEventListener('click', async function(){
             changeGroup(id);
@@ -5765,23 +5778,70 @@ async function changeGroup(groupId) {
         }
     }
     if (currentGroup != 'default-group') {
-        var funds = await readCacheData(currentGroup + '_funds');
-        if (funds == null || funds == 'null') {
-            fundList = [];
+        // 切换到全部分组，展示全部分组数据
+        if (currentGroup == 'all-group') {
+           await changeAllGroup();
         } else {
-            fundList = jQuery.parseJSON(funds);
-        }
-        var stocks = await readCacheData(currentGroup + '_stocks');
-        if (stocks == null || stocks == 'null') {
-            stockList = [];
-        } else {
-            stockList = jQuery.parseJSON(stocks);
+            var funds = await readCacheData(currentGroup + '_funds');
+            if (funds == null || funds == 'null') {
+                fundList = [];
+            } else {
+                fundList = jQuery.parseJSON(funds);
+            }
+            var stocks = await readCacheData(currentGroup + '_stocks');
+            if (stocks == null || stocks == 'null') {
+                stockList = [];
+            } else {
+                stockList = jQuery.parseJSON(stocks);
+            }
         }
     }
     $("#group-modal").modal('hide');
     reloadDataAndHtml();
 }
 
+async function changeAllGroup() {
+    fundList = [];
+    stockList = [];
+    // 遍历所有group
+    for (const id of Object.keys(groups)) {
+        if (id == 'default-group') {
+            var funds = await readCacheData('funds');
+            if (funds == null || funds == 'null') {
+                
+            } else {
+                jQuery.parseJSON(funds).forEach(item => {
+                    fundList.push(item);
+                })
+            }
+            var stocks = await readCacheData('stocks');
+            if (stocks == null || stocks == 'null') {
+                
+            } else {
+                jQuery.parseJSON(stocks).forEach(item => {
+                    stockList.push(item);
+                })
+            }
+        } else {
+            var funds = await readCacheData(id + '_funds');
+            if (funds == null || funds == 'null') {
+                
+            } else {
+                jQuery.parseJSON(funds).forEach(item => {
+                    fundList.push(item);
+                })
+            }
+            var stocks = await readCacheData(id + '_stocks');
+            if (stocks == null || stocks == 'null') {
+                
+            } else {
+                jQuery.parseJSON(stocks).forEach(item => {
+                    stockList.push(item);
+                })
+            }
+        }
+    };
+}
 // 展示涨跌分布图表
 async function showUpDownCounts() {
     let result = ajaxGetUpDownCounts();
