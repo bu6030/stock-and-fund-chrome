@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(scheduleTask);
 chrome.runtime.onStartup.addListener(scheduleTask);
 // 在扩展程序的 background.js 文件中使用 chrome.runtime.onMessage 监听函数
 chrome.runtime.onMessage.addListener(async function(message, sender, sendResponse) {
-    try{
+    try {
         // 在接收到消息时执行的操作
         console.log('收到消息:', message);
         if(message.message == "scheduleTask") {
