@@ -3566,7 +3566,7 @@ async function syncDataFromCloud() {
             saveCacheData('stocks', JSON.stringify(result.stocks));
             saveCacheData('funds', JSON.stringify(result.funds));
             if (result.groups != null && result.groups != undefined
-                 && result.groups != '') {
+                 && result.groups != '' && result.groups != 'null') {
                 groups = result.groups;
                 saveCacheData('groups', result.groups);
                 // 遍历json.groups获取所有value
@@ -3576,6 +3576,9 @@ async function syncDataFromCloud() {
                     saveCacheData(id + '_stocks', JSON.stringify(result[id + '_stocks']));
                     saveCacheData(id + '_funds', JSON.stringify(result[id + '_funds']));
                 });
+            } else {
+                groups = [];
+                saveCacheData('groups', groups);
             }
             if (currentGroup == 'default-group') {
                 stockList = result.stocks;
