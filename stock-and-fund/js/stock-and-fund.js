@@ -618,7 +618,18 @@ document.addEventListener(
                     var option = $("<option></option>").val(id).text(groupName);
                     $("#fund-belong-group-select").append(option);
                 });
-                $("#fund-belong-group-select").val(currentGroup);
+                if (currentGroup == 'all-group') {
+                    let belongGroup = '';
+                    for (var k in fundList) {
+                        if(fundList[k].fundCode == timeImageCode) {
+                            belongGroup = fundList[k].belongGroup;
+                            break;
+                        }
+                    }
+                    $("#fund-belong-group-select").val(belongGroup);
+                } else {
+                    $("#fund-belong-group-select").val(currentGroup);
+                }
                 $("#fund-modal").modal();
             } else {
                 // 初始化页面的belong-group
@@ -628,7 +639,18 @@ document.addEventListener(
                     var option = $("<option></option>").val(id).text(groupName);
                     $("#stock-belong-group-select").append(option);
                 });
-                $("#stock-belong-group-select").val(currentGroup);
+                if (currentGroup == 'all-group') {
+                    let belongGroup = '';
+                    for (var k in stockList) {
+                        if(stockList[k].code == timeImageCode) {
+                            belongGroup = stockList[k].belongGroup;
+                            break;
+                        }
+                    }
+                    $("#stock-belong-group-select").val(belongGroup);
+                } else {
+                    $("#stock-belong-group-select").val(currentGroup);
+                }
                 $("#stock-modal").modal();
             }
         });
@@ -1967,6 +1989,7 @@ async function searchFundByName(name) {
 // 保存股票
 async function saveStock() {
     var belongGroup = $("#stock-belong-group-select").val();
+    console.log('belongGroup=',belongGroup,';currentGroup=',currentGroup);
     var costPrise = $("#stock-costPrise").val();
     var bonds = $("#stock-bonds").val();
     var monitorHighPrice = $("#stock-monitor-high-price").val();
@@ -2021,14 +2044,22 @@ async function saveStock() {
                 stockList[k].addTimePrice = checkStockExsitResult.now;
                 stockList[k].addTime = getCurrentDate();
             }
-            // 如果新设置的group是currentGroup则默认保存
-            if (belongGroup == currentGroup) {
+            // 当前是全部分组，需要特殊处理
+            if (currentGroup == 'all-group') {
+                alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
+                $("#stock-modal").modal("hide");
+                $("#search-stock-modal").modal("hide");
+                return;
+            // 如果新设置的group是currentGroup则默认保存，实际上就是分组不变
+            } else if (belongGroup == currentGroup) {
+                // 同样都是默认group
                 if (currentGroup == 'default-group') {
                     saveCacheData('stocks', JSON.stringify(stockList));
+                // 同样都是非默认分组，保存到对应分组
                 } else {
                     saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
                 }
-            // 如果新设置的group不是currentGroup需要特殊处理
+            // 如果新设置的group不是currentGroup需要特殊处理，也就是分组变化了
             } else {
                 // 如果当前分组是默认分组，则需要先保存到新的其他分组中，再从默认分组删除
                 if (currentGroup == 'default-group') {
@@ -2125,7 +2156,7 @@ async function saveStock() {
     stock.addTimePrice = checkStockExsitResult.now;
     stock.addTime = getCurrentDate();
     stockList.push(stock);
-    if (currentGroup == 'default-group') {
+    if (currentGroup == 'default-group' || currentGroup == 'all-group') {
         saveCacheData('stocks', JSON.stringify(stockList));
     } else {
         saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
@@ -2140,6 +2171,7 @@ async function saveStock() {
 // 保存基金
 async function saveFund() {
     var belongGroup = $("#fund-belong-group-select").val();
+    console.log('belongGroup:',belongGroup,"currentGroup:",currentGroup);
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     if (isCycleInvest) {
@@ -2214,14 +2246,20 @@ async function saveFund() {
                 fundList[k].addTimePrice = checkFundExsitReuslt.now;
                 fundList[k].addTime = getCurrentDate();
             }
-            // 如果新设置的group是currentGroup则默认保存
-            if (belongGroup == currentGroup) {
+            // 当前是全部分组，需要特殊处理
+            if(currentGroup == 'all-group'){
+                alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
+                $("#fund-modal").modal("hide");
+                $("#search-fund-modal").modal("hide");
+                return;
+            // 如果新设置的group是currentGroup则默认保存，实际上就是分组不变
+            } else if (belongGroup == currentGroup) {
                 if (currentGroup == 'default-group') {
                     saveCacheData('funds', JSON.stringify(fundList));
                 } else {
                     saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
                 }
-            // 如果新设置的group不是currentGroup需要特殊处理
+            // 如果新设置的group不是currentGroup需要特殊处理，也就是分组变化了
             } else {
                 // 如果当前分组是默认分组，则需要先保存到新的其他分组中，再从默认分组删除
                 if (currentGroup == 'default-group') {
@@ -2324,7 +2362,7 @@ async function saveFund() {
     fund.addTimePrice = checkFundExsitReuslt.now;
     fund.addTime = getCurrentDate();
     fundList.push(fund);
-    if (currentGroup == 'default-group') {
+    if (currentGroup == 'default-group' || currentGroup == 'all-group') {
         saveCacheData('funds', JSON.stringify(fundList));
     } else {
         saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
@@ -5811,6 +5849,7 @@ async function changeAllGroup() {
                 
             } else {
                 jQuery.parseJSON(funds).forEach(item => {
+                    item.belongGroup = 'default-group';
                     fundList.push(item);
                 })
             }
@@ -5819,6 +5858,7 @@ async function changeAllGroup() {
                 
             } else {
                 jQuery.parseJSON(stocks).forEach(item => {
+                    item.belongGroup = 'default-group';
                     stockList.push(item);
                 })
             }
@@ -5828,6 +5868,7 @@ async function changeAllGroup() {
                 
             } else {
                 jQuery.parseJSON(funds).forEach(item => {
+                    item.belongGroup = id;
                     fundList.push(item);
                 })
             }
@@ -5836,6 +5877,7 @@ async function changeAllGroup() {
                 
             } else {
                 jQuery.parseJSON(stocks).forEach(item => {
+                    item.belongGroup = id;
                     stockList.push(item);
                 })
             }
