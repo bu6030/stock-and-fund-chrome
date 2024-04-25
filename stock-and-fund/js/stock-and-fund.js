@@ -5757,6 +5757,12 @@ function scrollToTableRow(rowIndex, type) {
 function changeTimeFormate(dateTime) {
     if (dateTime == null || dateTime == '' || dateTime == undefined || dateTime.length < 8) {
         return '--';
+    // dateTime格式为2024-05-08 10:05:25，不需要格式化
+    } else if(dateTime.indexOf('-') >= 0 && dateTime.indexOf(':') >= 0) {
+        return dateTime;
+    // dateTime格式为2024/05/08 10:05:25，替换/为-
+    } else if(dateTime.indexOf('/') >= 0 && dateTime.indexOf(':') >= 0) {
+        return dateTime.replaceAll('/', '-');
     // dateTime格式为20240508100525，格式化为2024-05-08 10:05:25
     } else if(dateTime.length > 8) {
         return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 
