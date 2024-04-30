@@ -919,7 +919,7 @@ async function initData() {
         if (stockApi == 'GTIMG') {
             var stocks = "";
             for (var k in stockList) {
-                stocks += stockList[k].code + ",";
+                stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','') + ",";
             }
             let huilvHK;
             let huilvUS;
@@ -941,7 +941,8 @@ async function initData() {
             turnOverRate = "";
             for (var k in stoksArr) {
                 for (var l in stockList) {
-                    if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
+                    console.log(stockList[l].code ,"===", stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("=")))
+                    if (stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
                         var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                         var values = dataStr.split("~");
                         stockList[l].name = values[1] + "";
@@ -1063,7 +1064,7 @@ async function initData() {
             for (var k in stockList) {
                 stocks += stockList[k].code + ",";
                 let code = stockList[k].code;
-                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '') + ',';
+                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.', '_') + ',';
             }
             let huilvHK;
             let huilvUS;
@@ -1077,17 +1078,18 @@ async function initData() {
                 }
             }
             let result = "";
+            let stoksArr = [];
             // 没有股票不调用接口请求
             if (stocks != "") {
                 result = ajaxGetStockFromEastMoney(secIdStockArr);
                 console.log('ajaxGetStockFromEastMoney=', result.data.diff);
+                stoksArr = result.data.diff;
             }
-            var stoksArr = result.data.diff;
             turnOverRate = "";
             for (var k in stoksArr) {
                 let stock = {};
                 for (var l in stockList) {
-                    if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '')) {
+                    if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.', '_')) {
                         stock = stockList[l];
                     }
                 }
@@ -2302,7 +2304,7 @@ async function saveStock() {
             return;
         }
     }
-    let checkStockExsitResult = checkStockExsit(stock.code);
+    let checkStockExsitResult = checkStockExsit(stock.code.replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N',''));
     if (!checkStockExsitResult.checkReuslt) {
         alertMessage("不存在该股票");
         $("#stock-modal").modal("hide");
@@ -2593,7 +2595,8 @@ async function searchFundAndStock() {
             } else {
                 market = "其他"
             }
-            var option = $("<option></option>").val(values[0] + values[1].replace('.oq','').replace('.ps','').replace('.n','').toUpperCase()).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
+            // var option = $("<option></option>").val(values[0] + values[1].replace('.oq','').replace('.ps','').replace('.n','').toUpperCase()).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
+            var option = $("<option></option>").val(values[0] + values[1].toUpperCase()).text(A2U(values[2]) + " " + values[0] + values[1] + " （" + market + "）");
             $("#search-stock-select").append(option);
         }
         if (stocksArr != null && stocksArr != '' && stocksArr != undefined && stocksArr.length > 0) {
@@ -5148,21 +5151,32 @@ function getSecid(code) {
                 }
             }
             if (stock != null && stock != undefined) {
-                let name = stock.name;
+                let name = stock.name != null ? stock.name : stock.code;
+            
                 let result = ajaxGetStockCodeByNameFromGtimg(name);
                 let sec = result.split("^")[0].split('~')[1];
-                if (sec.endsWith('.oq')) {
-                    secid = '105';
-                }else if (sec.endsWith('.ps')) {
-                    secid = '153';
+                if(sec == undefined || sec == 'undefined'){
+                    if (stock.code.endsWith('.oq') || stock.code.endsWith('.OQ')) {
+                        secid = '105';
+                    }else if (stock.code.endsWith('.ps') || stock.code.endsWith('.PS')) {
+                        secid = '153';
+                    } else {
+                        secid = '106';
+                    }
                 } else {
-                    secid = '106';
+                    if (sec.endsWith('.oq')) {
+                        secid = '105';
+                    }else if (sec.endsWith('.ps')) {
+                        secid = '153';
+                    } else {
+                        secid = '106';
+                    }
                 }
             } else if(code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
                 secid = '100';
             }
         } catch (error) {
-            console.error(error);
+            console.warn(error);
             secid = '106';
         }
     } else if(code.startsWith('9')) {
