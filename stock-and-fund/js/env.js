@@ -11,6 +11,7 @@ let Env = {
     GET_NANBEI_XIANG_MONEY_URL: "https://push2.eastmoney.com/api/qt/kamt.rtmin/get",
     GET_HANGYE_BANKUAI_MONEY_URL: "http://push2.eastmoney.com/api/qt/clist/get",
     GET_WHOLE_TWO_MARKET_MONEY_URL: "https://push2.eastmoney.com/api/qt/ulist.np/get",
+    GET_STOCK_FROM_EAST_MONEY_URL: "https://push2.eastmoney.com/api/qt/ulist.np/get",
     GET_HUILV_URL: "https://webapi.huilv.cc/api/exchange",
     GET_FUND_FROM_TIANTIANJIJIN: "http://fundgz.1234567.com.cn/js/{CODE}.js",
     GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN: "http://fund.eastmoney.com/js/fundcode_search.js",

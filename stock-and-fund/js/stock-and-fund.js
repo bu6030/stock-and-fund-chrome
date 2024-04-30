@@ -91,6 +91,7 @@ const hiddenIconPath = {
 };
 // 初始状态为默认图标
 var defaultIcon;
+var stockApi;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -254,6 +255,10 @@ async function initLoad() {
         defaultIcon = true;
     } else if(defaultIcon == "false") {
         defaultIcon = false;
+    }
+    stockApi = await readCacheData('stock-api');
+    if (stockApi == null || stockApi == '') {
+        stockApi = 'GTIMG';
     }
     largetMarketTotalDisplay = await readCacheData('larget-market-total-display');
     if (largetMarketTotalDisplay == null || largetMarketTotalDisplay == "false") {
@@ -864,6 +869,9 @@ document.addEventListener(
         document.getElementById('main-page-refresh-time-10s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-5s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-3s-button').addEventListener('click', changeMainPageRefreshTime);
+        // 设置页面，点击切换新旧获取股票信息接口
+        document.getElementById('stock-api-gtimg-button').addEventListener('click', changeStockApi);
+        document.getElementById('stock-api-eastmoney-button').addEventListener('click', changeStockApi);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -907,143 +915,291 @@ function A2U(str) {
 async function initData() {
     initFirstInstall();
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
-        var stocks = "";
-        for (var k in stockList) {
-            stocks += stockList[k].code + ",";
-        }
-        let huilvHK;
-        let huilvUS;
-        // 只有切换了汇率才获取汇率接口数据
-        if(huilvConvert){
-            if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
-                huilvHK = await getHuilv('HKD');
+        // 走GTIMG获取股票接口
+        if (stockApi == 'GTIMG') {
+            var stocks = "";
+            for (var k in stockList) {
+                stocks += stockList[k].code + ",";
             }
-            if (stocks.indexOf('us') || stocks.indexOf('US')) {
-                huilvUS = await getHuilv('USD');
-            }
-        }
-        let result = "";
-        // 没有股票不调用接口请求
-        if (stocks != "") {
-            result = ajaxGetStockFromGtimg(stocks);
-        }
-        var stoksArr = result.split("\n");
-        turnOverRate = "";
-        for (var k in stoksArr) {
-            for (var l in stockList) {
-                if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
-                    var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                    var values = dataStr.split("~");
-                    stockList[l].name = values[1] + "";
-                    stockList[l].gztime = changeTimeFormate(values[30]) + "";
-                    // 可转债上市前加格默认为 0
-                    if (parseFloat(values[3]) == 0 && (values[1].indexOf("发债") != -1 || values[1].indexOf("转债") != -1)) {
-                        stockList[l].now = "100.00";
-                    } else {
-                        stockList[l].now = values[3] + "";
-                    }
-                    if (cheatMeFlag && parseFloat(values[31]) < 0) {
-                        var change = 0 - parseFloat(values[31]);
-                        var changePercent = 0 - parseFloat(values[32]);
-                        stockList[l].change = change + "";
-                        stockList[l].changePercent = changePercent + "";
-                    } else {
-                        stockList[l].change = values[31] + "";
-                        stockList[l].changePercent = values[32] + "";
-                    }
-                    stockList[l].time = values[30] + "";
-                    stockList[l].max = values[33] + "";
-                    stockList[l].min = values[34] + "";
-                    // stockList[l].buyOrSellStockRequestList = [];
-                    var now = new BigDecimal(stockList[l].now + "");
-                    var costPrise = new BigDecimal(stockList[l].costPrise + "")
-                    var incomeDiff = now.add(costPrise.negate());
-                    if (costPrise <= 0) {
-                        stockList[l].incomePercent = 0 + "";
-                    } else {
-                        var incomePercent = incomeDiff.divide(costPrise, 5, 4)
-                            .multiply(BigDecimal.TEN)
-                            .multiply(BigDecimal.TEN)
-                            .setScale(3);
-                        stockList[l].incomePercent = incomePercent + "";
-                    }
-                    var bonds = new BigDecimal(stockList[l].bonds);
-                    var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
-                    if (huilvConvert) {
-                        if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                        } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                        }
-                    }
-                    stockList[l].income = income + "";
-                    // 计算股票中的部分值
-                    var buyOrSells = stockList[l].buyOrSellStockRequestList;
-                    var todayBuyIncom = new BigDecimal("0");
-                    var todaySellIncom = new BigDecimal("0");
-                    var dayIncome = new BigDecimal("0");
-                    var marketValue = new BigDecimal("0");
-                    var maxBuyOrSellBonds = 0;
-                    //当天新买，计算当日收益，（最新价格-成本价格）*持仓数
-                    if (stockList[l].newBuy && stockList[l].newBuyDate == getBeijingDate()) {
-                        dayIncome = (now.add(costPrise.negate())).multiply(new BigDecimal(stockList[l].bonds));
-                    //不是当天新买
-                    } else {
-                        for (var g in buyOrSells) {
-                            let beijingDate = getBeijingDate();
-                            // 当天购买过
-                            if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
-                                maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
-                                var buyIncome = (new BigDecimal(stockList[l].now))
-                                    .subtract(new BigDecimal(buyOrSells[g].price + ""))
-                                    .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
-                                    .subtract(new BigDecimal(buyOrSells[g].cost + ""));
-                                todayBuyIncom = todayBuyIncom.add(buyIncome);
-                            }
-                            // 当天卖出过
-                            if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
-                                todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[g].income + ""));
-                            }
-                        }
-                        if (maxBuyOrSellBonds < stockList[l].bonds) {
-                            var restBonds = (new BigDecimal(stockList[l].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-                            dayIncome = (new BigDecimal(stockList[l].change)).multiply(restBonds);
-                        } else {
-                            dayIncome = new BigDecimal("0");
-                        }
-                        dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
-                    }
-                    if (huilvConvert) {
-                        if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                        } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                        }
-                    }
-                    stockList[l].dayIncome = dayIncome + "";
-                    marketValue = (new BigDecimal(stockList[l].now)).multiply(new BigDecimal(stockList[l].bonds));
-                    if (huilvConvert) {
-                        if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                        } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                        }
-                    }
-                    stockList[l].marketValue = marketValue + "";
-                    var costPrice = new BigDecimal(stockList[l].costPrise + "");
-                    var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(stockList[l].bonds))).toFixed(2));
-                    if (huilvConvert) {
-                        if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                            costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                        } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                            costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                        }
-                    }
-                    stockList[l].costPriceValue = costPriceValue + "";
-                    // 设置换手率
-                    turnOverRate += stockList[l].code + '~' + values[38] + '-';
-                    stockList[l].turnOverRate = values[38];
+            let huilvHK;
+            let huilvUS;
+            // 只有切换了汇率才获取汇率接口数据
+            if(huilvConvert){
+                if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
+                    huilvHK = await getHuilv('HKD');
                 }
+                if (stocks.indexOf('us') || stocks.indexOf('US')) {
+                    huilvUS = await getHuilv('USD');
+                }
+            }
+            let result = "";
+            // 没有股票不调用接口请求
+            if (stocks != "") {
+                result = ajaxGetStockFromGtimg(stocks);
+            }
+            var stoksArr = result.split("\n");
+            turnOverRate = "";
+            for (var k in stoksArr) {
+                for (var l in stockList) {
+                    if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
+                        var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
+                        var values = dataStr.split("~");
+                        stockList[l].name = values[1] + "";
+                        stockList[l].gztime = changeTimeFormate(values[30]) + "";
+                        // 可转债上市前加格默认为 0
+                        if (parseFloat(values[3]) == 0 && (values[1].indexOf("发债") != -1 || values[1].indexOf("转债") != -1)) {
+                            stockList[l].now = "100.00";
+                        } else {
+                            stockList[l].now = values[3] + "";
+                        }
+                        if (cheatMeFlag && parseFloat(values[31]) < 0) {
+                            var change = 0 - parseFloat(values[31]);
+                            var changePercent = 0 - parseFloat(values[32]);
+                            stockList[l].change = change + "";
+                            stockList[l].changePercent = changePercent + "";
+                        } else {
+                            stockList[l].change = values[31] + "";
+                            stockList[l].changePercent = values[32] + "";
+                        }
+                        stockList[l].time = values[30] + "";
+                        stockList[l].max = values[33] + "";
+                        stockList[l].min = values[34] + "";
+                        // stockList[l].buyOrSellStockRequestList = [];
+                        var now = new BigDecimal(stockList[l].now + "");
+                        var costPrise = new BigDecimal(stockList[l].costPrise + "")
+                        var incomeDiff = now.add(costPrise.negate());
+                        if (costPrise <= 0) {
+                            stockList[l].incomePercent = 0 + "";
+                        } else {
+                            var incomePercent = incomeDiff.divide(costPrise, 5, 4)
+                                .multiply(BigDecimal.TEN)
+                                .multiply(BigDecimal.TEN)
+                                .setScale(3);
+                            stockList[l].incomePercent = incomePercent + "";
+                        }
+                        var bonds = new BigDecimal(stockList[l].bonds);
+                        var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
+                        if (huilvConvert) {
+                            if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
+                                income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                            } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
+                                income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                            }
+                        }
+                        stockList[l].income = income + "";
+                        // 计算股票中的部分值
+                        var buyOrSells = stockList[l].buyOrSellStockRequestList;
+                        var todayBuyIncom = new BigDecimal("0");
+                        var todaySellIncom = new BigDecimal("0");
+                        var dayIncome = new BigDecimal("0");
+                        var marketValue = new BigDecimal("0");
+                        var maxBuyOrSellBonds = 0;
+                        //当天新买，计算当日收益，（最新价格-成本价格）*持仓数
+                        if (stockList[l].newBuy && stockList[l].newBuyDate == getBeijingDate()) {
+                            dayIncome = (now.add(costPrise.negate())).multiply(new BigDecimal(stockList[l].bonds));
+                        //不是当天新买
+                        } else {
+                            for (var g in buyOrSells) {
+                                let beijingDate = getBeijingDate();
+                                // 当天购买过
+                                if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
+                                    maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
+                                    var buyIncome = (new BigDecimal(stockList[l].now))
+                                        .subtract(new BigDecimal(buyOrSells[g].price + ""))
+                                        .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
+                                        .subtract(new BigDecimal(buyOrSells[g].cost + ""));
+                                    todayBuyIncom = todayBuyIncom.add(buyIncome);
+                                }
+                                // 当天卖出过
+                                if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
+                                    todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[g].income + ""));
+                                }
+                            }
+                            if (maxBuyOrSellBonds < stockList[l].bonds) {
+                                var restBonds = (new BigDecimal(stockList[l].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+                                dayIncome = (new BigDecimal(stockList[l].change)).multiply(restBonds);
+                            } else {
+                                dayIncome = new BigDecimal("0");
+                            }
+                            dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+                        }
+                        if (huilvConvert) {
+                            if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
+                                dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                            } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
+                                dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                            }
+                        }
+                        stockList[l].dayIncome = dayIncome + "";
+                        marketValue = (new BigDecimal(stockList[l].now)).multiply(new BigDecimal(stockList[l].bonds));
+                        if (huilvConvert) {
+                            if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
+                                marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                            } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
+                                marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                            }
+                        }
+                        stockList[l].marketValue = marketValue + "";
+                        var costPrice = new BigDecimal(stockList[l].costPrise + "");
+                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(stockList[l].bonds))).toFixed(2));
+                        if (huilvConvert) {
+                            if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
+                                costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                            } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
+                                costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                            }
+                        }
+                        stockList[l].costPriceValue = costPriceValue + "";
+                        // 设置换手率
+                        turnOverRate += stockList[l].code + '~' + values[38] + '-';
+                        stockList[l].turnOverRate = values[38];
+                    }
+                }
+            }
+        // 走东方财富获取股票接口
+        } else {
+            var stocks = "";
+            var secIdStockArr = '';
+            for (var k in stockList) {
+                stocks += stockList[k].code + ",";
+                let code = stockList[k].code;
+                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '') + ',';
+            }
+            let huilvHK;
+            let huilvUS;
+            // 只有切换了汇率才获取汇率接口数据
+            if(huilvConvert){
+                if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
+                    huilvHK = await getHuilv('HKD');
+                }
+                if (stocks.indexOf('us') || stocks.indexOf('US')) {
+                    huilvUS = await getHuilv('USD');
+                }
+            }
+            let result = "";
+            // 没有股票不调用接口请求
+            if (stocks != "") {
+                result = ajaxGetStockFromEastMoney(secIdStockArr);
+                console.log('ajaxGetStockFromEastMoney=', result.data.diff);
+            }
+            var stoksArr = result.data.diff;
+            turnOverRate = "";
+            for (var k in stoksArr) {
+                let stock = {};
+                for (var l in stockList) {
+                    if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '')) {
+                        stock = stockList[l];
+                    }
+                }
+                stock.name = stoksArr[k].f14 + "";
+                stock.gztime = '--';
+                // 可转债上市前加格默认为 0
+                if (parseFloat(stoksArr[k].f2) == 0 && (stoksArr[k].f14.indexOf("发债") != -1 || stoksArr[k].f14.indexOf("转债") != -1)) {
+                    stock.now = "100.00";
+                } else {
+                    stock.now = stoksArr[k].f2 + "";
+                }
+                if (cheatMeFlag && parseFloat(stoksArr[k].f4) < 0) {
+                    var change = 0 - parseFloat(stoksArr[k].f4);
+                    var changePercent = 0 - parseFloat(stoksArr[k].f3);
+                    stock.change = change + "";
+                    stock.changePercent = changePercent + "";
+                } else {
+                    stock.change = stoksArr[k].f4 + "";
+                    stock.changePercent = stoksArr[k].f3 + "";
+                }
+                stock.time = '--';
+                // stockList[l].max = values[33] + "";
+                // stockList[l].min = values[34] + "";
+                // stockList[l].buyOrSellStockRequestList = [];
+                var now = new BigDecimal(stock.now + "");
+                var costPrise = new BigDecimal(stock.costPrise + "")
+                var incomeDiff = now.add(costPrise.negate());
+                if (costPrise <= 0) {
+                    stock.incomePercent = 0 + "";
+                } else {
+                    var incomePercent = incomeDiff.divide(costPrise, 5, 4)
+                        .multiply(BigDecimal.TEN)
+                        .multiply(BigDecimal.TEN)
+                        .setScale(3);
+                        stock.incomePercent = incomePercent + "";
+                }
+                var bonds = new BigDecimal(stock.bonds);
+                var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
+                if (huilvConvert) {
+                    if (stock.code.indexOf("hk") >= 0 || stock.code.indexOf("HK") >= 0) {
+                        income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                    } else if (stock.code.indexOf("us") >= 0 || stock.code.indexOf("US") >= 0) {
+                        income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                    }
+                }
+                stock.income = income + "";
+                // 计算股票中的部分值
+                var buyOrSells = stock.buyOrSellStockRequestList;
+                var todayBuyIncom = new BigDecimal("0");
+                var todaySellIncom = new BigDecimal("0");
+                var dayIncome = new BigDecimal("0");
+                var marketValue = new BigDecimal("0");
+                var maxBuyOrSellBonds = 0;
+                //当天新买，计算当日收益，（最新价格-成本价格）*持仓数
+                if (stock.newBuy && stock.newBuyDate == getBeijingDate()) {
+                    dayIncome = (now.add(costPrise.negate())).multiply(new BigDecimal(stock.bonds));
+                //不是当天新买
+                } else {
+                    for (var g in buyOrSells) {
+                        let beijingDate = getBeijingDate();
+                        // 当天购买过
+                        if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
+                            maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
+                            var buyIncome = (new BigDecimal(stock.now))
+                                .subtract(new BigDecimal(buyOrSells[g].price + ""))
+                                .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
+                                .subtract(new BigDecimal(buyOrSells[g].cost + ""));
+                            todayBuyIncom = todayBuyIncom.add(buyIncome);
+                        }
+                        // 当天卖出过
+                        if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
+                            todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[g].income + ""));
+                        }
+                    }
+                    if (maxBuyOrSellBonds < stock.bonds) {
+                        var restBonds = (new BigDecimal(stock.bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
+                        dayIncome = (new BigDecimal(stock.change)).multiply(restBonds);
+                    } else {
+                        dayIncome = new BigDecimal("0");
+                    }
+                    dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
+                }
+                if (huilvConvert) {
+                    if (stock.code.indexOf("hk") >= 0 || stock.code.indexOf("HK") >= 0) {
+                        dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                    } else if (stock.code.indexOf("us") >= 0 || stock.code.indexOf("US") >= 0) {
+                        dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                    }
+                }
+                stock.dayIncome = dayIncome + "";
+                marketValue = (new BigDecimal(stock.now)).multiply(new BigDecimal(stock.bonds));
+                if (huilvConvert) {
+                    if (stock.code.indexOf("hk") >= 0 || stock.code.indexOf("HK") >= 0) {
+                        marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                    } else if (stock.code.indexOf("us") >= 0 || stock.code.indexOf("US") >= 0) {
+                        marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                    }
+                }
+                stock.marketValue = marketValue + "";
+                var costPrice = new BigDecimal(stock.costPrise + "");
+                var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(stock.bonds))).toFixed(2));
+                if (huilvConvert) {
+                    if (stock.code.indexOf("hk") >= 0 || stock.code.indexOf("HK") >= 0) {
+                        costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
+                    } else if (stock.code.indexOf("us") >= 0 || stock.code.indexOf("US") >= 0) {
+                        costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
+                    }
+                }
+                stock.costPriceValue = costPriceValue + "";
+                // 设置换手率
+                turnOverRate += stock.code + '~' + stoksArr[k].f8 + '-';
+                stock.turnOverRate = stoksArr[k].f8;
             }
         }
     }
@@ -6017,5 +6173,18 @@ async function changeMainPageRefreshTime(event) {
     }
     $("#setting-modal").modal("hide");
     saveCacheData('main-page-refresh-time', mainPageRefreshTime);
+    location.reload();
+}
+
+// 点击切换新旧获取股票信息接口
+async function changeStockApi(event) {
+    let targetId = event.target.id;
+    if (targetId == 'stock-api-gtimg-button') {
+        stockApi = 'GTIMG';
+    } else {
+        stockApi = 'EASTMONEY';
+    }
+    $("#setting-modal").modal("hide");
+    saveCacheData('stock-api', stockApi);
     location.reload();
 }

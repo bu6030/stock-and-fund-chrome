@@ -114,6 +114,30 @@ function ajaxGetStockFromGtimg(code) {
 }
 
 // 接口调用
+function ajaxGetStockFromEastMoney(code) {
+    let result;
+    $.ajax({
+        url: Env.GET_STOCK_FROM_EAST_MONEY_URL
+          + "?fltt=2&fields=f12,f13,f19,f14,f139,f148,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids="
+          + code,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
 function ajaxGetFundFromTiantianjijin(code) {
     let result;
     var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN;
