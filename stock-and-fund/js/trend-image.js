@@ -689,12 +689,14 @@ function setStockImage(type) {
                 let ma10 = params[2].value;
                 let ma20 = params[3].value;
                 let ma30 = params[4].value;
-                return result.data.name + "<br>时间：" + params[0].name + "<br>开盘：" + values[1]
-                    + "<br>收盘：" + values[2] + "<br>最低：" + values[3]
-                    + "<br>最高：" + values[4] + "<br>成交量：" + volumn
-                    + "万<br>成交额：" + money + "亿<br>涨跌幅：" + values[7] + "%"
-                    + "<br>MA5：" + ma5 + "<br>MA10：" + ma10
-                    + "<br>MA20：" + ma20 + "<br>MA30：" + ma30;
+                return result.data.name + "<br>时间：" + params[0].name
+                    + "<br>开盘：" + values[1] + "&nbsp;&nbsp;收盘：" + values[2] 
+                    + "<br>最低：" + values[3] + "&nbsp;&nbsp;最高：" + values[4]
+                    + "<br>成交量：" + volumn + "万"
+                    + "<br>成交额：" + money + "亿" 
+                    + "<br>涨跌幅：" + values[7] + "%"
+                    + "<br>MA5：" + ma5 + "&nbsp;&nbsp;MA10：" + ma10
+                    + "<br>MA20：" + ma20 + "&nbsp;&nbsp;MA30：" + ma30;
             }
         },
     };

@@ -262,6 +262,7 @@
 241. 增加展示全部分组功能 2024/4/24
 242. 港股/美股更新时间格式修改 2024/4/25
 243. 云同步数据导入分组问题修改 2024/4/25 -- version 2.0.9 -- end
+244. 日/周/月线属性值显示优化 2024/4/30
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
