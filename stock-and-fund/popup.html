@@ -374,13 +374,13 @@
 
                     <!-- 模态框头部 -->
                     <div class="modal-header">
-                        <h4 class="modal-title">扫码加入微信群 </h4>
+                        <h4 class="modal-title" id="wechat-group-modal-title">扫码加入微信群</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
                     <!-- 模态框主体 -->
                     <div class="modal-body">
-                        您使用中的各种问题或者错误进群联系我帮您解决，提出您的需求，如果合理我会尽快实现
+                        <div id="wechat-group-modal-content">您使用中的各种问题或者错误进群联系我帮您解决，提出您的需求，如果合理我会尽快实现</div>
                         <div align="center" id="wechat-group-qr-code-image"></div>
                     </div>
 
@@ -1247,9 +1247,14 @@
             <button type="button" id="full-screen-button-2" class="btn btn-outline-primary"
                 data-toggle="modal">全屏展示
             </button>
-            <button type="button" id="show-wechat-group-button" class="btn btn-outline-primary"
-                data-toggle="modal">加入微信群
-            </button>
+            <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                <button type="button" id="show-wechat-group-button" class="btn btn-outline-primary"
+                    data-toggle="modal">微信群
+                </button>
+                <button type="button" id="show-wechat-mini-button" class="btn btn-outline-primary"
+                    data-toggle="modal">小程序
+                </button>
+            </div>
             <button type="button" id="help-document-button" class="btn btn-outline-primary"
                 data-toggle="modal">使用说明
             </button>

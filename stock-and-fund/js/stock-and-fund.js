@@ -569,6 +569,8 @@ document.addEventListener(
         document.getElementById('help-document-alert').addEventListener('click', helpDocument);
         // 首页，点击加入微信群
         document.getElementById('show-wechat-group-button').addEventListener('click', function () {
+            $("#wechat-group-modal-title").html('扫码加入微信群');
+            $("#wechat-group-modal-content").html('您使用中的各种问题或者错误进群联系我帮您解决，提出您的需求，如果合理我会尽快实现～');
             let timestamp = Date.now();
             let path = Env.WECHAT_GROUP_QR_CODE + "?date=" + timestamp;
             $("#wechat-group-qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
@@ -582,6 +584,13 @@ document.addEventListener(
         document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
         // 首页，点击读取自选股
         document.getElementById('add-stock-from-tonghuashun-xueqiu').addEventListener('click', addStockFromTonghuashunXueqiu);
+        // 首页，点击小程序按钮
+        document.getElementById('show-wechat-mini-button').addEventListener('click', function () {
+            $("#wechat-group-modal-title").html('扫码进入微信小程序');
+            $("#wechat-group-modal-content").html('首次扫描二维码会进入股票基金神器页面，之后可以在小程序列表中的“编程面试题”进入首页，底部“股票基金神器”链接进入～');
+            $("#wechat-group-qr-code-image").html('<img src="/img/wechat-mini-qr-code.jpg" width="60%" length="60%" />');
+            $("#wechat-group-modal").modal();
+        });
 
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
@@ -2739,7 +2748,7 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
-        helpDocumentButton.style.display = "inline";
+        helpDocumentButton.style.display = "none";
         fullScreenButton2.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
