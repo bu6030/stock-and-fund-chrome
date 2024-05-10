@@ -3527,48 +3527,84 @@ async function setDisplayTr(event) {
 async function fileInput (e) {
     var file = e.target.files[0];
     var reader = new FileReader();
+    let fileName = file.name;
     reader.onload = function (e) {
         var contents = e.target.result;
-        var json = JSON.parse(contents);
-        if (json.stocks == null || json.stocks == '' || json.stocks == "null"
-            || json.stocks == undefined || json.stocks == 'undefined') {
-            json.stocks = [];
-        }
-        if (json.funds == null || json.funds == '' || json.funds == "null"
-            || json.funds == undefined || json.funds == 'undefined') {
-            json.funds = [];
-        }
-        if (json.groups == null || json.groups == '' || json.groups == "null"
-        || json.groups == undefined || json.groups == 'undefined') {
-            json.groups = {"default-group":"默认分组"};
-        }
-        // 在这里处理您的 JSON 数据
-        saveCacheData('stocks', JSON.stringify(json.stocks));
-        saveCacheData('funds', JSON.stringify(json.funds));
-        saveCacheData('groups', json.groups);
-        // 遍历json.groups获取所有value
-        Object.keys(groups).forEach(id => {
-            if (id == 'default-group') return;
-            if (json[id + '_stocks'] == null || json[id + '_stocks'] == '' 
-                || json[id + '_stocks'] == undefined || json[id + '_stocks'] == 'undefined'){
-                json[id + '_stocks'] = [];
+        try {
+            var json = JSON.parse(contents);
+            if (json.stocks == null || json.stocks == '' || json.stocks == "null"
+                || json.stocks == undefined || json.stocks == 'undefined') {
+                json.stocks = [];
             }
-            if (json[id + '_funds'] == null || json[id + '_funds'] == '' 
-                || json[id + '_funds'] == undefined || json[id + '_funds'] == 'undefined'){
-                json[id + '_funds'] = [];
+            if (json.funds == null || json.funds == '' || json.funds == "null"
+                || json.funds == undefined || json.funds == 'undefined') {
+                json.funds = [];
             }
-            saveCacheData(id + '_stocks', JSON.stringify(json[id + '_stocks']));
-            saveCacheData(id + '_funds', JSON.stringify(json[id + '_funds']));
-        });
+            if (json.groups == null || json.groups == '' || json.groups == "null"
+            || json.groups == undefined || json.groups == 'undefined') {
+                json.groups = {"default-group":"默认分组"};
+            }
+            // 在这里处理您的 JSON 数据
+            saveCacheData('stocks', JSON.stringify(json.stocks));
+            saveCacheData('funds', JSON.stringify(json.funds));
+            saveCacheData('groups', json.groups);
+            // 遍历json.groups获取所有value
+            Object.keys(groups).forEach(id => {
+                if (id == 'default-group') return;
+                if (json[id + '_stocks'] == null || json[id + '_stocks'] == '' 
+                    || json[id + '_stocks'] == undefined || json[id + '_stocks'] == 'undefined'){
+                    json[id + '_stocks'] = [];
+                }
+                if (json[id + '_funds'] == null || json[id + '_funds'] == '' 
+                    || json[id + '_funds'] == undefined || json[id + '_funds'] == 'undefined'){
+                    json[id + '_funds'] = [];
+                }
+                saveCacheData(id + '_stocks', JSON.stringify(json[id + '_stocks']));
+                saveCacheData(id + '_funds', JSON.stringify(json[id + '_funds']));
+            });
+            if (currentGroup == 'default-group') {
+                stockList = json.stocks;
+                fundList = json.funds;
+            } else if (json.groups.contains(currentGroup)) {
+                stockList = json[currentGroup + '_stocks'];
+                fundList = json[currentGroup + '_funds'];
+            }
+            groups = json.groups;
+        } catch(error) {
+            // 文本格式非json，需要单独处理，contents文本的每一行只有code读取到stocks中
+            if (fileName.indexOf('FUND') >= 0 || fileName.indexOf('fund') >= 0) {
+                var lines = contents.split('\n');
+                lines.forEach(function(line) {
+                    // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
+                    var code = line.trim(); // 去除每行开头和结尾的空白字符
+                    if (code !== '') {
+                        let fund = {
+                            "fundCode": code,
+                            "costPrise":"0",
+                            "bonds":"0"
+                        }
+                        fundList.push(fund);
+                    }
+                });
+                saveCacheData('funds', JSON.stringify(fundList));
+            } else {
+                var lines = contents.split('\n');
+                lines.forEach(function(line) {
+                    // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
+                    var code = line.trim(); // 去除每行开头和结尾的空白字符
+                    if (code !== '') {
+                        let stock = {
+                            "code": code,
+                            "costPrise":"0",
+                            "bonds":"0"
+                        }
+                        stockList.push(stock);
+                    }
+                });
+                saveCacheData('stocks', JSON.stringify(stockList));
+            }
+        }
         $("#data-import-modal").modal("hide");
-        if (currentGroup == 'default-group') {
-            stockList = json.stocks;
-            fundList = json.funds;
-        } else if (json.groups.contains(currentGroup)) {
-            stockList = json[currentGroup + '_stocks'];
-            fundList = json[currentGroup + '_funds'];
-        }
-        groups = json.groups;
         reloadDataAndHtml();
     };
     reader.readAsText(file);
