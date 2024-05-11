@@ -3565,7 +3565,7 @@ async function fileInput (e) {
             if (currentGroup == 'default-group') {
                 stockList = json.stocks;
                 fundList = json.funds;
-            } else if (json.groups.contains(currentGroup)) {
+            } else if (currentGroup in json.groups) {
                 stockList = json[currentGroup + '_stocks'];
                 fundList = json[currentGroup + '_funds'];
             }
