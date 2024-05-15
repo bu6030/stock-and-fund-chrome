@@ -146,6 +146,19 @@ async function initLoad() {
     if (windowSize == null) {
         windowSize = 'NORMAL';
     }
+    if (windowSize == 'NORMAL') {
+        document.getElementById('window-normal-size-change-button').classList.add('active');
+        document.getElementById('window-small-size-change-button').classList.remove('active');
+        document.getElementById('window-mini-size-change-button').classList.remove('active');
+    } else if (windowSize == 'SMALL') {
+        document.getElementById('window-normal-size-change-button').classList.remove('active');
+        document.getElementById('window-small-size-change-button').classList.add('active');
+        document.getElementById('window-mini-size-change-button').classList.remove('active');
+    } else {
+        document.getElementById('window-normal-size-change-button').classList.remove('active');
+        document.getElementById('window-small-size-change-button').classList.remove('active');
+        document.getElementById('window-mini-size-change-button').classList.add('active');
+    }
     marketValueDisplay = await readCacheData('market-value-display');
     if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
         marketValueDisplay = 'DISPLAY';
