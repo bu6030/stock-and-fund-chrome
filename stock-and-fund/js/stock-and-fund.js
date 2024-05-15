@@ -146,19 +146,6 @@ async function initLoad() {
     if (windowSize == null) {
         windowSize = 'NORMAL';
     }
-    if (windowSize == 'NORMAL') {
-        document.getElementById('window-normal-size-change-button').classList.add('active');
-        document.getElementById('window-small-size-change-button').classList.remove('active');
-        document.getElementById('window-mini-size-change-button').classList.remove('active');
-    } else if (windowSize == 'SMALL') {
-        document.getElementById('window-normal-size-change-button').classList.remove('active');
-        document.getElementById('window-small-size-change-button').classList.add('active');
-        document.getElementById('window-mini-size-change-button').classList.remove('active');
-    } else {
-        document.getElementById('window-normal-size-change-button').classList.remove('active');
-        document.getElementById('window-small-size-change-button').classList.remove('active');
-        document.getElementById('window-mini-size-change-button').classList.add('active');
-    }
     marketValueDisplay = await readCacheData('market-value-display');
     if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
         marketValueDisplay = 'DISPLAY';
@@ -379,6 +366,7 @@ async function initLoad() {
     initData();
     initLargeMarketData();
     initGroupButton();
+    settingButtonInit();
     // 默认20s刷新，通过mainPageRefreshTime获取
     setInterval(autoRefresh, mainPageRefreshTime);
 }
@@ -2670,6 +2658,7 @@ async function changeWindowSize(event) {
         windowSize = 'MINI';
     }
     initWindowsSize();
+    settingButtonInit();
 }
 
 // 初始化页面是，股票基金数据字体样式设定
@@ -3735,6 +3724,7 @@ async function enableChromeNotice(event) {
         saveCacheData('send-chrome-notice-enable', false);
     }
     $("#setting-modal").modal("hide");
+    settingButtonInit();
 }
 
 // 置顶股票基金
@@ -5167,6 +5157,7 @@ async function changeHuilvConvert(event) {
     saveCacheData('huilvConvert', huilvConvert);
     $("#setting-modal").modal("hide");
     initData();
+    settingButtonInit();
 }
 
 // 去东方财富看走势图
@@ -5566,6 +5557,7 @@ async function changeMonitorPriceOrPercent(event) {
     saveCacheData('monitor-price-or-percent', monitorPriceOrPercent);
     $("#setting-modal").modal("hide");
     reloadDataAndHtml();
+    settingButtonInit();
 }
 
 // 修改鼠标悬停扩展程序图标，展示/不展示前5只股票
@@ -5580,6 +5572,7 @@ async function changemonitorTop20Stock(event) {
     saveCacheData('monitor-top-20-stock', monitorTop20Stock);
     $("#setting-modal").modal("hide");
     reloadDataAndHtml();
+    settingButtonInit();
 }
 
 // 清理分时图timeout，不再刷新分时图
@@ -5603,6 +5596,7 @@ async function changeIcon(event) {
     }
     chrome.action.setIcon({path: iconPath});
     saveCacheData('default-icon', defaultIcon);
+    settingButtonInit();
 }
 
 // 获取基金/股票名称
@@ -5979,6 +5973,7 @@ async function changeLargeMarketTotalDisplay(event) {
     $("#setting-modal").modal('hide');
     reloadDataAndHtml();
     initLargeMarketData();
+    settingButtonInit();
 }
 
 // 滚动到指定行
@@ -6269,4 +6264,98 @@ async function changeStockApi(event) {
     $("#setting-modal").modal("hide");
     saveCacheData('stock-api', stockApi);
     location.reload();
+}
+
+// 设置页面按钮组展示是否生效的样式
+async function settingButtonInit(){
+    if (windowSize == 'NORMAL') {
+        document.getElementById('window-normal-size-change-button').classList.add('active');
+        document.getElementById('window-small-size-change-button').classList.remove('active');
+        document.getElementById('window-mini-size-change-button').classList.remove('active');
+    } else if (windowSize == 'SMALL') {
+        document.getElementById('window-normal-size-change-button').classList.remove('active');
+        document.getElementById('window-small-size-change-button').classList.add('active');
+        document.getElementById('window-mini-size-change-button').classList.remove('active');
+    } else {
+        document.getElementById('window-normal-size-change-button').classList.remove('active');
+        document.getElementById('window-small-size-change-button').classList.remove('active');
+        document.getElementById('window-mini-size-change-button').classList.add('active');
+    }
+    let sendChromeNoticeEnable = await readCacheData('send-chrome-notice-enable');
+    if (sendChromeNoticeEnable == 'true' || sendChromeNoticeEnable == true) {
+        document.getElementById('send-chrome-notice-disable-button').classList.remove('active');
+        document.getElementById('send-chrome-notice-enable-button').classList.add('active');
+    } else {
+        document.getElementById('send-chrome-notice-disable-button').classList.add('active');
+        document.getElementById('send-chrome-notice-enable-button').classList.remove('active');
+    }
+    if (huilvConvert) {
+        document.getElementById('huilv-convert-change-button').classList.add('active');
+        document.getElementById('huilv-dont-convert-change-button').classList.remove('active');
+    } else {
+        document.getElementById('huilv-convert-change-button').classList.remove('active');
+        document.getElementById('huilv-dont-convert-change-button').classList.add('active');
+    }
+    if (monitorPriceOrPercent == 'PRICE') {
+        document.getElementById('monitor-price-change-button').classList.add('active');
+        document.getElementById('monitor-percent-change-button').classList.remove('active');
+        document.getElementById('monitor-day-income-change-button').classList.remove('active');
+    } else if(monitorPriceOrPercent == 'PERCENT') {
+        document.getElementById('monitor-price-change-button').classList.remove('active');
+        document.getElementById('monitor-percent-change-button').classList.add('active');
+        document.getElementById('monitor-day-income-change-button').classList.remove('active');
+    } else {
+        document.getElementById('monitor-price-change-button').classList.remove('active');
+        document.getElementById('monitor-percent-change-button').classList.remove('active');
+        document.getElementById('monitor-day-income-change-button').classList.add('active');
+    }
+    if (monitorTop20Stock) {
+        document.getElementById('monitor-dont-top-20-stock-change-button').classList.remove('active');
+        document.getElementById('monitor-top-20-stock-change-button').classList.add('active');
+    } else {
+        document.getElementById('monitor-dont-top-20-stock-change-button').classList.add('active');
+        document.getElementById('monitor-top-20-stock-change-button').classList.remove('active');
+    }
+    if (largetMarketTotalDisplay) {
+        document.getElementById('larget-market-total-dont-display-change-button').classList.remove('active');
+        document.getElementById('larget-market-total-display-change-button').classList.add('active');
+    } else {
+        document.getElementById('larget-market-total-dont-display-change-button').classList.add('active');
+        document.getElementById('larget-market-total-display-change-button').classList.remove('active');
+    }
+    if (defaultIcon) {
+        document.getElementById('change-icon-default-button').classList.add('active');
+        document.getElementById('change-icon-hidden-button').classList.remove('active');
+    } else {
+        document.getElementById('change-icon-default-button').classList.remove('active');
+        document.getElementById('change-icon-hidden-button').classList.add('active');
+    }
+    if (mainPageRefreshTime == 20000) {
+        document.getElementById('main-page-refresh-time-20s-button').classList.add('active');
+        document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+    } else if(mainPageRefreshTime == 10000) {
+        document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-10s-button').classList.add('active');
+        document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+    }  else if(mainPageRefreshTime == 5000) {
+        document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-5s-button').classList.add('active');
+        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+    } else {
+        document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-3s-button').classList.add('active');
+    }
+    if (stockApi == 'GTIMG') {
+        document.getElementById('stock-api-gtimg-button').classList.add('active');
+        document.getElementById('stock-api-eastmoney-button').classList.remove('active');
+    } else {
+        document.getElementById('stock-api-gtimg-button').classList.remove('active');
+        document.getElementById('stock-api-eastmoney-button').classList.add('active');
+    }
 }
