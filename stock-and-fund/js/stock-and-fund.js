@@ -819,18 +819,23 @@ document.addEventListener(
         // 设置页面，点击打赏按钮
         document.getElementById("show-donate-button").addEventListener('click',  showDonate);
         document.getElementById("show-donate-button-2").addEventListener('click',  showDonate);
-        // 设置页面，点击分时图按钮
+        // 设置页面，点击展示/隐藏分时图按钮
         document.getElementById('show-minute-image-mini').addEventListener('click', setMinuteImageMini);
+        document.getElementById('hide-minute-image-mini').addEventListener('click', setMinuteImageMini);
         // 设置页面，点击颜色切换按钮
         document.getElementById('change-blue-red-button').addEventListener('click', changeBlueRed);
+        // document.getElementById('change-red-blue-button').addEventListener('click', changeBlueRed);
         // 设置黑暗，点击隐身模式
         document.getElementById('change-black-button').addEventListener('click', changeBlueRed);
+        // document.getElementById('disable-change-black-button').addEventListener('click', changeBlueRed);
         // 设置页面，点击忽悠自己按钮
         document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
+        document.getElementById('disable-cheat-me-button').addEventListener('click', cheatMe);
         // 设置页面，点击全屏按钮
         document.getElementById('full-screen-button').addEventListener('click', fullScreen);
         // 设置页面，点击样式切换
         document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
+        document.getElementById('bolder-font-change-button').addEventListener('click', changeFontStyle);
         // 设置页面，show-passwrod-protect-button点击，展示password-protect-modal
         document.getElementById('show-password-protect-button').addEventListener('click', showPasswordProtect);
         // 设置页面，自己开发时方便从 SpringBoot 项目直接导入数据
@@ -2791,28 +2796,36 @@ async function initWindowsSize() {
 }
 
 // 样式切换，股票基金数据字体加粗加大
-async function changeFontStyle() {
-    $("#setting-modal").modal("hide");
-    var stockNr = document.getElementById('stock-nr');
-    // 添加class样式
-    if (stockNr.classList.contains('my-table-tbody-font')) {
+async function changeFontStyle(event) {
+    let targetId = event.target.id;
+    if (targetId == 'font-change-button') {
         saveCacheData('font-change-style', 'normal');
     } else {
         saveCacheData('font-change-style', 'bolder');
     }
+    // var stockNr = document.getElementById('stock-nr');
+    // 添加class样式
+    // if (stockNr.classList.contains('my-table-tbody-font')) {
+    //     saveCacheData('font-change-style', 'normal');
+    // } else {
+    //     saveCacheData('font-change-style', 'bolder');
+    // }
+    $("#setting-modal").modal("hide");
     initFontStyle();
+    settingButtonInit();
 }
 
 // 展示隐藏分时图
-async function setMinuteImageMini() {
-    $("#setting-modal").modal("hide");
-    let showMinuteImageMini = await readCacheData('show-minute-image-mini');
-    if (showMinuteImageMini == 'open') {
-        saveCacheData('show-minute-image-mini', 'close');
-    } else {
+async function setMinuteImageMini(event) {
+    let targetId = event.target.id;
+    if (targetId == 'show-minute-image-mini') {
         saveCacheData('show-minute-image-mini', 'open');
+    } else {
+        saveCacheData('show-minute-image-mini', 'close');
     }
+    $("#setting-modal").modal("hide");
     initData();
+    settingButtonInit();
 }
 
 // 各种告警提示
@@ -3054,18 +3067,26 @@ async function changeBlueRed(event) {
     saveCacheData('blueColor', blueColor);
     initData();
     initLargeMarketData();
+    settingButtonInit();
 }
 
 // 欺骗自己，愣是把当日亏损变成盈利
-async function cheatMe() {
-    $("#setting-modal").modal("hide");
-    if(cheatMeFlag) {
+async function cheatMe(event) {
+    // let type;
+    if (event.target.id == 'disable-cheat-me-button') {
         cheatMeFlag = false;
-    } else if(!cheatMeFlag) {
+    } else {
         cheatMeFlag = true;
-    }
+    } 
+    $("#setting-modal").modal("hide");
+    // if(cheatMeFlag) {
+    //     cheatMeFlag = false;
+    // } else if(!cheatMeFlag) {
+    //     cheatMeFlag = true;
+    // }
     await saveCacheData('cheatMeFlag', cheatMeFlag);
     initData();
+    settingButtonInit();
 }
 
 // 切换展示股票/基金/全部
@@ -4221,6 +4242,10 @@ function changeBlackButton() {
     document.getElementById('show-wechat-group-button').classList.remove(btnLightCss);
     document.getElementById('show-wechat-group-button').classList.add(blackOutlineCss);
 
+    document.getElementById('show-wechat-mini-button').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('show-wechat-mini-button').classList.remove(btnLightCss);
+    document.getElementById('show-wechat-mini-button').classList.add(blackOutlineCss);
+    
     document.getElementById('help-document-button').classList.remove(btnOutlinePrimaryCss);
     document.getElementById('help-document-button').classList.remove(btnLightCss);
     document.getElementById('help-document-button').classList.add(blackOutlineCss);
@@ -6357,5 +6382,29 @@ async function settingButtonInit(){
     } else {
         document.getElementById('stock-api-gtimg-button').classList.remove('active');
         document.getElementById('stock-api-eastmoney-button').classList.add('active');
+    }
+    let showMinuteImageMini = await readCacheData('show-minute-image-mini');
+    if (showMinuteImageMini == 'open') {
+        document.getElementById('show-minute-image-mini').classList.add('active');
+        document.getElementById('hide-minute-image-mini').classList.remove('active');
+    } else {
+        document.getElementById('show-minute-image-mini').classList.remove('active');
+        document.getElementById('hide-minute-image-mini').classList.add('active');
+    }
+    let fontChangeStyle = await readCacheData('font-change-style');
+    if (fontChangeStyle == null || fontChangeStyle == undefined || fontChangeStyle == '' || fontChangeStyle == 'normal') {
+        document.getElementById('font-change-button').classList.add('active');
+        document.getElementById('bolder-font-change-button').classList.remove('active');
+    } else {
+        document.getElementById('font-change-button').classList.remove('active');
+        document.getElementById('bolder-font-change-button').classList.add('active');
+    }
+    console.log('cheatMeFlag', cheatMeFlag , cheatMeFlag == true);
+    if (cheatMeFlag) {
+        document.getElementById('cheat-me-button').classList.add('active');
+        document.getElementById('disable-cheat-me-button').classList.remove('active');
+    } else {
+        document.getElementById('cheat-me-button').classList.remove('active');
+        document.getElementById('disable-cheat-me-button').classList.add('active');
     }
 }

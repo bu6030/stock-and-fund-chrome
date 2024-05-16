@@ -651,17 +651,27 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
-                                <button type="button" id="show-minute-image-mini" class="btn btn-outline-primary"
-                                    data-toggle="modal">分时图
-                                </button>  展示/隐藏首页的迷你分时图
+                                <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" id="hide-minute-image-mini" class="btn btn-outline-primary"
+                                        data-toggle="modal">隐藏
+                                    </button>
+                                    <button type="button" id="show-minute-image-mini" class="btn btn-outline-primary"
+                                        data-toggle="modal">展示
+                                    </button>
+                                </div>  展示/隐藏首页的迷你分时图
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
-                                <button type="button" id="font-change-button" class="btn btn-outline-primary"
-                                    data-toggle="modal">样式切换
-                                </button>  首页字体变粗变大切换
+                                <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" id="font-change-button" class="btn btn-outline-primary"
+                                        data-toggle="modal">标准字体
+                                    </button>
+                                    <button type="button" id="bolder-font-change-button" class="btn btn-outline-primary"
+                                        data-toggle="modal">粗体字体
+                                    </button>
+                                </div>  样式切换，首页字体变粗变大切换
                                 <div class="btn-group btn-group" role="group" aria-label="Basic example">
                                     <button type="button" id="window-normal-size-change-button" class="btn btn-outline-primary">正常</button>
                                     <button type="button" id="window-small-size-change-button" class="btn btn-outline-primary">缩小</button>
@@ -717,25 +727,40 @@
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
-                                <button type="button" id="change-blue-red-button" class="btn btn-outline-primary"
-                                data-toggle="modal">颜色切换
-                                </button>  就是把涨跌红色/绿色互换下，涨红色跌绿色换成涨绿色跌红色
+                                <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" id="change-blue-red-button" class="btn btn-outline-primary"
+                                        data-toggle="modal">颜色切换<!--涨红/跌绿-->
+                                    </button>
+                                    <!-- <button type="button" id="change-red-blue-button" class="btn btn-outline-primary"
+                                        data-toggle="modal">涨绿/跌红
+                                    </button> -->
+                                </div> 颜色切换，就是把涨跌红色/绿色互换下，涨红色跌绿色换成涨绿色跌红色
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
-                                <button type="button" id="change-black-button" class="btn btn-outline-primary"
-                                data-toggle="modal">隐身模式
-                                </button>  颜色都变成灰色（包括底部按钮），更隐蔽，更方便摸鱼
+                                <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                                    <!-- <button type="button" id="disable-change-black-button" class="btn btn-outline-primary"
+                                    data-toggle="modal">关闭
+                                    </button> -->
+                                    <button type="button" id="change-black-button" class="btn btn-outline-primary"
+                                    data-toggle="modal">隐身模式<!--开启-->
+                                    </button>
+                                </div>  隐身模式，颜色都变成灰色（包括底部按钮），更隐蔽，更方便摸鱼
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
                             <div class="zuo"></div>
                             <div class="you">
-                                <button type="button" id="cheat-me-button" class="btn btn-outline-primary"
-                                data-toggle="modal">忽悠自己
-                                </button>  纯属娱乐，就是把当日亏损的负值变成正的，把亏损展示成盈利，但数据计算不十分准
+                                <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" id="disable-cheat-me-button" class="btn btn-outline-primary"
+                                    data-toggle="modal">关闭
+                                    </button>
+                                    <button type="button" id="cheat-me-button" class="btn btn-outline-primary"
+                                    data-toggle="modal">开启
+                                    </button>
+                            </div>  忽悠自己，纯属娱乐，就是把当日亏损的负值变成正的，把亏损展示成盈利，但数据计算不十分准
                             </div>
                         </div>
                         <div class="am-form-group am-cf">
@@ -750,8 +775,8 @@
                             <div class="zuo"></div>
                             <div class="you">
                                 <div class="btn-group btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" id="huilv-convert-change-button" class="btn btn-outline-primary">换算</button>
                                     <button type="button" id="huilv-dont-convert-change-button" class="btn btn-outline-primary">不换算</button>
+                                    <button type="button" id="huilv-convert-change-button" class="btn btn-outline-primary">换算</button>
                                 </div>  是否开启汇率换算，如果有美股，美元切换成人民币，如果有港股，港币切换成人民币
                             </div>
                         </div>
