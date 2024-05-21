@@ -595,6 +595,8 @@ document.addEventListener(
         document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
         // 首页，点击全屏显示按钮
         document.getElementById('full-screen-button-2').addEventListener('click', fullScreen);
+        // 首页，点击弹窗展示按钮
+        document.getElementById('popup-windows-button').addEventListener('click', popupWindows);
         // 首页，点击读取自选股
         document.getElementById('add-stock-from-tonghuashun-xueqiu').addEventListener('click', addStockFromTonghuashunXueqiu);
         // 首页，点击小程序按钮
@@ -2727,7 +2729,7 @@ async function initWindowsSize() {
     let footerDesc = document.getElementById('footer-desc');
     let helpDocumentButton = document.getElementById('help-document-button');
     let fundNetDiagramDiv = document.getElementById('fund-net-diagram');
-    let fullScreenButton2 = document.getElementById('full-screen-button-2');
+    // let fullScreenButton2 = document.getElementById('full-screen-button-2');
     let showBuyOrSellButton = document.getElementById('show-buy-or-sell-button');
     let showBuyOrSellButton2 = document.getElementById('show-buy-or-sell-button-2');
     let showWechatGroupButton = document.getElementById('show-wechat-group-button');
@@ -2737,6 +2739,7 @@ async function initWindowsSize() {
     let volumnImageEchart = document.getElementById('volumn-image-echart');
     let timeImageBody = document.getElementById('time-image-body');
     let groupMenuButton = document.getElementById('group-menu-button');
+    let fullScreenMenuButton = document.getElementById('full-screen-menu-button');
     if (windowSize == 'NORMAL') {
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
@@ -2753,11 +2756,12 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "inline";
-        fullScreenButton2.style.display = "inline";
+        // fullScreenButton2.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
         groupMenuButton.style.display = "inline";
+        fullScreenMenuButton.style.display = "inline";
         timeImageDialog.style.maxWidth = '630px';
         timeImageDialog.style.maxHeight = '430px';
         timeImageNew.style.width = '600px';
@@ -2780,11 +2784,12 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
         helpDocumentButton.style.display = "none";
-        fullScreenButton2.style.display = "inline";
+        // fullScreenButton2.style.display = "inline";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
         groupMenuButton.style.display = "inline";
+        fullScreenMenuButton.style.display = "inline";
         timeImageDialog.style.maxWidth = '600px';
         timeImageNew.style.width = '580px';
         timeImageNew.style.height = '300px';
@@ -2811,6 +2816,7 @@ async function initWindowsSize() {
         showBuyOrSellButton2.style.display = "none";
         showDataCenterButton.style.display = "none";
         groupMenuButton.style.display = "none";
+        fullScreenMenuButton.style.display = "none";
         timeImageDialog.style.maxWidth = '400px';
         timeImageNew.style.width = '380px';
         timeImageNew.style.height = '280px';
@@ -3179,13 +3185,13 @@ async function fullScreen() {
 }
 
 // 弹出窗口展示
-async function popupWindow() {
+async function popupWindows() {
     $("#setting-modal").modal("hide");
     chrome.windows.create({
         url: chrome.runtime.getURL("full-screen.html"),
         type: "popup",
-        width: 400,
-        height: 300
+        width: 800,
+        height: 600
     });
 }
 
@@ -4276,9 +4282,9 @@ function changeBlackButton() {
     document.getElementById('show-setting-button').classList.remove(btnLightCss);
     document.getElementById('show-setting-button').classList.add(blackOutlineCss);
 
-    document.getElementById('full-screen-button-2').classList.remove(btnOutlinePrimaryCss);
-    document.getElementById('full-screen-button-2').classList.remove(btnLightCss);
-    document.getElementById('full-screen-button-2').classList.add(blackOutlineCss);
+    document.getElementById('full-screen-menu-button').classList.remove(btnInfoCss);
+    document.getElementById('full-screen-menu-button').classList.remove(btnLightCss);
+    document.getElementById('full-screen-menu-button').classList.add(blackCss);
 
     document.getElementById('show-wechat-group-button').classList.remove(btnOutlinePrimaryCss);
     document.getElementById('show-wechat-group-button').classList.remove(btnLightCss);
