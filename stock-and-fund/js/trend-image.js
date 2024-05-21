@@ -685,18 +685,48 @@ function setStockImage(type) {
                 let values = params[0].value;
                 let volumn = (parseFloat(values[5]) / 10000).toFixed(2);
                 let money = (parseFloat(values[6]) / 100000000).toFixed(2);
-                let ma5 = params[1].value;
-                let ma10 = params[2].value;
-                let ma20 = params[3].value;
-                let ma30 = params[4].value;
+                // let ma5 = params[1].value;
+                // let ma10 = params[2].value;
+                // let ma20 = params[3].value;
+                // let ma30 = params[4].value;
+                // return result.data.name + "<br>时间：" + params[0].name
+                //     + "<br>开盘：" + values[1] + "&nbsp;&nbsp;收盘：" + values[2] 
+                //     + "<br>最低：" + values[3] + "&nbsp;&nbsp;最高：" + values[4]
+                //     + "<br>成交量：" + volumn + "万"
+                //     + "<br>成交额：" + money + "亿" 
+                //     + "<br>涨跌幅：" + values[7] + "%"
+                //     + "<br>MA5：" + ma5 + "&nbsp;&nbsp;MA10：" + ma10
+                //     + "<br>MA20：" + ma20 + "&nbsp;&nbsp;MA30：" + ma30;
+                let ma5 = null;
+                let ma10 = null;
+                let ma20 = null;
+                let ma30 = null;
+                params.forEach(function(param) {
+                    switch (param.seriesName) {
+                        case 'MA5':
+                            ma5 = param.value;
+                            break;
+                        case 'MA10':
+                            ma10 = param.value;
+                            break;
+                        case 'MA20':
+                            ma20 = param.value;
+                            break;
+                        case 'MA30':
+                            ma30 = param.value;
+                            break;
+                    }
+                });
                 return result.data.name + "<br>时间：" + params[0].name
-                    + "<br>开盘：" + values[1] + "&nbsp;&nbsp;收盘：" + values[2] 
-                    + "<br>最低：" + values[3] + "&nbsp;&nbsp;最高：" + values[4]
-                    + "<br>成交量：" + volumn + "万"
-                    + "<br>成交额：" + money + "亿" 
-                    + "<br>涨跌幅：" + values[7] + "%"
-                    + "<br>MA5：" + ma5 + "&nbsp;&nbsp;MA10：" + ma10
-                    + "<br>MA20：" + ma20 + "&nbsp;&nbsp;MA30：" + ma30;
+                + "<br>开盘：" + values[1] + "&nbsp;&nbsp;收盘：" + values[2] 
+                + "<br>最低：" + values[3] + "&nbsp;&nbsp;最高：" + values[4]
+                + "<br>成交量：" + volumn + "万"
+                + "<br>成交额：" + money + "亿" 
+                + "<br>涨跌幅：" + values[7] + "%<br>"
+                + (ma5 !== null ? "MA5：" + ma5 : "")
+                + (ma10 !== null ? "&nbsp;&nbsp;MA10：" + ma10 : "")
+                + (ma20 !== null ? "<br>MA20：" + ma20 : "")
+                + (ma30 !== null ? "&nbsp;&nbsp;MA30：" + ma30 : "");
             }
         },
     };

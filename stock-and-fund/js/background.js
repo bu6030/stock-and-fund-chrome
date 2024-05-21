@@ -412,6 +412,9 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 if (count <= 24) {
                     var kongge = '';
                         switch(name.length) {
+                            case 3: 
+                                kongge = '         ';
+                                break;
                             case 4: 
                                 kongge = '     ';
                                 break;

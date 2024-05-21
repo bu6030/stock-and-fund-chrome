@@ -268,6 +268,8 @@
 247. 导入数据优化，支持纯文本格式 2024/5/10 -- version 2.1.1 -- end
 248. 文件导入，分组报错 2024/5/11
 249. 优化设置页面生效的按钮特殊样式 2024/5/15 -- version 2.1.2 -- end
+250. 角标显示三个字股票格式优化 2024/5/21
+251. 日/周/月线图中取消均线显示报错 2024/5/21
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
