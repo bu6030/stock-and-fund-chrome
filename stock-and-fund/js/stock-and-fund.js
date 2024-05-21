@@ -6123,6 +6123,11 @@ function initGroupButton() {
             changeGroup(id);
         });
     });
+    if (currentGroup == 'all-group') {
+        document.getElementById("group-menu-button").innerHTML = '全部分组';
+    } else {
+        document.getElementById("group-menu-button").innerHTML = groups[currentGroup];
+    }
 }
 
 async function changeGroup(groupId) {
@@ -6169,6 +6174,7 @@ async function changeGroup(groupId) {
     }
     $("#group-modal").modal('hide');
     reloadDataAndHtml();
+    initGroupButton();
 }
 
 async function changeAllGroup() {

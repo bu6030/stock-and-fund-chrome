@@ -272,6 +272,7 @@
 251. 日/周/月线图中取消均线显示报错 2024/5/21 -- version 2.1.3 -- end
 252. 增加量比 2024/5/21
 253. 增加弹窗按钮，可以调整大小以及拖动 2024/5/21
+254. 分组按钮显示当前选中的分组 2024/5/21
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
