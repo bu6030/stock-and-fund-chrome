@@ -348,12 +348,10 @@ async function initLoad() {
         await changeAllGroup();
     } else {
         var funds = await readCacheData(currentGroup + '_funds');
-        console.log('=====funds=', funds);
         if (funds == null || funds == 'null') {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
-            console.log('=====fundList=', fundList);
         }
         var stocks = await readCacheData(currentGroup + '_stocks');
         if (stocks == null || stocks == 'null') {
@@ -376,6 +374,7 @@ async function initLoad() {
     initData();
     initLargeMarketData();
     initGroupButton();
+    initStockOrFundOrAllButton();
     settingButtonInit();
     // 默认20s刷新，通过mainPageRefreshTime获取
     setInterval(autoRefresh, mainPageRefreshTime);
@@ -3133,6 +3132,7 @@ async function changeShowStockOrFundOrAll(event) {
     showStockOrFundOrAll = type;
     initHtml();
     initData();
+    initStockOrFundOrAllButton();
 }
 
 // 展示数据导入页面
@@ -6478,5 +6478,22 @@ async function settingButtonInit(){
     } else {
         document.getElementById('cheat-me-button').classList.remove('active');
         document.getElementById('disable-cheat-me-button').classList.add('active');
+    }
+}
+
+// 设置全部/股票/基金按钮激活显示状态
+async function initStockOrFundOrAllButton() {
+    if (showStockOrFundOrAll == 'all') {
+        document.getElementById('show-all-button').classList.add('active');
+        document.getElementById('show-stock-button').classList.remove('active');
+        document.getElementById('show-fund-button').classList.remove('active');
+    } else if (showStockOrFundOrAll == 'stock') {
+        document.getElementById('show-all-button').classList.remove('active');
+        document.getElementById('show-stock-button').classList.add('active');
+        document.getElementById('show-fund-button').classList.remove('active');
+    } else if (showStockOrFundOrAll == 'fund') {
+        document.getElementById('show-all-button').classList.remove('active');
+        document.getElementById('show-stock-button').classList.remove('active');
+        document.getElementById('show-fund-button').classList.add('active');
     }
 }
