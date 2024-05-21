@@ -3193,6 +3193,7 @@ async function popupWindows() {
         width: 800,
         height: 600
     });
+    window.close();
 }
 
 // 展示密码保护页面
