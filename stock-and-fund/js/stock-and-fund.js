@@ -5322,7 +5322,7 @@ function getSecid(code) {
         secid = '2';
     } else {
         secid = '0';
-        if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX'){
+        if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX' || code == 'TWII'){
             secid = '100';
         }
     }
@@ -5752,6 +5752,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'SENSEX':
                 name = '印度孟买SENSEX';
+                break;
+            case 'TWII':
+                name = '台湾加权指数';
                 break;
             case 'sh000300':
                 name = '沪深300';

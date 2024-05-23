@@ -114,6 +114,12 @@ function initLargeMarketData() {
             timeImageCode = "SENSEX";
             initLargeMarketClick();
         });
+        // 点击印台湾加权指数
+        if(document.getElementById('large-market-TWII'))
+        document.getElementById('large-market-TWII').addEventListener('click', function () {
+            timeImageCode = "TWII";
+            initLargeMarketClick();
+        });
         // 点击沪深300指数
         if(document.getElementById('large-market-000300'))
         document.getElementById('large-market-000300').addEventListener('click', function () {
