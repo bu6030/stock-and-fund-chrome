@@ -5330,7 +5330,7 @@ function getSecid(code) {
         secid = '2';
     } else {
         secid = '0';
-        if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX' || code == 'TWII'){
+        if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX' || code == 'TWII' || code == 'HSI' || code == 'VNINDEX' || code == 'N100' || code == 'N300' || code == 'N500' || code == 'N1000' || code == 'N2000' || code == 'N3000' || code == 'N5000'){
             secid = '100';
         }
     }
@@ -5763,6 +5763,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'TWII':
                 name = '台湾加权指数';
+                break;
+            case 'VNINDEX':
+                name = '越南胡志明指数';
                 break;
             case 'sh000300':
                 name = '沪深300';
