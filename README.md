@@ -275,6 +275,7 @@
 254. 分组按钮显示当前选中的分组 2024/5/21
 255. 设置全部/股票/基金按钮激活显示状态 2024/5/21 -- version 2.1.4 -- end
 256. 增加大盘指数 2024/5/22
+257. 日/周/月线图成交量柱颜色不准确修改 2024/5/27
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

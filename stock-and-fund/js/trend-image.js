@@ -781,10 +781,9 @@ function setStockImage(type) {
                     color: function(params) {
                         var dataIndex = params.dataIndex;
                         // 获取主图的数据
-                        var currentPrice = data0.priceData[dataIndex];
-                        var lastMinitePrice = dataIndex > 1 ? data0.priceData[dataIndex - 1] : data0.priceData[dataIndex];
+                        var change = data0.changes[dataIndex];
                         // 设置不同的颜色
-                        if (currentPrice >= lastMinitePrice) {
+                        if (parseFloat(change + '') >= 0) {
                             return redColor; // 比主图线高时的颜色
                         } else {
                             return blueColor; // 比主图线低时的颜色
@@ -904,17 +903,20 @@ function splitData(rawData) {
     const volumnData = [];
     const priceData = [];
     const values = [];
+    const changes = [];
     for (var i = 0; i < rawData.length; i++) {
         categoryData.push(rawData[i].splice(0, 1)[0]);
         values.push(rawData[i]);
         volumnData.push(rawData[i][4]);
         priceData.push(rawData[i][3]);
+        changes.push(rawData[i][6]);
     }
     return {
         categoryData: categoryData,
         volumnData: volumnData,
         priceData: priceData,
-        values: values
+        values: values,
+        changes: changes,
     };
 }
 // 每次初始化修改分时图图表大小

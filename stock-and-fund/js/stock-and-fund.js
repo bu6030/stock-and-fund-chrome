@@ -969,7 +969,7 @@ async function initData() {
             turnOverRate = "";
             for (var k in stoksArr) {
                 for (var l in stockList) {
-                    console.log(stockList[l].code ,"===", stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("=")))
+                    // console.log(stockList[l].code ,"===", stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("=")))
                     if (stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
                         var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                         var values = dataStr.split("~");
@@ -1111,7 +1111,7 @@ async function initData() {
             // 没有股票不调用接口请求
             if (stocks != "") {
                 result = ajaxGetStockFromEastMoney(secIdStockArr);
-                console.log('ajaxGetStockFromEastMoney=', result.data.diff);
+                // console.log('ajaxGetStockFromEastMoney=', result.data.diff);
                 stoksArr = result.data.diff;
             }
             turnOverRate = "";
@@ -1300,7 +1300,7 @@ async function initFund() {
                             fundList[k].existJZ = true;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
-                            console.log("=========", dayIncome + "", marketValue +"");
+                            // console.log("=========", dayIncome + "", marketValue +"");
                         } else {
                             fundList[k].existJZ = false;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
@@ -1396,7 +1396,7 @@ async function initFund() {
                             fundList[k].existJZ = true;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
-                            console.log("=========", dayIncome + "", marketValue +"");
+                            // console.log("=========", dayIncome + "", marketValue +"");
                         } else {
                             fundList[k].existJZ = false;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
@@ -2197,7 +2197,7 @@ async function searchFundByName(name) {
 // 保存股票
 async function saveStock() {
     var belongGroup = $("#stock-belong-group-select").val();
-    console.log('belongGroup=',belongGroup,';currentGroup=',currentGroup);
+    // console.log('belongGroup=',belongGroup,';currentGroup=',currentGroup);
     var costPrise = $("#stock-costPrise").val();
     var bonds = $("#stock-bonds").val();
     var monitorHighPrice = $("#stock-monitor-high-price").val();
@@ -2379,7 +2379,7 @@ async function saveStock() {
 // 保存基金
 async function saveFund() {
     var belongGroup = $("#fund-belong-group-select").val();
-    console.log('belongGroup:',belongGroup,"currentGroup:",currentGroup);
+    // console.log('belongGroup:',belongGroup,"currentGroup:",currentGroup);
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     if (isCycleInvest) {
@@ -6486,7 +6486,6 @@ async function settingButtonInit(){
         document.getElementById('font-change-button').classList.remove('active');
         document.getElementById('bolder-font-change-button').classList.add('active');
     }
-    console.log('cheatMeFlag', cheatMeFlag , cheatMeFlag == true);
     if (cheatMeFlag) {
         document.getElementById('cheat-me-button').classList.add('active');
         document.getElementById('disable-cheat-me-button').classList.remove('active');
