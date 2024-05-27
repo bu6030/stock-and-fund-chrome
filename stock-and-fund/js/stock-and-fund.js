@@ -2876,7 +2876,7 @@ function initFirstInstall() {
 }
 
 // 遍历股票，展示主页迷你分时图
-function setStockMinitesImageMini(){
+async function setStockMinitesImageMini(){
     for (k in stockList) {
         let elementId = 'minute-image-mini-' + stockList[k].code;
         let result = ajaxGetStockTimeImageMinuteMini(stockList[k].code);
@@ -2928,7 +2928,7 @@ function setStockMinitesImageMini(){
 }
 
 // 遍历基金，展示主页迷你分时图
-function setFundMinitesImageMini(){
+async function setFundMinitesImageMini() {
     for (k in fundList) {
         let elementId = 'minute-image-mini-' + fundList[k].fundCode;
         let result = ajaxGetFundTimeImageMinuteMini(fundList[k].fundCode);
