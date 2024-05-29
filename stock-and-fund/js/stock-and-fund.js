@@ -2810,7 +2810,7 @@ async function initWindowsSize() {
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
         helpDocumentButton.style.display = "none";
-        fullScreenButton2.style.display = "none";
+        // fullScreenButton2.style.display = "none";
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
         showDataCenterButton.style.display = "none";
