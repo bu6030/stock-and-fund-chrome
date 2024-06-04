@@ -25,7 +25,7 @@ let Env = {
     GO_TO_EASTMONEY_1_URL: "https://quote.eastmoney.com/basic/h5chart-iframe.html",
     GET_UP_DOWN_COUNTS_URL: "https://push2ex.eastmoney.com/getTopicZDFenBu",
     GO_TO_EASTMONEY_2_URL: "https://quote.eastmoney.com",
-    ADVICE_URL: "http://1.117.221.208:8080/chrome/advice",
+    ADVICE_URL: "http://110.40.187.161:8080/chrome/advice",
     CLOUD_SERVER_DATA_SYNC: "https://dav.jianguoyun.com/dav/stock-and-fund/",
     CLOUD_SERVER_DATA_SYNC_BASIC_AUTH: "请申请自己的云账户",
     // 下面这两个地址可以通过本地启动stock-and-fund项目
@@ -38,7 +38,7 @@ let Env = {
     TIME_CACHED_SEVEN_DAY: 7 * 24 * 60 * 60 * 1000,
     TIME_CACHED_ONE_DAY: 24 * 60 * 60 * 1000,
     TIME_CACHED_ONE_HOUR: 1 * 60 * 60 * 1000,
-    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://1.117.221.208:8080/chrome/stockAndFund",
+    GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://110.40.187.161:8080/chrome/stockAndFund",
 }
 
 let develop = false;
