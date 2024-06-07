@@ -1,6 +1,13 @@
 let isCycleInvest = false;
 let performTaskId;
 let count = 0;
+let isFirefox = false;
+// 检测是否为 Firefox
+if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
+    // Firefox 环境中，映射 chrome 到 browser
+    chrome = browser;
+    isFirefox = true;
+}
 // 定时执行任务的函数
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
@@ -335,22 +342,42 @@ async function showNotification(title, body) {
 }
 // 统一发送chrome角标
 function sendChromeBadge(badgeTextColor, badgeBackgroundColor, badgeText) {
-    try {
-        chrome.action.setBadgeTextColor({ color: badgeTextColor });
-    } catch (error) {
-        console.warn("BadgeTextColor Error: ", error);
+    if (isFirefox) {
+        try {
+            chrome.browserAction.setBadgeTextColor({ color: badgeTextColor });
+        } catch (error) {
+            console.warn("BadgeTextColor Error: ", error);
+        }
+        chrome.browserAction.setBadgeBackgroundColor({ color: badgeBackgroundColor });
+        chrome.browserAction.setBadgeText({ text: badgeText });
+    } else {
+        try {
+            chrome.action.setBadgeTextColor({ color: badgeTextColor });
+        } catch (error) {
+            console.warn("BadgeTextColor Error: ", error);
+        }
+        chrome.action.setBadgeBackgroundColor({ color: badgeBackgroundColor });
+        chrome.action.setBadgeText({ text: badgeText });
     }
-    chrome.action.setBadgeBackgroundColor({ color: badgeBackgroundColor });
-    chrome.action.setBadgeText({ text: badgeText });
 }
 // 统一设置chrome标题
 function setChromeTitle(title) {
-    try {
-        chrome.action.setTitle({ 
-            title: title
-        });
-    } catch (error) {
-        console.warn("setChromeTitle Error: ", error);
+    if (isFirefox) {
+        try {
+            chrome.browserAction.setTitle({ 
+                title: title
+            });
+        } catch (error) {
+            console.warn("setChromeTitle Error: ", error);
+        }
+    } else {
+        try {
+            chrome.action.setTitle({ 
+                title: title
+            });
+        } catch (error) {
+            console.warn("setChromeTitle Error: ", error);
+        }
     }
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
