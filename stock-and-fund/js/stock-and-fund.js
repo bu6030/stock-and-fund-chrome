@@ -554,6 +554,12 @@ async function initHtml() {
 document.addEventListener(
     'DOMContentLoaded',
     function () {
+        // 初始化时获取模态框的ID，url中传递模态框直接显示
+        const params = new URLSearchParams(window.location.search);
+        const modalId = params.get('modal');
+        if (modalId) {
+            $("#" + modalId).modal();
+        }
         // 首页，点击设置按钮
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
@@ -3137,8 +3143,14 @@ async function changeShowStockOrFundOrAll(event) {
 
 // 展示数据导入页面
 function showImportData() {
-    $("#setting-modal").modal("hide");
-    $("#data-import-modal").modal();
+    // 如果是火狐需要弹出全屏窗口展示导入页面
+    if (isFirefox) {
+        chrome.tabs.create({ url: "full-screen.html?modal=data-import-modal" });
+        window.close();
+    } else {
+        $("#setting-modal").modal("hide");
+        $("#data-import-modal").modal();
+    }
 }
 
 // 数据导出
