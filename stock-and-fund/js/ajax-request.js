@@ -140,7 +140,8 @@ function ajaxGetStockFromEastMoney(code) {
 // 接口调用
 function ajaxGetFundFromTiantianjijin(code) {
     let result;
-    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN;
+    let timestamp = Date.now();
+    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN + '?' + timestamp;
     FUND_URL = FUND_URL.replace('{CODE}', code);
     $.ajax({
         url: FUND_URL,

@@ -17,9 +17,17 @@
     "storage",
     "notifications",
     "http://*.gtimg.cn/*",
-    "https://*.gtimg.cn/*",
     "http://*.eastmoney.com/*",
-    "https://*.eastmoney.com/*"
+    "http://*.1234567.com.cn/*",
+    "http://*.sinajs.cn/*",
+    "http://*.huilv.cc/*",
+    "http://*.dfcfw.com/*",
+    "https://*.gtimg.cn/*",
+    "https://*.eastmoney.com/*",
+    "https://*.1234567.com.cn/*",
+    "https://*.sinajs.cn/*",
+    "https://*.huilv.cc/*",
+    "https://*.dfcfw.com/*"
   ],
   "content_scripts": [
     {
