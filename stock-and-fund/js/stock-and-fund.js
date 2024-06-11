@@ -44,6 +44,7 @@ var largeMarketCode;
 var groups;
 var currentGroup;
 var mainPageRefreshTime;
+var trendImageType;
 var stockColumnNames = {
     "name-th": "股票名称",
     "mini-image-th": "迷你分时图",
@@ -268,6 +269,10 @@ async function initLoad() {
     stockApi = await readCacheData('stock-api');
     if (stockApi == null || stockApi == '') {
         stockApi = 'GTIMG';
+    }
+    trendImageType = await readCacheData('trend-image-type');
+    if (trendImageType == null || trendImageType == '') {
+        trendImageType = 'MINUTE';
     }
     largetMarketTotalDisplay = await readCacheData('larget-market-total-display');
     if (largetMarketTotalDisplay == null || largetMarketTotalDisplay == "false") {
@@ -906,6 +911,11 @@ document.addEventListener(
         // 设置页面，点击切换新旧获取股票信息接口
         document.getElementById('stock-api-gtimg-button').addEventListener('click', changeStockApi);
         document.getElementById('stock-api-eastmoney-button').addEventListener('click', changeStockApi);
+        // 设置页面，点击切换默认展示分时图/日线图/周线图/月线图
+        document.getElementById('trend-image-type-minute-button').addEventListener('click', changeTrendImageType);
+        document.getElementById('trend-image-type-day-button').addEventListener('click', changeTrendImageType);
+        document.getElementById('trend-image-type-week-button').addEventListener('click', changeTrendImageType);
+        document.getElementById('trend-image-type-month-button').addEventListener('click', changeTrendImageType);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -1577,7 +1587,15 @@ async function initStockAndFundHtml() {
                 }
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
-                showMinuteImage();
+                if (trendImageType == 'MINUTE') {
+                    showMinuteImage();
+                } else if (trendImageType == 'DAY') {
+                    showDayImage();
+                } else if (trendImageType == 'WEEK') {
+                    showWeekImage();
+                } else if (trendImageType == 'MONTH') {
+                    showMonthImage();
+                }
             });
             // stockTr.addEventListener('contextmenu', function (event) {
             //     event.preventDefault();
@@ -1626,7 +1644,15 @@ async function initStockAndFundHtml() {
                     $("#time-image-week-button")[0].style.display = 'inline';
                     $("#time-image-month-button")[0].style.display = 'inline';
                 }
-                showMinuteImage();
+                if (trendImageType == 'MINUTE') {
+                    showMinuteImage();
+                } else if (trendImageType == 'DAY') {
+                    showDayImage();
+                } else if (trendImageType == 'WEEK') {
+                    showWeekImage();
+                } else if (trendImageType == 'MONTH') {
+                    showMonthImage();
+                }
             });
         }
     }
@@ -3782,7 +3808,15 @@ function showTimeImage(event) {
         timeImageCode = $("#stock-code").val();
         timeImageType = "STOCK";
     }
-    showMinuteImage();
+    if (trendImageType == 'MINUTE') {
+        showMinuteImage();
+    } else if (trendImageType == 'DAY') {
+        showDayImage();
+    } else if (trendImageType == 'WEEK') {
+        showWeekImage();
+    } else if (trendImageType == 'MONTH') {
+        showMonthImage();
+    }
 }
 
 // 搜索股票基金输入框，点击回车搜索股票基金
@@ -6505,6 +6539,27 @@ async function settingButtonInit(){
         document.getElementById('cheat-me-button').classList.remove('active');
         document.getElementById('disable-cheat-me-button').classList.add('active');
     }
+    if (trendImageType == 'MINUTE') {
+        document.getElementById('trend-image-type-minute-button').classList.add('active');
+        document.getElementById('trend-image-type-day-button').classList.remove('active');
+        document.getElementById('trend-image-type-week-button').classList.remove('active');
+        document.getElementById('trend-image-type-month-button').classList.remove('active');
+    } else if (trendImageType == 'DAY') {
+        document.getElementById('trend-image-type-minute-button').classList.remove('active');
+        document.getElementById('trend-image-type-day-button').classList.add('active');
+        document.getElementById('trend-image-type-week-button').classList.remove('active');
+        document.getElementById('trend-image-type-month-button').classList.remove('active');
+    } else if (trendImageType == 'WEEK') {
+        document.getElementById('trend-image-type-minute-button').classList.remove('active');
+        document.getElementById('trend-image-type-day-button').classList.remove('active');
+        document.getElementById('trend-image-type-week-button').classList.add('active');
+        document.getElementById('trend-image-type-month-button').classList.remove('active');
+    } else if (trendImageType == 'MONTH') {
+        document.getElementById('trend-image-type-minute-button').classList.remove('active');
+        document.getElementById('trend-image-type-day-button').classList.remove('active');
+        document.getElementById('trend-image-type-week-button').classList.remove('active');
+        document.getElementById('trend-image-type-month-button').classList.add('active');
+    }
 }
 
 // 设置全部/股票/基金按钮激活显示状态
@@ -6522,4 +6577,19 @@ async function initStockOrFundOrAllButton() {
         document.getElementById('show-stock-button').classList.remove('active');
         document.getElementById('show-fund-button').classList.add('active');
     }
+}
+
+async function changeTrendImageType(event) {
+    let targetId = event.target.id;
+    if (targetId == 'trend-image-type-minute-button') {
+        trendImageType = 'MINUTE';
+    } else if (targetId == 'trend-image-type-day-button') {
+        trendImageType = 'DAY';
+    } else if (targetId == 'trend-image-type-week-button') {
+        trendImageType = 'WEEK';
+    } else {
+        trendImageType = 'MONTH';
+    }
+    saveCacheData('trend-image-type', trendImageType);
+    settingButtonInit();
 }
