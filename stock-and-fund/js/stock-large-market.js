@@ -241,7 +241,15 @@ function initLargeMarketClick() {
     $("#stock-fund-monitor-button")[0].style.display = 'block';
     $("#set-top-button-3")[0].style.display = 'none';
     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
-    showMinuteImage();
+    if (trendImageType == 'MINUTE') {
+        showMinuteImage();
+    } else if (trendImageType == 'DAY') {
+        showDayImage();
+    } else if (trendImageType == 'WEEK') {
+        showWeekImage();
+    } else if (trendImageType == 'MONTH') {
+        showMonthImage();
+    }
 }
 
 function largeMarketCodeSave() {
