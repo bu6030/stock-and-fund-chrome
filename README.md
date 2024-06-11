@@ -283,7 +283,7 @@
 262. 修改jQuery版本 2024/6/7
 263. 针对新浏览器定时bug处理 2024/6/7
 264. 新浏览器插件导入按钮点击后展示全屏导入模态框 2024/6/9
-265. 首页点击股票/基金时，修改默认打开分时图/日线图/周线图/月线图 2024/6/11
+265. 首页点击股票/基金时，修改默认打开分时图/日线图/周线图/月线图 2024/6/11 -- version 2.1.7 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
