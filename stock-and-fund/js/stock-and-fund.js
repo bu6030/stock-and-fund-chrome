@@ -258,7 +258,7 @@ async function initLoad() {
     }
     timeImageNewOrOld = await readCacheData('time-image-new-or-old');
     if (timeImageNewOrOld == null) {
-        timeImageNewOrOld = 'OLD';
+        timeImageNewOrOld = 'NEW';
     }
     defaultIcon = await readCacheData('default-icon');
     if (defaultIcon == null || defaultIcon == "true") {
