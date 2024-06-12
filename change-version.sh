@@ -10,11 +10,13 @@ NEW_V=$CURRENT_REL.$CURRENT_INCR.$NEW_FIX
 echo ========新版本$NEW_V========
 echo ========替换文件========
 sed -i "" 's/'$CURRENT_V'/'$NEW_V'/g' ./stock-and-fund/manifest.json
+sed -i "" 's/'$CURRENT_V'/'$NEW_V'/g' ./stock-and-fund/manifest-firefox.json
 sed -i "" 's/'$CURRENT_V'/'$NEW_V'/g' ./stock-and-fund/popup.html
 sed -i "" 's/'$CURRENT_V'/'$NEW_V'/g' ./stock-and-fund/full-screen.html
 
 echo ========GIT 提交文件========
 git add ./stock-and-fund/manifest.json
+git add ./stock-and-fund/manifest-firefox.json
 git add ./stock-and-fund/popup.html
 git add ./stock-and-fund/full-screen.html
 git commit -m "修改版本号"$NEW_V
