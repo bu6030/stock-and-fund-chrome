@@ -1309,6 +1309,9 @@ async function initFund() {
                         if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
                             gztime = gztime.substring(0, 10).replaceAll('-', '')
                         }
+                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        fundList[k].costPriceValue = costPriceValue + "";
                         if (currentDayNetDiagramDate == gztime) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
@@ -1317,6 +1320,8 @@ async function initFund() {
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             // console.log("=========", dayIncome + "", marketValue +"");
+                            fundList[k].income = marketValue.subtract(costPriceValue) + "";
+                            fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
                         } else {
                             fundList[k].existJZ = false;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
@@ -1324,9 +1329,6 @@ async function initFund() {
                         }
                         fundList[k].dayIncome = dayIncome + "";
                         fundList[k].marketValue = marketValue + "";
-                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
-                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
-                        fundList[k].costPriceValue = costPriceValue + "";
                         break;
                     }
                 }
@@ -1405,6 +1407,9 @@ async function initFund() {
                         if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
                             gztime = gztime.substring(0, 10).replaceAll('-', '')
                         }
+                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                        fundList[k].costPriceValue = costPriceValue + "";
                         if (currentDayNetDiagramDate == gztime) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
@@ -1413,6 +1418,8 @@ async function initFund() {
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             // console.log("=========", dayIncome + "", marketValue +"");
+                            fundList[k].income = marketValue.subtract(costPriceValue) + "";
+                            fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
                         } else {
                             fundList[k].existJZ = false;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
@@ -1420,9 +1427,6 @@ async function initFund() {
                         }
                         fundList[k].dayIncome = dayIncome + "";
                         fundList[k].marketValue = marketValue + "";
-                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
-                        var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
-                        fundList[k].costPriceValue = costPriceValue + "";
                     }
                 }
             }
