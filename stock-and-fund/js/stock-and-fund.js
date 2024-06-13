@@ -963,7 +963,7 @@ async function initData() {
         if (stockApi == 'GTIMG') {
             var stocks = "";
             for (var k in stockList) {
-                stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','') + ",";
+                stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') + ",";
             }
             let huilvHK;
             let huilvUS;
@@ -986,7 +986,7 @@ async function initData() {
             for (var k in stoksArr) {
                 for (var l in stockList) {
                     // console.log(stockList[l].code ,"===", stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("=")))
-                    if (stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
+                    if (stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
                         var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                         var values = dataStr.split("~");
                         stockList[l].name = values[1] + "";
@@ -1109,7 +1109,7 @@ async function initData() {
             for (var k in stockList) {
                 stocks += stockList[k].code + ",";
                 let code = stockList[k].code;
-                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.', '_') + ',';
+                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
             }
             let huilvHK;
             let huilvUS;
@@ -1134,7 +1134,7 @@ async function initData() {
             for (var k in stoksArr) {
                 let stock = {};
                 for (var l in stockList) {
-                    if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.', '_')) {
+                    if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
                         let toFixedVolume = 2;
                         stock = stockList[l];
                         // 本来想这里break出去，结果会导致一些数据undefined，继续遍历吧
@@ -2386,7 +2386,9 @@ async function saveStock() {
             return;
         }
     }
-    let checkStockExsitResult = checkStockExsit(stock.code.replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N',''));
+    let checkStockExsitResult = checkStockExsit(stock.code
+        .replace('.oq','').replace('.ps','').replace('.n','').replace('.am','')
+        .replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM',''));
     if (!checkStockExsitResult.checkReuslt) {
         alertMessage("不存在该股票");
         $("#stock-modal").modal("hide");
@@ -5351,8 +5353,10 @@ function getSecid(code) {
                 if(sec == undefined || sec == 'undefined'){
                     if (stock.code.endsWith('.oq') || stock.code.endsWith('.OQ')) {
                         secid = '105';
-                    }else if (stock.code.endsWith('.ps') || stock.code.endsWith('.PS')) {
+                    } else if (stock.code.endsWith('.ps') || stock.code.endsWith('.PS')) {
                         secid = '153';
+                    } else if (stock.code.endsWith('.am') || stock.code.endsWith('.AM')) {
+                        secid = '107';
                     } else {
                         secid = '106';
                     }

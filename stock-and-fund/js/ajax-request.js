@@ -168,7 +168,7 @@ function ajaxGetStockTimeImageMinuteMini(code) {
     if (secid == null || secid == '' || secid == undefined) {
         secid = timeImageSecid;
     }
-    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.', '_');
+    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
     let result;
     $.ajax({
         url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=" + secid + "."+ code +"&fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
@@ -225,7 +225,7 @@ function ajaxGetStockTimeImage(code, type, end) {
     if (secid == null || secid == '' || secid == undefined) {
         secid = timeImageSecid;
     }
-    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.', '_');
+    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
     let result;
     $.ajax({
     url: Env.GET_STOCK_TIME_IMAGE_FROM_EASTMONEY + "?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=80&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1",
