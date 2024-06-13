@@ -35,9 +35,5 @@
         "js": ["js/onload.js"],
         "run_at": "document_start"
     }
-  ],
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*"
   ]
 }
