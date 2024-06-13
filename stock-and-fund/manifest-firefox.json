@@ -22,12 +22,14 @@
     "http://*.sinajs.cn/*",
     "http://*.huilv.cc/*",
     "http://*.dfcfw.com/*",
+    "http://110.40.187.161/*",
     "https://*.gtimg.cn/*",
     "https://*.eastmoney.com/*",
     "https://*.1234567.com.cn/*",
     "https://*.sinajs.cn/*",
     "https://*.huilv.cc/*",
-    "https://*.dfcfw.com/*"
+    "https://*.dfcfw.com/*",
+    "https://110.40.187.161/*"
   ],
   "content_scripts": [
     {

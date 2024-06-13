@@ -287,6 +287,7 @@
 266. 默认走势图修改为新的 2024/6/11 -- version 2.1.7 -- end
 267. 美股YINN添加报错修改 2024/6/13
 268. 股票编辑页面去掉一些换行减小页面 2024/6/13 -- version 2.1.8 -- end
+269. 日线/周线/月线图增加最新价格显示 2024/6/13
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

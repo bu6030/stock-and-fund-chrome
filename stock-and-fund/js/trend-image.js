@@ -560,6 +560,7 @@ function setStockImage(type) {
     // 提取数据
     const echartsData = transformDayData(result);
     const data0 = splitData(echartsData);
+    let now = data0.values[data0.values.length-1][1];
     let kType;
     if (type == 'DAY') {
         kType = '日K';
@@ -668,7 +669,7 @@ function setStockImage(type) {
                     left: '5%',
                     top: '5%',
                     style: {
-                        text: fundOrStockName,
+                        text: fundOrStockName + "（最新：" + now + "）",
                         textAlign: 'left',
                         fill: '#333',
                         fontSize: 14
