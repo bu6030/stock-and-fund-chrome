@@ -290,6 +290,7 @@
 269. 日线/周线/月线图增加最新价格显示 2024/6/13
 270. 基金当日净值出来后总收益按照当日净值修改 2024/6/13
 271. 增加所属分组列展示 2024/6/14
+272. 各种二维码模态框合一 2024/6/14
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
