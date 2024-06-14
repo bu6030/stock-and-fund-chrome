@@ -60,6 +60,12 @@ function initLargeMarketData() {
             timeImageCode = "hkHSI";
             initLargeMarketClick();
         });
+        // 点击恒生科技指数
+        if(document.getElementById('large-market-HSTECH'))
+        document.getElementById('large-market-HSTECH').addEventListener('click', function () {
+            timeImageCode = "hkHSTECH";
+            initLargeMarketClick();
+        });
         // 点击纳斯达克指数
         if(document.getElementById('large-market-NDX'))
         document.getElementById('large-market-NDX').addEventListener('click', function () {

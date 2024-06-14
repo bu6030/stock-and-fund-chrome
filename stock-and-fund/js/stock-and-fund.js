@@ -5173,6 +5173,8 @@ function getSecid(code) {
         secid = '116';
         if (code == 'hkHSI') {
             secid = '100';
+        } else if(code == 'hkHSTECH') {
+            secid = '124';
         }
     } else if(code.startsWith('us') || code.startsWith('US')) {
         try {
@@ -5220,6 +5222,8 @@ function getSecid(code) {
         secid = '0';
         if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX' || code == 'TWII' || code == 'HSI' || code == 'VNINDEX' || code == 'N100' || code == 'N300' || code == 'N500' || code == 'N1000' || code == 'N2000' || code == 'N3000' || code == 'N5000'){
             secid = '100';
+        } else if(code == 'HSTECH'){
+            secid = '124';
         }
     }
     return secid;
@@ -5632,6 +5636,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'hkHSI':
                 name = '恒生指数'
+                break;
+            case 'hkHSTECH':
+                name = '恒生科技指数'
                 break;
             case 'usNDX':
                 name = '纳斯达克'
