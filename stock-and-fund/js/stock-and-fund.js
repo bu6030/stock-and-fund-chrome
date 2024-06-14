@@ -330,6 +330,16 @@ async function initLoad() {
             {"update-time-th": 0},
             {"addtime-price-th": 0},
         ];
+    } else {
+        // 遍历stockColumnNames中的所有键，检查是否存在于columnOrder中，如果不存在则添加
+        for (let key in stockColumnNames) {
+            const exists = columnOrder.some(column => column.hasOwnProperty(key));
+            if (!exists) {
+                const newColumn = {};
+                newColumn[key] = 0;
+                columnOrder.push(newColumn);
+            }
+        }
     }
     columnOrderTemp = columnOrder;
     var groupsCache = await readCacheData('groups');
