@@ -5500,12 +5500,13 @@ function arrayMove(arr, oldIndex, newIndex) {
 function recoveryColumnOrder() {
     columnOrder = [
         {"name-th": 0},
-        {"day-income-th": 0},
+        {"mini-image-th": 0},
         {"belong-group-th": 0},
+        {"day-income-th": 0},
         {"change-percent-th": 0},
-        {"change-th": 0},
         {"turn-over-rate-th": 0},
         {"quantity-relative-ratio-th": 0},
+        {"change-th": 0},
         {"price-th": 0},
         {"cost-price-th": 0},
         {"bonds-th": 0},
@@ -5514,6 +5515,7 @@ function recoveryColumnOrder() {
         {"cost-price-value-th": 0},
         {"income-percent-th": 0},
         {"income-th": 0},
+        {"update-time-th": 0},
         {"addtime-price-th": 0},
     ];
     columnOrderTemp = columnOrder;
