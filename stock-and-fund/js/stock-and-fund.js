@@ -29,6 +29,7 @@ var changeDisplay = 'DISPLAY';
 var updateTimeDisplay = 'DISPLAY';
 var turnOverRateDisplay = 'DISPLAY';
 var quantityRelativeRatioDisplay = 'DISPLAY';
+var belongGroupDisplay = 'DISPLAY';
 var largetMarketTotalDisplay;
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
@@ -48,6 +49,7 @@ var trendImageType;
 var stockColumnNames = {
     "name-th": "股票名称",
     "mini-image-th": "迷你分时图",
+    "belong-group-th": "所属分组",
     "day-income-th": "当日盈利",
     "change-percent-th": "涨跌幅",
     "turn-over-rate-th": "换手率",
@@ -67,6 +69,7 @@ var stockColumnNames = {
 var fundColumnNames = {
     "name-th": "基金名称",
     "mini-image-th": "迷你分时图",
+    "belong-group-th": "所属分组",
     "day-income-th": "当日盈利",
     "change-percent-th": "涨跌幅",
     "turn-over-rate-th": "换手率",
@@ -186,6 +189,12 @@ async function initLoad() {
     } else {
         dayIncomeDisplay = 'HIDDEN';
     }
+    belongGroupDisplay = await readCacheData('belong-group-display');
+    if (belongGroupDisplay == null || belongGroupDisplay == 'DISPLAY') {
+        belongGroupDisplay = 'DISPLAY';
+    } else {
+        belongGroupDisplay = 'HIDDEN';
+    }
     costPriceDisplay = await readCacheData('cost-price-display');
     if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
         costPriceDisplay = 'DISPLAY';
@@ -304,6 +313,7 @@ async function initLoad() {
         columnOrder = [
             {"name-th": 0},
             {"mini-image-th": 0},
+            {"belong-group-th": 0},
             {"day-income-th": 0},
             {"change-percent-th": 0},
             {"turn-over-rate-th": 0},
@@ -342,12 +352,18 @@ async function initLoad() {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
+            fundList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         }
         var stocks = await readCacheData('stocks');
         if (stocks == null || stocks == 'null') {
             stockList = [];
         } else {
             stockList = jQuery.parseJSON(stocks);
+            stockList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         }
     } else if(currentGroup == 'all-group') {
         await changeAllGroup();
@@ -357,12 +373,18 @@ async function initLoad() {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
+            fundList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         }
         var stocks = await readCacheData(currentGroup + '_stocks');
         if (stocks == null || stocks == 'null') {
             stockList = [];
         } else {
             stockList = jQuery.parseJSON(stocks);
+            stockList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         }
     }
 
@@ -1757,6 +1779,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
+                } else if(columnName == 'belong-group-th') {
+                    html = (belongGroupDisplay == 'DISPLAY' ? "<td>" + groups[result[k].belongGroup] + "</td>": "");
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -1833,6 +1857,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = "<td>合计</td>";
         } else if (columnName == 'mini-image-th') {
             html = "<td></td>";
+        } else if (columnName == 'belong-group-th') {
+            html = (belongGroupDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "");
         } else if(columnName == 'change-percent-th') {
@@ -1921,6 +1947,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
+                } else if(columnName == 'belong-group-th'){
+                    html = (belongGroupDisplay == 'DISPLAY' ? "<td>" + groups[result[k].belongGroup] + "</td>" : "");
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -1997,6 +2025,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = "<td>合计</td>";
         } else if (columnName == 'mini-image-th') {
             html = "<td></td>";
+        } else if(columnName == 'belong-group-th') {
+            html = (belongGroupDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "");
         } else if(columnName == 'change-percent-th') {
@@ -2074,6 +2104,8 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = "<td>汇总合计</td>";
         } else if (columnName == 'mini-image-th') {
             html = "<td></td>";
+        } else if(columnName == 'belong-group-th') {
+            html = (belongGroupDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" );
         } else if(columnName == 'change-percent-th') {
@@ -3545,6 +3577,9 @@ async function setDisplayTr(event) {
     } else if(type == 'addtime-price-display-checkbox') {
         addtimePriceDisplay = dispaly;
         saveCacheData('addtime-price-display', dispaly);
+    } else if(type == 'belong-group-display-checkbox') {
+        belongGroupDisplay = dispaly;
+        saveCacheData('belong-group-display', dispaly);
     } else if(type == 'day-income-display-checkbox') {
         dayIncomeDisplay = dispaly;
         saveCacheData('day-income-display', dispaly);
@@ -3577,6 +3612,7 @@ async function setDisplayTr(event) {
         incomePercentDisplay = dispaly;
         addtimePriceDisplay = dispaly;
         dayIncomeDisplay = dispaly;
+        belongGroupDisplay = dispaly;
         costPriceDisplay = dispaly;
         bondsDisplay = dispaly;
         incomeDisplay = dispaly;
@@ -3594,6 +3630,7 @@ async function setDisplayTr(event) {
         saveCacheData('income-percent-display', dispaly);
         saveCacheData('addtime-price-display', dispaly);
         saveCacheData('day-income-display', dispaly);
+        saveCacheData('belong-group-display', dispaly);
         saveCacheData('cost-price-display', dispaly);
         saveCacheData('bonds-display', dispaly);
         saveCacheData('income-display', dispaly);
@@ -3609,6 +3646,7 @@ async function setDisplayTr(event) {
             $("#cost-price-value-display-checkbox").prop("checked", true);
             $("#income-percent-display-checkbox").prop("checked", true);
             $("#addtime-price-display-checkbox").prop("checked", true);
+            $("#belong-group-display-checkbox").prop("checked", true);
             $("#day-income-display-checkbox").prop("checked", true);
             $("#cost-price-display-checkbox").prop("checked", true);
             $("#bonds-display-checkbox").prop("checked", true);
@@ -3625,6 +3663,7 @@ async function setDisplayTr(event) {
             $("#cost-price-value-display-checkbox").prop("checked", false);
             $("#income-percent-display-checkbox").prop("checked", false);
             $("#addtime-price-display-checkbox").prop("checked", false);
+            $("#belong-group-display-checkbox").prop("checked", false);
             $("#day-income-display-checkbox").prop("checked", false);
             $("#cost-price-display-checkbox").prop("checked", false);
             $("#bonds-display-checkbox").prop("checked", false);
@@ -3681,9 +3720,21 @@ async function fileInput (e) {
             if (currentGroup == 'default-group') {
                 stockList = json.stocks;
                 fundList = json.funds;
+                stockList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
+                fundList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
             } else if (currentGroup in json.groups) {
                 stockList = json[currentGroup + '_stocks'];
                 fundList = json[currentGroup + '_funds'];
+                stockList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
+                fundList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
             }
             groups = json.groups;
         } catch(error) {
@@ -3930,9 +3981,21 @@ async function syncDataFromCloud() {
             if (currentGroup == 'default-group') {
                 stockList = result.stocks;
                 fundList = result.funds;
+                stockList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
+                fundList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
             } else if((currentGroup + '_stocks') in result && (currentGroup + '_funds') in result) {
                 stockList = result[currentGroup + '_stocks'];
                 fundList = result[currentGroup + '_funds'];
+                stockList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
+                fundList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
             }
             reloadDataAndHtml();
             $("#sync-data-cloud-modal").modal('hide');
@@ -5409,6 +5472,8 @@ function getThColumnHtml(columnId, type) {
     var html;
     if (columnId == 'day-income-th' && dayIncomeDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'belong-group-th' && belongGroupDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'change-th' && changeDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'cost-price-th' && costPriceDisplay != 'DISPLAY') {
@@ -5564,6 +5629,13 @@ function addDragAndDropListeners() {
         dayIncomeDisplay = 'HIDDEN';
         $("#day-income-display-checkbox").prop("checked", false);
     }
+    if (belongGroupDisplay == null || belongGroupDisplay == 'DISPLAY') {
+        belongGroupDisplay = 'DISPLAY';
+        $("#belong-group-display-checkbox").prop("checked", true);
+    } else {
+        belongGroupDisplay = 'HIDDEN';
+        $("#belong-group-display-checkbox").prop("checked", false);
+    }
     if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
         costPriceDisplay = 'DISPLAY';
         $("#cost-price-display-checkbox").prop("checked", true);
@@ -5641,6 +5713,8 @@ function addDragAndDropListeners() {
     document.getElementById("addtime-price-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，当日盈利
     document.getElementById("day-income-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，所属分组
+    document.getElementById("belong-group-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，成本价/持仓成本单价
     document.getElementById("cost-price-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，持仓/持有份额
@@ -5670,6 +5744,7 @@ function recoveryColumnOrder() {
     columnOrder = [
         {"name-th": 0},
         {"day-income-th": 0},
+        {"belong-group-th": 0},
         {"change-percent-th": 0},
         {"change-th": 0},
         {"turn-over-rate-th": 0},
@@ -6214,12 +6289,18 @@ async function changeGroup(groupId) {
             fundList = [];
         } else {
             fundList = jQuery.parseJSON(funds);
+            fundList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         }
         var stocks = await readCacheData('stocks');
         if (stocks == null || stocks == 'null') {
             stockList = [];
         } else {
             stockList = jQuery.parseJSON(stocks);
+            stockList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         }
     }
     if (currentGroup != 'default-group') {
@@ -6232,12 +6313,18 @@ async function changeGroup(groupId) {
                 fundList = [];
             } else {
                 fundList = jQuery.parseJSON(funds);
+                fundList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
             }
             var stocks = await readCacheData(currentGroup + '_stocks');
             if (stocks == null || stocks == 'null') {
                 stockList = [];
             } else {
                 stockList = jQuery.parseJSON(stocks);
+                stockList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
             }
         }
     }
