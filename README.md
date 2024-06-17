@@ -292,7 +292,7 @@
 271. 增加所属分组列展示 2024/6/14
 272. 各种二维码模态框合一 2024/6/14
 273. 页面增加列属性后，需要动态添加到复选框列表中 2024/6/14
-274. 大盘指数增加恒生科技指数 2024/6/14
+274. 大盘指数增加恒生科技指数 2024/6/14 -- version 2.1.9 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
