@@ -189,7 +189,7 @@ function setStockMinitesImage() {
     volumnChart = echarts.init(document.getElementById(volumnElementId)); 
     setEchartsSize(myChart, volumnChart);
     $("#time-image").html('');
-    let result = ajaxGetStockTimeImageMinuteMini(timeImageCode);
+    let result = ajaxGetStockTimeImageMinute(timeImageCode);
     let dataStr = [];
     let dataAverageStr = [];
     let dataVolumnStr = [];

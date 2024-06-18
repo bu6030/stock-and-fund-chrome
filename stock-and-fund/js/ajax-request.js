@@ -165,6 +165,34 @@ function ajaxGetFundFromTiantianjijin(code) {
 // 接口调用
 function ajaxGetStockTimeImageMinuteMini(code) {
     let secid = getSecid(code);
+    let oldCode = code;
+    if (secid == null || secid == '' || secid == undefined) {
+        secid = timeImageSecid;
+    }
+    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
+    let result;
+    $.ajax({
+        url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=" + secid + "."+ code +"&fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
+        type: "get",
+        data: {},
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+            setStockMinitesImageMini(result, oldCode);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+
+// 接口调用
+function ajaxGetStockTimeImageMinute(code) {
+    let secid = getSecid(code);
     if (secid == null || secid == '' || secid == undefined) {
         secid = timeImageSecid;
     }
@@ -196,11 +224,12 @@ function ajaxGetFundTimeImageMinuteMini(code) {
         url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=0."+ code +"&fields1=f1,f2,f8&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
         type: "get",
         data: {},
-        async: false,
+        // async: false,
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             result = data;
+            setFundMinitesImageMini(result, code);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -208,7 +237,7 @@ function ajaxGetFundTimeImageMinuteMini(code) {
             console.log(textStatus);
         }
     });
-    return result;
+    // return result;
 }
 
 // 接口调用
