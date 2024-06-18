@@ -4449,6 +4449,8 @@ async function showDataCenter() {
 
 // 展示大盘资金图表
 async function showBigStockMoney() {
+    $("#day-income-history-head").html("");
+    $("#day-income-history-nr").html("");
     let result = ajaxGetBigStockMoney();
     let elementId = 'data-center-chart';
     let dataZhuLiJingLiuRu = [];
@@ -4629,6 +4631,8 @@ async function showBigStockMoney() {
 
 // 展示南向资金图表
 async function showNanXiang() {
+    $("#day-income-history-head").html("");
+    $("#day-income-history-nr").html("");
     let result = ajaxGetNanBeiXiangMoney();
     let elementId = 'data-center-chart';
     let dataNanXiangMoney = [];
@@ -4782,6 +4786,8 @@ async function showNanXiang() {
 
 // 展示北向资金图表
 async function showBeiXiang() {
+    $("#day-income-history-head").html("");
+    $("#day-income-history-nr").html("");
     let result = ajaxGetNanBeiXiangMoney();
     let elementId = 'data-center-chart';
     let dataBeiXiangMoney = [];
@@ -4936,6 +4942,8 @@ async function showBeiXiang() {
 
 // 展示行业板块图表
 async function showHangYeBanKuai() {
+    $("#day-income-history-head").html("");
+    $("#day-income-history-nr").html("");
     let result = ajaxGetHangYeBanKuaiMoney();
     let elementId = 'data-center-chart';
     let data = [];
@@ -5833,8 +5841,10 @@ function updateGroupList() {
 }
 
 async function showDayIncomeHistory() {
-    $("#day-income-history-modal").modal();
-    $("#data-center-modal").modal('hide');
+    $("#day-income-history-head").html("");
+    $("#day-income-history-nr").html("");
+    // $("#day-income-history-modal").modal();
+    // $("#data-center-modal").modal('hide');
     let dayIncomeHistory = await readCacheData('DAY_INCOME_HISTORY');
     // dayIncomeHistory数组倒序排列
     dayIncomeHistory = dayIncomeHistory.reverse();
@@ -5885,7 +5895,7 @@ async function showDayIncomeHistory() {
             }
         });
     });
-    let elementId = 'day-income-image';
+    let elementId = 'data-center-chart';
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById(elementId));
     myChart.clear();
@@ -5942,6 +5952,11 @@ async function showDayIncomeHistory() {
         ];
     }
     option = {
+        title: {
+            text: '每日盈利（点击数据弹出提示：确认是否删除？）', // 设置整个图表的标题
+            left: 'center', // 标题水平居中
+            top: 0 // 标题距离图表顶部的距离
+        },
         xAxis: {
             type: 'category',
             data: dataAxis,
@@ -6154,6 +6169,8 @@ async function changeAllGroup() {
 }
 // 展示涨跌分布图表
 async function showUpDownCounts() {
+    $("#day-income-history-head").html("");
+    $("#day-income-history-nr").html("");
     let result = ajaxGetUpDownCounts();
     let upDownCountsDate = changeTimeFormate(result.data.qdate + "");
     var fenbuValues = [];
