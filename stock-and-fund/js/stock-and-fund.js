@@ -1617,13 +1617,13 @@ async function initStockAndFundHtml() {
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
-            for (const k in stockList) {
-                setStockMinitesImageMini(stockList[k].code);
+            for (const indexK in stockList) {
+                setStockMinitesImageMini(stockList[indexK].code);
             }
         }
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
-            for (const k in fundList) {
-                setFundMinitesImageMini(fundList[k].fundCode);
+            for (const indexL in fundList) {
+                setFundMinitesImageMini(fundList[indexL].fundCode);
             }
         }
     }
@@ -2766,6 +2766,8 @@ function initFirstInstall() {
 
 // 遍历股票，展示主页迷你分时图
 async function setStockMinitesImageMini(code) {
+    // 打印毫秒数
+    console.log('==========',new Date().getTime());
     // for (k in stockList) {
         let elementId = 'minute-image-mini-' + code;
         let result = ajaxGetStockTimeImageMinuteMini(code);
@@ -2814,6 +2816,7 @@ async function setStockMinitesImageMini(code) {
         minPrice = minPrice.toFixed(toFixedVolume);
         setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume);
     // }
+    console.log('==========',new Date().getTime());
 }
 
 // 遍历基金，展示主页迷你分时图
@@ -2866,10 +2869,7 @@ async function setFundMinitesImageMini(fundCode) {
 }
 
 // 展示首页迷你分时图
-function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume) {
-    // 打印毫秒数
-    let start = new Date().getTime();
-    console.log('=======', new Date().getTime());
+async function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume) {
     // 如果分时数据长度小于240填充空值
     if (dataStr.length < 241) {
         const diffLength = 241 - dataStr.length;
@@ -2947,8 +2947,6 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
         ]
     };
     myChart.setOption(option);
-    let end = new Date().getTime();
-    console.log('=======', (end - start), '毫秒');
 }
 
 // 修改涨跌蓝绿颜色
