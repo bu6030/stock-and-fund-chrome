@@ -7,7 +7,6 @@ var timerId;
 let turnOverRate = '';
 // 展示分时图
 function showMinuteImage() {
-    // $("#volumn-image-echart").show();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006"
@@ -63,7 +62,6 @@ function showMinuteImage() {
 }
 // 展示日线图
 function showDayImage() {
-    // $("#volumn-image-echart").hide();
     clearTimeImageTimeout();
     let path = "";
     fundInvesterPositionSetButton();
@@ -100,7 +98,6 @@ function showDayImage() {
 }
 // 展示周线图
 function showWeekImage() {
-    // $("#volumn-image-echart").hide();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
@@ -133,7 +130,6 @@ function showWeekImage() {
 }
 // 展示月线图
 function showMonthImage() {
-    // $("#volumn-image-echart").hide();
     clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
@@ -691,18 +687,6 @@ function setStockImage(type) {
                 let values = params[0].value;
                 let volumn = (parseFloat(values[5]) / 10000).toFixed(2);
                 let money = (parseFloat(values[6]) / 100000000).toFixed(2);
-                // let ma5 = params[1].value;
-                // let ma10 = params[2].value;
-                // let ma20 = params[3].value;
-                // let ma30 = params[4].value;
-                // return result.data.name + "<br>时间：" + params[0].name
-                //     + "<br>开盘：" + values[1] + "&nbsp;&nbsp;收盘：" + values[2] 
-                //     + "<br>最低：" + values[3] + "&nbsp;&nbsp;最高：" + values[4]
-                //     + "<br>成交量：" + volumn + "万"
-                //     + "<br>成交额：" + money + "亿" 
-                //     + "<br>涨跌幅：" + values[7] + "%"
-                //     + "<br>MA5：" + ma5 + "&nbsp;&nbsp;MA10：" + ma10
-                //     + "<br>MA20：" + ma20 + "&nbsp;&nbsp;MA30：" + ma30;
                 let ma5 = null;
                 let ma10 = null;
                 let ma20 = null;

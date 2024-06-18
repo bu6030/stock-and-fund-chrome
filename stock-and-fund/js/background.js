@@ -12,7 +12,6 @@ if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
     performTaskId = setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
-    // saveData("performTaskId", performTaskId);
 }
 
 // 当扩展程序安装时触发的事件
@@ -25,7 +24,6 @@ chrome.runtime.onMessage.addListener(async function(message, sender, sendRespons
         // 在接收到消息时执行的操作
         console.log('收到消息:', message);
         if(message.message == "scheduleTask") {
-            // let performTaskId = await getData("performTaskId");
             console.log('清理performTaskId:', performTaskId);
             clearInterval(performTaskId);
             scheduleTask();
