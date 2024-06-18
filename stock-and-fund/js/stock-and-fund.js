@@ -5843,6 +5843,7 @@ function updateGroupList() {
 async function showDayIncomeHistory() {
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
+    $("#data-center-content").html("");
     // $("#day-income-history-modal").modal();
     // $("#data-center-modal").modal('hide');
     let dayIncomeHistory = await readCacheData('DAY_INCOME_HISTORY');
