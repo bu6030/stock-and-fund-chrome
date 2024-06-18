@@ -1617,10 +1617,14 @@ async function initStockAndFundHtml() {
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
-            setStockMinitesImageMini();
+            for (const k in stockList) {
+                setStockMinitesImageMini(stockList[k].code);
+            }
         }
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
-            setFundMinitesImageMini();
+            for (const k in fundList) {
+                setFundMinitesImageMini(fundList[k].fundCode);
+            }
         }
     }
     // 增加拖拽
@@ -2761,14 +2765,14 @@ function initFirstInstall() {
 }
 
 // 遍历股票，展示主页迷你分时图
-async function setStockMinitesImageMini(){
-    for (k in stockList) {
-        let elementId = 'minute-image-mini-' + stockList[k].code;
-        let result = ajaxGetStockTimeImageMinuteMini(stockList[k].code);
+async function setStockMinitesImageMini(code) {
+    // for (k in stockList) {
+        let elementId = 'minute-image-mini-' + code;
+        let result = ajaxGetStockTimeImageMinuteMini(code);
         let dataStr = [];
         let now;
         if (result.data == null){
-            continue;
+            return;
         }
         let preClose = parseFloat(result.data.preClose);
         let maxPrice = preClose;
@@ -2788,7 +2792,7 @@ async function setStockMinitesImageMini(){
             }
         }
         if(dataStr.length == 0){
-            continue;
+            return;
         }
         let color;
         if (parseFloat(now) >= preClose) {
@@ -2809,18 +2813,18 @@ async function setStockMinitesImageMini(){
         maxPrice = maxPrice.toFixed(toFixedVolume);
         minPrice = minPrice.toFixed(toFixedVolume);
         setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume);
-    }
+    // }
 }
 
 // 遍历基金，展示主页迷你分时图
-async function setFundMinitesImageMini() {
-    for (k in fundList) {
-        let elementId = 'minute-image-mini-' + fundList[k].fundCode;
-        let result = ajaxGetFundTimeImageMinuteMini(fundList[k].fundCode);
+async function setFundMinitesImageMini(fundCode) {
+    // for (k in fundList) {
+        let elementId = 'minute-image-mini-' + fundCode;
+        let result = ajaxGetFundTimeImageMinuteMini(fundCode);
         let dataStr = [];
         let now;
         if (result.data == null){
-            continue;
+            return;
         }
         let preClose = parseFloat(result.data.preClose);
         let maxPrice = preClose;
@@ -2858,11 +2862,14 @@ async function setFundMinitesImageMini() {
         maxPrice = maxPrice.toFixed(toFixedVolume);
         minPrice = minPrice.toFixed(toFixedVolume);
         setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume);
-    }
+    // }
 }
 
 // 展示首页迷你分时图
 function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume) {
+    // 打印毫秒数
+    let start = new Date().getTime();
+    console.log('=======', new Date().getTime());
     // 如果分时数据长度小于240填充空值
     if (dataStr.length < 241) {
         const diffLength = 241 - dataStr.length;
@@ -2940,6 +2947,8 @@ function setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice,
         ]
     };
     myChart.setOption(option);
+    let end = new Date().getTime();
+    console.log('=======', (end - start), '毫秒');
 }
 
 // 修改涨跌蓝绿颜色
