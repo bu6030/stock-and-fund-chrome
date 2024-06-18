@@ -1617,14 +1617,24 @@ async function initStockAndFundHtml() {
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+            let start = new Date().getTime()
+            console.log('========== 开始');
             for (const indexK in stockList) {
                 setStockMinitesImageMini(stockList[indexK].code);
             }
+            let end = new Date().getTime()
+            console.log('========== ',(end -start), '毫秒');
+            console.log('========== 结束');
         }
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+            let start = new Date().getTime()
+            console.log('========== 开始');
             for (const indexL in fundList) {
                 setFundMinitesImageMini(fundList[indexL].fundCode);
             }
+            let end = new Date().getTime()
+            console.log('========== ',(end -start), '毫秒');
+            console.log('========== 结束');
         }
     }
     // 增加拖拽
@@ -2766,11 +2776,10 @@ function initFirstInstall() {
 
 // 遍历股票，展示主页迷你分时图
 async function setStockMinitesImageMini(code) {
-    // 打印毫秒数
-    console.log('==========',new Date().getTime());
+    console.log('========== setStockMinitesImageMini');
     // for (k in stockList) {
         let elementId = 'minute-image-mini-' + code;
-        let result = ajaxGetStockTimeImageMinuteMini(code);
+        let result = await ajaxGetStockTimeImageMinuteMini(code);
         let dataStr = [];
         let now;
         if (result.data == null){
@@ -2816,11 +2825,12 @@ async function setStockMinitesImageMini(code) {
         minPrice = minPrice.toFixed(toFixedVolume);
         setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume);
     // }
-    console.log('==========',new Date().getTime());
+    console.log('========== 完成 ' + code);
 }
 
 // 遍历基金，展示主页迷你分时图
 async function setFundMinitesImageMini(fundCode) {
+    console.log('========== setStockMinitesImageMini');
     // for (k in fundList) {
         let elementId = 'minute-image-mini-' + fundCode;
         let result = ajaxGetFundTimeImageMinuteMini(fundCode);
@@ -2866,6 +2876,7 @@ async function setFundMinitesImageMini(fundCode) {
         minPrice = minPrice.toFixed(toFixedVolume);
         setDetailChart(elementId, dataStr, color, preClose, maxPrice, minPrice, toFixedVolume);
     // }
+    console.log('========== 完成 ' + code);
 }
 
 // 展示首页迷你分时图
