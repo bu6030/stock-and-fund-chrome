@@ -4,6 +4,7 @@
 [版本更新历史记录](#develop-history)  
 [Chrome应用市场安装](#chrome-plugin-stock-and-fund)  
 [Edge应用市场安装](#edge-plugin-stock-and-fund)  
+[Firfox火狐应用市场安装](#firefox-plugin-stock-and-fund)  
 [chrome安装步骤](#chrome-stock-and-fund)  
 [Edge安装步骤](#edge-stock-and-fund)  
 [狐猴浏览器安装步骤](#huhou-stock-and-fund)  
@@ -302,6 +303,9 @@
 
 ## <span id="edge-plugin-stock-and-fund">Edge应用市场安装</span>
 点击这个[链接到Edge应用市场安装，国内国外均可用，无需科学上网](https://microsoftedge.microsoft.com/addons/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/nlekkaghplahbknlhefkempopljodhee)  
+
+## <span id="firefox-plugin-stock-and-fund">Firefox火狐应用市场安装</span>
+点击这个[链接到Firefox火狐应用市场安装，国内国外均可用，无需科学上网](https://addons.mozilla.org/zh-CN/firefox/addon/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/)  
 
 ## <span id="chrome-stock-and-fund">chrome安装步骤</span>
  1. 代码下载完成后，在chrome浏览器中选择扩展程序进入扩展程序页面    
