@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "2.1.9.1",
+  "version": "2.1.9.2",
   "name": "股票基金神器",
   "description": "上班族都安装了，实时监控股票价格，角标提醒，终身免费，股票基金神器，实时盯盘，A股美股港股。",
   "browser_action": {
