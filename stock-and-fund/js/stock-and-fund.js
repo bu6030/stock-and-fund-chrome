@@ -3507,6 +3507,9 @@ async function fileInput (e) {
             || json.groups == undefined || json.groups == 'undefined') {
                 json.groups = {"default-group":"默认分组"};
             }
+            json.stocks.forEach(item => {
+                item.code = item.code.replace('SH','sh').replace('SZ','sz').replace('HK','hk');
+            })
             // 在这里处理您的 JSON 数据
             saveCacheData('stocks', JSON.stringify(json.stocks));
             saveCacheData('funds', JSON.stringify(json.funds));
@@ -3522,6 +3525,9 @@ async function fileInput (e) {
                     || json[id + '_funds'] == undefined || json[id + '_funds'] == 'undefined'){
                     json[id + '_funds'] = [];
                 }
+                json[id + '_stocks'].forEach(item => {
+                    item.code = item.code.replace('SH','sh').replace('SZ','sz').replace('HK','hk');
+                })
                 saveCacheData(id + '_stocks', JSON.stringify(json[id + '_stocks']));
                 saveCacheData(id + '_funds', JSON.stringify(json[id + '_funds']));
             });
@@ -3568,6 +3574,7 @@ async function fileInput (e) {
                     // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
                     var code = line.trim(); // 去除每行开头和结尾的空白字符
                     if (code !== '') {
+                        code = code.replace('SH','sh').replace('SZ','sz').replace('HK','hk');
                         let stock = {
                             "code": code,
                             "costPrise":"0",

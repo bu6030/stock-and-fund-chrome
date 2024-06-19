@@ -297,6 +297,7 @@
 275. 分时图模态框合并入数据中心模态框 2024/6/18
 276. 异步处理分时图，增加响应速度 2024/6/18
 277. 第一次点击排序时，默认从大到小排列 2024/6/19 -- version 2.1.9.1 -- end
+278. 首页点击股票无法查看分时图，清理数据后，重新导入数据时替换大写字母为小写解决 2024/6/19
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
