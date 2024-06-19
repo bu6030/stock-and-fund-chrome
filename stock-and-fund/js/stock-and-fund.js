@@ -4229,19 +4229,19 @@ async function clickSortStockAndFund(event) {
     // 第一次未排序时候点击，按正序排列，并把之前未排序的顺序保存起来
     if (document.getElementById(targetId).classList.contains('order')) {
         if (targetId.indexOf('stock-') >= 0) {
-            lastSort.stock.sortType = 'asc';
-            lastSort.stock.targetId = targetId;
-        } else {
-            lastSort.fund.sortType = 'asc';
-            lastSort.fund.targetId = targetId;
-        }
-    // 第二次点击，之前已经正序排序，这次按倒序排列
-    } else if(document.getElementById(targetId).classList.contains('asc')) {
-        if (targetId.indexOf('stock-') >= 0) {
             lastSort.stock.sortType = 'desc';
             lastSort.stock.targetId = targetId;
         } else {
             lastSort.fund.sortType = 'desc';
+            lastSort.fund.targetId = targetId;
+        }
+    // 第二次点击，之前已经正序排序，这次按倒序排列
+    } else if(document.getElementById(targetId).classList.contains('desc')) {
+        if (targetId.indexOf('stock-') >= 0) {
+            lastSort.stock.sortType = 'asc';
+            lastSort.stock.targetId = targetId;
+        } else {
+            lastSort.fund.sortType = 'asc';
             lastSort.fund.targetId = targetId;
         }
     // 第三次点击，之前已经倒序排序，这次恢复第一次未排序的顺序
@@ -4257,6 +4257,9 @@ async function clickSortStockAndFund(event) {
                 stocks = await readCacheData(currentGroup + '_stocks');
             }
             stockList = jQuery.parseJSON(stocks);
+            stockList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         } else {
             lastSort.fund.sortType = 'order';
             lastSort.fund.targetId = '';
@@ -4268,6 +4271,9 @@ async function clickSortStockAndFund(event) {
                 funds = await readCacheData(currentGroup + '_funds');
             }
             fundList = jQuery.parseJSON(funds);
+            fundList.forEach(item => {
+                item.belongGroup = currentGroup;
+            })
         }
     }
     saveCacheData("last-sort", lastSort);
