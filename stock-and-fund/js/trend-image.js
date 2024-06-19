@@ -933,6 +933,7 @@ function setTotalVolumnAndTurnOverRate(totalVolumn) {
             for (let i = 0; i < turnOverRateArr.length; i++) {
                 if (turnOverRateArr[i].split("~")[0] == timeImageCode) {
                     contentHtml += "&nbsp;&nbsp;&nbsp;&nbsp;换手率: " + turnOverRateArr[i].split("~")[1] + "%";
+                    break;
                 }
             }
         }
