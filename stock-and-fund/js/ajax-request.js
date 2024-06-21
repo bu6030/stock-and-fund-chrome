@@ -3,6 +3,7 @@ function ajaxGetStockAndFundFromLocalService() {
     var result;
     $.ajax({
         url: Env.GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -25,6 +26,7 @@ function ajaxGetFundFromEastMoney(code) {
     let fund = {};
     $.ajax({
         url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -52,6 +54,7 @@ function ajaxGetFundCodeFromTiantianjijin() {
     let result;
     $.ajax({
         url: Env.GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -74,6 +77,7 @@ function ajaxGetStockCodeByNameFromGtimg(name) {
     let result;
     $.ajax({
         url: Env.GET_STOCK_CODE_BY_NAME_FROM_GTIMG + "?v=2&t=all&c=1&q=" + name,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -96,6 +100,7 @@ function ajaxGetStockFromGtimg(code) {
     let result;
     $.ajax({
         url: Env.GET_STOCK_FROM_GTIMG + "q=" + code,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -120,6 +125,7 @@ function ajaxGetStockFromEastMoney(code) {
         url: Env.GET_STOCK_FROM_EAST_MONEY_URL
           + "?fltt=2&fields=f12,f13,f19,f14,f139,f148,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids="
           + code,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -145,6 +151,7 @@ function ajaxGetFundFromTiantianjijin(code) {
     FUND_URL = FUND_URL.replace('{CODE}', code);
     $.ajax({
         url: FUND_URL,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -173,6 +180,7 @@ function ajaxGetStockTimeImageMinuteMini(code) {
     let result;
     $.ajax({
         url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=" + secid + "."+ code +"&fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         dataType: 'json',
@@ -200,6 +208,7 @@ function ajaxGetStockTimeImageMinute(code) {
     let result;
     $.ajax({
         url: Env.GET_STOCK_TIME_IMAGE_MINUTE_MINI + "?secid=" + secid + "."+ code +"&fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=1",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -257,7 +266,8 @@ function ajaxGetStockTimeImage(code, type, end) {
     code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
     let result;
     $.ajax({
-    url: Env.GET_STOCK_TIME_IMAGE_FROM_EASTMONEY + "?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=80&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1",
+        url: Env.GET_STOCK_TIME_IMAGE_FROM_EASTMONEY + "?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=80&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -281,6 +291,7 @@ function ajaxGetFundInvesterPosition(code) {
     let timestamp = Date.now();
     $.ajax({
         url: Env.GET_FUND_INVERST_POSITION + "?FCODE="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=&_=" + timestamp,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -304,6 +315,7 @@ function ajaxGetFundPositionList(code) {
     let timestamp = Date.now();
     $.ajax({
         url: Env.GET_FUND_POSITION_LIST + "?pageIndex=1&pageSize=10&deviceid=1234567.py.service&version=4.3.0&product=Eastmoney&plat=Web&FCODE="+ code +"&_=" + timestamp,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -326,6 +338,7 @@ function ajaxGetFundInvesterPositionDetail(code) {
     let result;
     $.ajax({
         url: Env.GET_FUND_INVERST_POSITION_DETAIL + "?fields=f1,f2,f3,f4,f12,f13,f14,f292&fltt=2&secids="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -364,6 +377,7 @@ function ajaxGetFundNetDiagram(code, type) {
     }
     $.ajax({
         url: Env.GET_FUND_NET_DIAGRAM + "?FCODE=" + code + "&RANGE=" + range + "&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -386,6 +400,7 @@ function ajaxSyncDataFromCloud(syncDataCloudUuid) {
     let result;
     $.ajax({
         url: Env.CLOUD_SERVER_DATA_SYNC + syncDataCloudUuid + ".json",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         headers: {
@@ -411,6 +426,7 @@ function ajaxSyncDataToCloud(data, syncDataCloudUuid) {
     let result;
     $.ajax({
         url: Env.CLOUD_SERVER_DATA_SYNC + syncDataCloudUuid + ".json",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "put",
         data: data,
         headers: {
@@ -438,6 +454,7 @@ function ajaxGetBigStockMoney() {
     var url = Env.GET_BIG_STOCK_MONEY_URL + "?lmt=0&klt=1&secid=1.000001&secid2=0.399001&fields1=f1,f2,f3,f7&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63";
     $.ajax({
         url: url,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -461,6 +478,7 @@ function ajaxGetNanBeiXiangMoney() {
     var url = Env.GET_NANBEI_XIANG_MONEY_URL + "?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55,f56";
     $.ajax({
         url: url,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -484,6 +502,7 @@ function ajaxGetHangYeBanKuaiMoney() {
     var url = Env.GET_HANGYE_BANKUAI_MONEY_URL + "?pn=1&pz=500&po=1&np=1&fields=f12,f13,f14,f62&fid=f62&fs=m:90+t:2";
     $.ajax({
         url: url,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -507,6 +526,7 @@ function ajaxGetWholeTwoMarketMoney() {
     var url = Env.GET_WHOLE_TWO_MARKET_MONEY_URL + "?fltt=2&secids=1.000001,0.399001&fields=f1,f2,f3,f4,f6,f12,f13,f104,f105,f106";
     $.ajax({
         url: url,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -530,6 +550,7 @@ function ajaxGetHuiLv(type) {
     var url = Env.GET_HUILV_URL + "?num=100&chiyouhuobi=" + type + "&duihuanhuobi=CNY&type=1&callback=jisuanjieguo";
     $.ajax({
         url: url,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -565,6 +586,7 @@ function ajaxPostAdvice(adviceContent) {
     }
     $.ajax({
         url: Env.ADVICE_URL,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "post",
         data: JSON.stringify(request),
         async: false,
@@ -587,6 +609,7 @@ function ajaxPostAdvice(adviceContent) {
 async function ajaxGetAdvice() {
     $.ajax({
         url: Env.ADVICE_URL,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
@@ -608,6 +631,7 @@ function ajaxGetUpDownCounts() {
     var result = null;
     $.ajax({
         url: Env.GET_UP_DOWN_COUNTS_URL + "?cb=callbackdata7930743&ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         async: false,
