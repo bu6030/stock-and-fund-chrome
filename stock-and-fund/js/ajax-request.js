@@ -612,7 +612,6 @@ async function ajaxGetAdvice() {
         timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
-        async: false,
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
