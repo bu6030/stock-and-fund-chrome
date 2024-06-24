@@ -883,6 +883,7 @@ document.addEventListener(
         document.getElementById('stock-api-eastmoney-button').addEventListener('click', changeStockApi);
         // 设置页面，点击切换默认展示分时图/日线图/周线图/月线图
         document.getElementById('trend-image-type-minute-button').addEventListener('click', changeTrendImageType);
+        document.getElementById('trend-image-type-minute-5day-button').addEventListener('click', changeTrendImageType);
         document.getElementById('trend-image-type-day-button').addEventListener('click', changeTrendImageType);
         document.getElementById('trend-image-type-week-button').addEventListener('click', changeTrendImageType);
         document.getElementById('trend-image-type-month-button').addEventListener('click', changeTrendImageType);
@@ -1559,7 +1560,7 @@ async function initStockAndFundHtml() {
                 timeImageType = "STOCK";
                 if (trendImageType == 'MINUTE') {
                     showMinuteImage('1DAY');
-                } else if (trendImageType == '5DAY_MINUTE') {
+                } else if (trendImageType == '5DAY') {
                     showMinuteImage('5DAY');
                 } else if (trendImageType == 'DAY') {
                     showDayImage();
@@ -1615,7 +1616,7 @@ async function initStockAndFundHtml() {
                 }
                 if (trendImageType == 'MINUTE') {
                     showMinuteImage('1DAY');
-                } else if (trendImageType == '5DAY_MINUTE') {
+                } else if (trendImageType == '5DAY') {
                     showMinuteImage('5DAY');
                 } else if (trendImageType == 'DAY') {
                     showDayImage();
@@ -3719,7 +3720,7 @@ function showTimeImage(event) {
     }
     if (trendImageType == 'MINUTE') {
         showMinuteImage('1DAY');
-    } else if (trendImageType == '5DAY_MINUTE') {
+    } else if (trendImageType == '5DAY') {
         showMinuteImage('5DAY');
     } else if (trendImageType == 'DAY') {
         showDayImage();
@@ -6503,21 +6504,31 @@ async function settingButtonInit(){
     }
     if (trendImageType == 'MINUTE') {
         document.getElementById('trend-image-type-minute-button').classList.add('active');
+        document.getElementById('trend-image-type-minute-5day-button').classList.remove('active');
+        document.getElementById('trend-image-type-day-button').classList.remove('active');
+        document.getElementById('trend-image-type-week-button').classList.remove('active');
+        document.getElementById('trend-image-type-month-button').classList.remove('active');
+    } else if (trendImageType == '5DAY') {
+        document.getElementById('trend-image-type-minute-button').classList.remove('active');
+        document.getElementById('trend-image-type-minute-5day-button').classList.add('active');
         document.getElementById('trend-image-type-day-button').classList.remove('active');
         document.getElementById('trend-image-type-week-button').classList.remove('active');
         document.getElementById('trend-image-type-month-button').classList.remove('active');
     } else if (trendImageType == 'DAY') {
         document.getElementById('trend-image-type-minute-button').classList.remove('active');
+        document.getElementById('trend-image-type-minute-5day-button').classList.remove('active');
         document.getElementById('trend-image-type-day-button').classList.add('active');
         document.getElementById('trend-image-type-week-button').classList.remove('active');
         document.getElementById('trend-image-type-month-button').classList.remove('active');
     } else if (trendImageType == 'WEEK') {
         document.getElementById('trend-image-type-minute-button').classList.remove('active');
+        document.getElementById('trend-image-type-minute-5day-button').classList.remove('active');
         document.getElementById('trend-image-type-day-button').classList.remove('active');
         document.getElementById('trend-image-type-week-button').classList.add('active');
         document.getElementById('trend-image-type-month-button').classList.remove('active');
     } else if (trendImageType == 'MONTH') {
         document.getElementById('trend-image-type-minute-button').classList.remove('active');
+        document.getElementById('trend-image-type-minute-5day-button').classList.remove('active');
         document.getElementById('trend-image-type-day-button').classList.remove('active');
         document.getElementById('trend-image-type-week-button').classList.remove('active');
         document.getElementById('trend-image-type-month-button').classList.add('active');
@@ -6545,6 +6556,8 @@ async function changeTrendImageType(event) {
     let targetId = event.target.id;
     if (targetId == 'trend-image-type-minute-button') {
         trendImageType = 'MINUTE';
+    } else if (targetId == 'trend-image-type-minute-5day-button') {
+        trendImageType = '5DAY';
     } else if (targetId == 'trend-image-type-day-button') {
         trendImageType = 'DAY';
     } else if (targetId == 'trend-image-type-week-button') {
