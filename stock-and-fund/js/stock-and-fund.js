@@ -623,7 +623,13 @@ document.addEventListener(
         document.getElementById('stock-monitor-button').addEventListener('click', stockMonitor);
 
         // 走势图页面，点击分时图按钮
-        document.getElementById('time-image-minute-button').addEventListener('click', showMinuteImage);
+        document.getElementById('time-image-minute-button').addEventListener('click', async function () {
+            showMinuteImage('1DAY');
+        });
+        // 走势图页面，点击分时图按钮
+        document.getElementById('time-image-minute-5day-button').addEventListener('click', async function () {
+            showMinuteImage('5DAY');
+        });
         // 走势图页面，日线图按钮点击
         document.getElementById('time-image-day-button').addEventListener('click', showDayImage);
         // 走势图页面，周线图按钮点击
@@ -1550,7 +1556,9 @@ async function initStockAndFundHtml() {
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
                 if (trendImageType == 'MINUTE') {
-                    showMinuteImage();
+                    showMinuteImage('1DAY');
+                } else if (trendImageType == '5DAY_MINUTE') {
+                    showMinuteImage('5DAY');
                 } else if (trendImageType == 'DAY') {
                     showDayImage();
                 } else if (trendImageType == 'WEEK') {
@@ -1602,7 +1610,9 @@ async function initStockAndFundHtml() {
                     $("#time-image-month-button")[0].style.display = 'inline';
                 }
                 if (trendImageType == 'MINUTE') {
-                    showMinuteImage();
+                    showMinuteImage('1DAY');
+                } else if (trendImageType == '5DAY_MINUTE') {
+                    showMinuteImage('5DAY');
                 } else if (trendImageType == 'DAY') {
                     showDayImage();
                 } else if (trendImageType == 'WEEK') {
@@ -3704,7 +3714,9 @@ function showTimeImage(event) {
         timeImageType = "STOCK";
     }
     if (trendImageType == 'MINUTE') {
-        showMinuteImage();
+        showMinuteImage('1DAY');
+    } else if (trendImageType == '5DAY_MINUTE') {
+        showMinuteImage('5DAY');
     } else if (trendImageType == 'DAY') {
         showDayImage();
     } else if (trendImageType == 'WEEK') {

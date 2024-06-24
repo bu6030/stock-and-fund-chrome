@@ -211,11 +211,41 @@ function ajaxGetStockTimeImageMinute(code) {
         timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
-        async: false,
+        // async: false,
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            result = data;
+            setStockMinitesImageCallBack(data, 1);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
+function ajaxGetStockTimeImageMinuteHis(code, ndays) {
+    let secid = getSecid(code);
+    if (secid == null || secid == '' || secid == undefined) {
+        secid = timeImageSecid;
+    }
+    if (ndays == null || ndays == '' || ndays == undefined) {
+        ndays = 5;
+    }
+    code = code.replace('sh','').replace('sz','').replace('us','').replace('hk','').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
+    let result;
+    $.ajax({
+        url: Env.GET_STOCK_TIME_IMAGE_MINUTE_HIS + "?secid=" + secid + "."+ code +"&fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f53,f56,f58&iscr=0&iscca=0&ndays=" + ndays,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
+        type: "get",
+        data: {},
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            setStockMinitesImageCallBack(data, 5);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);

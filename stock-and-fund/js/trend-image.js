@@ -6,7 +6,7 @@ let timeImageSecid;
 var timerId;
 let turnOverRate = '';
 // 展示分时图
-function showMinuteImage() {
+function showMinuteImage(ndays) {
     clearTimeImageTimeout();
     let path = "";
     if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006"
@@ -56,7 +56,7 @@ function showMinuteImage() {
         $("#time-image-modal").modal();
         $("#time-image-new").show();
         $("#time-image").html('');
-        setStockMinitesImage();
+        setStockMinitesImage(ndays);
     }
 
 }
@@ -177,7 +177,14 @@ function toEditPage() {
     $("#stock-modal").modal();
 }
 // 展示分时图
-function setStockMinitesImage() {
+function setStockMinitesImage(type) {
+    if (type == '1DAY') {
+        ajaxGetStockTimeImageMinute(timeImageCode);
+    } else if (type == '5DAY') {
+        ajaxGetStockTimeImageMinuteHis(timeImageCode, 5);
+    }
+}
+function setStockMinitesImageCallBack(result, ndays) {
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
     let volumnElementId = 'volumn-image-echart';
@@ -189,7 +196,7 @@ function setStockMinitesImage() {
     volumnChart = echarts.init(document.getElementById(volumnElementId)); 
     setEchartsSize(myChart, volumnChart);
     $("#time-image").html('');
-    let result = ajaxGetStockTimeImageMinute(timeImageCode);
+    // let result = ajaxGetStockTimeImageMinute(timeImageCode);
     let dataStr = [];
     let dataAverageStr = [];
     let dataVolumnStr = [];
@@ -231,7 +238,11 @@ function setStockMinitesImage() {
         }
         dataStr.push(price);
         dataAverageStr.push(averagePrice);
-        dataAxis.push(str.split(",")[0].split(" ")[1]);
+        let axis = str.split(",")[0].split(" ")[1];
+        if (ndays == 5) {
+            axis = str.split(",")[0].split(" ")[0];
+        }
+        dataAxis.push(axis);
         dataVolumnStr.push(volumn);
         if (k == result.data.trends.length - 1) {
             now = dataStr[k];
@@ -246,8 +257,15 @@ function setStockMinitesImage() {
     } else {
         color = blueColor;
     }
-    if (dataStr.length < 241) {
+    if (dataStr.length < 241 && ndays == 1) {
         const diffLength = 241 - dataStr.length;
+        const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
+        dataStr = dataStr.concat(emptyData);
+        dataAverageStr = dataAverageStr.concat(emptyData);
+        dataAxis = dataAxis.concat(emptyData);
+        dataVolumnStr = dataVolumnStr.concat(emptyData);
+    } else if (dataStr.length < 1201 && ndays == 5) {
+        const diffLength = 1201 - dataStr.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
         dataStr = dataStr.concat(emptyData);
         dataAverageStr = dataAverageStr.concat(emptyData);
@@ -255,8 +273,14 @@ function setStockMinitesImage() {
         dataVolumnStr = dataVolumnStr.concat(emptyData);
     }
     let interval = 29;
+    if (ndays == 5) {
+        interval = 240;
+    }
     if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US")) {
         interval = 59;
+        if (ndays == 5) {
+            interval = 480;
+        }
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     // 说明该基金是从持仓明细进入的
