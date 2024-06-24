@@ -184,7 +184,7 @@ function setStockMinitesImage(type) {
         ajaxGetStockTimeImageMinuteHis(timeImageCode, 5);
     }
 }
-function setStockMinitesImageCallBack(result, ndays) {
+function setStockMinitesImageCallBack(result, ndays, code) {
     // 基于准备好的dom，初始化echarts实例
     let elementId = 'time-image-new';
     let volumnElementId = 'volumn-image-echart';
@@ -217,6 +217,7 @@ function setStockMinitesImageCallBack(result, ndays) {
     }
     let maxPrice = preClose;
     let minPrice = preClose;
+    let ndaysMarkLineSet = [];
     let totalVolumn = 0;
     for (var k = 0; k < result.data.trends.length; k++) {
         let str = result.data.trends[k];
@@ -240,13 +241,52 @@ function setStockMinitesImageCallBack(result, ndays) {
         dataAverageStr.push(averagePrice);
         let axis = str.split(",")[0].split(" ")[1];
         if (ndays == 5) {
-            axis = str.split(",")[0].split(" ")[0];
+            axis = str.split(",")[0];
+            if ((code.startsWith('us') || code.startsWith('US')) && axis.endsWith('21:30')) {
+                ndaysMarkLineSet.push(axis);
+            } else if (axis.endsWith('09:30')) {
+                ndaysMarkLineSet.push(axis);
+            }
         }
         dataAxis.push(axis);
         dataVolumnStr.push(volumn);
         if (k == result.data.trends.length - 1) {
             now = dataStr[k];
         }
+    }
+    let markLineData = [];
+    if (ndays == 5) {
+        for (var k = 0; k < ndaysMarkLineSet.length; k++) {
+            markLineData.push({
+                 xAxis: ndaysMarkLineSet[k],
+                 lineStyle: {
+                    color: 'gray',
+                    width: 1,
+                    type: 'dashed'
+                },
+                label: { show: false },
+            })
+        }
+    } else {
+        markLineData = [
+            {
+                yAxis: parseFloat(preClose).toFixed(toFixedVolume),  // 在 y 轴上的 150 处添加一条横线
+                label: {
+                    show: true,  // 设置为 true，使标签一开始就可见
+                    position: 'middle',  // 调整标签位置，可以根据需要调整
+                    color: 'gray',  // 标签文本颜色
+                    fontWeight: 'bold',  // 标签文本粗细
+                    formatter : function() {
+                        return "昨日收盘：" + parseFloat(preClose).toFixed(toFixedVolume);
+                    },
+                },
+                lineStyle: {
+                    color: 'gray',
+                    width: 1,
+                    type: 'dashed'
+                },
+            }
+        ]
     }
     if(dataStr.length == 0) {
         return;
@@ -264,8 +304,8 @@ function setStockMinitesImageCallBack(result, ndays) {
         dataAverageStr = dataAverageStr.concat(emptyData);
         dataAxis = dataAxis.concat(emptyData);
         dataVolumnStr = dataVolumnStr.concat(emptyData);
-    } else if (dataStr.length < 1201 && ndays == 5) {
-        const diffLength = 1201 - dataStr.length;
+    } else if (dataStr.length < 1205 && ndays == 5) {
+        const diffLength = 1205 - dataStr.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
         dataStr = dataStr.concat(emptyData);
         dataAverageStr = dataAverageStr.concat(emptyData);
@@ -274,12 +314,12 @@ function setStockMinitesImageCallBack(result, ndays) {
     }
     let interval = 29;
     if (ndays == 5) {
-        interval = 240;
+        interval = 239;
     }
     if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US")) {
         interval = 59;
         if (ndays == 5) {
-            interval = 480;
+            interval = 479;
         }
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
@@ -303,11 +343,18 @@ function setStockMinitesImageCallBack(result, ndays) {
         xAxis: {
             data: dataAxis,
             type: 'category',
+            boundaryGap: true,
             axisLabel: {
                 textStyle: {
                     fontSize: imageTextSize // 调小字体大小使其适应空间
                 },
                 interval: interval, // 调整刻度显示间隔
+                formatter: function (value) {
+                    if (ndays == 5) {
+                        value = value.split(' ')[0];
+                    }
+                    return value;
+                }
             },
         },
         yAxis: [
@@ -392,25 +439,7 @@ function setStockMinitesImageCallBack(result, ndays) {
                 markLine: {
                     silent: true,
                     symbol: 'none',
-                    label: {
-                        show: true,  // 设置为 true，使标签一开始就可见
-                        position: 'middle',  // 调整标签位置，可以根据需要调整
-                        color: 'gray',  // 标签文本颜色
-                        fontWeight: 'bold',  // 标签文本粗细
-                        formatter : function() {
-                            return "昨日收盘：" + parseFloat(preClose).toFixed(toFixedVolume);
-                        },
-                    },
-                    lineStyle: {
-                        color: 'gray',
-                        width: 1,
-                        type: 'dashed'
-                    },
-                    data: [
-                        {
-                            yAxis: parseFloat(preClose).toFixed(toFixedVolume)  // 在 y 轴上的 150 处添加一条横线
-                        }
-                    ]
+                    data: markLineData
                 },
             },
             {
@@ -481,11 +510,18 @@ function setStockMinitesImageCallBack(result, ndays) {
         xAxis: {
             data: dataAxis,  // X 轴数据，与主图相同
             type: 'category',
+            boundaryGap: true,
             axisLabel: {
                 textStyle: {
                     fontSize: imageTextSize // 调小字体大小使其适应空间
                 },
                 interval: interval, // 调整刻度显示间隔
+                formatter: function (value) {
+                    if (ndays == 5) {
+                        value = value.split(' ')[0];
+                    }
+                    return value;
+                }
             },
         },
         yAxis: {

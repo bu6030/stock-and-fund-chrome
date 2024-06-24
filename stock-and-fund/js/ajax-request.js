@@ -200,6 +200,7 @@ function ajaxGetStockTimeImageMinuteMini(code) {
 
 // 接口调用
 function ajaxGetStockTimeImageMinute(code) {
+    let oldCode = code;
     let secid = getSecid(code);
     if (secid == null || secid == '' || secid == undefined) {
         secid = timeImageSecid;
@@ -215,7 +216,7 @@ function ajaxGetStockTimeImageMinute(code) {
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            setStockMinitesImageCallBack(data, 1);
+            setStockMinitesImageCallBack(data, 1, oldCode);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -228,6 +229,7 @@ function ajaxGetStockTimeImageMinute(code) {
 
 // 接口调用
 function ajaxGetStockTimeImageMinuteHis(code, ndays) {
+    let oldCode = code;
     let secid = getSecid(code);
     if (secid == null || secid == '' || secid == undefined) {
         secid = timeImageSecid;
@@ -245,7 +247,7 @@ function ajaxGetStockTimeImageMinuteHis(code, ndays) {
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            setStockMinitesImageCallBack(data, 5);
+            setStockMinitesImageCallBack(data, 5, oldCode);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
