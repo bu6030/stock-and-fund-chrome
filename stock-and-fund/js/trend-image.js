@@ -314,7 +314,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     }
     let interval = 29;
     if (ndays == 5) {
-        interval = 239;
+        interval = 240;
     }
     if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US")) {
         interval = 59;
@@ -343,7 +343,6 @@ function setStockMinitesImageCallBack(result, ndays, code) {
         xAxis: {
             data: dataAxis,
             type: 'category',
-            boundaryGap: true,
             axisLabel: {
                 textStyle: {
                     fontSize: imageTextSize // 调小字体大小使其适应空间
