@@ -1540,6 +1540,7 @@ async function initStockAndFundHtml() {
                 let currentURL = window.location.href;
                 if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) {
                     $("#time-image-minute-button")[0].style.display = 'none';
+                    $("#time-image-minute-5day-button")[0].style.display = 'none';
                     $("#time-image-day-button")[0].style.display = 'none';
                     $("#time-image-week-button")[0].style.display = 'none';
                     $("#time-image-month-button")[0].style.display = 'none';
@@ -1547,6 +1548,7 @@ async function initStockAndFundHtml() {
                     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 } else {
                     $("#time-image-minute-button")[0].style.display = 'inline';
+                    $("#time-image-minute-5day-button")[0].style.display = 'inline';
                     $("#time-image-day-button")[0].style.display = 'inline';
                     $("#time-image-week-button")[0].style.display = 'inline';
                     $("#time-image-month-button")[0].style.display = 'inline';
@@ -1600,11 +1602,13 @@ async function initStockAndFundHtml() {
                 let currentURL = window.location.href;
                 if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) {
                     $("#time-image-minute-button")[0].style.display = 'none';
+                    $("#time-image-minute-5day-button")[0].style.display = 'none';
                     $("#time-image-day-button")[0].style.display = 'none';
                     $("#time-image-week-button")[0].style.display = 'none';
                     $("#time-image-month-button")[0].style.display = 'none';
                 } else {
                     $("#time-image-minute-button")[0].style.display = 'inline';
+                    $("#time-image-minute-5day-button")[0].style.display = 'inline';
                     $("#time-image-day-button")[0].style.display = 'inline';
                     $("#time-image-week-button")[0].style.display = 'inline';
                     $("#time-image-month-button")[0].style.display = 'inline';
