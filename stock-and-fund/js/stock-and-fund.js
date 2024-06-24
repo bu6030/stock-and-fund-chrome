@@ -2136,6 +2136,13 @@ async function searchFundByName(name) {
 
 // 保存股票
 async function saveStock() {
+    // 当前是全部分组，需要特殊处理
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
+        $("#stock-modal").modal("hide");
+        $("#search-stock-modal").modal("hide");
+        return;
+    }
     var belongGroup = $("#stock-belong-group-select").val();
     // console.log('belongGroup=',belongGroup,';currentGroup=',currentGroup);
     var costPrise = $("#stock-costPrise").val();
@@ -2297,6 +2304,7 @@ async function saveStock() {
     }
     stock.addTimePrice = checkStockExsitResult.now;
     stock.addTime = getCurrentDate();
+    stock.belongGroup = currentGroup;
     stockList.push(stock);
     if (currentGroup == 'default-group' || currentGroup == 'all-group') {
         saveCacheData('stocks', JSON.stringify(stockList));
@@ -2310,6 +2318,13 @@ async function saveStock() {
 
 // 保存基金
 async function saveFund() {
+    // 当前是全部分组，需要特殊处理
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
+        $("#fund-modal").modal("hide");
+        $("#search-fund-modal").modal("hide");
+        return;
+    }
     var belongGroup = $("#fund-belong-group-select").val();
     // console.log('belongGroup:',belongGroup,"currentGroup:",currentGroup);
     var costPrise = $("#fund-costPrise").val();
@@ -2489,6 +2504,7 @@ async function saveFund() {
     }
     fund.addTimePrice = checkFundExsitReuslt.now;
     fund.addTime = getCurrentDate();
+    fund.belongGroup = currentGroup;
     fundList.push(fund);
     if (currentGroup == 'default-group' || currentGroup == 'all-group') {
         saveCacheData('funds', JSON.stringify(fundList));
@@ -3634,6 +3650,13 @@ async function getStockAndFundFromLocalService () {
 async function deleteStockAndFund() {
     var checkResult = confirm("是否确认删除？");
     if (!checkResult) {
+        return;
+    }
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
+        $("#time-image-modal").modal("hide");
+        $("#stock-modal").modal("hide");
+        $("#fund-modal").modal("hide");
         return;
     }
     if (timeImageType == "FUND") {

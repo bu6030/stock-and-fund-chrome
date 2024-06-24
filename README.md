@@ -299,6 +299,8 @@
 277. 第一次点击排序时，默认从大到小排列 2024/6/19 -- version 2.1.9.1 -- end
 278. 首页点击股票无法查看分时图，清理数据后，重新导入数据时替换大写字母为小写解决 2024/6/19 -- version 2.1.9.2 -- end
 279. 增加接口请求超时时间 2024/6/21
+280. 在全部分组下不能编辑/删除股票 2024/6/24
+281. 添加股票时分组显示undefined问题修改 2024/6/24
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
