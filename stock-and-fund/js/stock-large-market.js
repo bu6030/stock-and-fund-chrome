@@ -248,7 +248,9 @@ function initLargeMarketClick() {
     $("#set-top-button-3")[0].style.display = 'none';
     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
     if (trendImageType == 'MINUTE') {
-        showMinuteImage();
+        showMinuteImage('1DAY');
+    } else if (trendImageType == '5DAY') {
+        showMinuteImage('5DAY');
     } else if (trendImageType == 'DAY') {
         showDayImage();
     } else if (trendImageType == 'WEEK') {
