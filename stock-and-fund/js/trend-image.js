@@ -308,15 +308,22 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     } else {
         color = blueColor;
     }
-    if (dataStr.length < 241 && ndays == 1) {
-        const diffLength = 241 - dataStr.length;
+    // A股分时线中每个周期241条数据，港股每个周期331条数据，美股每个周期391条数据
+    let ndaysInterval = 241;
+    if (code.startsWith('us') || code.startsWith('US')) {
+        ndaysInterval = 391;
+    } else if (code.startsWith('hk') || code.startsWith('HK')) {
+        ndaysInterval = 331;
+    }
+    if (dataStr.length < ndaysInterval && ndays == 1) {
+        const diffLength = ndaysInterval - dataStr.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
         dataStr = dataStr.concat(emptyData);
         dataAverageStr = dataAverageStr.concat(emptyData);
         dataAxis = dataAxis.concat(emptyData);
         dataVolumnStr = dataVolumnStr.concat(emptyData);
-    } else if (dataStr.length < 1205 && ndays == 5) {
-        const diffLength = 1205 - dataStr.length;
+    } else if (dataStr.length < ndaysInterval * 5 && ndays == 5) {
+        const diffLength = ndaysInterval * 5 - dataStr.length;
         const emptyData = Array(diffLength).fill(''); // 使用 null 填充空数据
         dataStr = dataStr.concat(emptyData);
         dataAverageStr = dataAverageStr.concat(emptyData);
@@ -326,11 +333,10 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     let interval = 29;
     if (ndays == 5) {
         interval = 240;
-    }
-    if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US")) {
-        interval = 59;
-        if (ndays == 5) {
-            interval = 479;
+        if (timeImageCode.startsWith("us") || timeImageCode.startsWith("US")) {
+            interval = 390;
+        } else if (timeImageCode.startsWith("hk") || timeImageCode.startsWith("HK")) {
+            interval = 330;
         }
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
@@ -510,12 +516,6 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                 var volumn = parseFloat(dataVolumnStr[dataIndex] / 10000).toFixed(2);
                 var changePercent = "";
                 if (ndays == 5) {
-                    let ndaysInterval = 241; // 每个范围的长度1205/5
-                    if (code.startsWith('us') || code.startsWith('US')) {
-                        ndaysInterval = 391; // 每个范围的长度1955/5
-                    } else if (code.startsWith('hk') || code.startsWith('HK')) {
-                        ndaysInterval = 331; // 每个范围的长度1655/5
-                    }
                     const index = Math.floor(dataIndex / ndaysInterval); // 计算 preCloseList 的索引
                     if (index >= 4) {
                         changePercent = ((params[0].value - preClose) / preClose * 100).toFixed(2);
