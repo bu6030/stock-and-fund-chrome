@@ -265,6 +265,22 @@ function setStockMinitesImageCallBack(result, ndays, code) {
             now = dataStr[k];
         }
     }
+    // 美股进入夏令时，开盘时间改成22:30-05:00时，无法取到21:30的数据修改
+    if (ndaysMarkLineSet.length == 0 && ndays == 5 && (code.startsWith('us') || code.startsWith('US'))) {
+        preCloseList = [];
+        preCloseList.push(parseFloat(result.data.trends[0].split(",")[1]));
+        for (var k = 0; k < result.data.trends.length; k++) {
+            let str = result.data.trends[k];
+            let price = parseFloat(str.split(",")[1]);
+            let axis = str.split(",")[0];
+            if (axis.endsWith('22:30')) {
+                ndaysMarkLineSet.push(axis);
+            }
+            if (axis.endsWith('05:00')) {
+                preCloseList.push(price);
+            }
+        }
+    }
     let markLineData = [];
     if (ndays == 5) {
         for (var k = 0; k < ndaysMarkLineSet.length; k++) {

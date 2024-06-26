@@ -304,6 +304,7 @@
 282. 增加五日线 2024/6/24 -- version 2.1.9.3 -- end
 283. 新浏览器插件云同步问题修改 2024/6/25 -- version 2.1.9.4 -- end
 284. 五日线涨跌幅显示问题修改 2024/6/26 -- version 2.1.9.5 -- end
+285. 美股夏令时取收盘价格问题处理 2024/6/26
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
