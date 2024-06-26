@@ -211,6 +211,10 @@ function setStockMinitesImageCallBack(result, ndays, code) {
         return;
     }
     var preClose = parseFloat(result.data.preClose);
+    var preCloseList = [];
+    if (ndays == 5) {
+        preCloseList.push(parseFloat(result.data.trends[0].split(",")[1]));
+    }
     let toFixedVolume = 2;
     if (preClose <= 5) {
         toFixedVolume = 3;
@@ -246,6 +250,13 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                 ndaysMarkLineSet.push(axis);
             } else if (axis.endsWith('09:30')) {
                 ndaysMarkLineSet.push(axis);
+            }
+            if ((code.startsWith('us') || code.startsWith('US')) && axis.endsWith('04:00')) {
+                preCloseList.push(price);
+            } else if ((code.startsWith('hk') || code.startsWith('HK')) && axis.endsWith('16:00')) {
+                preCloseList.push(price);
+            } else if (!code.startsWith('us') && !code.startsWith('US') && !code.startsWith('hk') && !code.startsWith('HK') && axis.endsWith('15:00')) {
+                preCloseList.push(price);
             }
         }
         dataAxis.push(axis);
@@ -497,7 +508,23 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                 }
                 var dataIndex = params[0].dataIndex;
                 var volumn = parseFloat(dataVolumnStr[dataIndex] / 10000).toFixed(2);
-                var changePercent = ((params[0].value - preClose) / preClose * 100).toFixed(2);
+                var changePercent = "";
+                if (ndays == 5) {
+                    let ndaysInterval = 241; // 每个范围的长度1205/5
+                    if (code.startsWith('us') || code.startsWith('US')) {
+                        ndaysInterval = 391; // 每个范围的长度1955/5
+                    } else if (code.startsWith('hk') || code.startsWith('HK')) {
+                        ndaysInterval = 331; // 每个范围的长度1655/5
+                    }
+                    const index = Math.floor(dataIndex / ndaysInterval); // 计算 preCloseList 的索引
+                    if (index >= 4) {
+                        changePercent = ((params[0].value - preClose) / preClose * 100).toFixed(2);
+                    } else {
+                        changePercent = ((params[0].value - preCloseList[index]) / preCloseList[index] * 100).toFixed(2);
+                    }
+                } else {
+                    changePercent = ((params[0].value - preClose) / preClose * 100).toFixed(2);
+                }
                 return result.data.name + "<br>时间：" + params[0].name + "<br>价格：" + params[0].value
                      + "<br>涨跌幅：" + changePercent + "%<br>成交量：" + volumn + "万";
             }
