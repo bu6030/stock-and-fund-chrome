@@ -389,6 +389,29 @@ function ajaxGetFundInvesterPositionDetail(code) {
 }
 
 // 接口调用
+function ajaxGetLargeMarketData(code) {
+    let result;
+    $.ajax({
+        url: Env.GET_STOCK_FROM_EAST_MONEY_URL + "?fields=f1,f2,f3,f4,f12,f13,f14,f292&fltt=2&secids="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
+        type: "get",
+        data: {},
+        // async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data.data.diff;
+            initLargeMarketDataCallBack(result);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+// 接口调用
 function ajaxGetFundNetDiagram(code, type) {
     let result;
     let range;

@@ -14,7 +14,19 @@ function initLargeMarketData() {
         $("#stock-large-market").html('<div class=\"stock-large-market-container\">' + largetMarketTotalStr + '</div>');
         return;
     }
-    var bigStocks = ajaxGetFundInvesterPositionDetail(codes);
+    ajaxGetLargeMarketData(codes);
+}
+// 初始化首页大盘股数据回调方法
+async function initLargeMarketDataCallBack(bigStocks) {
+    console.log('=====',bigStocks);
+    let largetMarketTotalStr = '';
+    if (largetMarketTotalDisplay) {
+        largetMarketTotalStr = '<div class=\"stock-large-market-box\" id=\"larget-market-total\">' +
+            '<p>持仓盈亏</p>' +
+            '<p style=\"color:' + redColor + ';\">--</p>' +
+            '<p style=\"color:' + redColor + ';\">--%</p>' +
+        '</div>'
+    }
     var str = "<div class=\"stock-large-market-container\">";
     str += largetMarketTotalStr;
     for(let k in bigStocks) {
