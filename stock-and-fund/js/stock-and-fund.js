@@ -6596,14 +6596,14 @@ async function showQrCodeModal (event) {
     } else if (targetId == 'ali-pay-button') {
         path = Env.ALI_PAY_QR_CODE;
         $("#qr-code-modal-title").html('打赏');
-        $("#qr-code-modal-content").html('感谢有您的支持，股票基金神器才能一直保持更新，开发更多有趣的功能。');
+        $("#qr-code-modal-content").html('如果您觉得我的插件对您在股市的探索有帮助，您可以支付宝扫一扫打赏或者到插件市场给我五星好评～');
         $("#qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
         $("#wechat-pay-button")[0].style.display = 'inline';
         $("#ali-pay-button")[0].style.display = 'inline';
     } else if (targetId == 'wechat-pay-button' || targetId == 'show-donate-button' || targetId == 'show-donate-button-2') {
         path = Env.WECHAT_PAY_QR_CODE;
         $("#qr-code-modal-title").html('打赏');
-        $("#qr-code-modal-content").html('感谢有您的支持，股票基金神器才能一直保持更新，开发更多有趣的功能。');
+        $("#qr-code-modal-content").html('如果您觉得我的插件对您在股市的探索有帮助，您可以微信扫一扫打赏或者到插件市场给我五星好评～');
         $("#qr-code-image").html('<img src="' + path + '" width="60%" length="60%" />');
         $("#wechat-pay-button")[0].style.display = 'inline';
         $("#ali-pay-button")[0].style.display = 'inline';
