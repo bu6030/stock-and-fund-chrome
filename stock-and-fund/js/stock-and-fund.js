@@ -5857,6 +5857,7 @@ function setAdviceUl(advices) {
     columnList.innerHTML = '';
     advices.forEach(function (advice) {
         var listItem = document.createElement('li');
+        listItem.className = 'advice-list-li';
         // Create label for checkbox
         var adviceDevelopVersion = advice.adviceDevelopVersion == null ? '' : ' 计划修改版本：' + advice.adviceDevelopVersion;
         var textContent = advice.adviceContent + '\n 提交时间：' + advice.date + adviceDevelopVersion;
