@@ -768,6 +768,7 @@ document.addEventListener(
                 // 清理之前表单记录
                 $("#fund-costPrise").val('');
                 $("#fund-bonds").val('');
+                $("#fund-desc").val('');
                 $("#fund-cycle-invest-type").val('');
                 $("#fund-cycle-invest-date").val('');
                 $("#fund-cycle-invest-value").val('');
@@ -1588,6 +1589,7 @@ async function initStockAndFundHtml() {
                 $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
                 $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
                 $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
+                $("#fund-desc").val(fundList[this.sectionRowIndex].desc);
                 if (isCycleInvest) {
                     $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
                     $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
@@ -1880,12 +1882,13 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             }
             var exsitJZStr = result[k].existJZ !== null && result[k].existJZ !== undefined
                 && result[k].existJZ ? '(实)' : '(估)';
+            var desc = result[k].desc ? "(" + result[k].desc + ")" : "";
             // 新顺序拼接TR行HTML
             var fundStrOrder = columnOrder.map(function (column) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
+                    html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + desc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th'){
@@ -2351,6 +2354,7 @@ async function saveFund() {
     // console.log('belongGroup:',belongGroup,"currentGroup:",currentGroup);
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
+    var desc = $("#fund-desc").val();
     if (isCycleInvest) {
         var fundCycleInvestType = $("#fund-cycle-invest-type").val();
         var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
@@ -2389,6 +2393,7 @@ async function saveFund() {
             "fundCode": code,
             "costPrise": costPrise,
             "bonds": bonds,
+            "desc": desc,
             "fundCycleInvestType": fundCycleInvestType,
             "fundCycleInvestDate": fundCycleInvestDate,
             "fundCycleInvestValue": fundCycleInvestValue,
@@ -2399,6 +2404,7 @@ async function saveFund() {
             "fundCode": code,
             "costPrise": costPrise,
             "bonds": bonds,
+            "desc": desc,
         }
     }
     for (var k in fundList) {
@@ -2406,6 +2412,7 @@ async function saveFund() {
             fundList[k].fundCode = fund.fundCode;
             fundList[k].costPrise = fund.costPrise;
             fundList[k].bonds = fund.bonds;
+            fundList[k].desc = fund.desc;
             if (isCycleInvest) {
                 fundList[k].fundCycleInvestType = fund.fundCycleInvestType;
                 fundList[k].fundCycleInvestDate = fund.fundCycleInvestDate;
@@ -2418,7 +2425,7 @@ async function saveFund() {
                 fundList[k].addTime = getCurrentDate();
             }
             // 当前是全部分组，需要特殊处理
-            if(currentGroup == 'all-group'){
+            if(currentGroup == 'all-group') {
                 alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
                 $("#fund-modal").modal("hide");
                 $("#search-fund-modal").modal("hide");
