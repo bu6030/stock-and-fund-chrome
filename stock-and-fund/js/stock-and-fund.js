@@ -1473,7 +1473,7 @@ async function initStockAndFundHtml() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         try{
             for (var k = stockList.length - 1; k >= 0; k--) {
-                marketValue = (new BigDecimal(stockList[k].now)).multiply(new BigDecimal(stockList[k].bonds));
+                marketValue = new BigDecimal(stockList[k].marketValue);
                 totalMarketValue = totalMarketValue.add(marketValue);
             }
         } catch (e) {
