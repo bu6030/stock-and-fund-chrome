@@ -4046,6 +4046,7 @@ async function buyOrSell() {
     buyOrSell.cost = cost;
     buyOrSell.type = type;
     if (type == '2') {
+        stockCode = stockCode.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','')
         let stockNow = checkStockExsit(stockCode);
         let now = new BigDecimal(stockNow.now + "");
         let change = new BigDecimal(stockNow.change + "");
