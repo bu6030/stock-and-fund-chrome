@@ -119,7 +119,7 @@ function ajaxGetStockFromGtimg(code) {
 }
 
 // 接口调用
-function ajaxGetStockFromGtimgAsync(code) {
+function ajaxGetStockFromGtimgAsync(code, stocks) {
     $.ajax({
         url: Env.GET_STOCK_FROM_GTIMG + "q=" + code,
         timeout: 5000, // 设置超时时间为5000毫秒（5秒）
@@ -129,7 +129,7 @@ function ajaxGetStockFromGtimgAsync(code) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             // result = data;
-            initStockGtimgCallBack(data);
+            initStockGtimgCallBack(data, stocks);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
@@ -140,7 +140,7 @@ function ajaxGetStockFromGtimgAsync(code) {
 }
 
 // 接口调用
-function ajaxGetStockFromEastMoney(code) {
+function ajaxGetStockFromEastMoney(code, stocks) {
     $.ajax({
         url: Env.GET_STOCK_FROM_EAST_MONEY_URL
           + "?fltt=2&fields=f12,f13,f19,f14,f139,f148,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids="
@@ -152,7 +152,7 @@ function ajaxGetStockFromEastMoney(code) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             stoksArr = data.data.diff;
-            initStockEastMoneyCallBack(stoksArr);
+            initStockEastMoneyCallBack(stoksArr, stocks);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);

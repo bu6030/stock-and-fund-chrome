@@ -939,7 +939,7 @@ async function initData() {
             }
             // 没有股票不调用接口请求
             if (stocks != "") {
-                ajaxGetStockFromGtimgAsync(stocks);
+                ajaxGetStockFromGtimgAsync(stocks, stocks);
             }
         // 走东方财富获取股票接口
         } else {
@@ -953,7 +953,7 @@ async function initData() {
             // let stoksArr = [];
             // 没有股票不调用接口请求
             if (stocks != "") {
-                ajaxGetStockFromEastMoney(secIdStockArr);
+                ajaxGetStockFromEastMoney(secIdStockArr, stocks);
             }
         }
     }
@@ -962,7 +962,7 @@ async function initData() {
     }
 }
 
-async function initStockGtimgCallBack(result) {
+async function initStockGtimgCallBack(result, stocks) {
     let huilvHK;
     let huilvUS;
     // 只有切换了汇率才获取汇率接口数据
@@ -1098,7 +1098,7 @@ async function initStockGtimgCallBack(result) {
     await initFund();
 }
 
-async function initStockEastMoneyCallBack(stoksArr) {
+async function initStockEastMoneyCallBack(stoksArr, stocks) {
     let huilvHK;
     let huilvUS;
     // 只有切换了汇率才获取汇率接口数据
