@@ -308,7 +308,7 @@
 286. 异步处理大盘数据 2024/7/1
 287. 异步处理股票/基金数据 2024/7/2
 288. 增大各种二维码页面文字大小 2024/7/2 -- version 2.1.9.6 -- end
-289. 增加建议字体大小 2024/7/4
+289. 增加建议字体大小 2024/7/4 -- version 2.1.9.7 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
