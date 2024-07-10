@@ -391,7 +391,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         var stockList = JSON.parse(stockArr);
         var stocks = "sh000001,sz399001,sz399006,hkHSI,";
         for (let k in stockList) {
-            stocks += stockList[k].code + ",";
+            stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') + ",";
         }
         let response;
         try {
@@ -408,17 +408,19 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         var title = '';
         var stoksArr = data.split("\n");
         var stockDayIncome = 0.00;
-        var stockTotalIncome = 0.00;
+        // var stockTotalIncome = 0.00;
         var date = '';
         for (let k in stoksArr) {
             try {
-                var stock;
+                // console.log('stoksArr[k]=', stoksArr[k]);
+                var stock = undefined;
                 for (let l in stockList) {
-                    if(stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
+                    if(stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
                         stock = stockList[l];
                         break;
                     }
                 }
+                // console.log('stock=', stock);
                 var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
                 var values = dataStr.split("~");
                 var name = values[1];
@@ -430,8 +432,15 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 var changePercent = parseFloat(values[32]).toFixed(2);
                 var dayIncome = 0.00;
                 if (stock != undefined) {
-                    dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
-                    stockTotalIncome += (now - parseFloat(stock.costPrise)) * parseFloat(stock.bonds);
+                    if (stock.code.indexOf('hk') >= 0 || stock.code.indexOf('HK') >= 0) {
+                        dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'HK');
+                    } else if (stock.code.indexOf('us') >= 0 || stock.code.indexOf('US') >= 0) {
+                        dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'US');
+                    } else {
+                        dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
+                    }
+                    // console.log('dayIncome=',stock.name, dayIncome);
+                    // stockTotalIncome += (now - parseFloat(stock.costPrise)) * parseFloat(stock.bonds);
                 }
                 stockDayIncome += dayIncome;
                 if (count <= 24) {
@@ -455,7 +464,8 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                         title += (name + kongge + now + '(' + changePercent + "%)\n");
                     }
                 }
-                if (values[30].substring(0, 8) > date) {
+                var value30 = values[30].replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
+                if (value30.substring(0, 8) > date) {
                     // 如果当前日期大于之前存储的最大日期，则更新最大日期
                     date = values[30].substring(0, 8);
                 }
@@ -470,9 +480,9 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             return;
         }
         let funcDayIncome = funcIncome.fundDayIncome;
-        let fundTotalIncome = funcIncome.fundTotalIncome;
+        // let fundTotalIncome = funcIncome.fundTotalIncome;
         let totalDayIncome = funcDayIncome + stockDayIncome;
-        let totalIncome = fundTotalIncome + stockTotalIncome;
+        // let totalIncome = fundTotalIncome + stockTotalIncome;
         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
         title += '\n当日总收益：' + totalDayIncome.toFixed(2);
@@ -586,4 +596,31 @@ async function getFundIncome(date) {
         return null;
     }
     return result;
+}
+// 汇率计算当日盈利
+async function getHuilvDayIncome(dayIncome, type) {
+    let newDayIncome = dayIncome;
+    let huilvConvert = await getData('huilvConvert');
+    // console.log('huilvConvert',huilvConvert);
+    let huilv = 1;
+    if (huilvConvert == null) {
+        huilvConvert = false;
+    } else if(huilvConvert == "true") {
+        huilvConvert = true;
+    } else if(huilvConvert == "false") {
+        huilvConvert = false;
+    }
+    if (huilvConvert && type == 'HK') {
+        huilv = await getData('HKD_huilv_cached');
+    } else if (huilvConvert && type == 'US') {
+        huilv = await getData('USD_huilv_cached');
+    }
+    // console.log('huilv',huilv);
+    if (huilvConvert) {
+        newDayIncome = parseFloat(dayIncome + "") * parseFloat(huilv + "");
+        // console.log('newDayIncome',newDayIncome);
+        return newDayIncome;
+    } else {
+        return dayIncome;
+    }
 }
