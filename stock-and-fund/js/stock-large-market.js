@@ -41,7 +41,7 @@ async function initLargeMarketDataCallBack(bigStocks) {
             '<div class=\"stock-large-market-box\"' + aId + '>' +
                 '<p>' + name +'</p>' +
                 '<p ' + style + '>' + now + '</p>' +
-                '<p ' + style + '>' + changePercent + '%</p>' +
+                '<p ' + style + '>' + change + '(' + changePercent + '%)</p>' +
             '</div>';
     }
     str = str + '</div>';
