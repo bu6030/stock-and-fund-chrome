@@ -672,9 +672,27 @@ function setStockImage(type) {
     if (fundOrStockName == timeImageCode) {
         fundOrStockName = timeImageName;
     }
+    let zoomStart = 80;
+    let interval = 12;
+    if (data0.values.length <= 30) {
+        interval = 0;
+        zoomStart = 0;
+    } else if (data0.values.length <= 60) {
+        interval = 1;
+        zoomStart = 40;
+    } else if (data0.values.length <= 120) {
+        interval = 4;
+        zoomStart = 60;
+    } else if (data0.values.length <= 240) {
+        interval = 8;
+        zoomStart = 80;
+    } else {
+        interval = 12;
+        zoomStart = 90;
+    }
     option = {
         legend: {
-            data: ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30'],
+            data: ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30', 'MA50', 'MA250'],
             top: 30
         },
         grid: {
@@ -683,7 +701,7 @@ function setStockImage(type) {
         xAxis: {
             data: data0.categoryData,
             axisLabel: {
-                interval: 6, // 调整刻度显示间隔
+                interval: interval, // 调整刻度显示间隔
             },
         },
         yAxis: {
@@ -695,7 +713,7 @@ function setStockImage(type) {
         dataZoom: [
             {
                 type: 'inside',
-                start: 50,
+                start: zoomStart,
                 end: 100
             },
             {
@@ -703,7 +721,7 @@ function setStockImage(type) {
                 show: true,
                 type: 'slider',
                 top: '90%',
-                start: 50,
+                start: zoomStart,
                 end: 100
             }
         ],
@@ -758,6 +776,26 @@ function setStockImage(type) {
                 lineStyle: {
                     width: 1, // 线宽
                 },
+            },
+            {
+                name: 'MA50',
+                type: 'line',
+                data: calculateMA(50, data0.values), // 使用自定义函数计算五日均线数据
+                smooth: true, // 是否平滑曲线
+                showSymbol: false, // 不显示圆点
+                lineStyle: {
+                    width: 1, // 线宽
+                },
+            },
+            {
+                name: 'MA250',
+                type: 'line',
+                data: calculateMA(250, data0.values), // 使用自定义函数计算五日均线数据
+                smooth: true, // 是否平滑曲线
+                showSymbol: false, // 不显示圆点
+                lineStyle: {
+                    width: 1, // 线宽
+                },
             }
         ],
         graphic: {
@@ -793,6 +831,8 @@ function setStockImage(type) {
                 let ma10 = null;
                 let ma20 = null;
                 let ma30 = null;
+                let ma50 = null;
+                let ma250 = null;
                 params.forEach(function(param) {
                     switch (param.seriesName) {
                         case 'MA5':
@@ -807,6 +847,12 @@ function setStockImage(type) {
                         case 'MA30':
                             ma30 = param.value;
                             break;
+                        case 'MA50':
+                            ma50 = param.value;
+                            break;
+                        case 'MA250':
+                            ma250 = param.value;
+                            break;
                     }
                 });
                 return result.data.name + "<br>时间：" + params[0].name
@@ -818,7 +864,9 @@ function setStockImage(type) {
                 + (ma5 !== null ? "MA5：" + ma5 : "")
                 + (ma10 !== null ? "&nbsp;&nbsp;MA10：" + ma10 : "")
                 + (ma20 !== null ? "<br>MA20：" + ma20 : "")
-                + (ma30 !== null ? "&nbsp;&nbsp;MA30：" + ma30 : "");
+                + (ma30 !== null ? "&nbsp;&nbsp;MA30：" + ma30 : "")
+                + (ma50 !== null ? "<br>MA50：" + ma50 : "")
+                + (ma250 !== null ? "&nbsp;&nbsp;MA250：" + ma250 : "");
             }
         },
     };
@@ -828,7 +876,7 @@ function setStockImage(type) {
         dataZoom: [
             {
                 type: 'inside',
-                start: 50,
+                start: zoomStart,
                 end: 100
             },
             {
@@ -836,7 +884,7 @@ function setStockImage(type) {
                 show: true,
                 type: 'slider',
                 top: '90%',
-                start: 50,
+                start: zoomStart,
                 end: 100
             }
         ],
@@ -847,7 +895,7 @@ function setStockImage(type) {
                 textStyle: {
                     fontSize: imageTextSize // 调小字体大小使其适应空间
                 },
-                interval: 6, // 调整刻度显示间隔
+                interval: interval, // 调整刻度显示间隔
             },
         },
         yAxis: {

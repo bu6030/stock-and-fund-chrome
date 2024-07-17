@@ -314,7 +314,8 @@
 292. 港股/美股汇率换算报错 2024/7/10 -- version 2.1.9.9 -- end
 293. 统计每日盈利计算美股/港股问题修改 2024/7/10 -- version 2.2.0.0 -- end
 294. 大盘指数显示涨跌值 2024/7/16 -- version 2.2.0.1 -- end
-295. 弹窗/全屏显示字体按钮变大 2024/7/16
+295. 日K线增加MA50和MA250 2024/7/17
+296. 弹窗/全屏显示字体按钮变大 2024/7/16
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
