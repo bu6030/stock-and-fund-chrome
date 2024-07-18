@@ -316,6 +316,7 @@
 294. 大盘指数显示涨跌值 2024/7/16 -- version 2.2.0.1 -- end
 295. 弹窗/全屏显示字体按钮变大 2024/7/16
 296. 日K线增加MA50和MA250 2024/7/17 -- version 2.2.0.2 -- end
+297. 增加展示/隐藏大盘涨跌值 2024/7/18
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

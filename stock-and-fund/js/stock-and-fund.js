@@ -31,6 +31,7 @@ var turnOverRateDisplay = 'DISPLAY';
 var quantityRelativeRatioDisplay = 'DISPLAY';
 var belongGroupDisplay = 'DISPLAY';
 var largetMarketTotalDisplay;
+var largetMarketCountDisplay;
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
 var lastSort;
@@ -288,6 +289,12 @@ async function initLoad() {
         largetMarketTotalDisplay = false;
     } else if(largetMarketTotalDisplay == "true") {
         largetMarketTotalDisplay = true;
+    }
+    largetMarketCountDisplay = await readCacheData('larget-market-count-display');
+    if (largetMarketCountDisplay == null || largetMarketCountDisplay == "false") {
+        largetMarketCountDisplay = false;
+    } else if(largetMarketCountDisplay == "true") {
+        largetMarketCountDisplay = true;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -874,6 +881,9 @@ document.addEventListener(
         // 设置页面，点击在大盘指数位置展示/不展示持仓盈亏
         document.getElementById('larget-market-total-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
         document.getElementById('larget-market-total-dont-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
+        // 设置页面，点击在大盘指数位置展示/不展示涨跌值
+        document.getElementById('larget-market-count-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
+        document.getElementById('larget-market-count-dont-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
         // 设置页面，点击首页数据自动刷新时间间隔按钮，20秒/10秒/5秒/3秒
         document.getElementById('main-page-refresh-time-20s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-10s-button').addEventListener('click', changeMainPageRefreshTime);
@@ -6093,6 +6103,21 @@ async function changeLargeMarketTotalDisplay(event) {
     settingButtonInit();
 }
 
+// 切换/隐藏大盘涨跌值
+async function changeLargeMarketCountDisplay(event) {
+    let targetId = event.target.id;
+    if (targetId == 'larget-market-count-display-change-button') {
+        largetMarketCountDisplay = true;
+    } else {
+        largetMarketCountDisplay = false;
+    }
+    saveCacheData('larget-market-count-display', largetMarketCountDisplay);
+    $("#setting-modal").modal('hide');
+    reloadDataAndHtml();
+    initLargeMarketData();
+    settingButtonInit();
+}
+
 // 滚动到指定行
 function scrollToTableRow(rowIndex, type) {
     // 获取表格元素
@@ -6459,6 +6484,13 @@ async function settingButtonInit(){
     } else {
         document.getElementById('larget-market-total-dont-display-change-button').classList.add('active');
         document.getElementById('larget-market-total-display-change-button').classList.remove('active');
+    }
+    if (largetMarketCountDisplay) {
+        document.getElementById('larget-market-count-dont-display-change-button').classList.remove('active');
+        document.getElementById('larget-market-count-display-change-button').classList.add('active');
+    } else {
+        document.getElementById('larget-market-count-dont-display-change-button').classList.add('active');
+        document.getElementById('larget-market-count-display-change-button').classList.remove('active');
     }
     if (defaultIcon) {
         document.getElementById('change-icon-default-button').classList.add('active');
