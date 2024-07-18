@@ -291,10 +291,10 @@ async function initLoad() {
         largetMarketTotalDisplay = true;
     }
     largetMarketCountDisplay = await readCacheData('larget-market-count-display');
-    if (largetMarketCountDisplay == null || largetMarketCountDisplay == "false") {
-        largetMarketCountDisplay = false;
-    } else if(largetMarketCountDisplay == "true") {
+    if (largetMarketCountDisplay == null || largetMarketCountDisplay == "true") {
         largetMarketCountDisplay = true;
+    } else if(largetMarketCountDisplay == "false") {
+        largetMarketCountDisplay = false;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
