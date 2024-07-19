@@ -309,8 +309,8 @@ async function initLoad() {
         // TODO 修改默认值
         klineMAList = ['MA100','MA200'];
         for (const ma of klineMAList) {
-            let klineMADisplay = await readCacheData(`kline-${ma.toLowerCase()}-display`);
-            if (klineMADisplay == null || klineMADisplay == "false") {
+            let klineMADisplay = await readCacheData('kline-' + ma.toLowerCase() + '-display');
+            if (klineMADisplay == null || klineMADisplay == false || klineMADisplay == "false") {
                 klineMADisplay = false;
             } else {
                 klineMADisplay = true;
@@ -1739,26 +1739,14 @@ async function initMinitesImageMini() {
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
-            // let start = new Date().getTime()
-            // console.log('========== 开始');
             for (const indexK in stockList) {
                 ajaxGetStockTimeImageMinuteMini(stockList[indexK].code);
-                // setStockMinitesImageMini();
             }
-            // let end = new Date().getTime()
-            // console.log('========== ',(end -start), '毫秒');
-            // console.log('========== 结束');
         }
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
-            // let start = new Date().getTime()
-            // console.log('========== 开始');
             for (const indexL in fundList) {
                 ajaxGetFundTimeImageMinuteMini(fundList[indexL].fundCode);
-                // setFundMinitesImageMini(fundList[indexL].fundCode);
             }
-            // let end = new Date().getTime()
-            // console.log('========== ',(end -start), '毫秒');
-            // console.log('========== 结束');
         }
     }
 }
@@ -2260,7 +2248,6 @@ async function saveStock() {
         return;
     }
     var belongGroup = $("#stock-belong-group-select").val();
-    // console.log('belongGroup=',belongGroup,';currentGroup=',currentGroup);
     var costPrise = $("#stock-costPrise").val();
     var bonds = $("#stock-bonds").val();
     var monitorHighPrice = $("#stock-monitor-high-price").val();
@@ -2442,7 +2429,6 @@ async function saveFund() {
         return;
     }
     var belongGroup = $("#fund-belong-group-select").val();
-    // console.log('belongGroup:',belongGroup,"currentGroup:",currentGroup);
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     var desc = $("#fund-desc").val();
@@ -6231,7 +6217,11 @@ async function changeKlineDisplay(event) {
         saveCacheData('kline-ma250-display', klineMA250Display);
     } else {
         const maType = targetId.split('-')[1];
-        console.log('maType=', maType, event.target.checked);
+        klineMAListDisplay.filter(item => {
+            if(item.ma == maType.toUpperCase()) {
+                item.display = event.target.checked;
+            }
+        });
         saveCacheData('kline-' + maType + '-display', event.target.checked);
     }
     // $("#setting-modal").modal('hide');
@@ -6798,6 +6788,14 @@ async function initKlineCheckbox() {
     });
     klineMATable.innerHTML = innerHTML;
     klineMAList.forEach(ma => {
+        let klineDisplay = false;
+        for(item of klineMAListDisplay){
+            if(item.ma == ma) {
+                klineDisplay = item.display;
+                break;
+            }
+        }
         document.getElementById(`kline-${ma.toLowerCase()}-display-checkbox`).addEventListener('change', changeKlineDisplay);
+        $("#kline-" + ma.toLowerCase() + "-display-checkbox").prop("checked", klineDisplay);
     });
 }

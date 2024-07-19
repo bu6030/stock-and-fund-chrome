@@ -788,9 +788,7 @@ function setStockImage(type) {
         legendData = legendData.filter(item => item !== 'MA250');
         optionSeries = optionSeries.filter(item => item.name !== 'MA250');
     }
-    console.log('klineMAListDisplay==2=',klineMAListDisplay);
     for (const item of klineMAListDisplay) {
-        console.log('=1=====',item);
         if (item.display) {
             legendData.push(item.ma);
             optionSeries.push({
@@ -805,7 +803,6 @@ function setStockImage(type) {
             });
         }
     }
-    console.log('======',klineMAList, legendData);
     option = {
         legend: {
             data: legendData,
@@ -877,6 +874,7 @@ function setStockImage(type) {
                 let ma30 = null;
                 let ma50 = null;
                 let ma250 = null;
+                let maOthers = [];
                 params.forEach(function(param) {
                     switch (param.seriesName) {
                         case 'MA5':
@@ -897,6 +895,16 @@ function setStockImage(type) {
                         case 'MA250':
                             ma250 = param.value;
                             break;
+                        default:
+                            for (const item of klineMAListDisplay) {
+                                if (item.display && param.seriesName == item.ma) {
+                                    maOthers.push({
+                                        ma: param.seriesName,
+                                        value: param.value
+                                    });
+                                    break;
+                                }
+                            }
                     }
                 });
                 let formatContext = result.data.name + "<br>时间：" + params[0].name
@@ -936,6 +944,19 @@ function setStockImage(type) {
                 }
                 if (!klineMA250Display) {
                     maValues = maValues.filter(item => item.label !== 'MA250：');
+                }
+                for (const item of klineMAListDisplay) {
+                    if (item.display) {
+                        for(const maOther of maOthers) {
+                            if (maOther.ma == item.ma) {
+                                maValues.push({
+                                    value: maOther.value,
+                                    label: item.ma +'：'
+                               });
+                               break;
+                            }
+                        }
+                    }
                 }
                 let count = 0;
                 maValues.forEach((ma, index) => {
