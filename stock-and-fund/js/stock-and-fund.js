@@ -306,20 +306,19 @@ async function initLoad() {
     }
     klineMAList = await readCacheData('kline-ma-list');
     if (klineMAList == null || klineMAList == '' || klineMAList == undefined || klineMAList == 'undefined') {
-        // TODO 修改默认值
-        klineMAList = ['MA100','MA200'];
-        for (const ma of klineMAList) {
-            let klineMADisplay = await readCacheData('kline-' + ma.toLowerCase() + '-display');
-            if (klineMADisplay == null || klineMADisplay == false || klineMADisplay == "false") {
-                klineMADisplay = false;
-            } else {
-                klineMADisplay = true;
-            }
-            klineMAListDisplay.push({
-                ma: ma,
-                display: klineMADisplay
-            });
+        klineMAList = [];
+    }
+    for (const ma of klineMAList) {
+        let klineMADisplay = await readCacheData('kline-' + ma.toLowerCase() + '-display');
+        if (klineMADisplay == null || klineMADisplay == false || klineMADisplay == "false") {
+            klineMADisplay = false;
+        } else {
+            klineMADisplay = true;
         }
+        klineMAListDisplay.push({
+            ma: ma,
+            display: klineMADisplay
+        });
     }
     klineMA5Display = await readCacheData('kline-ma5-display');
     if (klineMA5Display == null || klineMA5Display == "true") {
@@ -979,6 +978,8 @@ document.addEventListener(
         document.getElementById('trend-image-type-day-button').addEventListener('click', changeTrendImageType);
         document.getElementById('trend-image-type-week-button').addEventListener('click', changeTrendImageType);
         document.getElementById('trend-image-type-month-button').addEventListener('click', changeTrendImageType);
+        // 设置页面，点击自定义MA按钮
+        document.getElementById('show-kline-ma-button').addEventListener('click', showKlineMA);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -1010,6 +1011,9 @@ document.addEventListener(
 
         // 分组页面，点击新建分组
         document.getElementById('add-group-button').addEventListener('click', addGroup);
+
+        // 自定义MA页面，点击保存
+        document.getElementById('kline-ma-save-button').addEventListener('click', saveKlineMa);
     }
 );
 
@@ -6798,4 +6802,44 @@ async function initKlineCheckbox() {
         document.getElementById(`kline-${ma.toLowerCase()}-display-checkbox`).addEventListener('change', changeKlineDisplay);
         $("#kline-" + ma.toLowerCase() + "-display-checkbox").prop("checked", klineDisplay);
     });
+}
+
+async function showKlineMA() {
+    let klineMATextCache = await readCacheData('kline-ma-list');
+    let klineMAText;
+    if (klineMATextCache == null || klineMATextCache == '' || klineMATextCache == undefined || klineMATextCache == 'undefined') {
+        klineMAText = '[]';
+    } else {
+        klineMAText = JSON.stringify(klineMATextCache);
+    }
+    $("#kline-ma-text").val(klineMAText);
+    $("#kline-ma-modal").modal();
+}
+
+async function saveKlineMa() {
+    try {
+        let klineMAText = $("#kline-ma-text").val();
+        klineMAList = JSON.parse(klineMAText.replace(/'/g, '"'));
+        saveCacheData('kline-ma-list', klineMAList);
+    } catch(error) {
+        console.error('保存MA线', error);
+        klineMAList = [];
+        saveCacheData('kline-ma-list', klineMAList);
+    }
+    klineMAListDisplay = [];
+    for (const ma of klineMAList) {
+        let klineMADisplay = await readCacheData('kline-' + ma.toLowerCase() + '-display');
+        if (klineMADisplay == null || klineMADisplay == false || klineMADisplay == "false") {
+            klineMADisplay = false;
+        } else {
+            klineMADisplay = true;
+        }
+        klineMAListDisplay.push({
+            ma: ma,
+            display: klineMADisplay
+        });
+    }
+    initKlineCheckbox();
+    $("#kline-ma-modal").modal("hide");
+    $("#setting-modal").modal("hide");
 }

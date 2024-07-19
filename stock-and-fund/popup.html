@@ -719,6 +719,9 @@
                             <div class="zuo"></div>
                             <div class="you">
                                 <h5 class="modal-title">K 线图展示/隐藏MA5/MA10等</h5>
+                                <button type="button" id="show-kline-ma-button" class="btn btn-outline-primary"
+                                    data-toggle="modal">自定义MA
+                                </button>
                                 <h6 class="modal-title">
                                     <ul>
                                         <input type="checkbox" value="" id="kline-ma5-display-checkbox">MA5展示/隐藏
@@ -1097,6 +1100,34 @@
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-3year-button">三年</button>
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-5year-button">五年</button>
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-allyear-button">上市以来</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 自定义MA模态框 -->
+        <div class="modal fade" id="kline-ma-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">自定义MA</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">MA列表，注意格式为['MA100','MA200']，每个MA要用逗号分开</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm my-text" id="kline-ma-text" placeholder="['MA100','MA200']">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="kline-ma-save-button">保存</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
                 </div>
