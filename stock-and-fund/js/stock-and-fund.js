@@ -38,6 +38,8 @@ var klineMA20Display;
 var klineMA30Display;
 var klineMA50Display;
 var klineMA250Display;
+var klineMAList;
+let klineMAListDisplay = [];
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
 var lastSort;
@@ -302,6 +304,23 @@ async function initLoad() {
     } else if(largetMarketCountDisplay == "false") {
         largetMarketCountDisplay = false;
     }
+    klineMAList = await readCacheData('kline-ma-list');
+    if (klineMAList == null || klineMAList == '' || klineMAList == undefined || klineMAList == 'undefined') {
+        // TODO 修改默认值
+        klineMAList = ['MA100','MA200'];
+        for (const ma of klineMAList) {
+            let klineMADisplay = await readCacheData(`kline-${ma.toLowerCase()}-display`);
+            if (klineMADisplay == null || klineMADisplay == "false") {
+                klineMADisplay = false;
+            } else {
+                klineMADisplay = true;
+            }
+            klineMAListDisplay.push({
+                ma: ma,
+                display: klineMADisplay
+            });
+        }
+    }
     klineMA5Display = await readCacheData('kline-ma5-display');
     if (klineMA5Display == null || klineMA5Display == "true") {
         klineMA5Display = true;
@@ -478,6 +497,7 @@ async function initLoad() {
     initGroupButton();
     initStockOrFundOrAllButton();
     settingButtonInit();
+    initKlineCheckbox();
     // 默认20s刷新，通过mainPageRefreshTime获取
     setInterval(autoRefresh, mainPageRefreshTime);
 }
@@ -6209,6 +6229,10 @@ async function changeKlineDisplay(event) {
             klineMA250Display = false;
         }
         saveCacheData('kline-ma250-display', klineMA250Display);
+    } else {
+        const maType = targetId.split('-')[1];
+        console.log('maType=', maType, event.target.checked);
+        saveCacheData('kline-' + maType + '-display', event.target.checked);
     }
     // $("#setting-modal").modal('hide');
     reloadDataAndHtml();
@@ -6763,4 +6787,17 @@ async function showQrCodeModal (event) {
         $("#ali-pay-button")[0].style.display = 'inline';
     }
     $("#qr-code-modal").modal();
+}
+
+async function initKlineCheckbox() {
+    const klineMATable = document.getElementById('kline-ma-table');
+    let innerHTML = '';
+    // 遍历klineMAList数组并生成<input>元素
+    klineMAList.forEach(ma => {
+        innerHTML += `<input type="checkbox" value="" id="kline-${ma.toLowerCase()}-display-checkbox">${ma}展示/隐藏`;
+    });
+    klineMATable.innerHTML = innerHTML;
+    klineMAList.forEach(ma => {
+        document.getElementById(`kline-${ma.toLowerCase()}-display-checkbox`).addEventListener('change', changeKlineDisplay);
+    });
 }

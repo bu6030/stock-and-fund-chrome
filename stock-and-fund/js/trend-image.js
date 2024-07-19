@@ -788,6 +788,24 @@ function setStockImage(type) {
         legendData = legendData.filter(item => item !== 'MA250');
         optionSeries = optionSeries.filter(item => item.name !== 'MA250');
     }
+    console.log('klineMAListDisplay==2=',klineMAListDisplay);
+    for (const item of klineMAListDisplay) {
+        console.log('=1=====',item);
+        if (item.display) {
+            legendData.push(item.ma);
+            optionSeries.push({
+                name: item.ma,
+                type: 'line',
+                data: calculateMA(parseInt(item.ma.replace('MA', '')), data0.values), // 使用自定义函数计算均线数据
+                smooth: true, // 是否平滑曲线
+                showSymbol: false, // 不显示圆点
+                lineStyle: {
+                    width: 1, // 线宽
+                },
+            });
+        }
+    }
+    console.log('======',klineMAList, legendData);
     option = {
         legend: {
             data: legendData,
