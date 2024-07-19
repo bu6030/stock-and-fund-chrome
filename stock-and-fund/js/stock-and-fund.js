@@ -33,6 +33,10 @@ var belongGroupDisplay = 'DISPLAY';
 var largetMarketTotalDisplay;
 var largetMarketCountDisplay;
 var klineMA5Display;
+var klineMA10Display;
+var klineMA20Display;
+var klineMA30Display;
+var klineMA50Display;
 var klineMA250Display;
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
@@ -301,14 +305,50 @@ async function initLoad() {
     klineMA5Display = await readCacheData('kline-ma5-display');
     if (klineMA5Display == null || klineMA5Display == "true") {
         klineMA5Display = true;
+        $("#kline-ma5-display-checkbox").prop("checked", true);
     } else if(klineMA5Display == "false") {
         klineMA5Display = false;
+        $("#kline-ma5-display-checkbox").prop("checked", false);
+    }
+    klineMA10Display = await readCacheData('kline-ma10-display');
+    if (klineMA10Display == null || klineMA10Display == "true") {
+        klineMA10Display = true;
+        $("#kline-ma10-display-checkbox").prop("checked", true);
+    } else if(klineMA10Display == "false") {
+        klineMA10Display = false;
+        $("#kline-ma10-display-checkbox").prop("checked", false);
+    }
+    klineMA20Display = await readCacheData('kline-ma20-display');
+    if (klineMA20Display == null || klineMA20Display == "true") {
+        klineMA20Display = true;
+        $("#kline-ma20-display-checkbox").prop("checked", true);
+    } else if(klineMA20Display == "false") {
+        klineMA20Display = false;
+        $("#kline-ma20-display-checkbox").prop("checked", false);
+    }
+    klineMA30Display = await readCacheData('kline-ma30-display');
+    if (klineMA30Display == null || klineMA30Display == "true") {
+        klineMA30Display = true;
+        $("#kline-ma30-display-checkbox").prop("checked", true);
+    } else if(klineMA30Display == "false") {
+        klineMA30Display = false;
+        $("#kline-ma30-display-checkbox").prop("checked", false);
+    }
+    klineMA50Display = await readCacheData('kline-ma50-display');
+    if (klineMA50Display == null || klineMA50Display == "true") {
+        klineMA50Display = true;
+        $("#kline-ma50-display-checkbox").prop("checked", true);
+    } else if(klineMA50Display == "false") {
+        klineMA50Display = false;
+        $("#kline-ma50-display-checkbox").prop("checked", false);
     }
     klineMA250Display = await readCacheData('kline-ma250-display');
     if (klineMA250Display == null || klineMA250Display == "true") {
         klineMA250Display = true;
+        $("#kline-ma250-display-checkbox").prop("checked", true);
     } else if(klineMA250Display == "false") {
         klineMA250Display = false;
+        $("#kline-ma250-display-checkbox").prop("checked", false);
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -899,10 +939,12 @@ document.addEventListener(
         document.getElementById('larget-market-count-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
         document.getElementById('larget-market-count-dont-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
         // 设置页面，点击在K线图展示/不展示MA5/MA250
-        document.getElementById('kline-ma5-display-change-button').addEventListener('click', changeKlineDisplay);
-        document.getElementById('kline-ma5-dont-display-change-button').addEventListener('click', changeKlineDisplay);
-        document.getElementById('kline-ma250-display-change-button').addEventListener('click', changeKlineDisplay);
-        document.getElementById('kline-ma250-dont-display-change-button').addEventListener('click', changeKlineDisplay);
+        document.getElementById("kline-ma5-display-checkbox").addEventListener('change', changeKlineDisplay);
+        document.getElementById("kline-ma10-display-checkbox").addEventListener('change', changeKlineDisplay);
+        document.getElementById("kline-ma20-display-checkbox").addEventListener('change', changeKlineDisplay);
+        document.getElementById("kline-ma30-display-checkbox").addEventListener('change', changeKlineDisplay);
+        document.getElementById("kline-ma50-display-checkbox").addEventListener('change', changeKlineDisplay);
+        document.getElementById("kline-ma250-display-checkbox").addEventListener('change', changeKlineDisplay);
         // 设置页面，点击首页数据自动刷新时间间隔按钮，20秒/10秒/5秒/3秒
         document.getElementById('main-page-refresh-time-20s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-10s-button').addEventListener('click', changeMainPageRefreshTime);
@@ -6122,23 +6164,53 @@ async function changeLargeMarketTotalDisplay(event) {
     settingButtonInit();
 }
 
-// 切换/隐藏MA5/MA250
+// 切换/隐藏MA5/MA10/MA20/MA30/MA50/MA250
 async function changeKlineDisplay(event) {
     let targetId = event.target.id;
-    if (targetId == 'kline-ma5-display-change-button') {
-        klineMA5Display = true;
+    if (targetId == 'kline-ma5-display-checkbox') {
+        if (event.target.checked) {
+            klineMA5Display = true;
+        } else {
+            klineMA5Display = false;
+        }
         saveCacheData('kline-ma5-display', klineMA5Display);
-    } else if (targetId == 'kline-ma5-dont-display-change-button') {
-        klineMA5Display = false;
-        saveCacheData('kline-ma5-display', klineMA5Display);
-    } else if (targetId == 'kline-ma250-display-change-button') {
-        klineMA250Display = true;
-        saveCacheData('kline-ma250-display', klineMA5Display);
-    } else if (targetId == 'kline-ma250-dont-display-change-button') {
-        klineMA250Display = false;
-        saveCacheData('kline-ma250-display', klineMA5Display);
+    } else if (targetId == 'kline-ma10-display-checkbox') {
+        if (event.target.checked) {
+            klineMA10Display = true;
+        } else {
+            klineMA10Display = false;
+        }
+        saveCacheData('kline-ma10-display', klineMA10Display);
+    } else if (targetId == 'kline-ma20-display-checkbox') {
+        if (event.target.checked) {
+            klineMA20Display = true;
+        } else {
+            klineMA20Display = false;
+        }
+        saveCacheData('kline-ma20-display', klineMA20Display);
+    } else if (targetId == 'kline-ma30-display-checkbox') {
+        if (event.target.checked) {
+            klineMA30Display = true;
+        } else {
+            klineMA30Display = false;
+        }
+        saveCacheData('kline-ma30-display', klineMA30Display);
+    } else if (targetId == 'kline-ma50-display-checkbox') {
+        if (event.target.checked) {
+            klineMA50Display = true;
+        } else {
+            klineMA50Display = false;
+        }
+        saveCacheData('kline-ma50-display', klineMA50Display);
+    } else if (targetId == 'kline-ma250-display-checkbox') {
+        if (event.target.checked) {
+            klineMA250Display = true;
+        } else {
+            klineMA250Display = false;
+        }
+        saveCacheData('kline-ma250-display', klineMA250Display);
     }
-    $("#setting-modal").modal('hide');
+    // $("#setting-modal").modal('hide');
     reloadDataAndHtml();
     initLargeMarketData();
     settingButtonInit();
@@ -6525,20 +6597,6 @@ async function settingButtonInit(){
     } else {
         document.getElementById('larget-market-total-dont-display-change-button').classList.add('active');
         document.getElementById('larget-market-total-display-change-button').classList.remove('active');
-    }
-    if (klineMA5Display) {
-        document.getElementById('kline-ma5-dont-display-change-button').classList.remove('active');
-        document.getElementById('kline-ma5-display-change-button').classList.add('active');
-    } else {
-        document.getElementById('kline-ma5-dont-display-change-button').classList.add('active');
-        document.getElementById('kline-ma5-display-change-button').classList.remove('active');
-    }
-    if (klineMA250Display) {
-        document.getElementById('kline-ma250-dont-display-change-button').classList.remove('active');
-        document.getElementById('kline-ma250-display-change-button').classList.add('active');
-    } else {
-        document.getElementById('kline-ma250-dont-display-change-button').classList.add('active');
-        document.getElementById('kline-ma250-display-change-button').classList.remove('active');
     }
     if (largetMarketCountDisplay) {
         document.getElementById('larget-market-count-dont-display-change-button').classList.remove('active');

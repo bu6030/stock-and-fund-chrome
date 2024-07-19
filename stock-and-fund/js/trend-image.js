@@ -763,17 +763,30 @@ function setStockImage(type) {
             },
         }
     ];
-    if (klineMA5Display && klineMA250Display) {
-        legendData = ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30', 'MA50', 'MA250'];
-    } else if (klineMA5Display) {
-        legendData = ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30', 'MA50'];
-        optionSeries = optionSeries.filter(item => item.name !== 'MA250');
-    } else if (klineMA250Display) {
-        legendData = ['K 线图', 'MA10', 'MA20', 'MA30', 'MA50', 'MA250'];
+    let legendData = ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30', 'MA50', 'MA250'];
+    if (!klineMA5Display) {
+        legendData = legendData.filter(item => item !== 'MA5');
         optionSeries = optionSeries.filter(item => item.name !== 'MA5');
-    } else {
-        legendData = ['K 线图', 'MA10', 'MA20', 'MA30', 'MA50'];
-        optionSeries = optionSeries.filter(item => item.name !== 'MA5' && item.name !== 'MA250');
+    }
+    if (!klineMA10Display) {
+        legendData = legendData.filter(item => item !== 'MA10');
+        optionSeries = optionSeries.filter(item => item.name !== 'MA10');
+    }
+    if (!klineMA20Display) {
+        legendData = legendData.filter(item => item !== 'MA20');
+        optionSeries = optionSeries.filter(item => item.name !== 'MA20');
+    }
+    if (!klineMA30Display) {
+        legendData = legendData.filter(item => item !== 'MA30');
+        optionSeries = optionSeries.filter(item => item.name !== 'MA30');
+    }
+    if (!klineMA50Display) {
+        legendData = legendData.filter(item => item !== 'MA50');
+        optionSeries = optionSeries.filter(item => item.name !== 'MA50');
+    }
+    if (!klineMA250Display) {
+        legendData = legendData.filter(item => item !== 'MA250');
+        optionSeries = optionSeries.filter(item => item.name !== 'MA250');
     }
     option = {
         legend: {
@@ -880,9 +893,7 @@ function setStockImage(type) {
                 // + (ma30 !== null ? "MA30：" + ma30 + "&nbsp;&nbsp;" : "")
                 // + (ma50 !== null ? "<br>MA50：" + ma50 + "&nbsp;&nbsp;" : "")
                 // + (ma250 !== null ? "MA250：" + ma250 + "&nbsp;&nbsp;" : "");
-                let maValues;
-                if (klineMA5Display && klineMA250Display) {
-                    maValues = [
+                let maValues = [
                         { value: ma5, label: "MA5：" },
                         { value: ma10, label: "MA10：" },
                         { value: ma20, label: "MA20：" },
@@ -890,29 +901,23 @@ function setStockImage(type) {
                         { value: ma50, label: "MA50：" },
                         { value: ma250, label: "MA250：" }
                     ];
-                } else if (klineMA5Display) {
-                    maValues = [
-                        { value: ma5, label: "MA5：" },
-                        { value: ma10, label: "MA10：" },
-                        { value: ma20, label: "MA20：" },
-                        { value: ma30, label: "MA30：" },
-                        { value: ma50, label: "MA50：" }
-                   ];
-                } else if (klineMA250Display) {
-                    maValues = [
-                        { value: ma10, label: "MA10：" },
-                        { value: ma20, label: "MA20：" },
-                        { value: ma30, label: "MA30：" },
-                        { value: ma50, label: "MA50：" },
-                        { value: ma250, label: "MA250：" }
-                    ]
-                } else {
-                    maValues = [
-                        { value: ma10, label: "MA10：" },
-                        { value: ma20, label: "MA20：" },
-                        { value: ma30, label: "MA30：" },
-                        { value: ma50, label: "MA50：" }
-                    ]
+                if (!klineMA5Display) {
+                    maValues = maValues.filter(item => item.label !== 'MA5：');
+                }
+                if (!klineMA10Display) {
+                    maValues = maValues.filter(item => item.label !== 'MA10：');
+                }
+                if (!klineMA20Display) {
+                    maValues = maValues.filter(item => item.label !== 'MA20：');
+                }
+                if (!klineMA30Display) {
+                    maValues = maValues.filter(item => item.label !== 'MA30：');
+                }
+                if (!klineMA50Display) {
+                    maValues = maValues.filter(item => item.label !== 'MA50：');
+                }
+                if (!klineMA250Display) {
+                    maValues = maValues.filter(item => item.label !== 'MA250：');
                 }
                 let count = 0;
                 maValues.forEach((ma, index) => {
