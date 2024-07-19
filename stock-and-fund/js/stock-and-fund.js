@@ -32,6 +32,8 @@ var quantityRelativeRatioDisplay = 'DISPLAY';
 var belongGroupDisplay = 'DISPLAY';
 var largetMarketTotalDisplay;
 var largetMarketCountDisplay;
+var klineMA5Display;
+var klineMA250Display;
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
 var lastSort;
@@ -295,6 +297,18 @@ async function initLoad() {
         largetMarketCountDisplay = true;
     } else if(largetMarketCountDisplay == "false") {
         largetMarketCountDisplay = false;
+    }
+    klineMA5Display = await readCacheData('kline-ma5-display');
+    if (klineMA5Display == null || klineMA5Display == "true") {
+        klineMA5Display = true;
+    } else if(klineMA5Display == "false") {
+        klineMA5Display = false;
+    }
+    klineMA250Display = await readCacheData('kline-ma250-display');
+    if (klineMA250Display == null || klineMA250Display == "true") {
+        klineMA250Display = true;
+    } else if(klineMA250Display == "false") {
+        klineMA250Display = false;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -884,6 +898,11 @@ document.addEventListener(
         // 设置页面，点击在大盘指数位置展示/不展示涨跌值
         document.getElementById('larget-market-count-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
         document.getElementById('larget-market-count-dont-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
+        // 设置页面，点击在K线图展示/不展示MA5/MA250
+        document.getElementById('kline-ma5-display-change-button').addEventListener('click', changeKlineDisplay);
+        document.getElementById('kline-ma5-dont-display-change-button').addEventListener('click', changeKlineDisplay);
+        document.getElementById('kline-ma250-display-change-button').addEventListener('click', changeKlineDisplay);
+        document.getElementById('kline-ma250-dont-display-change-button').addEventListener('click', changeKlineDisplay);
         // 设置页面，点击首页数据自动刷新时间间隔按钮，20秒/10秒/5秒/3秒
         document.getElementById('main-page-refresh-time-20s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-10s-button').addEventListener('click', changeMainPageRefreshTime);
@@ -6103,6 +6122,28 @@ async function changeLargeMarketTotalDisplay(event) {
     settingButtonInit();
 }
 
+// 切换/隐藏MA5/MA250
+async function changeKlineDisplay(event) {
+    let targetId = event.target.id;
+    if (targetId == 'kline-ma5-display-change-button') {
+        klineMA5Display = true;
+        saveCacheData('kline-ma5-display', klineMA5Display);
+    } else if (targetId == 'kline-ma5-dont-display-change-button') {
+        klineMA5Display = false;
+        saveCacheData('kline-ma5-display', klineMA5Display);
+    } else if (targetId == 'kline-ma250-display-change-button') {
+        klineMA250Display = true;
+        saveCacheData('kline-ma250-display', klineMA5Display);
+    } else if (targetId == 'kline-ma250-dont-display-change-button') {
+        klineMA250Display = false;
+        saveCacheData('kline-ma250-display', klineMA5Display);
+    }
+    $("#setting-modal").modal('hide');
+    reloadDataAndHtml();
+    initLargeMarketData();
+    settingButtonInit();
+}
+
 // 切换/隐藏大盘涨跌值
 async function changeLargeMarketCountDisplay(event) {
     let targetId = event.target.id;
@@ -6484,6 +6525,20 @@ async function settingButtonInit(){
     } else {
         document.getElementById('larget-market-total-dont-display-change-button').classList.add('active');
         document.getElementById('larget-market-total-display-change-button').classList.remove('active');
+    }
+    if (klineMA5Display) {
+        document.getElementById('kline-ma5-dont-display-change-button').classList.remove('active');
+        document.getElementById('kline-ma5-display-change-button').classList.add('active');
+    } else {
+        document.getElementById('kline-ma5-dont-display-change-button').classList.add('active');
+        document.getElementById('kline-ma5-display-change-button').classList.remove('active');
+    }
+    if (klineMA250Display) {
+        document.getElementById('kline-ma250-dont-display-change-button').classList.remove('active');
+        document.getElementById('kline-ma250-display-change-button').classList.add('active');
+    } else {
+        document.getElementById('kline-ma250-dont-display-change-button').classList.add('active');
+        document.getElementById('kline-ma250-display-change-button').classList.remove('active');
     }
     if (largetMarketCountDisplay) {
         document.getElementById('larget-market-count-dont-display-change-button').classList.remove('active');

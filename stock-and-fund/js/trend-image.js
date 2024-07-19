@@ -690,9 +690,94 @@ function setStockImage(type) {
         interval = 12;
         zoomStart = 90;
     }
+    let optionSeries = [
+        {
+            type: 'candlestick',
+            data: data0.values,
+            // 配置涨的颜色和跌的颜色
+            itemStyle: {
+                color: redColor, // 涨的颜色
+                color0: blueColor, // 跌的颜色
+                borderColor: null, // 边框颜色，null 表示使用涨跌颜色
+                borderColor0: null, // 跌的边框颜色，null 表示使用涨跌颜色
+            },
+        },
+        {
+            name: 'MA5',
+            type: 'line',
+            data: calculateMA(5, data0.values), // 使用自定义函数计算五日均线数据
+            smooth: true, // 是否平滑曲线
+            showSymbol: false, // 不显示圆点
+            lineStyle: {
+                width: 1, // 线宽
+            },
+        },
+        {
+            name: 'MA10',
+            type: 'line',
+            data: calculateMA(10, data0.values), // 使用自定义函数计算五日均线数据
+            smooth: true, // 是否平滑曲线
+            showSymbol: false, // 不显示圆点
+            lineStyle: {
+                width: 1, // 线宽
+            },
+        },
+        {
+            name: 'MA20',
+            type: 'line',
+            data: calculateMA(20, data0.values), // 使用自定义函数计算五日均线数据
+            smooth: true, // 是否平滑曲线
+            showSymbol: false, // 不显示圆点
+            lineStyle: {
+                width: 1, // 线宽
+            },
+        },
+        {
+            name: 'MA30',
+            type: 'line',
+            data: calculateMA(30, data0.values), // 使用自定义函数计算五日均线数据
+            smooth: true, // 是否平滑曲线
+            showSymbol: false, // 不显示圆点
+            lineStyle: {
+                width: 1, // 线宽
+            },
+        },
+        {
+            name: 'MA50',
+            type: 'line',
+            data: calculateMA(50, data0.values), // 使用自定义函数计算五日均线数据
+            smooth: true, // 是否平滑曲线
+            showSymbol: false, // 不显示圆点
+            lineStyle: {
+                width: 1, // 线宽
+            },
+        },
+        {
+            name: 'MA250',
+            type: 'line',
+            data: calculateMA(250, data0.values), // 使用自定义函数计算五日均线数据
+            smooth: true, // 是否平滑曲线
+            showSymbol: false, // 不显示圆点
+            lineStyle: {
+                width: 1, // 线宽
+            },
+        }
+    ];
+    if (klineMA5Display && klineMA250Display) {
+        legendData = ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30', 'MA50', 'MA250'];
+    } else if (klineMA5Display) {
+        legendData = ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30', 'MA50'];
+        optionSeries = optionSeries.filter(item => item.name !== 'MA250');
+    } else if (klineMA250Display) {
+        legendData = ['K 线图', 'MA10', 'MA20', 'MA30', 'MA50', 'MA250'];
+        optionSeries = optionSeries.filter(item => item.name !== 'MA5');
+    } else {
+        legendData = ['K 线图', 'MA10', 'MA20', 'MA30', 'MA50'];
+        optionSeries = optionSeries.filter(item => item.name !== 'MA5' && item.name !== 'MA250');
+    }
     option = {
         legend: {
-            data: ['K 线图', 'MA5', 'MA10', 'MA20', 'MA30', 'MA50', 'MA250'],
+            data: legendData,
             top: 30
         },
         grid: {
@@ -725,79 +810,7 @@ function setStockImage(type) {
                 end: 100
             }
         ],
-        series: [
-            {
-                type: 'candlestick',
-                data: data0.values,
-                // 配置涨的颜色和跌的颜色
-                itemStyle: {
-                    color: redColor, // 涨的颜色
-                    color0: blueColor, // 跌的颜色
-                    borderColor: null, // 边框颜色，null 表示使用涨跌颜色
-                    borderColor0: null, // 跌的边框颜色，null 表示使用涨跌颜色
-                },
-            },
-            {
-                name: 'MA5',
-                type: 'line',
-                data: calculateMA(5, data0.values), // 使用自定义函数计算五日均线数据
-                smooth: true, // 是否平滑曲线
-                showSymbol: false, // 不显示圆点
-                lineStyle: {
-                    width: 1, // 线宽
-                },
-            },
-            {
-                name: 'MA10',
-                type: 'line',
-                data: calculateMA(10, data0.values), // 使用自定义函数计算五日均线数据
-                smooth: true, // 是否平滑曲线
-                showSymbol: false, // 不显示圆点
-                lineStyle: {
-                    width: 1, // 线宽
-                },
-            },
-            {
-                name: 'MA20',
-                type: 'line',
-                data: calculateMA(20, data0.values), // 使用自定义函数计算五日均线数据
-                smooth: true, // 是否平滑曲线
-                showSymbol: false, // 不显示圆点
-                lineStyle: {
-                    width: 1, // 线宽
-                },
-            },
-            {
-                name: 'MA30',
-                type: 'line',
-                data: calculateMA(30, data0.values), // 使用自定义函数计算五日均线数据
-                smooth: true, // 是否平滑曲线
-                showSymbol: false, // 不显示圆点
-                lineStyle: {
-                    width: 1, // 线宽
-                },
-            },
-            {
-                name: 'MA50',
-                type: 'line',
-                data: calculateMA(50, data0.values), // 使用自定义函数计算五日均线数据
-                smooth: true, // 是否平滑曲线
-                showSymbol: false, // 不显示圆点
-                lineStyle: {
-                    width: 1, // 线宽
-                },
-            },
-            {
-                name: 'MA250',
-                type: 'line',
-                data: calculateMA(250, data0.values), // 使用自定义函数计算五日均线数据
-                smooth: true, // 是否平滑曲线
-                showSymbol: false, // 不显示圆点
-                lineStyle: {
-                    width: 1, // 线宽
-                },
-            }
-        ],
+        series: optionSeries,
         graphic: {
             elements: [
                 {
@@ -855,18 +868,63 @@ function setStockImage(type) {
                             break;
                     }
                 });
-                return result.data.name + "<br>时间：" + params[0].name
+                let formatContext = result.data.name + "<br>时间：" + params[0].name
                 + "<br>开盘：" + values[1] + "&nbsp;&nbsp;收盘：" + values[2] 
                 + "<br>最低：" + values[3] + "&nbsp;&nbsp;最高：" + values[4]
                 + "<br>成交量：" + volumn + "万"
                 + "<br>成交额：" + money + "亿" 
-                + "<br>涨跌幅：" + values[7] + "%<br>"
-                + (ma5 !== null ? "MA5：" + ma5 : "")
-                + (ma10 !== null ? "&nbsp;&nbsp;MA10：" + ma10 : "")
-                + (ma20 !== null ? "<br>MA20：" + ma20 : "")
-                + (ma30 !== null ? "&nbsp;&nbsp;MA30：" + ma30 : "")
-                + (ma50 !== null ? "<br>MA50：" + ma50 : "")
-                + (ma250 !== null ? "&nbsp;&nbsp;MA250：" + ma250 : "");
+                + "<br>涨跌幅：" + values[7] + "%<br>";
+                // + (ma5 !== null ? "MA5：" + ma5 + "&nbsp;&nbsp;" : "")
+                // + (ma10 !== null ? "MA10：" + ma10 + "&nbsp;&nbsp;" : "")
+                // + (ma20 !== null ? "<br>MA20：" + ma20 + "&nbsp;&nbsp;" : "")
+                // + (ma30 !== null ? "MA30：" + ma30 + "&nbsp;&nbsp;" : "")
+                // + (ma50 !== null ? "<br>MA50：" + ma50 + "&nbsp;&nbsp;" : "")
+                // + (ma250 !== null ? "MA250：" + ma250 + "&nbsp;&nbsp;" : "");
+                let maValues;
+                if (klineMA5Display && klineMA250Display) {
+                    maValues = [
+                        { value: ma5, label: "MA5：" },
+                        { value: ma10, label: "MA10：" },
+                        { value: ma20, label: "MA20：" },
+                        { value: ma30, label: "MA30：" },
+                        { value: ma50, label: "MA50：" },
+                        { value: ma250, label: "MA250：" }
+                    ];
+                } else if (klineMA5Display) {
+                    maValues = [
+                        { value: ma5, label: "MA5：" },
+                        { value: ma10, label: "MA10：" },
+                        { value: ma20, label: "MA20：" },
+                        { value: ma30, label: "MA30：" },
+                        { value: ma50, label: "MA50：" }
+                   ];
+                } else if (klineMA250Display) {
+                    maValues = [
+                        { value: ma10, label: "MA10：" },
+                        { value: ma20, label: "MA20：" },
+                        { value: ma30, label: "MA30：" },
+                        { value: ma50, label: "MA50：" },
+                        { value: ma250, label: "MA250：" }
+                    ]
+                } else {
+                    maValues = [
+                        { value: ma10, label: "MA10：" },
+                        { value: ma20, label: "MA20：" },
+                        { value: ma30, label: "MA30：" },
+                        { value: ma50, label: "MA50：" }
+                    ]
+                }
+                let count = 0;
+                maValues.forEach((ma, index) => {
+                    if (ma.value !== null) {
+                        formatContext += ma.label + ma.value + "&nbsp;&nbsp;";
+                        count++;
+                        if (count % 2 === 0 && index < maValues.length - 1) {
+                            formatContext += "<br>";
+                        }
+                    }
+                });
+                return formatContext;
             }
         },
     };
