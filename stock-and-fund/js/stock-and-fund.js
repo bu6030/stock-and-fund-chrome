@@ -6751,6 +6751,13 @@ async function settingButtonInit(){
         document.getElementById('cheat-me-button').classList.remove('active');
         document.getElementById('disable-cheat-me-button').classList.add('active');
     }
+    if (mainDeleteButtonDisplay) {
+        document.getElementById('main-delete-button-display-change-button').classList.add('active');
+        document.getElementById('main-delete-button-dont-display-change-button').classList.remove('active');
+    } else {
+        document.getElementById('main-delete-button-display-change-button').classList.remove('active');
+        document.getElementById('main-delete-button-dont-display-change-button').classList.add('active');
+    }
     if (trendImageType == 'MINUTE') {
         document.getElementById('trend-image-type-minute-button').classList.add('active');
         document.getElementById('trend-image-type-minute-5day-button').classList.remove('active');
@@ -6922,5 +6929,6 @@ async function changeMainDeleteButton (event) {
         mainDeleteButtonDisplay = true;
     }
     saveCacheData('main-delete-button-display', mainDeleteButtonDisplay);
+    settingButtonInit();
     reloadDataAndHtml();
 }
