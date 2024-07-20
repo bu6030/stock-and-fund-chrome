@@ -319,6 +319,7 @@
 297. 增加展示/隐藏大盘涨跌值 2024/7/18
 298. K线图MA5/MA10/MA20/MA30/MA50/MA250可以设置展示/不展示 2024/7/19
 299. K线图增加自定义MA 2024/7/19
+300. 首页可以展示/隐藏删除按钮 2024/7/20
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

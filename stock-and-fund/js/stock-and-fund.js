@@ -30,6 +30,7 @@ var updateTimeDisplay = 'DISPLAY';
 var turnOverRateDisplay = 'DISPLAY';
 var quantityRelativeRatioDisplay = 'DISPLAY';
 var belongGroupDisplay = 'DISPLAY';
+var mainDeleteButtonDisplay;
 var largetMarketTotalDisplay;
 var largetMarketCountDisplay;
 var klineMA5Display;
@@ -368,6 +369,12 @@ async function initLoad() {
         klineMA250Display = false;
         $("#kline-ma250-display-checkbox").prop("checked", false);
     }
+    mainDeleteButtonDisplay = await readCacheData('main-delete-button-display');
+    if (mainDeleteButtonDisplay == null || mainDeleteButtonDisplay == "false") {
+        mainDeleteButtonDisplay = false;
+    } else if(mainDeleteButtonDisplay == "true") {
+        mainDeleteButtonDisplay = true;
+    }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
         lastSort = {
@@ -522,13 +529,19 @@ async function initHtml() {
         var columnName = Object.keys(column)[0];
         return getThColumnHtml(columnName, 'STOCK');
     }).join("");
-    var stockHead = " <tr id=\"stock-tr-title\"> " + stockHeadOrder + " </tr>";
+    let deleteButton;
+    if (mainDeleteButtonDisplay) {
+        deleteButton = '<td></td>';
+    } else {
+        deleteButton = '';
+    }
+    var stockHead = " <tr id=\"stock-tr-title\"> " + stockHeadOrder + deleteButton + " </tr>";
     // 基金标题
     var fundHeadOrder = columnOrder.map(function (column) {
         var columnName = Object.keys(column)[0];
         return getThColumnHtml(columnName, 'FUND');
     }).join("");
-    var fundHead = " <tr id=\"fund-tr-title\"> " + fundHeadOrder + " </tr>";
+    var fundHead = " <tr id=\"fund-tr-title\"> " + fundHeadOrder + deleteButton + " </tr>";
 
     // 持仓明细标题
     var fundInversPositionHead = " <tr >" +
@@ -980,6 +993,9 @@ document.addEventListener(
         document.getElementById('trend-image-type-month-button').addEventListener('click', changeTrendImageType);
         // 设置页面，点击自定义MA按钮
         document.getElementById('show-kline-ma-button').addEventListener('click', showKlineMA);
+        // 设置页面，点击首页展示/隐藏删除按钮
+        document.getElementById('main-delete-button-dont-display-change-button').addEventListener('click', changeMainDeleteButton);
+        document.getElementById('main-delete-button-display-change-button').addEventListener('click', changeMainDeleteButton);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -1598,6 +1614,18 @@ async function initStockAndFundHtml() {
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         for (k in stockList) {
+            if (mainDeleteButtonDisplay) {
+                let deleteButton = document.getElementById('stock-delete-button-' + k);
+                deleteButton.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    let buttonId = this.id; // 获取按钮的id
+                    let buttonIndex = buttonId.split('-').pop(); // 从id中提取编号
+                    console.log(stockList[buttonIndex].name);
+                    timeImageCode = stockList[buttonIndex].code;
+                    timeImageType = 'STOCK';
+                    deleteStockAndFund();
+                });
+            }
             let stockTr = document.getElementById('stock-tr-' + k);
             stockTr.addEventListener('click', function () {
                 $("#stock-name").val(stockList[this.sectionRowIndex].name);
@@ -1677,6 +1705,18 @@ async function initStockAndFundHtml() {
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
         for (k in fundList) {
+            if (mainDeleteButtonDisplay) {
+                let deleteButton = document.getElementById('fund-delete-button-' + k);
+                deleteButton.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    let buttonId = this.id; // 获取按钮的id
+                    let buttonIndex = buttonId.split('-').pop(); // 从id中提取编号
+                    console.log(fundList[buttonIndex].name);
+                    timeImageCode = fundList[buttonIndex].fundCode;
+                    timeImageType = 'FUND';
+                    deleteStockAndFund();
+                });
+            }
             let fundTr = document.getElementById('fund-tr-' + k);
             fundTr.addEventListener('click', function () {
                 $("#fund-name").val(fundList[this.sectionRowIndex].name);
@@ -1873,7 +1913,13 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 }
                 return html;
             }).join("");
-            str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">" + stockStrOrder + "</tr>";
+            let deleteButton;
+            if (mainDeleteButtonDisplay) {
+                deleteButton = '<td><button type="button" class="btn btn-primary" id="stock-delete-button-' + k + '">删除</button></td>';
+            } else {
+                deleteButton = '';
+            }
+            str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">" + stockStrOrder + deleteButton + "</tr>";
 
             stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
             stockDayIncome = stockDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
@@ -1935,7 +1981,13 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         }
         return html;
     }).join("");
-    str += "<tr id=\"stock-tr-total\">" + stockTotalStrOrder + "</tr>";
+    let deleteButton;
+    if (mainDeleteButtonDisplay) {
+        deleteButton = '<td></td>';
+    } else {
+        deleteButton = '';
+    }
+    str += "<tr id=\"stock-tr-total\">" + stockTotalStrOrder + deleteButton + "</tr>";
     return str;
 }
 
@@ -2009,7 +2061,13 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 }
                 return html;
             }).join("");
-            str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">" + fundStrOrder + "</tr>";
+            let deleteButton;
+            if (mainDeleteButtonDisplay) {
+                deleteButton = '<td><button type="button" class="btn btn-primary" id="fund-delete-button-' + k + '">删除</button></td>';
+            } else {
+                deleteButton = '';
+            }
+            str += "<tr draggable=\"true\" id=\"fund-tr-" + k + "\">" + fundStrOrder + deleteButton + "</tr>";
 
             fundTotalIncome = fundTotalIncome.add(new BigDecimal(result[k].income));
             fundDayIncome = fundDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
@@ -2071,7 +2129,13 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         }
         return html;
     }).join("");
-    str += "<tr id=\"fund-tr-total\">" + fundTotalStrOrder + "</tr>";
+    let deleteButton;
+    if (mainDeleteButtonDisplay) {
+        deleteButton = '<td></td>';
+    } else {
+        deleteButton = '';
+    }
+    str += "<tr id=\"fund-tr-total\">" + fundTotalStrOrder + deleteButton + "</tr>";
     return str;
 }
 
@@ -2134,7 +2198,13 @@ function getTotalTableHtml(totalMarketValueResult) {
         }
         return html;
     }).join("");
-    str += "<tr id=\"total-tr-total\">" + totalStrOrder + "</tr>";
+    let deleteButton;
+    if (mainDeleteButtonDisplay) {
+        deleteButton = '<td></td>';
+    } else {
+        deleteButton = '';
+    }
+    str += "<tr id=\"total-tr-total\">" + totalStrOrder + deleteButton + "</tr>";
     if (largetMarketTotalDisplay) {
         let str2 = '<p>持仓盈亏</p>' +
             '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncome + '</p>' +
@@ -6842,4 +6912,15 @@ async function saveKlineMa() {
     initKlineCheckbox();
     $("#kline-ma-modal").modal("hide");
     $("#setting-modal").modal("hide");
+}
+
+async function changeMainDeleteButton (event) {
+    let targetId = event.target.id;
+    if (targetId == 'main-delete-button-dont-display-change-button') {
+        mainDeleteButtonDisplay = false;
+    } else {
+        mainDeleteButtonDisplay = true;
+    }
+    saveCacheData('main-delete-button-display', mainDeleteButtonDisplay);
+    reloadDataAndHtml();
 }
