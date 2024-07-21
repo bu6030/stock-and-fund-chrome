@@ -1021,6 +1021,11 @@ document.addEventListener(
         document.getElementById('day-income-history-button').addEventListener('click', showDayIncomeHistory);
         // 数据中心页面，点击涨跌分布
         document.getElementById('up-down-counts-button').addEventListener('click', showUpDownCounts);
+        // 数据中心页面，点击概念板块
+        document.getElementById('gainian-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
+        document.getElementById('bankuai-money-1day-button').addEventListener('click', showHangYeBanKuai);
+        document.getElementById('bankuai-money-5days-button').addEventListener('click', showHangYeBanKuai);
+        document.getElementById('bankuai-money-10days-button').addEventListener('click', showHangYeBanKuai);
 
         // 反馈建议页面，点击保存
         document.getElementById('save-advice-button').addEventListener('click', saveAdvice);

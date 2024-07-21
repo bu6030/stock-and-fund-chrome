@@ -296,16 +296,26 @@
                     <div class="modal-body">
                         <div id="data-center-chart" class="my-echart-new"></div>
                         <div id="data-center-content"></div>
+                        <div id="bankuai-money-button-div" class="bankuai-money-buttons">
+                            <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-primary" id="bankuai-money-1day-button">今日排行</button>
+                                <button type="button" class="btn btn-primary" id="bankuai-money-5days-button">5日排行</button>
+                                <button type="button" class="btn btn-primary" id="bankuai-money-10days-button">10日排行</button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="big-stock-money-button">大盘资金</button>
-                        <button type="button" class="btn btn-primary" id="hangye-bankuai-money-button">行业板块</button>
-                        <button type="button" class="btn btn-primary" id="beixiang-money-button">北向资金</button>
-                        <button type="button" class="btn btn-primary" id="nanxiang-money-button">南向资金</button>
-                        <button type="button" class="btn btn-primary" id="up-down-counts-button">涨跌分布</button>
-                        <button type="button" class="btn btn-primary" id="day-income-history-button">每日盈利</button>
+                        <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-primary" id="big-stock-money-button">大盘资金</button>
+                            <button type="button" class="btn btn-primary" id="hangye-bankuai-money-button">行业板块</button>
+                            <button type="button" class="btn btn-primary" id="gainian-bankuai-money-button">概念板块</button>
+                            <button type="button" class="btn btn-primary" id="beixiang-money-button">北向资金</button>
+                            <button type="button" class="btn btn-primary" id="nanxiang-money-button">南向资金</button>
+                            <button type="button" class="btn btn-primary" id="up-down-counts-button">涨跌分布</button>
+                            <button type="button" class="btn btn-primary" id="day-income-history-button">每日盈利</button>
+                        </div>
                     </div>
                     <table class="table table-hover my-font no-wrap table-striped">
                         <thead id="day-income-history-head" />
