@@ -571,9 +571,23 @@ function ajaxGetNanBeiXiangMoney() {
 }
 
 // 接口调用
-function ajaxGetHangYeBanKuaiMoney() {
+function ajaxGetHangYeBanKuaiMoney(type, day) {
+    let dayParam = "";
+    let gaiNianParam = "";
+    if (day == '1') {
+        dayParam = "f62&fid=f62";
+    } else if (day == '5') {
+        dayParam = "f164&fid=f164";
+    } else if (day == '10') {
+        dayParam = "f174&fid=f174";
+    }
+    if (type == 'HANGYE') {
+        gaiNianParam = '&fs=m:90+t:2';
+    } else if (type == 'GAINIAN') {
+        gaiNianParam = '&fs=m:90+t:3';
+    }
     let result;
-    var url = Env.GET_HANGYE_BANKUAI_MONEY_URL + "?pn=1&pz=500&po=1&np=1&fields=f12,f13,f14,f62&fid=f62&fs=m:90+t:2";
+    var url = Env.GET_BANKUAI_MONEY_URL + "?pn=1&pz=500&po=1&np=1&fields=f12,f13,f14," + dayParam + gaiNianParam;
     $.ajax({
         url: url,
         timeout: 5000, // 设置超时时间为5000毫秒（5秒）

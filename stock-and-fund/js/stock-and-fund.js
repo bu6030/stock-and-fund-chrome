@@ -109,6 +109,7 @@ const hiddenIconPath = {
 // 初始状态为默认图标
 var defaultIcon;
 var stockApi;
+let hangYeOrGaiNian;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -1015,17 +1016,22 @@ document.addEventListener(
         document.getElementById('beixiang-money-button').addEventListener('click', showBeiXiang);
         // 数据中心页面，点击南向资金
         document.getElementById('nanxiang-money-button').addEventListener('click', showNanXiang);
-        // 数据中心页面，点击行业板块
-        document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
         // 数据中心页面，点击每日盈利
         document.getElementById('day-income-history-button').addEventListener('click', showDayIncomeHistory);
         // 数据中心页面，点击涨跌分布
         document.getElementById('up-down-counts-button').addEventListener('click', showUpDownCounts);
-        // 数据中心页面，点击概念板块
-        document.getElementById('gainian-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
-        document.getElementById('bankuai-money-1day-button').addEventListener('click', showHangYeBanKuai);
-        document.getElementById('bankuai-money-5days-button').addEventListener('click', showHangYeBanKuai);
-        document.getElementById('bankuai-money-10days-button').addEventListener('click', showHangYeBanKuai);
+        // 数据中心页面，点击行业/概念板块
+        document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
+        document.getElementById('gainian-bankuai-money-button').addEventListener('click', showGaiNianBanKuai);
+        document.getElementById('bankuai-money-1day-button').addEventListener('click', function() {
+            showBanKuai(hangYeOrGaiNian, '1');
+        });
+        document.getElementById('bankuai-money-5days-button').addEventListener('click', function() {
+            showBanKuai(hangYeOrGaiNian, '5');
+        });
+        document.getElementById('bankuai-money-10days-button').addEventListener('click', function() {
+            showBanKuai(hangYeOrGaiNian, '10');
+        });
 
         // 反馈建议页面，点击保存
         document.getElementById('save-advice-button').addEventListener('click', saveAdvice);
@@ -4692,11 +4698,19 @@ async function sortStockAndFund(totalMarketValue) {
 // 展示数据中心
 async function showDataCenter() {
     $('#data-center-modal').modal('show');
+    displayBankuaiMoney("none");
     showBigStockMoney();
+}
+
+function displayBankuaiMoney(display) {
+    document.getElementById('bankuai-money-1day-button').style.display = display;
+    document.getElementById('bankuai-money-5days-button').style.display = display;
+    document.getElementById('bankuai-money-10days-button').style.display = display;
 }
 
 // 展示大盘资金图表
 async function showBigStockMoney() {
+    displayBankuaiMoney("none");
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
     let result = ajaxGetBigStockMoney();
@@ -4879,6 +4893,7 @@ async function showBigStockMoney() {
 
 // 展示南向资金图表
 async function showNanXiang() {
+    displayBankuaiMoney("none");
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
     let result = ajaxGetNanBeiXiangMoney();
@@ -5034,6 +5049,7 @@ async function showNanXiang() {
 
 // 展示北向资金图表
 async function showBeiXiang() {
+    displayBankuaiMoney("none");
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
     let result = ajaxGetNanBeiXiangMoney();
@@ -5188,11 +5204,26 @@ async function showBeiXiang() {
     myChart.setOption(option);
 }
 
+function showHangYeBanKuai() {
+    hangYeOrGaiNian = 'HANGYE';
+    showBanKuai('HANGYE', '1');
+}
+
+function showGaiNianBanKuai() {
+    hangYeOrGaiNian = 'GAINIAN';
+    showBanKuai('GAINIAN', '1');
+}
+
 // 展示行业板块图表
-async function showHangYeBanKuai() {
+async function showBanKuai(type, day) {
+    let dataZoomEnd = 30;
+    if (type == 'GAINIAN') {
+        dataZoomEnd = 6;
+    }
+    displayBankuaiMoney("inline");
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
-    let result = ajaxGetHangYeBanKuaiMoney();
+    let result = ajaxGetHangYeBanKuaiMoney(type, day);
     let elementId = 'data-center-chart';
     let data = [];
     let dataAxis = [];
@@ -5202,9 +5233,16 @@ async function showHangYeBanKuai() {
     let oneHundredMillion = new BigDecimal("100000000");
     for (var k = 0; k < result.data.diff.length; k++) {
         dataAxis.push(result.data.diff[k].f14);
-        let moeny = new BigDecimal(result.data.diff[k].f62 + "");
-        moeny = moeny.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
-        data.push(moeny + "");
+        let money;
+        if (day == '1') {
+            money = new BigDecimal(result.data.diff[k].f62 + "");
+        } else if(day == '5') {
+            money = new BigDecimal(result.data.diff[k].f164 + "");
+        } else if(day == '10') {
+            money = new BigDecimal(result.data.diff[k].f174 + "");
+        }
+        money = money.divide(oneHundredMillion, 2, BigDecimal.ROUND_HALF_UP);
+        data.push(money + "");
     }
     $("#data-center-content").html("");
     if(data.length == 0) {
@@ -5289,13 +5327,13 @@ async function showHangYeBanKuai() {
                 show: true,
                 xAxisIndex: [0],  // 表示控制第一个 x 轴
                 start: 0,
-                end: 30
+                end: dataZoomEnd
             },
             {
                 type: 'inside',  // 内置型选择框
                 xAxisIndex: [0],  // 表示控制第一个 x 轴
                 start: 0,
-                end: 30
+                end: dataZoomEnd
             }
         ],
         graphic: {
@@ -6090,6 +6128,7 @@ function updateGroupList() {
 }
 
 async function showDayIncomeHistory() {
+    displayBankuaiMoney("none");
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
     $("#data-center-content").html("");
@@ -6494,6 +6533,7 @@ async function changeAllGroup() {
 }
 // 展示涨跌分布图表
 async function showUpDownCounts() {
+    displayBankuaiMoney("none");
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
     let result = ajaxGetUpDownCounts();
