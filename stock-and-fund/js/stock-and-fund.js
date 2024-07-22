@@ -5223,7 +5223,7 @@ async function showBanKuai(type, day) {
     displayBankuaiMoney("inline");
     $("#day-income-history-head").html("");
     $("#day-income-history-nr").html("");
-    let result = ajaxGetHangYeBanKuaiMoney(type, day);
+    let result = ajaxGetBanKuaiMoney(type, day);
     let elementId = 'data-center-chart';
     let data = [];
     let dataAxis = [];

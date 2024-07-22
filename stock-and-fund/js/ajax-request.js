@@ -571,7 +571,7 @@ function ajaxGetNanBeiXiangMoney() {
 }
 
 // 接口调用
-function ajaxGetHangYeBanKuaiMoney(type, day) {
+function ajaxGetBanKuaiMoney(type, day) {
     let dayParam = "";
     let gaiNianParam = "";
     if (day == '1') {
