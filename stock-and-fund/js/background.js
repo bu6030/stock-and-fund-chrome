@@ -626,14 +626,18 @@ async function getHuilvDayIncome(dayIncome, type) {
     }
 }
 //后台修改默认图标为隐蔽图标
-function changeDefaultIcon() {
+async function changeDefaultIcon() {
     try {
-        let iconPath = {
-            "16": "/img/128_hidden.png",
-            "48": "/img/128_hidden.png",
-            "128": "/img/128_hidden.png"
+        let defaultIcon = await getData('default-icon');
+        if (defaultIcon == 'false' || defaultIcon == false) {
+            let iconPath = {
+                "16": "/img/128_hidden.png",
+                "48": "/img/128_hidden.png",
+                "128": "/img/128_hidden.png"
+            }
+            chrome.action.setIcon({path: iconPath});
+            console.log('设定隐蔽图标后，重启浏览器再次设定隐蔽图标');
         }
-        chrome.action.setIcon({path: iconPath});
     } catch (error) {
         console.warn(`Change default icon : ${error}`);
     }
