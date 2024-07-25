@@ -12,6 +12,7 @@ if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
     performTaskId = setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
+    changeDefaultIcon();
 }
 
 // 当扩展程序安装时触发的事件
@@ -622,5 +623,18 @@ async function getHuilvDayIncome(dayIncome, type) {
         return newDayIncome;
     } else {
         return dayIncome;
+    }
+}
+//后台修改默认图标为隐蔽图标
+function changeDefaultIcon() {
+    try {
+        let iconPath = {
+            "16": "/img/128_hidden.png",
+            "48": "/img/128_hidden.png",
+            "128": "/img/128_hidden.png"
+        }
+        chrome.action.setIcon({path: iconPath});
+    } catch (error) {
+        console.warn(`Change default icon : ${error}`);
     }
 }
