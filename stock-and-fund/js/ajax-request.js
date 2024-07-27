@@ -585,6 +585,8 @@ function ajaxGetBanKuaiMoney(type, day) {
         gaiNianParam = '&fs=m:90+t:2';
     } else if (type == 'GAINIAN') {
         gaiNianParam = '&fs=m:90+t:3';
+    } else if (type == 'DIYU') {
+        gaiNianParam = '&fs=m:90+t:1';
     }
     let result;
     var url = Env.GET_BANKUAI_MONEY_URL + "?pn=1&pz=500&po=1&np=1&fields=f12,f13,f14," + dayParam + gaiNianParam;

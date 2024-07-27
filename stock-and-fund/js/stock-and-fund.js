@@ -1023,6 +1023,7 @@ document.addEventListener(
         // 数据中心页面，点击行业/概念板块
         document.getElementById('hangye-bankuai-money-button').addEventListener('click', showHangYeBanKuai);
         document.getElementById('gainian-bankuai-money-button').addEventListener('click', showGaiNianBanKuai);
+        document.getElementById('diyu-bankuai-money-button').addEventListener('click', showDiYuBanKuai);
         document.getElementById('bankuai-money-1day-button').addEventListener('click', function() {
             showBanKuai(hangYeOrGaiNian, '1');
         });
@@ -5214,11 +5215,21 @@ function showGaiNianBanKuai() {
     showBanKuai('GAINIAN', '1');
 }
 
+function showDiYuBanKuai() {
+    hangYeOrGaiNian = 'DIYU';
+    showBanKuai('DIYU', '1');
+}
+
 // 展示行业板块图表
 async function showBanKuai(type, day) {
     let dataZoomEnd = 30;
+    let chartTitle = '行业板块';
     if (type == 'GAINIAN') {
         dataZoomEnd = 6;
+        chartTitle = '概念板块';
+    } else if (type == 'DIYU') {
+        dataZoomEnd = 100;
+        chartTitle = '地域板块';
     }
     displayBankuaiMoney("inline");
     $("#day-income-history-head").html("");
@@ -5258,7 +5269,7 @@ async function showBanKuai(type, day) {
             bottom: '30%' // 调整图表底部距离容器的距离
         },
         title: {
-            text: '行业板块', // 设置整个图表的标题
+            text: chartTitle, // 设置整个图表的标题
             left: 'center', // 标题水平居中
             top: 0 // 标题距离图表顶部的距离
         },
@@ -5288,7 +5299,7 @@ async function showBanKuai(type, day) {
         },
         series: [
             {
-                name: '行业板块',
+                name: chartTitle,
                 data: data,
                 type: 'bar',
                 itemStyle: {
