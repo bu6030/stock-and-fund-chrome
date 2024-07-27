@@ -322,7 +322,7 @@
 300. 首页可以展示/隐藏删除按钮 2024/7/20 -- version 2.2.0.3 -- end
 301. 增加概念板块 2024/7/21 -- version 2.2.0.4 -- end
 302. 重启浏览器后，隐蔽图标自动更换 2024/7/25 -- version 2.2.0.5 -- end
-303. 增加地域板块 2024/7/27
+303. 增加地域板块 2024/7/27 -- version 2.2.0.6 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
