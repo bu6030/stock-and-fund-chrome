@@ -2900,7 +2900,7 @@ async function initWindowsSize() {
         myDiv.style.width = '600px';
         myBody.style.width = '600px';
         myMainContent.style.width = '600px';
-        myMainContent.style.height = '450px';
+        myMainContent.style.height = '100%';
         myDiv.style.height = '450px';
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
@@ -2926,7 +2926,7 @@ async function initWindowsSize() {
         myDiv.style.width = '400px';
         myBody.style.width = '400px';
         myMainContent.style.width = '400px';
-        myMainContent.style.height = '450px';
+        myMainContent.style.height = '100%';
         myDiv.style.height = '450px';
         helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
