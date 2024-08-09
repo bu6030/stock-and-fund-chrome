@@ -3329,9 +3329,11 @@ async function stockMonitor () {
     let openPrice = stock.openPrice;
     let badgeBackgroundColor;
     if (parseFloat(now) >= parseFloat(openPrice)) {
-        badgeBackgroundColor = '#ee2500';
+        // badgeBackgroundColor = '#ee2500';
+        badgeBackgroundColor = redColor;
     } else {
-        badgeBackgroundColor = '#093';
+        // badgeBackgroundColor = '#093';
+        badgeBackgroundColor = blueColor;
     }
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));

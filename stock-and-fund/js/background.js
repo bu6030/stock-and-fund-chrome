@@ -267,34 +267,50 @@ function monitorStock(code) {
         fetch("http://qt.gtimg.cn/q=" + code)
             .then(response => response.arrayBuffer())
             .then(data => {
-                const decoder = new TextDecoder('GBK');
-                data = decoder.decode(data);
-                // 在这里处理返回的数据
-                var stoksArr = data.split("\n");
-                var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
-                var values = dataStr.split("~");
-                var name = values[1];
-                var now = values[3];
-                var openPrice = values[4];
-                var badgeBackgroundColor;
-                var changePercent = parseFloat(values[32]);
-                if (parseFloat(now) >= parseFloat(openPrice)) {
-                    badgeBackgroundColor = '#ee2500';
-                } else {
-                    badgeBackgroundColor = '#093';
-                }
-                if (now.length >= 5) {
-                    now = parseFloat(now.substring(0, 5));
-                }
-                getData('monitor-price-or-percent').then((monitorPriceOrPercent) => {
-                    if (monitorPriceOrPercent == null || monitorPriceOrPercent == "PRICE") {
-                        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
-                    } else if (monitorPriceOrPercent == "PERCENT") {
-                        if(changePercent < 0) {
-                            changePercent = 0 - changePercent;
-                        }
-                        sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent.toFixed(2));
+                getData('blueColor').then((blueColor) => {
+                    if (blueColor == null) {
+                        blueColor = '#093';
                     }
+                    getData('redColor').then((redColor) => {
+                        if (redColor == null) {
+                            redColor = '#ee2500';
+                        }
+                        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
+                            blueColor = '#093'; 
+                            redColor = '#ee2500';
+                        }
+                        const decoder = new TextDecoder('GBK');
+                        data = decoder.decode(data);
+                        // 在这里处理返回的数据
+                        var stoksArr = data.split("\n");
+                        var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
+                        var values = dataStr.split("~");
+                        var name = values[1];
+                        var now = values[3];
+                        var openPrice = values[4];
+                        var badgeBackgroundColor;
+                        var changePercent = parseFloat(values[32]);
+                        if (parseFloat(now) >= parseFloat(openPrice)) {
+                            // badgeBackgroundColor = '#ee2500';
+                            badgeBackgroundColor = redColor
+                        } else {
+                            // badgeBackgroundColor = '#093';
+                            badgeBackgroundColor = blueColor;
+                        }
+                        if (now.length >= 5) {
+                            now = parseFloat(now.substring(0, 5));
+                        }
+                        getData('monitor-price-or-percent').then((monitorPriceOrPercent) => {
+                            if (monitorPriceOrPercent == null || monitorPriceOrPercent == "PRICE") {
+                                sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + now);
+                            } else if (monitorPriceOrPercent == "PERCENT") {
+                                if(changePercent < 0) {
+                                    changePercent = 0 - changePercent;
+                                }
+                                sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent.toFixed(2));
+                            }
+                        });
+                    });
                 });
             })
             .catch(error => {
