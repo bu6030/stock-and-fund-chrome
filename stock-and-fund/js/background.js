@@ -503,9 +503,21 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
         title += '\n当日总收益：' + totalDayIncome.toFixed(2);
+        let blueColor = await getData('blueColor');
+        if (blueColor == null) {
+            blueColor = '#093';
+        }
+        let redColor = await getData('redColor');
+        if (redColor == null) {
+            redColor = '#ee2500';
+        }
+        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
+            blueColor = '#093'; 
+            redColor = '#ee2500';
+        }
         let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
         if (monitorPriceOrPercent == 'DAY_INCOME') {
-            let color = totalDayIncome > 0 ? 'red' : 'green';
+            let color = totalDayIncome > 0 ? redColor : blueColor;
             if (totalDayIncome < 0) {
                 totalDayIncome = 0 - totalDayIncome;
             }
