@@ -1245,7 +1245,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                 if (stock.name.indexOf('ETF') >= 0) {
                     toFixedVolume = 3;
                 }
-                stock.gztime = '--';
+                stock.gztime = getDateStrFromTimestamp(stoksArr[k].f124*1000);
                 // 可转债上市前加格默认为 0
                 if (parseFloat(stoksArr[k].f2) == 0 && (stoksArr[k].f14.indexOf("发债") != -1 || stoksArr[k].f14.indexOf("转债") != -1)) {
                     stock.now = "100.00";
@@ -1261,7 +1261,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                     stock.change = parseFloat(stoksArr[k].f4).toFixed(toFixedVolume)
                     stock.changePercent = parseFloat(stoksArr[k].f3 + "").toFixed(2);
                 }
-                stock.time = '--';
+                stock.time = getDateStrFromTimestamp(stoksArr[k].f124*1000);
                 var now = new BigDecimal(stock.now + "");
                 var costPrise = new BigDecimal(stock.costPrise + "")
                 var incomeDiff = now.add(costPrise.negate());

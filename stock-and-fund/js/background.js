@@ -396,6 +396,147 @@ function setChromeTitle(title) {
     }
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
+// async function monitorTop20StockChromeTitle(monitoTop20Stock) {
+//     var date = new Date();
+//     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
+//     if (isTradingTime(date)) {
+//         console.log("交易时间，执行任务...");
+//         let stockArr = await getData('stocks');
+//         if (stockArr == null || stockArr == undefined) {
+//             stockArr = '[]';
+//         }
+//         var stockList = JSON.parse(stockArr);
+//         var stocks = "sh000001,sz399001,sz399006,hkHSI,";
+//         for (let k in stockList) {
+//             stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') + ",";
+//         }
+//         let response;
+//         try {
+//             response = await fetch("http://qt.gtimg.cn/q=" + stocks);
+//         } catch (error) {
+//             console.warn("监控前20个股票以及计算盈亏获取股票数据错误: ", error);
+//             return;
+//         }
+//         let data = await response.arrayBuffer();
+//         var count = 0;
+//         const decoder = new TextDecoder('GBK');
+//         data = decoder.decode(data);
+//         // 在这里处理返回的数据
+//         var title = '';
+//         var stoksArr = data.split("\n");
+//         var stockDayIncome = 0.00;
+//         // var stockTotalIncome = 0.00;
+//         var date = '';
+//         for (let k in stoksArr) {
+//             try {
+//                 // console.log('stoksArr[k]=', stoksArr[k]);
+//                 var stock = undefined;
+//                 for (let l in stockList) {
+//                     if(stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
+//                         stock = stockList[l];
+//                         break;
+//                     }
+//                 }
+//                 // console.log('stock=', stock);
+//                 var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
+//                 var values = dataStr.split("~");
+//                 var name = values[1];
+//                 var code = values[2];
+//                 if (name == undefined) {
+//                     continue;
+//                 }
+//                 var now = parseFloat(values[3]);
+//                 var changePercent = parseFloat(values[32]).toFixed(2);
+//                 var dayIncome = 0.00;
+//                 if (stock != undefined) {
+//                     if (stock.code.indexOf('hk') >= 0 || stock.code.indexOf('HK') >= 0) {
+//                         dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'HK');
+//                     } else if (stock.code.indexOf('us') >= 0 || stock.code.indexOf('US') >= 0) {
+//                         dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'US');
+//                     } else {
+//                         dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
+//                     }
+//                     // console.log('dayIncome=',stock.name, dayIncome);
+//                     // stockTotalIncome += (now - parseFloat(stock.costPrise)) * parseFloat(stock.bonds);
+//                 }
+//                 stockDayIncome += dayIncome;
+//                 if (count <= 24) {
+//                     var kongge = '';
+//                         switch(name.length) {
+//                             case 3: 
+//                                 kongge = '         ';
+//                                 break;
+//                             case 4: 
+//                                 kongge = '     ';
+//                                 break;
+//                             case 5: 
+//                                 kongge = '     ';
+//                                 break;
+//                             case 6: 
+//                                 kongge = '  ';
+//                                 break;
+//                         }
+//                     if (code == '000001' || code =='399001' || code =='399006' || code == 'HSI' 
+//                         || (monitoTop20Stock != null && monitoTop20Stock == true)) {
+//                         title += (name + kongge + now + '(' + changePercent + "%)\n");
+//                     }
+//                 }
+//                 var value30 = values[30].replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
+//                 if (value30.substring(0, 8) > date) {
+//                     // 如果当前日期大于之前存储的最大日期，则更新最大日期
+//                     date = values[30].substring(0, 8);
+//                 }
+//                 count++;
+//             } catch (error) {
+//                 console.warn("监控前20个股票以及计算盈亏股票处理错误: ", error);
+//             }
+//         }
+//         title = title.substring(0, title.length - 1);
+//         let funcIncome = await getFundIncome(date);
+//         if (funcIncome == null) {
+//             return;
+//         }
+//         let funcDayIncome = funcIncome.fundDayIncome;
+//         // let fundTotalIncome = funcIncome.fundTotalIncome;
+//         let totalDayIncome = funcDayIncome + stockDayIncome;
+//         // let totalIncome = fundTotalIncome + stockTotalIncome;
+//         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
+//         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
+//         title += '\n当日总收益：' + totalDayIncome.toFixed(2);
+//         let blueColor = await getData('blueColor');
+//         if (blueColor == null) {
+//             blueColor = '#093';
+//         }
+//         let redColor = await getData('redColor');
+//         if (redColor == null) {
+//             redColor = '#ee2500';
+//         }
+//         if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
+//             blueColor = '#093'; 
+//             redColor = '#ee2500';
+//         }
+//         let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
+//         if (monitorPriceOrPercent == 'DAY_INCOME') {
+//             let color = totalDayIncome > 0 ? redColor : blueColor;
+//             if (totalDayIncome < 0) {
+//                 totalDayIncome = 0 - totalDayIncome;
+//             }
+//             if (totalDayIncome > 9999.99) {
+//                 totalDayIncome = Math.floor(totalDayIncome/10000*10)/10 + "w";
+//             } else if (totalDayIncome > 99.99) {
+//                 totalDayIncome = Math.floor(totalDayIncome);
+//             } else if (totalDayIncome > 9.99) {
+//                 totalDayIncome = Math.floor(totalDayIncome * 10) / 10;
+//             } else {
+//                 totalDayIncome = totalDayIncome.toFixed(2);
+//             }
+//             sendChromeBadge('#FFFFFF', color, totalDayIncome + "");
+//         }
+//         saveDayIncomehistory(stockDayIncome.toFixed(2), funcDayIncome.toFixed(2), date);
+//         setChromeTitle(title);
+//     }
+// }
+// 扩展程序图标鼠标悬停后展示前20个股票价格
 async function monitorTop20StockChromeTitle(monitoTop20Stock) {
     var date = new Date();
     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
@@ -406,58 +547,50 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             stockArr = '[]';
         }
         var stockList = JSON.parse(stockArr);
-        var stocks = "sh000001,sz399001,sz399006,hkHSI,";
-        for (let k in stockList) {
-            stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') + ",";
+        var secIdStockArr = '1.000001,0.399001,0.399006,100.HSI,';
+        for (var k in stockList) {
+            let code = stockList[k].code;
+            secIdStockArr += getSecidBack(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
         }
         let response;
         try {
-            response = await fetch("http://qt.gtimg.cn/q=" + stocks);
+            response = await fetch("https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f12,f13,f19,f14,f139,f148,f124,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids=" + secIdStockArr);
         } catch (error) {
             console.warn("监控前20个股票以及计算盈亏获取股票数据错误: ", error);
             return;
         }
-        let data = await response.arrayBuffer();
-        var count = 0;
-        const decoder = new TextDecoder('GBK');
-        data = decoder.decode(data);
+        response = await response.text();
+        response = JSON.parse(response);
+        let stoksArr = response.data.diff;
         // 在这里处理返回的数据
         var title = '';
-        var stoksArr = data.split("\n");
         var stockDayIncome = 0.00;
-        // var stockTotalIncome = 0.00;
         var date = '';
         for (let k in stoksArr) {
             try {
-                // console.log('stoksArr[k]=', stoksArr[k]);
                 var stock = undefined;
                 for (let l in stockList) {
-                    if(stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
+                    if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
                         stock = stockList[l];
                         break;
                     }
                 }
-                // console.log('stock=', stock);
-                var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                var values = dataStr.split("~");
-                var name = values[1];
-                var code = values[2];
+                var name = stoksArr[k].f14 + "";
+                var code = stoksArr[k].f12 + "";
                 if (name == undefined) {
                     continue;
                 }
-                var now = parseFloat(values[3]);
-                var changePercent = parseFloat(values[32]).toFixed(2);
+                var now = parseFloat(stoksArr[k].f2 + "");
+                var changePercent = parseFloat(stoksArr[k].f3).toFixed(2);
                 var dayIncome = 0.00;
                 if (stock != undefined) {
                     if (stock.code.indexOf('hk') >= 0 || stock.code.indexOf('HK') >= 0) {
-                        dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'HK');
+                        dayIncome = await getHuilvDayIncome(parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds), 'HK');
                     } else if (stock.code.indexOf('us') >= 0 || stock.code.indexOf('US') >= 0) {
-                        dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'US');
+                        dayIncome = await getHuilvDayIncome(parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds), 'US');
                     } else {
-                        dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
+                        dayIncome = parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds);
                     }
-                    // console.log('dayIncome=',stock.name, dayIncome);
-                    // stockTotalIncome += (now - parseFloat(stock.costPrise)) * parseFloat(stock.bonds);
                 }
                 stockDayIncome += dayIncome;
                 if (count <= 24) {
@@ -481,10 +614,10 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                         title += (name + kongge + now + '(' + changePercent + "%)\n");
                     }
                 }
-                var value30 = values[30].replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
+                var value30 = getDateStrFromTimestamp(stoksArr[k].f124*1000).replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
                 if (value30.substring(0, 8) > date) {
                     // 如果当前日期大于之前存储的最大日期，则更新最大日期
-                    date = values[30].substring(0, 8);
+                    date = value30.substring(0, 8);
                 }
                 count++;
             } catch (error) {
@@ -497,9 +630,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             return;
         }
         let funcDayIncome = funcIncome.fundDayIncome;
-        // let fundTotalIncome = funcIncome.fundTotalIncome;
         let totalDayIncome = funcDayIncome + stockDayIncome;
-        // let totalIncome = fundTotalIncome + stockTotalIncome;
         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
         title += '\n当日总收益：' + totalDayIncome.toFixed(2);
@@ -668,5 +799,60 @@ async function changeDefaultIcon() {
         }
     } catch (error) {
         console.warn(`Change default icon : ${error}`);
+    }
+}
+
+// 获取市场id
+function getSecidBack(code) {
+    let secid;
+    if(code.startsWith('sh') || code.startsWith('SH')){
+        secid = '1';
+    } else if(code.startsWith('sz') || code.startsWith('SZ')) {
+        secid = '0';
+    } else if(code.startsWith('hk') || code.startsWith('HK')) {
+        secid = '116';
+        if (code == 'hkHSI') {
+            secid = '100';
+        } else if(code == 'hkHSTECH') {
+            secid = '124';
+        }
+    } else if(code.startsWith('us') || code.startsWith('US')) {
+        if (code.endsWith('.oq') || code.endsWith('.OQ')) {
+            secid = '105';
+        } else if (code.endsWith('.ps') || code.endsWith('.PS')) {
+            secid = '153';
+        } else if (code.endsWith('.am') || code.endsWith('.AM')) {
+            secid = '107';
+        } else {
+            secid = '106';
+        }
+        if (code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
+            secid = '100';
+        }
+    } else if(code.startsWith('9')) {
+        secid = '2';
+    } else {
+        secid = '0';
+        if(code == 'N225' || code == 'KS11' || code =='FTSE' || code == 'GDAXI' || code =='FCHI' || code == 'SENSEX' || code == 'TWII' || code == 'HSI' || code == 'VNINDEX' || code == 'N100' || code == 'N300' || code == 'N500' || code == 'N1000' || code == 'N2000' || code == 'N3000' || code == 'N5000'){
+            secid = '100';
+        } else if(code == 'HSTECH'){
+            secid = '124';
+        }
+    }
+    return secid;
+}
+// 将时间戳转换为日期字符串
+function getDateStrFromTimestamp(timestamp) {
+    try {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 确保月份总是两位数
+        const day = String(date.getDate()).padStart(2, '0'); // 确保日期总是两位数
+        const hours = String(date.getHours()).padStart(2, '0'); // 确保小时总是两位数
+        const minutes = String(date.getMinutes()).padStart(2, '0'); // 确保分钟总是两位数
+        const seconds = String(date.getSeconds()).padStart(2, '0'); // 确保秒总是两位数
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    } catch(error) {
+        return '1970-01-01 00:00:00';
     }
 }
