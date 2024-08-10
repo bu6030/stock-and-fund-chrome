@@ -288,7 +288,7 @@ async function initLoad() {
     }
     stockApi = await readCacheData('stock-api');
     if (stockApi == null || stockApi == '') {
-        stockApi = 'GTIMG';
+        stockApi = 'EASTMONEY';
     }
     trendImageType = await readCacheData('trend-image-type');
     if (trendImageType == null || trendImageType == '') {

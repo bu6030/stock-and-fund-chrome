@@ -105,7 +105,8 @@ function monitorStockPrice(stockList) {
                 || (typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorLowPrice != '')
                 || (typeof stockList[k].monitorUpperPercent != 'undefined' && stockList[k].monitorUpperPercent != '')
                 || (typeof stockList[k].monitorLowerPercent != 'undefined' && stockList[k].monitorLowerPercent != '')) {
-                stocks += stockList[k].code + ",";
+                // stocks += stockList[k].code + ",";
+                stocks += getSecidBack(stockList[k].code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
             }
         }
         if (stocks == "") {
@@ -113,81 +114,102 @@ function monitorStockPrice(stockList) {
             return;
         }
 
-        fetch("http://qt.gtimg.cn/q=" + stocks)
+        fetch("https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f12,f13,f19,f14,f139,f148,f124,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids=" + stocks)
             .then(response => response.text())
-            .then(data => {
-                // 在这里处理返回的数据
-                var stoksArr = data.split("\n");
-                for (let k in stoksArr) {
-                    var monitorStock;
-                    for (let l in stockList) {
-                        if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
-                            monitorStock = stockList[l];
-                        }
+            .then(repsonse => JSON.parse(repsonse))
+            .then(response => {
+                getData('blueColor').then((blueColor) => {
+                    if (blueColor == null) {
+                        blueColor = '#093';
                     }
-                    var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                    var values = dataStr.split("~");
-                    var name = monitorStock.name;
-                    var now = parseFloat(values[3]);
-                    if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
-                        var highPrice = parseFloat(monitorStock.monitorHighPrice);
-                        if (now > highPrice) {
-                            monitorStock.monitorAlert = '1';
-                            monitorStock.monitorAlertDate = Date.now();
-                            sendChromeBadge('#FFFFFF', 'red', "" + now);
-                            var text = name + "涨破监控价格" + highPrice + "，达到" + now;
-                            saveData('stocks', JSON.stringify(stockList));
-                            saveData("MONITOR_STOCK_CODE", '');
-                            showNotification("通知", text);
-                            console.log("================监控价格涨破", highPrice, "============");
+                    getData('redColor').then((redColor) => {
+                        if (redColor == null) {
+                            redColor = '#ee2500';
                         }
-                    }
-                    if (typeof monitorStock.monitorLowPrice != 'undefined' && monitorStock.monitorLowPrice != '') {
-                        var lowPrice = parseFloat(monitorStock.monitorLowPrice);
-                        if (now < lowPrice) {
-                            monitorStock.monitorAlert = '2';
-                            monitorStock.monitorAlertDate = Date.now();
-                            sendChromeBadge('#FFFFFF', 'green', "" + now);
-                            var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
-                            saveData('stocks', JSON.stringify(stockList));
-                            saveData("MONITOR_STOCK_CODE", '');
-                            showNotification("通知", text);
-                            console.log("================监控价格跌破", lowPrice, "============");
+                        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
+                            blueColor = '#093'; 
+                            redColor = '#ee2500';
                         }
-                    }
-                    // 日涨幅提醒
-                    if (typeof monitorStock.monitorUpperPercent != 'undefined' && monitorStock.monitorUpperPercent != '') {
-                        var upperPercent = parseFloat(monitorStock.monitorUpperPercent);
-                        var openPrice = parseFloat(values[4]);
-                        let currentPercent = (now - openPrice) / openPrice * 100;
-                        if (currentPercent >= upperPercent) {
-                            monitorStock.monitorAlert = '3';
-                            monitorStock.monitorAlertDate = Date.now();
-                            sendChromeBadge('#FFFFFF', 'red', upperPercent + "%");
-                            var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
-                            saveData('stocks', JSON.stringify(stockList));
-                            saveData("MONITOR_STOCK_CODE", '');
-                            showNotification("通知", text);
-                            console.log("================日涨幅提醒", upperPercent, "%============");
+                        // 在这里处理返回的数据
+                        // var stoksArr = data.split("\n");
+                        var stoksArr = response.data.diff;
+                        for (let k in stoksArr) {
+                            var monitorStock;
+                            for (let l in stockList) {
+                                // if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
+                                if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
+                                    monitorStock = stockList[l];
+                                }
+                            }
+                            // var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
+                            // var values = dataStr.split("~");
+                            // var name = monitorStock.name;
+                            // var now = parseFloat(values[3]);
+                            var name = stoksArr[k].f14 + "";
+                            var now = parseFloat(stoksArr[k].f2 + "");
+                            if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
+                                var highPrice = parseFloat(monitorStock.monitorHighPrice);
+                                if (now > highPrice) {
+                                    monitorStock.monitorAlert = '1';
+                                    monitorStock.monitorAlertDate = Date.now();
+                                    sendChromeBadge('#FFFFFF', redColor, "" + now);
+                                    var text = name + "涨破监控价格" + highPrice + "，达到" + now;
+                                    saveData('stocks', JSON.stringify(stockList));
+                                    saveData("MONITOR_STOCK_CODE", '');
+                                    showNotification("通知", text);
+                                    console.log("================监控价格涨破", highPrice, "============");
+                                }
+                            }
+                            if (typeof monitorStock.monitorLowPrice != 'undefined' && monitorStock.monitorLowPrice != '') {
+                                var lowPrice = parseFloat(monitorStock.monitorLowPrice);
+                                if (now < lowPrice) {
+                                    monitorStock.monitorAlert = '2';
+                                    monitorStock.monitorAlertDate = Date.now();
+                                    sendChromeBadge('#FFFFFF', blueColor, "" + now);
+                                    var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
+                                    saveData('stocks', JSON.stringify(stockList));
+                                    saveData("MONITOR_STOCK_CODE", '');
+                                    showNotification("通知", text);
+                                    console.log("================监控价格跌破", lowPrice, "============");
+                                }
+                            }
+                            // 日涨幅提醒
+                            if (typeof monitorStock.monitorUpperPercent != 'undefined' && monitorStock.monitorUpperPercent != '') {
+                                var upperPercent = parseFloat(monitorStock.monitorUpperPercent);
+                                // var openPrice = parseFloat(values[4]);
+                                var openPrice = parseFloat(stoksArr[k].f18 + "");
+                                let currentPercent = (now - openPrice) / openPrice * 100;
+                                if (currentPercent >= upperPercent) {
+                                    monitorStock.monitorAlert = '3';
+                                    monitorStock.monitorAlertDate = Date.now();
+                                    sendChromeBadge('#FFFFFF', redColor, upperPercent + "%");
+                                    var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
+                                    saveData('stocks', JSON.stringify(stockList));
+                                    saveData("MONITOR_STOCK_CODE", '');
+                                    showNotification("通知", text);
+                                    console.log("================日涨幅提醒", upperPercent, "%============");
+                                }
+                            }
+                            // 日跌幅提醒
+                            if (typeof monitorStock.monitorLowerPercent != 'undefined' && monitorStock.monitorLowerPercent != '') {
+                                var lowerPercent = parseFloat(monitorStock.monitorLowerPercent);
+                                // var openPrice = parseFloat(values[4]);
+                                var openPrice = parseFloat(stoksArr[k].f18 + "");
+                                let currentPercent = (openPrice - now) / openPrice * 100;
+                                if (currentPercent >= lowerPercent) {
+                                    monitorStock.monitorAlert = '4';
+                                    monitorStock.monitorAlertDate = Date.now();
+                                    sendChromeBadge('#FFFFFF', blueColor, lowerPercent + "%");
+                                    var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
+                                    saveData('stocks', JSON.stringify(stockList));
+                                    saveData("MONITOR_STOCK_CODE", '');
+                                    showNotification("通知", text);
+                                    console.log("================日跌幅提醒", lowerPercent, "%============");
+                                }
+                            }
                         }
-                    }
-                    // 日跌幅提醒
-                    if (typeof monitorStock.monitorLowerPercent != 'undefined' && monitorStock.monitorLowerPercent != '') {
-                        var lowerPercent = parseFloat(monitorStock.monitorLowerPercent);
-                        var openPrice = parseFloat(values[4]);
-                        let currentPercent = (openPrice - now) / openPrice * 100;
-                        if (currentPercent >= lowerPercent) {
-                            monitorStock.monitorAlert = '4';
-                            monitorStock.monitorAlertDate = Date.now();
-                            sendChromeBadge('#FFFFFF', 'green', lowerPercent + "%");
-                            var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
-                            saveData('stocks', JSON.stringify(stockList));
-                            saveData("MONITOR_STOCK_CODE", '');
-                            showNotification("通知", text);
-                            console.log("================日跌幅提醒", lowerPercent, "%============");
-                        }
-                    }
-                }
+                    });
+                });
             })
             .catch(error => {
                 // 处理请求错误
@@ -263,10 +285,11 @@ function monitorStock(code) {
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
-
-        fetch("http://qt.gtimg.cn/q=" + code)
-            .then(response => response.arrayBuffer())
-            .then(data => {
+        let secIdStock = getSecidBack(code) + '.' + code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+        fetch("https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f12,f13,f19,f14,f139,f148,f124,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids=" + secIdStock)
+            .then(response => response.text())
+            .then(repsonse => JSON.parse(repsonse))
+            .then(response => {
                 getData('blueColor').then((blueColor) => {
                     if (blueColor == null) {
                         blueColor = '#093';
@@ -279,17 +302,22 @@ function monitorStock(code) {
                             blueColor = '#093'; 
                             redColor = '#ee2500';
                         }
-                        const decoder = new TextDecoder('GBK');
-                        data = decoder.decode(data);
+                        // const decoder = new TextDecoder('GBK');
+                        // data = decoder.decode(data);
                         // 在这里处理返回的数据
-                        var stoksArr = data.split("\n");
-                        var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
-                        var values = dataStr.split("~");
-                        var name = values[1];
-                        var now = values[3];
-                        var openPrice = values[4];
+                        // var stoksArr = data.split("\n");
+                        // var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
+                        // var values = dataStr.split("~");
+                        let stock = response.data.diff[0];
+                        // var name = values[1];
+                        // var now = values[3];
+                        // var openPrice = values[4];
+                        var name = stock.f14 + "";
+                        var now = stock.f2 + "";
+                        var openPrice = parseFloat(stock.f18 + "");
                         var badgeBackgroundColor;
-                        var changePercent = parseFloat(values[32]);
+                        // var changePercent = parseFloat(values[32]);
+                        var changePercent = parseFloat(stock.f3).toFixed(2);
                         if (parseFloat(now) >= parseFloat(openPrice)) {
                             // badgeBackgroundColor = '#ee2500';
                             badgeBackgroundColor = redColor
