@@ -1113,6 +1113,10 @@ async function initStockGtimgCallBack(result, stocks) {
                 } else {
                     stockList[l].now = values[3] + "";
                 }
+                // 9点至9点15分，股票价格如果为0就取昨日收盘价格
+                if (parseFloat(stockList[l].now) == 0) {
+                    stockList[l].now = values[4] + "";
+                }
                 if (cheatMeFlag && parseFloat(values[31]) < 0) {
                     var change = 0 - parseFloat(values[31]);
                     var changePercent = 0 - parseFloat(values[32]);
@@ -1251,6 +1255,10 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                     stock.now = "100.00";
                 } else {
                     stock.now = parseFloat(stoksArr[k].f2 + "").toFixed(toFixedVolume);
+                }
+                // 9点至9点15分，股票价格如果为0就取昨日收盘价格
+                if (parseFloat(stock.now) == 0) {
+                    stock.now = parseFloat(stoksArr[k].f18 + "").toFixed(toFixedVolume);
                 }
                 if (cheatMeFlag && parseFloat(stoksArr[k].f4) < 0) {
                     var change = 0 - parseFloat(stoksArr[k].f4);

@@ -327,6 +327,7 @@
 305. 仅仅修改说明 2024/8/7 -- version 2.2.0.8 -- end
 306. 监控价格定时角标颜色与红绿保持一致 2024/8/8
 307. 修改默认新装股票接口为新接口 2024/8/10 -- version 2.2.0.9 -- end
+308. 9点至9点15分，股票价格如果为0就取昨日收盘价格 2024/8/14 -- version 2.2.1.0 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
