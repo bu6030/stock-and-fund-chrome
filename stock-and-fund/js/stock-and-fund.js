@@ -1602,14 +1602,16 @@ async function initStockAndFundHtml() {
     var marketValue = new BigDecimal("0");
     totalMarketValue = new BigDecimal("0");
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
-        try{
+        let errorStockCode = '';
+        try {
             for (var k = stockList.length - 1; k >= 0; k--) {
+                errorStockCode = stockList[k].code;
                 marketValue = new BigDecimal(stockList[k].marketValue);
                 totalMarketValue = totalMarketValue.add(marketValue);
             }
         } catch (e) {
             console.warn("股票列表获取完毕后，初始化 html 页面出错", e);
-            alertMessage('切换新接口后，部分美股数据报错，请切换回旧接口删除重新添加即可！');
+            alertMessage('切换新接口后，股票编码：' + errorStockCode + ' 数据报错，请切换回旧接口删除重新添加即可！');
         }
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
