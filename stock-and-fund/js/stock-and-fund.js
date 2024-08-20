@@ -110,6 +110,9 @@ const hiddenIconPath = {
 var defaultIcon;
 var stockApi;
 let hangYeOrGaiNian;
+var allTotalIncome = '--';
+var allTotalIncomePercent = '--';
+var allTotalIncomePercentStyle = '';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -2165,9 +2168,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
 function getTotalTableHtml(totalMarketValueResult) {
     var str = "";
     var allDayIncome = fundDayIncome.add(stockDayIncome);
-    var allTotalIncome = fundTotalIncome.add(stockTotalIncome);
+    allTotalIncome = fundTotalIncome.add(stockTotalIncome);
     var allDayIncomePercent = new BigDecimal("0");
-    var allTotalIncomePercent = new BigDecimal("0");
+    allTotalIncomePercent = new BigDecimal("0");
     var totalCostPrice = fundTotalCostValue.add(stockTotalCostValue);
     if (totalMarketValueResult != 0) {
         allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult.subtract(allDayIncome), 4);
@@ -2176,7 +2179,7 @@ function getTotalTableHtml(totalMarketValueResult) {
         allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalCostPrice, 4);
     }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    var allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
+    allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     // 新顺序拼接TR行HTML
     var totalStrOrder = columnOrder.map(function (column) {
         var columnName = Object.keys(column)[0];

@@ -18,14 +18,9 @@ function initLargeMarketData() {
 }
 // 初始化首页大盘股数据回调方法
 async function initLargeMarketDataCallBack(bigStocks) {
-    console.log('=====',bigStocks);
     let largetMarketTotalStr = '';
     if (largetMarketTotalDisplay) {
-        largetMarketTotalStr = '<div class=\"stock-large-market-box\" id=\"larget-market-total\">' +
-            '<p>持仓盈亏</p>' +
-            '<p style=\"color:' + redColor + ';\">--</p>' +
-            '<p style=\"color:' + redColor + ';\">--%</p>' +
-        '</div>'
+        largetMarketTotalStr = getlargetMarketTotalHtml();
     }
     var str = "<div class=\"stock-large-market-container\">";
     str += largetMarketTotalStr;
@@ -293,4 +288,13 @@ function largeMarketCodeSave() {
     saveCacheData('large-market-code', JSON.stringify(selectedData));
     $("#setting-modal").modal("hide");
     initLargeMarketData();
+}
+
+function getlargetMarketTotalHtml (){
+    let str = '<div class=\"stock-large-market-box\" id=\"larget-market-total\">' +
+        '<p>持仓盈亏</p>' +
+        '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncome + '</p>' +
+        '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncomePercent + '%</p>' +
+        '</div>';
+    return str;
 }
