@@ -1835,7 +1835,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             var incomePercent = parseFloat(result[k].incomePercent);
             var incomePercentStyle = incomePercent == 0 ? "" : (incomePercent >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
-            stockTotalCostValue = stockTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
+            if (result[k].costPriceValue) {
+                stockTotalCostValue = stockTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
+            }
             let showMinuteImageMini = await readCacheData('show-minute-image-mini');
             let minuteImageMiniDiv = "";
             if (showMinuteImageMini == 'open') {
@@ -1855,7 +1857,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(日跌幅" + result[k].monitorLowerPercent + "%)</span>";
                 }
             }
-            let stockName = result[k].name;
+            let stockName = result[k].name ? result[k].name : result[k].code;
             let dayIncome = parseFloat(result[k].dayIncome + "").toFixed(2);
             var dayIncomeStyle = parseFloat(result[k].dayIncome + "") == 0 ? "" : (parseFloat(result[k].dayIncome + "") > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             let now = result[k].now;
@@ -1945,10 +1947,15 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 deleteButton = '';
             }
             str += "<tr draggable=\"true\" id=\"stock-tr-" + k + "\">" + stockStrOrder + deleteButton + "</tr>";
-
-            stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
-            stockDayIncome = stockDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
-            stockTotalmarketValue = stockTotalmarketValue.add(new BigDecimal(result[k].marketValue + ""));
+            if (result[k].income) {
+                stockTotalIncome = stockTotalIncome.add(new BigDecimal(result[k].income));
+            }
+            if (result[k].dayIncome) {
+                stockDayIncome = stockDayIncome.add(new BigDecimal(result[k].dayIncome + ""));
+            }
+            if (result[k].marketValue) {
+                stockTotalmarketValue = stockTotalmarketValue.add(new BigDecimal(result[k].marketValue + ""));
+            }
         } catch (error) {
             console.error(error);
         }

@@ -330,6 +330,7 @@
 308. 9点至9点15分，股票价格如果为0就取昨日收盘价格 2024/8/14 -- version 2.2.1.0 -- end
 309. 部分错误股票添加后报错，提示编码切换会旧股票接口删除 2024/8/20
 310. 大盘指数展示持仓盈亏展示问题修改 2024/8/20 -- version 2.2.1.1 -- end
+311. 部分股票报错后，依然展示，允许用户删除 2024/8/21
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
