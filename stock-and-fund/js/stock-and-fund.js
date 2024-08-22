@@ -1625,6 +1625,14 @@ async function initStockAndFundHtml() {
     }
     // 获取完totalMarketValue再排序
     await sortStockAndFund(totalMarketValue);
+    stockTotalIncome = new BigDecimal("0");
+    stockDayIncome = new BigDecimal("0");
+    stockTotalmarketValue = new BigDecimal("0");
+    stockTotalCostValue = new BigDecimal("0");
+    fundTotalIncome = new BigDecimal("0");
+    fundDayIncome = new BigDecimal("0");
+    fundTotalmarketValue = new BigDecimal("0");
+    fundTotalCostValue = new BigDecimal("0");
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         var str1 = await getStockTableHtml(stockList, totalMarketValue);
         $("#stock-nr").html(str1);
@@ -1633,10 +1641,23 @@ async function initStockAndFundHtml() {
         var str2 = await getFundTableHtml(fundList, totalMarketValue);
         $("#fund-nr").html(str2);
     }
+    allTotalIncome = fundTotalIncome.add(stockTotalIncome);
+    allTotalIncomePercent = new BigDecimal("0");
+    var totalCostPrice = fundTotalCostValue.add(stockTotalCostValue);
+    if (totalCostPrice > 0) {
+        allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalCostPrice, 4);
+    }
+    allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
+    if (largetMarketTotalDisplay) {
+        let str2 = '<p>持仓盈亏</p>' +
+            '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncome + '</p>' +
+            '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncomePercent + '%</p>';
+        $("#larget-market-total").html(str2);
+    }
     if (showStockOrFundOrAll == 'all') {
         var str3 = await getTotalTableHtml(totalMarketValue);
         $("#total-nr").html(str3);
-    }
+    }  
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         for (k in stockList) {
             if (mainDeleteButtonDisplay) {
@@ -1823,10 +1844,10 @@ async function initMinitesImageMini() {
 // 拼接股票 html
 async function getStockTableHtml(result, totalMarketValueResult) {
     var str = "";
-    stockTotalIncome = new BigDecimal("0");
-    stockDayIncome = new BigDecimal("0");
-    stockTotalmarketValue = new BigDecimal("0");
-    stockTotalCostValue = new BigDecimal("0");
+    // stockTotalIncome = new BigDecimal("0");
+    // stockDayIncome = new BigDecimal("0");
+    // stockTotalmarketValue = new BigDecimal("0");
+    // stockTotalCostValue = new BigDecimal("0");
     for (var k in result) {
         try {
             let changePercent = parseFloat(result[k].changePercent);
@@ -2026,10 +2047,10 @@ async function getStockTableHtml(result, totalMarketValueResult) {
 // 拼接基金 html
 async function getFundTableHtml(result, totalMarketValueResult) {
     var str = "";
-    fundTotalIncome = new BigDecimal("0");
-    fundDayIncome = new BigDecimal("0");
-    fundTotalmarketValue = new BigDecimal("0");
-    fundTotalCostValue = new BigDecimal("0");
+    // fundTotalIncome = new BigDecimal("0");
+    // fundDayIncome = new BigDecimal("0");
+    // fundTotalmarketValue = new BigDecimal("0");
+    // fundTotalCostValue = new BigDecimal("0");
     for (var k in result) {
         try {
             let gszzl = parseFloat(result[k].gszzl);
@@ -2175,18 +2196,18 @@ async function getFundTableHtml(result, totalMarketValueResult) {
 function getTotalTableHtml(totalMarketValueResult) {
     var str = "";
     var allDayIncome = fundDayIncome.add(stockDayIncome);
-    allTotalIncome = fundTotalIncome.add(stockTotalIncome);
+    // allTotalIncome = fundTotalIncome.add(stockTotalIncome);
     var allDayIncomePercent = new BigDecimal("0");
-    allTotalIncomePercent = new BigDecimal("0");
+    // allTotalIncomePercent = new BigDecimal("0");
     var totalCostPrice = fundTotalCostValue.add(stockTotalCostValue);
     if (totalMarketValueResult != 0) {
         allDayIncomePercent = allDayIncome.multiply(new BigDecimal("100")).divide(totalMarketValueResult.subtract(allDayIncome), 4);
     }
-    if (totalCostPrice > 0) {
-        allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalCostPrice, 4);
-    }
+    // if (totalCostPrice > 0) {
+    //     allTotalIncomePercent = allTotalIncome.multiply(new BigDecimal("100")).divide(totalCostPrice, 4);
+    // }
     var allDayIncomePercentStyle = allDayIncome == 0 ? "" : (allDayIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-    allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
+    // allTotalIncomePercentStyle = allTotalIncome == 0 ? "" : (allTotalIncome > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
     // 新顺序拼接TR行HTML
     var totalStrOrder = columnOrder.map(function (column) {
         var columnName = Object.keys(column)[0];
@@ -2237,12 +2258,12 @@ function getTotalTableHtml(totalMarketValueResult) {
         deleteButton = '';
     }
     str += "<tr id=\"total-tr-total\">" + totalStrOrder + deleteButton + "</tr>";
-    if (largetMarketTotalDisplay) {
-        let str2 = '<p>持仓盈亏</p>' +
-            '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncome + '</p>' +
-            '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncomePercent + '%</p>';
-        $("#larget-market-total").html(str2);
-    }
+    // if (largetMarketTotalDisplay) {
+    //     let str2 = '<p>持仓盈亏</p>' +
+    //         '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncome + '</p>' +
+    //         '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncomePercent + '%</p>';
+    //     $("#larget-market-total").html(str2);
+    // }
     return str;
 }
 
