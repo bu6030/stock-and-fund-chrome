@@ -334,6 +334,7 @@
 312. 大盘指数在股票或基金单独页面展示持仓盈亏展示问题修改 2024/8/22 -- version 2.2.1.3 -- end
 313. 老版本浏览器报错修改 2024/8/27 -- version 2.2.1.4 -- end
 314. 角标监控实时涨跌幅报错 2024/8/27
+315. 缩短后台定时执行间隔为10s 2024/8/27 -- version 2.2.1.5 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

@@ -11,7 +11,7 @@ if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
 // 定时执行任务的函数
 function scheduleTask() {
     // 设置定时器，每隔一定时间执行 performTask 函数
-    performTaskId = setInterval(performTask, 20000); // 20s，您可以根据需要进行调整
+    performTaskId = setInterval(performTask, 10000); // 10s，您可以根据需要进行调整
     changeDefaultIcon();
 }
 
