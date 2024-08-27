@@ -1416,7 +1416,8 @@ async function initFund() {
                         let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
                         let gztime = fundList[k].gztime;
                         if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
-                            gztime = gztime.substring(0, 10).replaceAll('-', '')
+                            // gztime = gztime.substring(0, 10).replaceAll('-', '')
+                            gztime = gztime.substring(0, 10).replace(/-/g, '')
                         }
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");
                         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
@@ -1513,7 +1514,8 @@ async function initFund() {
                         let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
                         let gztime = fundList[k].gztime;
                         if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
-                            gztime = gztime.substring(0, 10).replaceAll('-', '')
+                            // gztime = gztime.substring(0, 10).replaceAll('-', '')
+                            gztime = gztime.substring(0, 10).replace(/-/g, '')
                         }
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");
                         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
@@ -3858,7 +3860,8 @@ async function getStockAndFundFromLocalService () {
             && result.dayIncomeHistorys != []) {
             let filteredData = result.dayIncomeHistorys.map(item => {
                 return {
-                    date: item.date.replaceAll('-', ''),
+                    // date: item.date.replaceAll('-', ''),
+                    date: item.date.replace(/-/g, ''),
                     stockDayIncome: item.stockDayIncome,
                     fundDayIncome: item.fundDayIncome
                 };
@@ -6439,7 +6442,9 @@ function changeTimeFormate(dateTime) {
         return dateTime;
     // dateTime格式为2024/05/08 10:05:25，替换/为-
     } else if(dateTime.indexOf('/') >= 0 && dateTime.indexOf(':') >= 0) {
-        return dateTime.replaceAll('/', '-');
+        // return dateTime.replaceAll('/', '-');
+        return dateTime.replace(/\//g, '-');
+        
     // dateTime格式为20240508100525，格式化为2024-05-08 10:05:25
     } else if(dateTime.length > 8) {
         return dateTime.substring(0,4) + "-" + dateTime.substring(4,6) 

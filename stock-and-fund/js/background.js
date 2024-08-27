@@ -642,7 +642,8 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                         title += (name + kongge + now + '(' + changePercent + "%)\n");
                     }
                 }
-                var value30 = getDateStrFromTimestamp(stoksArr[k].f124*1000).replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
+                // var value30 = getDateStrFromTimestamp(stoksArr[k].f124*1000).replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
+                var value30 = getDateStrFromTimestamp(stoksArr[k].f124*1000).replace(/\//g,'').replace(/-/g,'').replace(/\s/g,'').replace(/:/g,'');
                 if (value30.substring(0, 8) > date) {
                     // 如果当前日期大于之前存储的最大日期，则更新最大日期
                     date = value30.substring(0, 8);
@@ -736,7 +737,8 @@ async function getFundIncome(date) {
                 let fundNetDiagramJson = JSON.parse(fundNetDiagramData);
                 let currentDayNetDiagram = null;
                 for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
-                    if (fundNetDiagramJson.Datas[i].FSRQ.replaceAll('-', '') == date) {
+                    // if (fundNetDiagramJson.Datas[i].FSRQ.replaceAll('-', '') == date) {
+                    if (fundNetDiagramJson.Datas[i].FSRQ.replace(/-/g, '') == date) {
                         currentDayNetDiagram = fundNetDiagramJson.Datas[i];
                         break;
                     }
@@ -759,7 +761,8 @@ async function getFundIncome(date) {
                     let data = await response.text();
                     if (data != 'jsonpgz();') {
                         var json = JSON.parse(data.substring(8, data.length - 2));
-                        let gztime = json.gztime.substring(0, 10).replaceAll('-', '');
+                        // let gztime = json.gztime.substring(0, 10).replaceAll('-', '');
+                        let gztime = json.gztime.substring(0, 10).replace(/-/g, '');
                         // 如果日期不一致不在计算
                         if (date != gztime) return;
                         let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
