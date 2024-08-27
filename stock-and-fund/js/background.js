@@ -335,7 +335,7 @@ function monitorStock(code) {
                                 if(changePercent < 0) {
                                     changePercent = 0 - changePercent;
                                 }
-                                sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent.toFixed(2));
+                                sendChromeBadge('#FFFFFF', badgeBackgroundColor, "" + changePercent);
                             }
                         });
                     });
