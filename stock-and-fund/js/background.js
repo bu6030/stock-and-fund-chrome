@@ -66,7 +66,7 @@ function performTask() {
             }
         });
         getData('monitor-top-20-stock').then((monitoTop20Stock) => {
-            if (count % 3 == 0) {
+            if (count % 2 == 0) {
                 if (monitoTop20Stock == null || monitoTop20Stock == undefined) {
                     monitoTop20Stock = false;
                 }
