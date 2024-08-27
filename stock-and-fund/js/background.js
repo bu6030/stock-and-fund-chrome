@@ -2,6 +2,8 @@ let isCycleInvest = false;
 let performTaskId;
 let count = 0;
 let isFirefox = false;
+let lightBlue = [144, 238, 144, 255];
+let lightRed = [255, 192, 203, 255];
 // 检测是否为 Firefox
 if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
     // Firefox 环境中，映射 chrome 到 browser
@@ -126,9 +128,11 @@ function monitorStockPrice(stockList) {
                         if (redColor == null) {
                             redColor = '#ee2500';
                         }
-                        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
-                            blueColor = '#093'; 
-                            redColor = '#ee2500';
+                        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
+                            // blueColor = '#093'; 
+                            // redColor = '#ee2500';
+                            blueColor = lightBlue;
+                            redColor = lightRed;
                         }
                         // 在这里处理返回的数据
                         // var stoksArr = data.split("\n");
@@ -298,9 +302,11 @@ function monitorStock(code) {
                         if (redColor == null) {
                             redColor = '#ee2500';
                         }
-                        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
-                            blueColor = '#093'; 
-                            redColor = '#ee2500';
+                        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
+                            // blueColor = '#093'; 
+                            // redColor = '#ee2500';
+                            blueColor = lightBlue;
+                            redColor = lightRed;
                         }
                         // const decoder = new TextDecoder('GBK');
                         // data = decoder.decode(data);
@@ -424,147 +430,6 @@ function setChromeTitle(title) {
     }
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
-// async function monitorTop20StockChromeTitle(monitoTop20Stock) {
-//     var date = new Date();
-//     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
-//     if (isTradingTime(date)) {
-//         console.log("交易时间，执行任务...");
-//         let stockArr = await getData('stocks');
-//         if (stockArr == null || stockArr == undefined) {
-//             stockArr = '[]';
-//         }
-//         var stockList = JSON.parse(stockArr);
-//         var stocks = "sh000001,sz399001,sz399006,hkHSI,";
-//         for (let k in stockList) {
-//             stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') + ",";
-//         }
-//         let response;
-//         try {
-//             response = await fetch("http://qt.gtimg.cn/q=" + stocks);
-//         } catch (error) {
-//             console.warn("监控前20个股票以及计算盈亏获取股票数据错误: ", error);
-//             return;
-//         }
-//         let data = await response.arrayBuffer();
-//         var count = 0;
-//         const decoder = new TextDecoder('GBK');
-//         data = decoder.decode(data);
-//         // 在这里处理返回的数据
-//         var title = '';
-//         var stoksArr = data.split("\n");
-//         var stockDayIncome = 0.00;
-//         // var stockTotalIncome = 0.00;
-//         var date = '';
-//         for (let k in stoksArr) {
-//             try {
-//                 // console.log('stoksArr[k]=', stoksArr[k]);
-//                 var stock = undefined;
-//                 for (let l in stockList) {
-//                     if(stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))){
-//                         stock = stockList[l];
-//                         break;
-//                     }
-//                 }
-//                 // console.log('stock=', stock);
-//                 var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-//                 var values = dataStr.split("~");
-//                 var name = values[1];
-//                 var code = values[2];
-//                 if (name == undefined) {
-//                     continue;
-//                 }
-//                 var now = parseFloat(values[3]);
-//                 var changePercent = parseFloat(values[32]).toFixed(2);
-//                 var dayIncome = 0.00;
-//                 if (stock != undefined) {
-//                     if (stock.code.indexOf('hk') >= 0 || stock.code.indexOf('HK') >= 0) {
-//                         dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'HK');
-//                     } else if (stock.code.indexOf('us') >= 0 || stock.code.indexOf('US') >= 0) {
-//                         dayIncome = await getHuilvDayIncome(parseFloat(values[31]) * parseFloat(stock.bonds), 'US');
-//                     } else {
-//                         dayIncome = parseFloat(values[31]) * parseFloat(stock.bonds);
-//                     }
-//                     // console.log('dayIncome=',stock.name, dayIncome);
-//                     // stockTotalIncome += (now - parseFloat(stock.costPrise)) * parseFloat(stock.bonds);
-//                 }
-//                 stockDayIncome += dayIncome;
-//                 if (count <= 24) {
-//                     var kongge = '';
-//                         switch(name.length) {
-//                             case 3: 
-//                                 kongge = '         ';
-//                                 break;
-//                             case 4: 
-//                                 kongge = '     ';
-//                                 break;
-//                             case 5: 
-//                                 kongge = '     ';
-//                                 break;
-//                             case 6: 
-//                                 kongge = '  ';
-//                                 break;
-//                         }
-//                     if (code == '000001' || code =='399001' || code =='399006' || code == 'HSI' 
-//                         || (monitoTop20Stock != null && monitoTop20Stock == true)) {
-//                         title += (name + kongge + now + '(' + changePercent + "%)\n");
-//                     }
-//                 }
-//                 var value30 = values[30].replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
-//                 if (value30.substring(0, 8) > date) {
-//                     // 如果当前日期大于之前存储的最大日期，则更新最大日期
-//                     date = values[30].substring(0, 8);
-//                 }
-//                 count++;
-//             } catch (error) {
-//                 console.warn("监控前20个股票以及计算盈亏股票处理错误: ", error);
-//             }
-//         }
-//         title = title.substring(0, title.length - 1);
-//         let funcIncome = await getFundIncome(date);
-//         if (funcIncome == null) {
-//             return;
-//         }
-//         let funcDayIncome = funcIncome.fundDayIncome;
-//         // let fundTotalIncome = funcIncome.fundTotalIncome;
-//         let totalDayIncome = funcDayIncome + stockDayIncome;
-//         // let totalIncome = fundTotalIncome + stockTotalIncome;
-//         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
-//         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
-//         title += '\n当日总收益：' + totalDayIncome.toFixed(2);
-//         let blueColor = await getData('blueColor');
-//         if (blueColor == null) {
-//             blueColor = '#093';
-//         }
-//         let redColor = await getData('redColor');
-//         if (redColor == null) {
-//             redColor = '#ee2500';
-//         }
-//         if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
-//             blueColor = '#093'; 
-//             redColor = '#ee2500';
-//         }
-//         let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
-//         if (monitorPriceOrPercent == 'DAY_INCOME') {
-//             let color = totalDayIncome > 0 ? redColor : blueColor;
-//             if (totalDayIncome < 0) {
-//                 totalDayIncome = 0 - totalDayIncome;
-//             }
-//             if (totalDayIncome > 9999.99) {
-//                 totalDayIncome = Math.floor(totalDayIncome/10000*10)/10 + "w";
-//             } else if (totalDayIncome > 99.99) {
-//                 totalDayIncome = Math.floor(totalDayIncome);
-//             } else if (totalDayIncome > 9.99) {
-//                 totalDayIncome = Math.floor(totalDayIncome * 10) / 10;
-//             } else {
-//                 totalDayIncome = totalDayIncome.toFixed(2);
-//             }
-//             sendChromeBadge('#FFFFFF', color, totalDayIncome + "");
-//         }
-//         saveDayIncomehistory(stockDayIncome.toFixed(2), funcDayIncome.toFixed(2), date);
-//         setChromeTitle(title);
-//     }
-// }
-// 扩展程序图标鼠标悬停后展示前20个股票价格
 async function monitorTop20StockChromeTitle(monitoTop20Stock) {
     var date = new Date();
     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
@@ -671,9 +536,11 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         if (redColor == null) {
             redColor = '#ee2500';
         }
-        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色正常
-            blueColor = '#093'; 
-            redColor = '#ee2500';
+        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
+            // blueColor = '#093'; 
+            // redColor = '#ee2500';
+            blueColor = lightBlue;
+            redColor = lightRed;
         }
         let monitorPriceOrPercent =  await getData('monitor-price-or-percent');
         if (monitorPriceOrPercent == 'DAY_INCOME') {

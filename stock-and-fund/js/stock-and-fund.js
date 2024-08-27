@@ -3371,12 +3371,20 @@ async function stockMonitor () {
     let now = stock.now;
     let openPrice = stock.openPrice;
     let badgeBackgroundColor;
-    if (parseFloat(now) >= parseFloat(openPrice)) {
-        // badgeBackgroundColor = '#ee2500';
-        badgeBackgroundColor = redColor;
+    if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
+        if (parseFloat(now) >= parseFloat(openPrice)) {
+            badgeBackgroundColor = lightRed;
+        } else {
+            badgeBackgroundColor = lightBlue;
+        }
     } else {
-        // badgeBackgroundColor = '#093';
-        badgeBackgroundColor = blueColor;
+        if (parseFloat(now) >= parseFloat(openPrice)) {
+            // badgeBackgroundColor = '#ee2500';
+            badgeBackgroundColor = redColor;
+        } else {
+            // badgeBackgroundColor = '#093';
+            badgeBackgroundColor = blueColor;
+        }
     }
     if (now.length >= 5) {
         now = parseFloat(now.substring(0, 5));
