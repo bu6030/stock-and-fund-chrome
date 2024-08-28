@@ -18,9 +18,17 @@ function scheduleTask() {
 }
 
 // 当扩展程序安装时触发的事件
-chrome.runtime.onInstalled.addListener(scheduleTask);
+chrome.runtime.onInstalled.addListener(async function() {
+    // 设置定时器，每隔一定时间执行 performTask 函数
+    performTaskId = setInterval(performTask, 10000); // 10s，您可以根据需要进行调整
+    changeDefaultIcon();
+ });
 // 当浏览器打开时触发的事件
-chrome.runtime.onStartup.addListener(scheduleTask);
+chrome.runtime.onStartup.addListener(async function() {
+    // 设置定时器，每隔一定时间执行 performTask 函数
+    performTaskId = setInterval(performTask, 10000); // 10s，您可以根据需要进行调整
+    changeDefaultIcon();
+});
 // 在扩展程序的 background.js 文件中使用 chrome.runtime.onMessage 监听函数
 chrome.runtime.onMessage.addListener(async function(message, sender, sendResponse) {
     try {
