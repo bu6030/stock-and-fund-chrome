@@ -151,6 +151,10 @@ function monitorStockPrice(stockList) {
                             // var now = parseFloat(values[3]);
                             var name = stoksArr[k].f14 + "";
                             var now = parseFloat(stoksArr[k].f2 + "");
+                            // 9点至9点15分，股票价格如果为0就取昨日收盘价格
+                            if (now == 0) {
+                                now = parseFloat(stoksArr[k].f18 + "");
+                            }
                             if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
                                 var highPrice = parseFloat(monitorStock.monitorHighPrice);
                                 if (now > highPrice) {
@@ -159,7 +163,7 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', redColor, "" + now);
                                     var text = name + "涨破监控价格" + highPrice + "，达到" + now;
                                     saveData('stocks', JSON.stringify(stockList));
-                                    saveData("MONITOR_STOCK_CODE", '');
+                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================监控价格涨破", highPrice, "============");
                                 }
@@ -172,7 +176,7 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', blueColor, "" + now);
                                     var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
                                     saveData('stocks', JSON.stringify(stockList));
-                                    saveData("MONITOR_STOCK_CODE", '');
+                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================监控价格跌破", lowPrice, "============");
                                 }
@@ -189,7 +193,7 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', redColor, upperPercent + "%");
                                     var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
                                     saveData('stocks', JSON.stringify(stockList));
-                                    saveData("MONITOR_STOCK_CODE", '');
+                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================日涨幅提醒", upperPercent, "%============");
                                 }
@@ -206,7 +210,7 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', blueColor, lowerPercent + "%");
                                     var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
                                     saveData('stocks', JSON.stringify(stockList));
-                                    saveData("MONITOR_STOCK_CODE", '');
+                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================日跌幅提醒", lowerPercent, "%============");
                                 }
@@ -320,6 +324,10 @@ function monitorStock(code) {
                         // var openPrice = values[4];
                         var name = stock.f14 + "";
                         var now = stock.f2 + "";
+                        // 9点至9点15分，股票价格如果为0就取昨日收盘价格
+                        if (parseFloat(now) == 0) {
+                            now = stock.f18 + "";
+                        }
                         var openPrice = parseFloat(stock.f18 + "");
                         var badgeBackgroundColor;
                         // var changePercent = parseFloat(values[32]);
@@ -474,6 +482,10 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                     continue;
                 }
                 var now = parseFloat(stoksArr[k].f2 + "");
+                // 9点至9点15分，股票价格如果为0就取昨日收盘价格
+                if (now == 0) {
+                    now = parseFloat(stoksArr[k].f18 + "");
+                }
                 var changePercent = parseFloat(stoksArr[k].f3).toFixed(2);
                 var dayIncome = 0.00;
                 if (stock != undefined) {

@@ -337,6 +337,8 @@
 315. 缩短后台定时执行间隔为10s 2024/8/27 -- version 2.2.1.5 -- end
 316. 隐身模式角标红绿颜色变淡，变得更隐蔽 2024/8/27 -- version 2.2.1.6 -- end
 317. 监控前20个股票盈利定时改为20s 2024/8/27 version 2.2.1.7 -- end
+318. 盘前价格监控问题修改 2024/8/28
+319. 价格突破监控触发后，影响原有实时价格角标显示问题修改 2024/8/28 version 2.2.1.8 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
