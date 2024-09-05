@@ -1611,8 +1611,10 @@ async function initStockAndFundHtml() {
         try {
             for (var k = stockList.length - 1; k >= 0; k--) {
                 errorStockCode = stockList[k].code;
-                marketValue = new BigDecimal(stockList[k].marketValue);
-                totalMarketValue = totalMarketValue.add(marketValue);
+                if (stockList[k].marketValue) {
+                    marketValue = new BigDecimal(stockList[k].marketValue);
+                    totalMarketValue = totalMarketValue.add(marketValue);
+                }
             }
         } catch (e) {
             console.warn("股票列表获取完毕后，初始化 html 页面出错", e);
@@ -4564,7 +4566,7 @@ async function clickSortStockAndFund(event) {
 async function sortStockAndFund(totalMarketValue) {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         stockList.forEach(function (stock) {
-            if (totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
+            if (stock.marketValue && totalMarketValue.compareTo(new BigDecimal("0")) != 0) {
                 let marketValuePercent = (new BigDecimal(stock.marketValue + "")).multiply(new BigDecimal("100")).divide(totalMarketValue, 4);
                 stock.marketValuePercent = marketValuePercent + "";
             } else {
