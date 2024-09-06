@@ -1159,6 +1159,10 @@ function splitData(rawData) {
 // 每次初始化修改分时图图表大小
 function setEchartsSize(myChart, volumnChart) {
     console.log('改变echartSize');
+    var currentURL = window.location.href;
+    if (currentURL.indexOf('full-screen.html') > 0) {
+        return;
+    }
     // 设置容器的宽度和高度
     if (windowSize == 'NORMAL') {
         myChart.getDom().style.width = '630px';
