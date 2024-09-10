@@ -1122,6 +1122,8 @@ async function initStockGtimgCallBack(result, stocks) {
     }
     var stoksArr = result.split("\n");
     turnOverRate = "";
+    stockMaxs = "";
+    stockMins = "";
     for (var k in stoksArr) {
         for (var l in stockList) {
             // console.log(stockList[l].code ,"===", stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("=")))
@@ -1241,6 +1243,8 @@ async function initStockGtimgCallBack(result, stocks) {
                 // 设置换手率
                 turnOverRate += stockList[l].code + '~' + values[38] + '-';
                 stockList[l].turnOverRate = values[38];
+                stockMaxs += stock.code + '~' + stock.max + '-';
+                stockMins += stock.code + '~' + stock.min + '-';
                 stockList[l].quantityRelativeRatio = values[49];
             }
         }
@@ -1261,6 +1265,8 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
         }
     }
     turnOverRate = "";
+    stockMaxs = "";
+    stockMins = "";
     for (var k in stoksArr) {
         let stock = {};
         for (var l in stockList) {
@@ -1385,6 +1391,8 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                 // 设置换手率
                 turnOverRate += stock.code + '~' + stoksArr[k].f8 + '-';
                 stock.turnOverRate = parseFloat(stoksArr[k].f8 + '').toFixed(2);
+                stockMaxs += stock.code + '~' + stock.max + '-';
+                stockMins += stock.code + '~' + stock.min + '-';
                 stockList[l].quantityRelativeRatio = parseFloat(stoksArr[k].f10 + '').toFixed(2);
             }
         }

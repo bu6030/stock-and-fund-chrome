@@ -411,7 +411,7 @@ function ajaxGetFundInvesterPositionDetail(code) {
 function ajaxGetLargeMarketData(code) {
     let result;
     $.ajax({
-        url: Env.GET_STOCK_FROM_EAST_MONEY_URL + "?fields=f1,f2,f3,f4,f12,f13,f14,f292&fltt=2&secids="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=",
+        url: Env.GET_STOCK_FROM_EAST_MONEY_URL + "?fields=f1,f2,f15,f16,f3,f4,f12,f13,f14,f292&fltt=2&secids="+ code +"&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&Uid=",
         timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},

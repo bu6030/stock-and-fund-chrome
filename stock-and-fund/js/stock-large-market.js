@@ -22,6 +22,8 @@ async function initLargeMarketDataCallBack(bigStocks) {
     if (largetMarketTotalDisplay) {
         largetMarketTotalStr = getlargetMarketTotalHtml();
     }
+    largeMarketStockMaxs = '';
+    largeMarketStockMins = '';
     var str = "<div class=\"stock-large-market-container\">";
     str += largetMarketTotalStr;
     for(let k in bigStocks) {
@@ -30,6 +32,8 @@ async function initLargeMarketDataCallBack(bigStocks) {
         var now = parseFloat(bigStocks[k].f2).toFixed(2);
         var changePercent = parseFloat(bigStocks[k].f3).toFixed(2);
         var aId = "id = 'large-market-" + bigStocks[k].f12 + "'";
+        largeMarketStockMaxs += bigStocks[k].f12 + '~' + bigStocks[k].f15 + '-';
+        largeMarketStockMins += bigStocks[k].f12 + '~' + bigStocks[k].f16 + '-';
         var style = "style=\""
             + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
         if (largetMarketCountDisplay) {

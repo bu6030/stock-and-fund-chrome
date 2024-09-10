@@ -5,6 +5,10 @@ let timeImageName;
 let timeImageSecid;
 var timerId;
 let turnOverRate = '';
+let stockMaxs = '';
+let stockMins = '';
+let largeMarketStockMaxs = '';
+let largeMarketStockMins = '';
 // 展示分时图
 function showMinuteImage(ndays) {
     clearTimeImageTimeout();
@@ -369,6 +373,44 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     maxPrice = maxPrice.toFixed(toFixedVolume);
     minPrice = minPrice.toFixed(toFixedVolume);
     setTotalVolumnAndTurnOverRate(totalVolumn);
+    let realMaxPrice = 0;
+    let realMinPrice = 0;
+    if (stockMaxs != undefined && stockMaxs != '') {
+        let stockMaxsArr = stockMaxs.split("-");
+        for (let i = 0; i < stockMaxsArr.length; i++) {
+            if (stockMaxsArr[i].split("~")[0] == timeImageCode) {
+                realMaxPrice = stockMaxsArr[i].split("~")[1];
+                break;
+            }
+        }
+    }
+    if (largeMarketStockMaxs != undefined && largeMarketStockMaxs != '') {
+        let largeMarketStockMaxsArr = largeMarketStockMaxs.split("-");
+        for (let i = 0; i < largeMarketStockMaxsArr.length; i++) {
+            if (largeMarketStockMaxsArr[i].split("~")[0] == timeImageCode.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
+                realMaxPrice = largeMarketStockMaxsArr[i].split("~")[1];
+                break;
+            }
+        }
+    }
+    if (stockMins != undefined && stockMins != '') {
+        let stockMinsArr = stockMins.split("-");
+        for (let i = 0; i < stockMinsArr.length; i++) {
+            if (stockMinsArr[i].split("~")[0] == timeImageCode) {
+                realMinPrice = stockMinsArr[i].split("~")[1];
+                break;
+            }
+        }
+    }
+    if (largeMarketStockMins != undefined && largeMarketStockMins != '') {
+        let largeMarketStockMinsArr = largeMarketStockMins.split("-");
+        for (let i = 0; i < largeMarketStockMinsArr.length; i++) {
+            if (largeMarketStockMinsArr[i].split("~")[0] == timeImageCode.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
+                realMinPrice = largeMarketStockMinsArr[i].split("~")[1];
+                break;
+            }
+        }
+    }
     option = {
         grid: {
             bottom: '7%',   // 距离容器底部的距离
@@ -473,6 +515,34 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                     symbol: 'none',
                     data: markLineData
                 },
+                markPoint: {
+                    data: [
+                        {
+                            type: 'max',
+                            name: '最高',
+                            symbol: 'pin',
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                formatter: '最高',
+                                position: 'top',
+                                fontSize: 10
+                            }
+                        },
+                        {
+                            type: 'min',
+                            name: '最低',
+                            symbol: 'pin',
+                            symbolSize: 10,
+                            label: {
+                                show: true,
+                                formatter: '最低',
+                                position: 'bottom',
+                                fontSize: 10
+                            }
+                        }
+                    ]
+                }
             },
             {
                 data: dataStr,
@@ -505,7 +575,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                         left: '5%',
                         top: '5%',
                         style: {
-                            text: fundOrStockName + "（最新：" + now + "）",
+                            text: fundOrStockName + "（最新：" + now + "）" + (parseFloat(realMaxPrice) == 0 ? "" : "最高：" + realMaxPrice)  + (parseFloat(realMinPrice) == 0 ? "" : "  最低：" + realMinPrice) ,
                             textAlign: 'left',
                             fill: '#333',
                             fontSize: 14
