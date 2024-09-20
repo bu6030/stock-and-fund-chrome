@@ -497,12 +497,17 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 var changePercent = parseFloat(stoksArr[k].f3).toFixed(2);
                 var dayIncome = 0.00;
                 if (stock != undefined) {
-                    if (stock.code.indexOf('hk') >= 0 || stock.code.indexOf('HK') >= 0) {
-                        dayIncome = await getHuilvDayIncome(parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds), 'HK');
-                    } else if (stock.code.indexOf('us') >= 0 || stock.code.indexOf('US') >= 0) {
-                        dayIncome = await getHuilvDayIncome(parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds), 'US');
+                    // 当天新买入
+                    if (stock.newBuy && stock.newBuyDate == getBeijingDate()) {
+                        dayIncome = (now - parseFloat(stock.costPrise + ""))*(parseFloat(stock.bonds));
+                    // 不是当天新买
                     } else {
-                        dayIncome = parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds);
+                        dayIncome = parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds)
+                    }
+                    if (stock.code.indexOf('hk') >= 0 || stock.code.indexOf('HK') >= 0) {
+                        dayIncome = await getHuilvDayIncome(dayIncome, 'HK');
+                    } else if (stock.code.indexOf('us') >= 0 || stock.code.indexOf('US') >= 0) {
+                        dayIncome = await getHuilvDayIncome(dayIncome, 'US');
                     }
                 }
                 stockDayIncome += dayIncome;
@@ -773,4 +778,18 @@ function getDateStrFromTimestamp(timestamp) {
     } catch(error) {
         return '1970-01-01 00:00:00';
     }
+}
+
+// 获取北京时间格式的日期，2023-01-01格式
+function getBeijingDate() {
+    let date = new Date();
+    let options = {
+      timeZone: 'Asia/Shanghai',
+      hour12: false,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    };
+    let formattedDate = date.toLocaleString('zh-CN', options);
+    return formattedDate.replace(/\//g, '-');
 }

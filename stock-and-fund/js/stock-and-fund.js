@@ -4253,20 +4253,6 @@ function getBeijingTime() {
     return date.toLocaleString('zh-CN', options);
 }
 
-// 获取北京时间格式的日期，2023-01-01格式
-function getBeijingDate() {
-    let date = new Date();
-    let options = {
-      timeZone: 'Asia/Shanghai',
-      hour12: false,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    };
-    let formattedDate = date.toLocaleString('zh-CN', options);
-    return formattedDate.replace(/\//g, '-');
-}
-
 // 获取北京时间格式的日期，20230101格式
 function getBeijingDateNoSlash() {
     let date = new Date();
