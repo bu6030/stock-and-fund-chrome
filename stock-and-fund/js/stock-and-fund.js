@@ -1243,8 +1243,8 @@ async function initStockGtimgCallBack(result, stocks) {
                 // 设置换手率
                 turnOverRate += stockList[l].code + '~' + values[38] + '-';
                 stockList[l].turnOverRate = values[38];
-                stockMaxs += stock.code + '~' + stock.max + '-';
-                stockMins += stock.code + '~' + stock.min + '-';
+                stockMaxs += stockList[l].code + '~' + stockList[l].max + '-';
+                stockMins += stockList[l].code + '~' + stockList[l].min + '-';
                 stockList[l].quantityRelativeRatio = values[49];
             }
         }

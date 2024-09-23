@@ -342,7 +342,8 @@
 320. 部分错误股票返回后，依然展示，允许用户删除 2024/8/29 version 2.2.1.9 -- end
 321. 全屏模式窗口模式，调整窗口大小后分时图显示问题修改 2024/9/6 version 2.2.2.0 -- end
 322. 增加显示股票最高价，最低价 2024/9/10 version 2.2.2.1 -- end
-323. 角标计算当日收益增加当天新买入逻辑 2024/9/20 version 2.2.2.2 -- end
+323. 角标计算当日收益增加当天新买入逻辑 2024/9/20
+324. 页面显示股价最大值最小值问题修改 version 2.2.2.2 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
