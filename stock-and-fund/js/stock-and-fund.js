@@ -5519,6 +5519,10 @@ async function getHuilv(type) {
         console.log('汇率缓存超过1小时');
         huilvCached = null;
     }
+    if (huilvCached == "1") {
+        console.log('汇率比率为1，几乎不可能说明上次接口调用问题');
+        huilvCached = null;
+    }
     if (huilvCached != null) {
         huilv = huilvCached;
         console.log('从缓存取汇率');
