@@ -309,6 +309,16 @@ function ajaxGetStockTimeImage(code, type, end) {
         klt = 102;
     } else if (type == 'MONTH'){
         klt = 103;
+    } else if (type == '1MIN') {
+        klt = 1;
+    } else if (type == '5MIN') {
+        klt = 5;
+    } else if (type == '15MIN') {
+        klt = 15;
+    } else if (type == '30MIN') {
+        klt = 30;
+    } else if (type == '60MIN') {
+        klt = 60;
     }
     let secid = getSecid(code);
     if (secid == null || secid == '' || secid == undefined) {

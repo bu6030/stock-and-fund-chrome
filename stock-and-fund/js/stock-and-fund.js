@@ -753,6 +753,16 @@ document.addEventListener(
         document.getElementById('time-image-week-button').addEventListener('click', showWeekImage);
         // 走势图页面，月线图按钮点击
         document.getElementById('time-image-month-button').addEventListener('click', showMonthImage);
+        // 走势图页面，1分钟线图按钮点击
+        document.getElementById('time-image-1min-button').addEventListener('click', show1or5or15or30or60MinutesImage);
+        // 走势图页面，5分钟线图按钮点击
+        document.getElementById('time-image-5min-button').addEventListener('click', show1or5or15or30or60MinutesImage);
+        // 走势图页面，15分钟线图按钮点击
+        document.getElementById('time-image-15min-button').addEventListener('click', show1or5or15or30or60MinutesImage);
+        // 走势图页面，30分钟线图按钮点击
+        document.getElementById('time-image-30min-button').addEventListener('click', show1or5or15or30or60MinutesImage);
+        // 走势图页面，60分钟线图按钮点击
+        document.getElementById('time-image-60min-button').addEventListener('click', show1or5or15or30or60MinutesImage);
         // 走势图页面，点击股票基金按钮
         document.getElementById('stock-fund-delete-button').addEventListener('click', deleteStockAndFund);
         // 走势图页面，点击编辑按钮

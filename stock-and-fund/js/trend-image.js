@@ -102,6 +102,7 @@ function showDayImage() {
 }
 // 展示周线图
 function showWeekImage() {
+    clearTimeImageTimeout();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
@@ -163,6 +164,25 @@ function showMonthImage() {
         $("#time-image-new").show();
         $("#time-image").html('');
     }
+    $("#time-image-modal").modal();
+}
+// 展示5分钟15分钟30分钟60分钟线图
+function show1or5or15or30or60MinutesImage(event) {
+    clearTimeImageTimeout();
+    let targetId = event.target.id;
+    if (targetId == 'time-image-1min-button') {
+        setStockImage('1MIN');
+    } else if (targetId == 'time-image-5min-button') {
+        setStockImage('5MIN');
+    } else if (targetId == 'time-image-15min-button') {
+        setStockImage('15MIN');
+    } else if (targetId == 'time-image-30min-button') {
+        setStockImage('30MIN');
+    } else if (targetId == 'time-image-60min-button') {
+        setStockImage('60MIN');
+    }
+    $("#time-image-new").show();
+    $("#time-image").html('');
     $("#time-image-modal").modal();
 }
 // 获取当前日期，年-月-日格式
@@ -736,6 +756,16 @@ function setStockImage(type) {
         kType = '周K';
     } else if (type == 'MONTH'){
         kType = '月K';
+    } else if (type == '1MIN') {
+        kType = '1分钟';
+    } else if (type == '5MIN') {
+        kType = '5分钟';
+    } else if (type == '15MIN') {
+        kType = '15分钟';
+    } else if (type == '30MIN') {
+        kType = '30分钟';
+    } else if (type == '60MIN') {
+        kType = '60分钟';
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     // 说明该基金是从持仓明细进入的
