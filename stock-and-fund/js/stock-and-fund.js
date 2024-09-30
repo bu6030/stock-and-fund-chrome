@@ -1770,6 +1770,7 @@ async function initStockAndFundHtml() {
                     $("#time-image-month-button")[0].style.display = 'none';
                     $("#stock-show-time-image-button")[0].style.display = 'none';
                     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
+                    $("#show-time-image-5min15min30min60min-button")[0].style.display = 'none';
                 } else {
                     $("#time-image-minute-button")[0].style.display = 'inline';
                     $("#time-image-minute-5day-button")[0].style.display = 'inline';
@@ -1778,6 +1779,7 @@ async function initStockAndFundHtml() {
                     $("#time-image-month-button")[0].style.display = 'inline';
                     $("#stock-show-time-image-button")[0].style.display = 'inline';
                     $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
+                    $("#show-time-image-5min15min30min60min-button")[0].style.display = 'inline';
                 }
                 timeImageCode = stockCode;
                 timeImageType = "STOCK";
