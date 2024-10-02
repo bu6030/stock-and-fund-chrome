@@ -30,6 +30,7 @@ var updateTimeDisplay = 'DISPLAY';
 var turnOverRateDisplay = 'DISPLAY';
 var quantityRelativeRatioDisplay = 'DISPLAY';
 var belongGroupDisplay = 'DISPLAY';
+var amplitudeDisplay = 'DISPLAY';
 var maxDisplay = 'DISPLAY';
 var minDisplay = 'DISPLAY';
 var mainDeleteButtonDisplay;
@@ -67,6 +68,7 @@ var stockColumnNames = {
     "turn-over-rate-th": "换手率",
     "quantity-relative-ratio-th": "量比",
     "change-th": "涨跌",
+    "amplitude-th": "振幅",
     "price-th": "当前价",
     "cost-price-th": "成本价",
     "max-th":"最高价",
@@ -89,6 +91,7 @@ var fundColumnNames = {
     "turn-over-rate-th": "换手率",
     "quantity-relative-ratio-th": "量比",
     "change-th": "涨跌",
+    "amplitude-th": "振幅",
     "price-th": "估算净值",
     "cost-price-th": "持仓成本单价",
     "max-th":"最高价",
@@ -267,6 +270,12 @@ async function initLoad() {
     } else {
         changeDisplay = 'DISPLAY';
     }
+    amplitudeDisplay = await readCacheData('amplitude-display');
+    if (amplitudeDisplay == null || amplitudeDisplay == 'HIDDEN') {
+        amplitudeDisplay = 'HIDDEN';
+    } else {
+        amplitudeDisplay = 'DISPLAY';
+    }
     updateTimeDisplay = await readCacheData('update-time-display');
     if (updateTimeDisplay == null || updateTimeDisplay == 'DISPLAY') {
         updateTimeDisplay = 'DISPLAY';
@@ -424,6 +433,7 @@ async function initLoad() {
             {"belong-group-th": 0},
             {"day-income-th": 0},
             {"change-percent-th": 0},
+            {"amplitude-th": 0},
             {"turn-over-rate-th": 0},
             {"quantity-relative-ratio-th": 0},
             {"change-th": 0},
@@ -644,6 +654,8 @@ async function initHtml() {
             document.getElementById('stock-income-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-change-th'))
             document.getElementById('stock-change-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-amplitude-th'))
+            document.getElementById('stock-amplitude-th').addEventListener('click', clickSortStockAndFund);
         if (lastSort.stock.targetId != null && lastSort.stock.targetId != '' && document.getElementById(lastSort.stock.targetId)) {
             if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
                 document.getElementById(lastSort.stock.targetId).classList.remove('order');
@@ -1249,6 +1261,7 @@ async function initStockGtimgCallBack(result, stocks) {
                         costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                     }
                 }
+                stockList[l].amplitude = values[43];
                 stockList[l].costPriceValue = costPriceValue + "";
                 // 设置换手率
                 turnOverRate += stockList[l].code + '~' + values[38] + '-';
@@ -1397,6 +1410,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                         costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                     }
                 }
+                stock.amplitude = stoksArr[k].f7;
                 stock.costPriceValue = costPriceValue + "";
                 // 设置换手率
                 turnOverRate += stock.code + '~' + stoksArr[k].f8 + '-';
@@ -1986,6 +2000,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = "<td " + changePercentStyle + ">" + result[k].changePercent + "%" + "</td>";
                 } else if(columnName == 'change-th') {
                     html = (changeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].change + "</td>" : "");
+                } else if(columnName == 'amplitude-th') {
+                    html = (amplitudeDisplay == 'DISPLAY' ? "<td>" + result[k].amplitude + "%</td>" : "");
                 } else if(columnName == 'turn-over-rate-th') {
                     html = (turnOverRateDisplay == 'DISPLAY' ? "<td>" + result[k].turnOverRate + "%</td>" : "");
                 } else if(columnName == 'quantity-relative-ratio-th') {
@@ -2063,6 +2079,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>";
         } else if(columnName == 'change-th') {
             html = (changeDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'amplitude-th') {
+            html = (amplitudeDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'turn-over-rate-th') {
             html = (turnOverRateDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'quantity-relative-ratio-th') {
@@ -2147,6 +2165,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = "<td " + gszzlStyle + ">" + result[k].gszzl + "%</td>";
                 } else if(columnName == 'change-th') {
                     html = (changeDisplay == 'DISPLAY' ? "<td>--</td>" : "");
+                } else if(columnName == 'amplitude-th') {
+                    html = (amplitudeDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'turn-over-rate-th') {
                     html = (turnOverRateDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'quantity-relative-ratio-th') {
@@ -2219,6 +2239,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = "<td " + fundDayIncomePercentStyle + ">" + fundDayIncomePercent + "%</td>"
         } else if(columnName == 'change-th') {
             html = (changeDisplay == 'DISPLAY' ? "<td></td>" : "")
+        } else if(columnName == 'amplitude-th') {
+            html = (amplitudeDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'turn-over-rate-th') {
             html = (turnOverRateDisplay == 'DISPLAY' ? "<td></td>" : "")
         } else if(columnName == 'quantity-relative-ratio-th') {
@@ -2292,6 +2314,8 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncomePercent + "").toFixed(2) + "%</td>";
         } else if(columnName == 'change-th') {
             html = (changeDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'amplitude-th') {
+            html = (amplitudeDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'turn-over-rate-th') {
             html = (turnOverRateDisplay == 'DISPLAY' ? "<td></td>" : "")
         } else if(columnName == 'quantity-relative-ratio-th') {
@@ -3736,6 +3760,9 @@ async function setDisplayTr(event) {
     } else if(type == 'change-display-checkbox') {
         changeDisplay = dispaly;
         saveCacheData('change-display', dispaly);
+    } else if(type =='amplitude-display-checkbox') {
+        amplitudeDisplay = dispaly;
+        saveCacheData('amplitude-display', dispaly);
     } else if(type == 'turn-over-rate-display-checkbox') {
         turnOverRateDisplay = dispaly;
         saveCacheData('turn-over-rate-display', dispaly);
@@ -3761,6 +3788,7 @@ async function setDisplayTr(event) {
         incomeDisplay = dispaly;
         codeDisplay = dispaly;
         changeDisplay = dispaly;
+        amplitudeDisplay = dispaly;
         updateTimeDisplay = dispaly;
         turnOverRateDisplay = dispaly;
         quantityRelativeRatioDisplay = dispaly;
@@ -3780,6 +3808,7 @@ async function setDisplayTr(event) {
         saveCacheData('bonds-display', dispaly);
         saveCacheData('income-display', dispaly);
         saveCacheData('change-display', dispaly);
+        saveCacheData('amplitude-display', dispaly);
         saveCacheData('update-time-display', dispaly);
         saveCacheData('turn-over-rate-display', dispaly);
         saveCacheData('quantity-relative-ratio-display', dispaly);
@@ -3799,6 +3828,7 @@ async function setDisplayTr(event) {
             $("#bonds-display-checkbox").prop("checked", true);
             $("#income-display-checkbox").prop("checked", true);
             $("#change-display-checkbox").prop("checked", true);
+            $("#amplitude-display-checkbox").prop("checked", true);
             $("#update-time-display-checkbox").prop("checked", true);
             $("#turn-over-rate-display-checkbox").prop("checked", true);
             $("#quantity-relative-ratio-display-checkbox").prop("checked", true);
@@ -3818,6 +3848,7 @@ async function setDisplayTr(event) {
             $("#bonds-display-checkbox").prop("checked", false);
             $("#income-display-checkbox").prop("checked", false);
             $("#change-display-checkbox").prop("checked", false);
+            $("#amplitude-display-checkbox").prop("checked", false);
             $("#update-time-display-checkbox").prop("checked", false);
             $("#turn-over-rate-display-checkbox").prop("checked", false);
             $("#quantity-relative-ratio-display-checkbox").prop("checked", false);
@@ -4686,6 +4717,12 @@ async function sortStockAndFund(totalMarketValue) {
                     return parseFloat(a.change + "") - parseFloat(b.change + "");
                 } else {
                     return parseFloat(b.change + "") - parseFloat(a.change + "");
+                }
+            } else if (targetId == 'stock-amplitude-th') {
+                if(lastSort.stock.sortType == 'asc'){
+                    return parseFloat(a.amplitude + "") - parseFloat(b.amplitude + "");
+                } else {
+                    return parseFloat(b.amplitude + "") - parseFloat(a.amplitude + "");
                 }
             } else if (targetId == 'stock-price-th') {
                 if(lastSort.stock.sortType == 'asc'){
@@ -5684,6 +5721,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'change-th' && changeDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'amplitude-th' && amplitudeDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'cost-price-th' && costPriceDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'turn-over-rate-th' && turnOverRateDisplay != 'DISPLAY') {
@@ -5900,6 +5939,13 @@ function addDragAndDropListeners() {
         changeDisplay = 'DISPLAY';
         $("#change-display-checkbox").prop("checked", true);
     }
+    if (amplitudeDisplay == null || amplitudeDisplay == 'HIDDEN') {
+        amplitudeDisplay = 'HIDDEN';
+        $("#amplitude-display-checkbox").prop("checked", false);
+    } else {
+        amplitudeDisplay = 'DISPLAY';
+        $("#amplitude-display-checkbox").prop("checked", true);
+    }
     if (updateTimeDisplay == null || updateTimeDisplay == 'HIDDEN') {
         updateTimeDisplay = 'HIDDEN';
         $("#update-time-display-checkbox").prop("checked", false);
@@ -5949,6 +5995,8 @@ function addDragAndDropListeners() {
     document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，涨跌
     document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，振幅
+    document.getElementById("amplitude-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，更新时间
     document.getElementById("update-time-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，换手率
@@ -5973,6 +6021,7 @@ function recoveryColumnOrder() {
         {"belong-group-th": 0},
         {"day-income-th": 0},
         {"change-percent-th": 0},
+        {"amplitude-th": 0},
         {"turn-over-rate-th": 0},
         {"quantity-relative-ratio-th": 0},
         {"change-th": 0},
