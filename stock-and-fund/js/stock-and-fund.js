@@ -271,10 +271,10 @@ async function initLoad() {
         changeDisplay = 'DISPLAY';
     }
     amplitudeDisplay = await readCacheData('amplitude-display');
-    if (amplitudeDisplay == null || amplitudeDisplay == 'HIDDEN') {
-        amplitudeDisplay = 'HIDDEN';
-    } else {
+    if (amplitudeDisplay == null || amplitudeDisplay == 'DISPLAY') {
         amplitudeDisplay = 'DISPLAY';
+    } else {
+        amplitudeDisplay = 'HIDDEN';
     }
     updateTimeDisplay = await readCacheData('update-time-display');
     if (updateTimeDisplay == null || updateTimeDisplay == 'DISPLAY') {
