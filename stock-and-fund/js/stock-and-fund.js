@@ -5690,6 +5690,8 @@ function getSecid(code) {
             secid = '100';
         } else if(code == 'HSTECH'){
             secid = '124';
+        } else if(code == 'CN00Y'){
+            secid = '104';
         }
     }
     return secid;
@@ -6141,6 +6143,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'hkHSTECH':
                 name = '恒生科技指数'
+                break;
+            case 'CN00Y':
+                name = 'A50期指'
                 break;
             case 'usNDX':
                 name = '纳斯达克'

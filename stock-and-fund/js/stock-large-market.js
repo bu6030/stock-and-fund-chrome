@@ -87,6 +87,12 @@ async function initLargeMarketDataCallBack(bigStocks) {
             timeImageCode = "hkHSTECH";
             initLargeMarketClick();
         });
+        // 点击A50期指指数
+        if(document.getElementById('large-market-CN00Y'))
+        document.getElementById('large-market-CN00Y').addEventListener('click', function () {
+            timeImageCode = "CN00Y";
+            initLargeMarketClick();
+        });
         // 点击纳斯达克指数
         if(document.getElementById('large-market-NDX'))
         document.getElementById('large-market-NDX').addEventListener('click', function () {

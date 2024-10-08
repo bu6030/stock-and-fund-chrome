@@ -23,7 +23,7 @@ function showMinuteImage(ndays) {
         && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
         && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
         && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH') {
+        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y') {
         $("#update-stock-fund-button")[0].style.display = 'block';
         $("#set-top-button-3")[0].style.display = 'block';
         if (timeImageType == "STOCK") {
@@ -42,7 +42,7 @@ function showMinuteImage(ndays) {
         && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
         && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
         && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH') {
+        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y') {
         if (timeImageType == "FUND") {
             path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
             $("#fund-modal").modal("hide");
@@ -80,7 +80,7 @@ function showDayImage() {
         && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
         && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
         && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH') {
+        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -115,7 +115,7 @@ function showWeekImage() {
         && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
         && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
         && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH') {
+        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=W&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -148,7 +148,7 @@ function showMonthImage() {
         && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
         && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
         && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH') {
+        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y') {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=M&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
