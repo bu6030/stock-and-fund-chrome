@@ -3565,7 +3565,7 @@ async function getFundInversPosition() {
             timeImageSecid = secid;
             timeImageType = "STOCK";
             timeImageName = fundStocksDetail[this.sectionRowIndex].f14;
-            showMinuteImage();
+            showMinuteImage('1DAY');
         });
     }
 }
