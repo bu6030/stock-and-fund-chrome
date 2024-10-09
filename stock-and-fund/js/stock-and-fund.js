@@ -31,6 +31,7 @@ var turnOverRateDisplay = 'DISPLAY';
 var quantityRelativeRatioDisplay = 'DISPLAY';
 var belongGroupDisplay = 'DISPLAY';
 var amplitudeDisplay = 'DISPLAY';
+var upSpeedDisplay = 'DISPLAY';
 var maxDisplay = 'DISPLAY';
 var minDisplay = 'DISPLAY';
 var mainDeleteButtonDisplay;
@@ -71,6 +72,7 @@ var stockColumnNames = {
     "amplitude-th": "振幅",
     "price-th": "当前价",
     "cost-price-th": "成本价",
+    "up-speed-th": "涨速",
     "max-th":"最高价",
     "min-th":"最低价",
     "bonds-th": "持仓",
@@ -94,6 +96,7 @@ var fundColumnNames = {
     "amplitude-th": "振幅",
     "price-th": "估算净值",
     "cost-price-th": "持仓成本单价",
+    "up-speed-th": "涨速",
     "max-th":"最高价",
     "min-th":"最低价",
     "bonds-th": "持有份额",
@@ -217,6 +220,12 @@ async function initLoad() {
         belongGroupDisplay = 'DISPLAY';
     } else {
         belongGroupDisplay = 'HIDDEN';
+    }
+    upSpeedDisplay = await readCacheData('up-speed-display');
+    if (upSpeedDisplay == null || upSpeedDisplay == 'DISPLAY') {
+        upSpeedDisplay = 'DISPLAY';
+    } else {
+        upSpeedDisplay = 'HIDDEN';
     }
     maxDisplay = await readCacheData('max-display');
     if (maxDisplay == null || maxDisplay == 'DISPLAY') {
@@ -439,6 +448,7 @@ async function initLoad() {
             {"change-th": 0},
             {"price-th": 0},
             {"cost-price-th": 0},
+            {"up-speed-th": 0},
             {"max-th": 0},
             {"min-th": 0},
             {"bonds-th": 0},
@@ -1410,6 +1420,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                         costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                     }
                 }
+                stock.upSpeed = parseFloat(stoksArr[k].f22 + '').toFixed(2);
                 stock.amplitude = stoksArr[k].f7;
                 stock.costPriceValue = costPriceValue + "";
                 // 设置换手率
@@ -1990,6 +2001,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th') {
                     html = (belongGroupDisplay == 'DISPLAY' ? "<td>" + groups[result[k].belongGroup] + "</td>": "");
+                } else if(columnName == 'up-speed-th') {
+                    html = (upSpeedDisplay == 'DISPLAY' ? "<td>" + result[k].upSpeed + "%</td>": "");
                 } else if(columnName == 'max-th') {
                     html = (maxDisplay == 'DISPLAY' ? "<td>" + result[k].max + "</td>": "");
                 } else if(columnName == 'min-th') {
@@ -2069,7 +2082,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = "<td></td>";
         } else if (columnName == 'belong-group-th') {
             html = (belongGroupDisplay == 'DISPLAY' ? "<td></td>" : "");
-        } else if (columnName == 'max-th') {
+        } else if(columnName == 'up-speed-th') {
+            html = (upSpeedDisplay == 'DISPLAY' ? "<td></td>": "");
+        }  else if (columnName == 'max-th') {
             html = (maxDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if (columnName == 'min-th') {
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
@@ -2155,7 +2170,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th'){
                     html = (belongGroupDisplay == 'DISPLAY' ? "<td>" + groups[result[k].belongGroup] + "</td>" : "");
-                } else if(columnName == 'max-th'){
+                } else if(columnName == 'up-speed-th') {
+                    html = (upSpeedDisplay == 'DISPLAY' ? "<td>--</td>": "");
+                }  else if(columnName == 'max-th'){
                     html = (maxDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'min-th'){
                     html = (minDisplay == 'DISPLAY' ? "<td>--</td>" : "");
@@ -2229,7 +2246,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = "<td></td>";
         } else if(columnName == 'belong-group-th') {
             html = (belongGroupDisplay == 'DISPLAY' ? "<td></td>" : "");
-        } else if(columnName == 'max-th'){
+        } else if(columnName == 'up-speed-th') {
+            html = (upSpeedDisplay == 'DISPLAY' ? "<td></td>": "");
+        }  else if(columnName == 'max-th'){
             html = (maxDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'min-th'){
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
@@ -2304,7 +2323,9 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = "<td></td>";
         } else if(columnName == 'belong-group-th') {
             html = (belongGroupDisplay == 'DISPLAY' ? "<td></td>" : "");
-        } else if(columnName == 'max-th'){
+        } else if(columnName == 'up-speed-th') {
+            html = (upSpeedDisplay == 'DISPLAY' ? "<td></td>": "");
+        }  else if(columnName == 'max-th'){
             html = (maxDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'min-th'){
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
@@ -3739,6 +3760,9 @@ async function setDisplayTr(event) {
     } else if(type == 'belong-group-display-checkbox') {
         belongGroupDisplay = dispaly;
         saveCacheData('belong-group-display', dispaly);
+    } else if(type == 'up-speed-display-checkbox') {
+        upSpeedDisplay = dispaly;
+        saveCacheData('up-speed-display', dispaly);
     } else if(type == 'max-display-checkbox') {
         maxDisplay = dispaly;
         saveCacheData('max-display', dispaly);
@@ -3781,6 +3805,7 @@ async function setDisplayTr(event) {
         addtimePriceDisplay = dispaly;
         dayIncomeDisplay = dispaly;
         belongGroupDisplay = dispaly;
+        upSpeedDisplay = dispaly;
         maxDisplay = dispaly;
         minDisplay = dispaly;
         costPriceDisplay = dispaly;
@@ -3802,6 +3827,7 @@ async function setDisplayTr(event) {
         saveCacheData('addtime-price-display', dispaly);
         saveCacheData('day-income-display', dispaly);
         saveCacheData('belong-group-display', dispaly);
+        saveCacheData('up-speed-display', dispaly);
         saveCacheData('max-display', dispaly);
         saveCacheData('min-display', dispaly);
         saveCacheData('cost-price-display', dispaly);
@@ -3821,6 +3847,7 @@ async function setDisplayTr(event) {
             $("#income-percent-display-checkbox").prop("checked", true);
             $("#addtime-price-display-checkbox").prop("checked", true);
             $("#belong-group-display-checkbox").prop("checked", true);
+            $("#up-speed-display-checkbox").prop("checked", true);
             $("#max-display-checkbox").prop("checked", true);
             $("#min-display-checkbox").prop("checked", true);
             $("#day-income-display-checkbox").prop("checked", true);
@@ -3841,6 +3868,7 @@ async function setDisplayTr(event) {
             $("#income-percent-display-checkbox").prop("checked", false);
             $("#addtime-price-display-checkbox").prop("checked", false);
             $("#belong-group-display-checkbox").prop("checked", false);
+            $("#up-speed-display-checkbox").prop("checked", false);
             $("#max-display-checkbox").prop("checked", false);
             $("#min-display-checkbox").prop("checked", false);
             $("#day-income-display-checkbox").prop("checked", false);
@@ -5717,6 +5745,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'belong-group-th' && belongGroupDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'up-speed-th' && upSpeedDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'max-th' && maxDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'min-th' && minDisplay != 'DISPLAY') {
@@ -5885,6 +5915,13 @@ function addDragAndDropListeners() {
         belongGroupDisplay = 'HIDDEN';
         $("#belong-group-display-checkbox").prop("checked", false);
     }
+    if (upSpeedDisplay == null || upSpeedDisplay == 'DISPLAY') {
+        upSpeedDisplay = 'DISPLAY';
+        $("#up-speed-display-checkbox").prop("checked", true);
+    } else {
+        upSpeedDisplay = 'HIDDEN';
+        $("#up-speed-display-checkbox").prop("checked", false);
+    }
     if (maxDisplay == null || maxDisplay == 'DISPLAY') {
         maxDisplay = 'DISPLAY';
         $("#max-display-checkbox").prop("checked", true);
@@ -5985,6 +6022,8 @@ function addDragAndDropListeners() {
     document.getElementById("day-income-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，所属分组
     document.getElementById("belong-group-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，涨速
+    document.getElementById("up-speed-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，最高价
     document.getElementById("max-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，最低价
@@ -6029,6 +6068,7 @@ function recoveryColumnOrder() {
         {"change-th": 0},
         {"price-th": 0},
         {"cost-price-th": 0},
+        {"up-speed-th": 0},
         {"max-th": 0},
         {"min-th": 0},
         {"bonds-th": 0},
