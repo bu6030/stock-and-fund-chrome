@@ -1271,6 +1271,7 @@ async function initStockGtimgCallBack(result, stocks) {
                         costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
                     }
                 }
+                stockList[l].upSpeed = "--";
                 stockList[l].amplitude = values[43];
                 stockList[l].costPriceValue = costPriceValue + "";
                 // 设置换手率
