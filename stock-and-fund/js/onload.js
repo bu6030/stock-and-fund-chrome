@@ -30,32 +30,51 @@ document.addEventListener('DOMContentLoaded', function() {
         // 获取东方财富自选
         var dongfangcaifuElements = document.querySelectorAll('.ui-draggable-handle');
         if (dongfangcaifuElements.length > 0) {
-            for (let i = 0; i < dongfangcaifuElements.length; i++) {
-                let codeType = dongfangcaifuElements[i].dataset.code.split('.')[0];
-                let code = dongfangcaifuElements[i].dataset.code.split('.')[1];
-                if (code != '' && code != null && code != undefined) {
-                    if (code.length == 6 && code.startsWith("6")) {
-                        code = "sh" + code;
-                        stockCodes.push(code);
-                    } else if (code.length == 6 && (code.startsWith("0") || code.startsWith("3"))) {
-                        code = "sz" + code;
-                        stockCodes.push(code);
-                    } else if (code.length == 6 && (code.startsWith("1") || code.startsWith("5"))) {
-                        if (codeType == '0') { 
-                            code = "sz" + code;
-                        } else {
-                            code = "sh" + code;
-                        }
-                        stockCodes.push(code);
-                    } else if(code.length == 5 && isNumeric(code)) {
-                        code = "hk" + code;
-                        stockCodes.push(code);
-                    } else {
-                        code = "us" + code;
-                        stockCodes.push(code); 
-                    }
+            var checkboxes = document.querySelectorAll('.indexselect');
+
+            // 遍历所有复选框，并打印出它们的 value 值
+            checkboxes.forEach(function(checkbox) {
+                let code = checkbox.value;
+                if (code.length == 8 && code.startsWith("1")) {
+                    code = "sh" + code.split(".")[1];
+                    stockCodes.push(code);
+                } else if (code.length == 8 && (code.startsWith("0"))) {
+                    code = "sz" + code.split(".")[1];
+                    stockCodes.push(code);
+                } else if(code.length == 9 && code.startsWith("116")) {
+                    code = "hk" + code.split(".")[1];
+                    stockCodes.push(code);
+                } else if (code.length == 6 && (code.startsWith("105") || code.startsWith("153") || code.startsWith("107") || code.startsWith("106"))) {
+                    code = "us" + code.split(".")[1];
+                    stockCodes.push(code);
                 }
-            }
+            });
+            // for (let i = 0; i < dongfangcaifuElements.length; i++) {
+            //     let codeType = dongfangcaifuElements[i].dataset.code.split('.')[0];
+            //     let code = dongfangcaifuElements[i].dataset.code.split('.')[1];
+            //     if (code != '' && code != null && code != undefined) {
+            //         if (code.length == 6 && code.startsWith("6")) {
+            //             code = "sh" + code;
+            //             stockCodes.push(code);
+            //         } else if (code.length == 6 && (code.startsWith("0") || code.startsWith("3"))) {
+            //             code = "sz" + code;
+            //             stockCodes.push(code);
+            //         } else if (code.length == 6 && (code.startsWith("1") || code.startsWith("5"))) {
+            //             // if (codeType == '0') { 
+            //             //     code = "sz" + code;
+            //             // } else {
+            //                 code = "sh" + code;
+            //             // }
+            //             stockCodes.push(code);
+            //         } else if(code.length == 5 && isNumeric(code)) {
+            //             code = "hk" + code;
+            //             stockCodes.push(code);
+            //         } else {
+            //             code = "us" + code;
+            //             stockCodes.push(code); 
+            //         }
+            //     }
+            // }
         }
         // 获取雪球自选
         var xueqiuMore = document.querySelector('.optional__more');
