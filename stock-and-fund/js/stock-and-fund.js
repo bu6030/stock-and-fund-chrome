@@ -125,6 +125,8 @@ let hangYeOrGaiNian;
 var allTotalIncome = '--';
 var allTotalIncomePercent = '--';
 var allTotalIncomePercentStyle = '';
+var autoSync = false;
+var syncDataCloudUuid = '';
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -333,6 +335,12 @@ async function initLoad() {
     if (trendImageType == null || trendImageType == '') {
         trendImageType = 'MINUTE';
     }
+    autoSync = await readCacheData('auto-sync');
+    if (autoSync == null || autoSync == '' || autoSync == "false") {
+        autoSync = false;
+    } else if(autoSync == "true") {
+        autoSync = true;
+    }
     largetMarketTotalDisplay = await readCacheData('larget-market-total-display');
     if (largetMarketTotalDisplay == null || largetMarketTotalDisplay == "false") {
         largetMarketTotalDisplay = false;
@@ -531,7 +539,14 @@ async function initLoad() {
             })
         }
     }
-
+    syncDataCloudUuid = await readCacheData('sync-data-cloud-uuid');
+    if (syncDataCloudUuid == null || syncDataCloudUuid == '') {
+        syncDataCloudUuid = generateRandomUUID();
+        $("#sync-data-cloud-uuid").val(syncDataCloudUuid);
+        saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    } else {
+        $("#sync-data-cloud-uuid").val(syncDataCloudUuid);
+    }
     mainPageRefreshTime = await readCacheData('main-page-refresh-time');
     if (mainPageRefreshTime == null || mainPageRefreshTime == '' || mainPageRefreshTime == undefined
         || mainPageRefreshTime == 'undefined') {
@@ -550,6 +565,9 @@ async function initLoad() {
     initKlineCheckbox();
     // 默认20s刷新，通过mainPageRefreshTime获取
     setInterval(autoRefresh, mainPageRefreshTime);
+    if (autoSync) {
+        syncDataFromCloud();
+    }
 }
 
 // 20s自动刷新
@@ -1052,6 +1070,9 @@ document.addEventListener(
         // 设置页面，点击首页展示/隐藏删除按钮
         document.getElementById('main-delete-button-dont-display-change-button').addEventListener('click', changeMainDeleteButton);
         document.getElementById('main-delete-button-display-change-button').addEventListener('click', changeMainDeleteButton);
+        // 设置页面，点击开启/关闭自动同步
+        document.getElementById('close-auto-sync-button').addEventListener('click', changeAutoSync);
+        document.getElementById('open-auto-sync-button').addEventListener('click', changeAutoSync);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -2634,6 +2655,9 @@ async function saveStock() {
             $("#stock-modal").modal("hide");
             $("#search-stock-modal").modal("hide");
             initData();
+            if (autoSync) {
+                syncDataToCloud();
+            }
             return;
         }
     }
@@ -2657,6 +2681,9 @@ async function saveStock() {
     }
     $("#stock-modal").modal("hide");
     $("#search-stock-modal").modal("hide");
+    if (autoSync) {
+        syncDataToCloud();
+    }
     initData();
 }
 
@@ -2837,6 +2864,9 @@ async function saveFund() {
             $("#fund-modal").modal("hide");
             $("#search-fund-modal").modal("hide");
             initData();
+            if (autoSync) {
+                syncDataToCloud();
+            }
             return;
         }
     }
@@ -2860,6 +2890,9 @@ async function saveFund() {
     }
     $("#fund-modal").modal("hide");
     $("#search-fund-modal").modal("hide");
+    if (autoSync) {
+        syncDataToCloud();
+    }
     initData();
 }
 
@@ -3989,6 +4022,9 @@ async function fileInput (e) {
         }
         $("#data-import-modal").modal("hide");
         reloadDataAndHtml();
+        if(autoSync) {
+            syncDataToCloud();
+        }
     };
     reader.readAsText(file);
 }
@@ -4028,6 +4064,9 @@ async function getStockAndFundFromLocalService () {
         stockList = result.stocks;
         fundList = result.funds;
         reloadDataAndHtml();
+        if(autoSync) {
+            syncDataToCloud();
+        }
         $("#setting-modal").modal("hide");
     }
 }
@@ -4077,6 +4116,9 @@ async function deleteStockAndFund() {
         $("#stock-modal").modal("hide");
     }
     reloadDataAndHtml();
+    if(autoSync) {
+        syncDataToCloud();
+    }
 }
 
 // 展示分时图
@@ -4171,9 +4213,24 @@ async function syncDataFromCloud() {
         return;
     }
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    let syncDataLocalTime = await readCacheData('sync-data-local-time');
+    if (syncDataLocalTime == null || syncDataLocalTime == '') {
+        syncDataLocalTime = '1970/01/01 00:00:00';
+    }
     let result = ajaxSyncDataFromCloud(syncDataCloudUuid);
     if (result != null && result != '' && result != undefined) {
-        var checkResult = confirm("这些云同步数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
+        var checkResult = false;
+        if (autoSync) {
+            console.log('syncDataLocalTime=' + syncDataLocalTime + ';result.updateTime=' + result.updateTime + ';result.updateTime <= syncDataLocalTime=' + (result.updateTime + '' <= syncDataLocalTime + ''));
+            if (result.updateTime + '' <= syncDataLocalTime + '') {
+                // alertMessage('已经是最新不需要同步');
+                $("#sync-data-cloud-modal").modal('hide');
+                return;
+            }
+            checkResult = true;
+        } else {
+            checkResult = confirm("这些云同步数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
+        }
         if (checkResult) {
             saveCacheData('stocks', JSON.stringify(result.stocks));
             saveCacheData('funds', JSON.stringify(result.funds));
@@ -4210,8 +4267,11 @@ async function syncDataFromCloud() {
                     item.belongGroup = currentGroup;
                 })
             }
+            syncDataLocalTime = result.updateTime;
+            saveCacheData('sync-data-local-time', syncDataLocalTime);
             reloadDataAndHtml();
             $("#sync-data-cloud-modal").modal('hide');
+            // alertMessage("云同步成功");
         } else {
             $("#sync-data-cloud-modal").modal('hide');
             alertMessage("您取消了云同步");
@@ -4224,7 +4284,12 @@ async function syncDataFromCloud() {
 
 // 向云服务器存储数据
 async function syncDataToCloud() {
-    var checkResult = confirm("您是否要同步数据到云服务器？");
+    var checkResult = false;
+    if (autoSync) {
+        checkResult = true;
+    } else {
+        checkResult = confirm("您是否要同步数据到云服务器？");
+    }
     if (!checkResult) {
         $("#sync-data-cloud-modal").modal('hide');
         alertMessage("您取消了云同步");
@@ -4285,12 +4350,12 @@ async function syncDataToCloud() {
 
 // 展示云同步页面
 async function showSyncData() {
-    let syncDataCloudUuid = await readCacheData('sync-data-cloud-uuid');
-    if (syncDataCloudUuid !='' && syncDataCloudUuid != null && syncDataCloudUuid != undefined) {
+    // let syncDataCloudUuid = await readCacheData('sync-data-cloud-uuid');
+    // if (syncDataCloudUuid !='' && syncDataCloudUuid != null && syncDataCloudUuid != undefined) {
         $("#sync-data-cloud-uuid").val(syncDataCloudUuid);
-    } else {
-        $("#sync-data-cloud-uuid").val(generateRandomUUID());
-    }
+    // } else {
+    //     $("#sync-data-cloud-uuid").val(generateRandomUUID());
+    // }
     $("#setting-modal").modal('hide');
     $("#sync-data-cloud-modal").modal();
 }
@@ -4451,6 +4516,9 @@ async function buyOrSell() {
     }
     $("#buy-or-sell-modal").modal("hide");
     initData();
+    if (autoSync) {
+        syncDataToCloud();
+    }
 }
 
 // 拖拽股票基金后，调整位置
@@ -7090,6 +7158,13 @@ async function settingButtonInit(){
         document.getElementById('trend-image-type-week-button').classList.remove('active');
         document.getElementById('trend-image-type-month-button').classList.add('active');
     }
+    if (autoSync) {
+        document.getElementById('close-auto-sync-button').classList.remove('active');
+        document.getElementById('open-auto-sync-button').classList.add('active');
+    } else {
+        document.getElementById('close-auto-sync-button').classList.add('active');
+        document.getElementById('open-auto-sync-button').classList.remove('active');
+    }
 }
 
 // 设置全部/股票/基金按钮激活显示状态
@@ -7232,4 +7307,15 @@ async function changeMainDeleteButton (event) {
     saveCacheData('main-delete-button-display', mainDeleteButtonDisplay);
     settingButtonInit();
     reloadDataAndHtml();
+}
+
+async function changeAutoSync(event) {
+    let targetId = event.target.id;
+    if (targetId == 'close-auto-sync-button') {
+        autoSync = false;
+    } else {
+        autoSync = true;
+    }
+    saveCacheData('auto-sync', autoSync);
+    settingButtonInit();
 }
