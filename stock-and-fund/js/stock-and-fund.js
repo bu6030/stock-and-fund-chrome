@@ -1146,7 +1146,7 @@ async function initData() {
             for (var k in stockList) {
                 stocks += stockList[k].code + ",";
                 let code = stockList[k].code;
-                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj','').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
             }
             // let result = "";
             // let stoksArr = [];
@@ -1325,7 +1325,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
     for (var k in stoksArr) {
         let stock = {};
         for (var l in stockList) {
-            if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
+            if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj','').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
                 let toFixedVolume = 2;
                 stock = stockList[l];
                 // 本来想这里break出去，结果会导致一些数据undefined，继续遍历吧
@@ -2409,8 +2409,8 @@ function isNumeric(str) {
 
 // 通过股票名称搜索股票列表
 function searchStockByName(name) {
-    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1 || name.indexOf("us") != -1
-        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1 || name.indexOf("US") != -1) {
+    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1 || name.indexOf("us") != -1 || name.indexOf("bj") != -1 
+        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1 || name.indexOf("US") != -1 || name.indexOf("BJ") != -1) {
         name = name.substring(2, name.length);
     }
     var stocksArr;
@@ -2430,6 +2430,14 @@ function searchStockByName(name) {
                     result = result + "sz~" + name + "~" +stock.name ;
                 } else {
                     result = result  + "^" + "sz~" + name + "~" +stock.name ;
+                }
+            }
+            stock = checkStockExsit("bj" + name);
+            if (stock.checkReuslt) {
+                if (result == "v_hint=\"") {
+                    result = result + "bj~" + name + "~" +stock.name ;
+                } else {
+                    result = result  + "^" + "bj~" + name + "~" +stock.name ;
                 }
             }
             if (result == "v_hint=\"") {
@@ -2950,6 +2958,8 @@ async function searchFundAndStock() {
                 market = "沪A"
             } else if (values[0] == 'sz') {
                 market = "深A"
+            } else if (values[0] == 'bj') {
+                market = "京A"
             } else if (values[0] == 'hk') {
                 market = "港股"
             } else if (values[0] == 'us') {
@@ -3560,7 +3570,7 @@ async function removeBadgeText() {
 // 获取基金持仓明细
 async function getFundInversPosition() {
     let code = timeImageCode;
-    code = code.replace('sz','').replace('sh','');
+    code = code.replace('sz','').replace('sh','').replace('bj','');
     let fundStocks = ajaxGetFundInvesterPosition(code);
     if (fundStocks == null || fundStocks == '' || fundStocks == []) {
         fundStocks = ajaxGetFundPositionList(code);
@@ -3611,6 +3621,8 @@ async function getFundInversPosition() {
                 stockCode = "sh" + stockCode;
             } else if (stockCode.length == 6 && (stockCode.startsWith("0") || stockCode.startsWith("3"))) {
                 stockCode = "sz" + stockCode;
+            } else if (stockCode.length == 6 && (stockCode.startsWith("8"))) {
+                stockCode = "bj" + stockCode;
             } else if(stockCode.length == 5 || secid == 116) {
                 stockCode = "hk" + stockCode;
             } else if(secid == 105 || secid == 106 || secid == 153) {
@@ -3652,7 +3664,7 @@ async function setFundNetDiagram(event) {
         type = 'ALLYEAR';
     }
     let code = timeImageCode;
-    code = code.replace('sz','').replace('sh','');
+    code = code.replace('sz','').replace('sh','').replace('bj','');
     let fundNetDiagram = ajaxGetFundNetDiagram(code, type);
     let dataDwjz = [];
     let dataLJJZ = [];
@@ -3942,7 +3954,7 @@ async function fileInput (e) {
                 json.groups = {"default-group":"默认分组"};
             }
             json.stocks.forEach(item => {
-                item.code = item.code.replace('SH','sh').replace('SZ','sz').replace('HK','hk');
+                item.code = item.code.replace('SH','sh').replace('SZ','sz').replace('BJ','bj').replace('HK','hk');
             })
             // 在这里处理您的 JSON 数据
             saveCacheData('stocks', JSON.stringify(json.stocks));
@@ -3960,7 +3972,7 @@ async function fileInput (e) {
                     json[id + '_funds'] = [];
                 }
                 json[id + '_stocks'].forEach(item => {
-                    item.code = item.code.replace('SH','sh').replace('SZ','sz').replace('HK','hk');
+                    item.code = item.code.replace('SH','sh').replace('SZ','sz').replace('BJ','bj').replace('HK','hk');
                 })
                 saveCacheData(id + '_stocks', JSON.stringify(json[id + '_stocks']));
                 saveCacheData(id + '_funds', JSON.stringify(json[id + '_funds']));
@@ -4008,7 +4020,7 @@ async function fileInput (e) {
                     // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
                     var code = line.trim(); // 去除每行开头和结尾的空白字符
                     if (code !== '') {
-                        code = code.replace('SH','sh').replace('SZ','sz').replace('HK','hk');
+                        code = code.replace('SH','sh').replace('SZ','sz').replace('BJ','bj').replace('HK','hk');
                         let stock = {
                             "code": code,
                             "costPrise":"0",
@@ -5705,7 +5717,7 @@ async function goToEastMoney() {
         market = "1";
         let code = timeImageCode.substring(2, timeImageCode.length);
         url = Env.GO_TO_EASTMONEY_1_URL + "?code=" + code + "&market=" + market;
-    } else if(timeImageCode.startsWith('sz') || timeImageCode.startsWith('SZ')) {
+    } else if(timeImageCode.startsWith('sz') || timeImageCode.startsWith('SZ') || timeImageCode.startsWith('bj') || timeImageCode.startsWith('BJ')) {
         market = "0";
         let code = timeImageCode.substring(2, timeImageCode.length);
         url = Env.GO_TO_EASTMONEY_1_URL + "?code=" + code + "&market=" + market;
@@ -5730,7 +5742,7 @@ function getSecid(code) {
     let secid;
     if(code.startsWith('sh') || code.startsWith('SH')){
         secid = '1';
-    } else if(code.startsWith('sz') || code.startsWith('SZ')) {
+    } else if(code.startsWith('sz') || code.startsWith('SZ') || code.startsWith('bj') || code.startsWith('BJ')) {
         secid = '0';
     } else if(code.startsWith('hk') || code.startsWith('HK')) {
         secid = '116';

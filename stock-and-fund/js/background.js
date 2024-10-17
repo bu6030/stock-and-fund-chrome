@@ -116,7 +116,7 @@ function monitorStockPrice(stockList) {
                 || (typeof stockList[k].monitorUpperPercent != 'undefined' && stockList[k].monitorUpperPercent != '')
                 || (typeof stockList[k].monitorLowerPercent != 'undefined' && stockList[k].monitorLowerPercent != '')) {
                 // stocks += stockList[k].code + ",";
-                stocks += getSecidBack(stockList[k].code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+                stocks += getSecidBack(stockList[k].code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
             }
         }
         if (stocks == "") {
@@ -149,7 +149,7 @@ function monitorStockPrice(stockList) {
                             var monitorStock;
                             for (let l in stockList) {
                                 // if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
-                                if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
+                                if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
                                     monitorStock = stockList[l];
                                 }
                             }
@@ -301,7 +301,7 @@ function monitorStock(code) {
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
-        let secIdStock = getSecidBack(code) + '.' + code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+        let secIdStock = getSecidBack(code) + '.' + code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
         fetch("https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f12,f13,f19,f14,f139,f148,f124,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids=" + secIdStock)
             .then(response => response.text())
             .then(repsonse => JSON.parse(repsonse))
@@ -459,7 +459,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         var secIdStockArr = '1.000001,0.399001,0.399006,100.HSI,';
         for (var k in stockList) {
             let code = stockList[k].code;
-            secIdStockArr += getSecidBack(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+            secIdStockArr += getSecidBack(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
         }
         let response;
         try {
@@ -479,7 +479,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             try {
                 var stock = undefined;
                 for (let l in stockList) {
-                    if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
+                    if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
                         stock = stockList[l];
                         break;
                     }
@@ -730,7 +730,7 @@ function getSecidBack(code) {
     let secid;
     if(code.startsWith('sh') || code.startsWith('SH')){
         secid = '1';
-    } else if(code.startsWith('sz') || code.startsWith('SZ')) {
+    } else if(code.startsWith('sz') || code.startsWith('SZ') || code.startsWith('bj') || code.startsWith('BJ')) {
         secid = '0';
     } else if(code.startsWith('hk') || code.startsWith('HK')) {
         secid = '116';
