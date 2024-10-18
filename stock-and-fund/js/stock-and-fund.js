@@ -3175,7 +3175,7 @@ function alertMessage(message) {
     $("#alert-container").show();
     setTimeout(function () {
         $("#alert-container").hide();
-    }, 2000);
+    }, 3000);
 }
 
 // 第一次安装后没有数据，展示使用说明
@@ -4447,6 +4447,11 @@ async function showBuyOrSell(event) {
 
 // 买/卖股票计算该笔操作盈亏以及设定新成本，新持仓数等
 async function buyOrSell() {
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法编辑/添加/买卖，请切换到指定分组后再编辑/添加/买卖～');
+        $("#buy-or-sell-modal").modal("hide");
+        return;
+    }
     let stock;
     let stockCode = timeImageCode;
     let type = $("#buy-or-sell-type").val();
