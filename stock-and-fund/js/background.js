@@ -474,6 +474,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         // 在这里处理返回的数据
         var title = '';
         var stockDayIncome = 0.00;
+        var stockMarketValue = 0.00;
         var date = '';
         for (let k in stoksArr) {
             try {
@@ -509,6 +510,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                     } else if (stock.code.indexOf('us') >= 0 || stock.code.indexOf('US') >= 0) {
                         dayIncome = await getHuilvDayIncome(dayIncome, 'US');
                     }
+                    stockMarketValue += now * parseFloat(stock.bonds);
                 }
                 stockDayIncome += dayIncome;
                 if (count <= 24) {
@@ -550,6 +552,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         }
         let funcDayIncome = funcIncome.fundDayIncome;
         let totalDayIncome = funcDayIncome + stockDayIncome;
+        let fundMarketValue = funcIncome.fundMarketValue;
         title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
         title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
         title += '\n当日总收益：' + totalDayIncome.toFixed(2);
@@ -583,6 +586,11 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 totalDayIncome = totalDayIncome.toFixed(2);
             }
             sendChromeBadge('#FFFFFF', color, totalDayIncome + "");
+        } else if (monitorPriceOrPercent == 'DAY_INCOME_PERCENT') {
+            let color = totalDayIncome > 0 ? redColor : blueColor;
+            let totalDayIncomePercent = (totalDayIncome / (fundMarketValue + stockMarketValue - totalDayIncome) * 100).toFixed(2);
+            console.log('fundMarketValue + stockMarketValue:',(fundMarketValue + stockMarketValue),';totalDayIncome:',totalDayIncome);
+            sendChromeBadge('#FFFFFF', color, totalDayIncomePercent + "");
         }
         saveDayIncomehistory(stockDayIncome.toFixed(2), funcDayIncome.toFixed(2), date);
         setChromeTitle(title);
@@ -620,6 +628,7 @@ async function getFundIncome(date) {
     }
     let fundDayIncome = parseFloat("0");
     let fundTotalIncome = parseFloat("0");
+    let fundMarketValue = parseFloat("0");
     let isFailed = false;
     let promises = fundList.map(async (fund) => {
         try {
@@ -645,6 +654,7 @@ async function getFundIncome(date) {
                     fundDayIncome = fundDayIncome + dayIncome;
                     let totalIncome = (parseFloat(currentDayNetDiagram.DWJZ) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
                     fundTotalIncome = fundTotalIncome + totalIncome;
+                    fundMarketValue += parseFloat(currentDayNetDiagram.DWJZ) * parseFloat(fund.bonds);
                     saveData('previous_day_jingzhi_' + fund.fundCode, previousDayNetDiagram.DWJZ);
                     saveData('current_day_jingzhi_' + fund.fundCode, currentDayNetDiagram.DWJZ);
                     saveData('current_day_jingzhi_date_' + fund.fundCode, date);
@@ -661,6 +671,7 @@ async function getFundIncome(date) {
                         fundDayIncome = fundDayIncome + dayIncome;
                         let totalIncome = (parseFloat(json.gsz) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
                         fundTotalIncome = fundTotalIncome + totalIncome;
+                        fundMarketValue += parseFloat(json.gsz) * parseFloat(fund.bonds);
                     }
                 }
             }
@@ -673,7 +684,8 @@ async function getFundIncome(date) {
     await Promise.all(promises);
     let result = {
         "fundDayIncome" : fundDayIncome,
-        "fundTotalIncome" : fundTotalIncome
+        "fundTotalIncome" : fundTotalIncome,
+        "fundMarketValue": fundMarketValue
     }
     if (isFailed) {
         return null;

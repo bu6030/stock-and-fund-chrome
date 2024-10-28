@@ -1028,6 +1028,8 @@ document.addEventListener(
         document.getElementById('monitor-percent-change-button').addEventListener('click', changeMonitorPriceOrPercent);
         // 设置页面，点击当日总收益按钮
         document.getElementById('monitor-day-income-change-button').addEventListener('click', changeMonitorPriceOrPercent);
+        // 设置页面，点击当日总收益涨跌幅按钮
+        document.getElementById('monitor-day-income-percent-change-button').addEventListener('click', changeMonitorPriceOrPercent);
         // 设置页面，点击展示/不展示前5个股票价格
         document.getElementById('monitor-dont-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
         document.getElementById('monitor-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
@@ -6187,8 +6189,10 @@ async function changeMonitorPriceOrPercent(event) {
         monitorPriceOrPercent = 'PRICE';
     } else if (targetId == 'monitor-percent-change-button') {
         monitorPriceOrPercent = 'PERCENT';
-    } else {
+    } else if (targetId == 'monitor-day-income-change-button') {
         monitorPriceOrPercent = 'DAY_INCOME';
+    } else {
+        monitorPriceOrPercent = 'DAY_INCOME_PERCENT';
     }
     saveCacheData('monitor-price-or-percent', monitorPriceOrPercent);
     $("#setting-modal").modal("hide");
@@ -7049,14 +7053,22 @@ async function settingButtonInit(){
         document.getElementById('monitor-price-change-button').classList.add('active');
         document.getElementById('monitor-percent-change-button').classList.remove('active');
         document.getElementById('monitor-day-income-change-button').classList.remove('active');
+        document.getElementById('monitor-day-income-percent-change-button').classList.remove('active');
     } else if(monitorPriceOrPercent == 'PERCENT') {
         document.getElementById('monitor-price-change-button').classList.remove('active');
         document.getElementById('monitor-percent-change-button').classList.add('active');
         document.getElementById('monitor-day-income-change-button').classList.remove('active');
-    } else {
+        document.getElementById('monitor-day-income-percent-change-button').classList.remove('active');
+    } else if(monitorPriceOrPercent == 'DAY_INCOME') {
         document.getElementById('monitor-price-change-button').classList.remove('active');
         document.getElementById('monitor-percent-change-button').classList.remove('active');
         document.getElementById('monitor-day-income-change-button').classList.add('active');
+        document.getElementById('monitor-day-income-percent-change-button').classList.remove('active');
+    } else {
+        document.getElementById('monitor-price-change-button').classList.remove('active');
+        document.getElementById('monitor-percent-change-button').classList.remove('active');
+        document.getElementById('monitor-day-income-change-button').classList.remove('active');
+        document.getElementById('monitor-day-income-percent-change-button').classList.add('active');
     }
     if (monitorTop20Stock) {
         document.getElementById('monitor-dont-top-20-stock-change-button').classList.remove('active');
