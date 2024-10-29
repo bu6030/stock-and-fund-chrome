@@ -1,6 +1,7 @@
 # 股票基金神器chrome扩展程序版本
 
 [加入股票基金神器群](#attend-wechat-group)  
+[系统架构图](#architect)  
 [版本更新历史记录](#develop-history)  
 [Chrome应用市场安装](#chrome-plugin-stock-and-fund)  
 [Edge应用市场安装](#edge-plugin-stock-and-fund)  
@@ -18,6 +19,10 @@
 都可以提处理  
 我会立刻修改  
 您就是我的产品经理  
+
+## <span id="architect">系统架构图</span>
+![image](https://github.com/bu6030/stock-and-fund/blob/master/architect.png)  
+股票基金神器系统架构图--当前项目为Chrome/Edge/Firefox扩展程序  
 
 ## <span id="develop-history">版本更新历史记录</span>
 1. 增加导入导出数据 2023/2/23
