@@ -167,20 +167,23 @@ function showMonthImage() {
     $("#time-image-modal").modal();
 }
 // 展示5分钟15分钟30分钟60分钟线图
-function show1or5or15or30or60MinutesImage(event) {
-    clearTimeImageTimeout();
+function click1or5or15or30or60MinutesImage(event) {
     let targetId = event.target.id;
     if (targetId == 'time-image-1min-button') {
-        setStockImage('1MIN');
+        show1or5or15or30or60MinutesImage('1MIN');
     } else if (targetId == 'time-image-5min-button') {
-        setStockImage('5MIN');
+        show1or5or15or30or60MinutesImage('5MIN');
     } else if (targetId == 'time-image-15min-button') {
-        setStockImage('15MIN');
+        show1or5or15or30or60MinutesImage('15MIN');
     } else if (targetId == 'time-image-30min-button') {
-        setStockImage('30MIN');
+        show1or5or15or30or60MinutesImage('30MIN');
     } else if (targetId == 'time-image-60min-button') {
-        setStockImage('60MIN');
+        show1or5or15or30or60MinutesImage('60MIN');
     }
+}
+function show1or5or15or30or60MinutesImage(minutesType) {
+    clearTimeImageTimeout();
+    setStockImage(minutesType);
     $("#time-image-new").show();
     $("#time-image").html('');
     $("#time-image-modal").modal();
@@ -227,6 +230,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     let dataAxis = [];
     let now;
     let imageTextSize = 12;
+    let kType = '分时线';
     if (windowSize == 'MINI') {
         imageTextSize = 8;
     }
@@ -237,6 +241,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     var preClose = parseFloat(result.data.preClose);
     var preCloseList = [];
     if (ndays == 5) {
+        kType = '五日线';
         preCloseList.push(parseFloat(result.data.trends[0].split(",")[1]));
     }
     let toFixedVolume = 2;
@@ -595,7 +600,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                         left: '5%',
                         top: '5%',
                         style: {
-                            text: fundOrStockName + "（最新：" + now + "）" + (parseFloat(realMaxPrice) == 0 ? "" : "最高：" + realMaxPrice)  + (parseFloat(realMinPrice) == 0 ? "" : "  最低：" + realMinPrice) ,
+                            text: fundOrStockName + "（最新：" + now + "）" + (parseFloat(realMaxPrice) == 0 ? "" : "最高：" + realMaxPrice)  + (parseFloat(realMinPrice) == 0 ? "" : "  最低：" + realMinPrice) + " " + kType,
                             textAlign: 'left',
                             fill: '#333',
                             fontSize: 14
@@ -946,7 +951,7 @@ function setStockImage(type) {
                     left: '5%',
                     top: '5%',
                     style: {
-                        text: fundOrStockName + "（最新：" + now + "）",
+                        text: fundOrStockName + "（最新：" + now + "） " + kType,
                         textAlign: 'left',
                         fill: '#333',
                         fontSize: 14
