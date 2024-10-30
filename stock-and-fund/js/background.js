@@ -588,7 +588,8 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             sendChromeBadge('#FFFFFF', color, totalDayIncome + "");
         } else if (monitorPriceOrPercent == 'DAY_INCOME_PERCENT') {
             let color = totalDayIncome > 0 ? redColor : blueColor;
-            let totalDayIncomePercent = (totalDayIncome / (fundMarketValue + stockMarketValue - totalDayIncome) * 100).toFixed(2);
+            let totalDayIncomePercent = (totalDayIncome / (fundMarketValue + stockMarketValue - totalDayIncome) * 100);
+            totalDayIncomePercent = totalDayIncomePercent >= 0 ? totalDayIncomePercent.toFixed(2) : (0 - totalDayIncomePercent).toFixed(2);
             console.log('fundMarketValue + stockMarketValue:',(fundMarketValue + stockMarketValue),';totalDayIncome:',totalDayIncome);
             sendChromeBadge('#FFFFFF', color, totalDayIncomePercent + "");
         }
