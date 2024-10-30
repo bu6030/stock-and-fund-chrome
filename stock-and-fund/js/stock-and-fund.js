@@ -2183,13 +2183,13 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             }
             var exsitJZStr = result[k].existJZ !== null && result[k].existJZ !== undefined
                 && result[k].existJZ ? '(实)' : '(估)';
-            var desc = result[k].desc ? "(" + result[k].desc + ")" : "";
+            var nameOrDesc = result[k].desc ? result[k].desc : result[k].name;
             // 新顺序拼接TR行HTML
             var fundStrOrder = columnOrder.map(function (column) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\">" + result[k].name + desc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
+                    html = "<td class=\"stock-fund-name-and-code\">" + nameOrDesc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th'){
@@ -4241,6 +4241,7 @@ async function syncDataFromCloud() {
                 $("#sync-data-cloud-modal").modal('hide');
                 return;
             }
+            // alertMessage('这就同步了');
             checkResult = true;
         } else {
             checkResult = confirm("这些云同步数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
@@ -4353,6 +4354,7 @@ async function syncDataToCloud() {
     }));
     let result = ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    saveCacheData('sync-data-local-time', data.updateTime);
     if (result == 'fail') {
         $("#sync-data-cloud-modal").modal('hide');
         alertMessage("云同步失败，请检查网络是否可以访问云服务器");
