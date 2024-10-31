@@ -182,6 +182,19 @@ function click1or5or15or30or60MinutesImage(event) {
     }
 }
 function show1or5or15or30or60MinutesImage(minutesType) {
+    let buttonText = '';
+    if (minutesType == '1MIN') {
+        buttonText = '1分';
+    } else if (minutesType == '5MIN') {
+        buttonText = '5分';
+    } else if (minutesType == '15MIN') {
+        buttonText = '15分';
+    } else if (minutesType == '30MIN') {
+        buttonText = '30分';
+    } else if (minutesType == '60MIN') {
+        buttonText = '60分';
+    }
+    document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = buttonText;
     clearTimeImageTimeout();
     setStockImage(minutesType);
     $("#time-image-new").show();
