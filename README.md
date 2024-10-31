@@ -361,7 +361,7 @@
 334. 全部分组禁止买卖操作 2024/10/18 version 2.2.2.7 -- end
 335. 角标增加显示当日总收益涨跌幅 2024/10/29
 336. 修改基金备注为别名，防止基金名称过长显示，只显示别名 2024/10/30
-337. 增加设置点击股票基金默认展示1分钟/5分钟/15分钟/30分钟/60分钟线图 2024/10/30
+337. 增加设置点击股票基金默认展示1分钟/5分钟/15分钟/30分钟/60分钟线图 2024/10/30 version 2.2.2.8 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
