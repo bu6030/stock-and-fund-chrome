@@ -51,7 +51,6 @@ async function initLargeMarketDataCallBack(bigStocks) {
                 '<p ' + style + '>' + changePercent + '%</p>' +
             '</div>';
         }
-
     }
     str = str + '</div>';
     $("#stock-large-market").html(str);
@@ -297,6 +296,7 @@ function largeMarketCodeSave() {
     largeMarketCode = selectedData;
     saveCacheData('large-market-code', JSON.stringify(selectedData));
     $("#setting-modal").modal("hide");
+    initWindowsSize();
     initLargeMarketData();
 }
 

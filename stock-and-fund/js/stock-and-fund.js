@@ -3168,6 +3168,17 @@ async function initWindowsSize() {
         volumnImageEchart.style.width = '380px';
         volumnImageEchart.style.height = '80px';
     }
+    if (largeMarketCode == null || largeMarketCode == '' || largeMarketCode == []) {
+        myInputGroup.style.marginTop='1px';
+        myHeader.style.height = '0px';
+        stockLargeMarket.style.height = '0px';
+        myBody.style.marginTop='40px';
+    } else {
+        myInputGroup.style.marginTop='10px';
+        myHeader.style.height = '80px';
+        stockLargeMarket.style.height = '50px';
+        myBody.style.marginTop='90px';
+    }
 }
 
 // 样式切换，股票基金数据字体加粗加大
