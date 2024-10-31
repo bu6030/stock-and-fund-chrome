@@ -103,6 +103,7 @@ function showDayImage() {
 // 展示周线图
 function showWeekImage() {
     clearTimeImageTimeout();
+    fundInvesterPositionSetButton();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
@@ -136,6 +137,7 @@ function showWeekImage() {
 // 展示月线图
 function showMonthImage() {
     clearTimeImageTimeout();
+    fundInvesterPositionSetButton();
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
@@ -196,6 +198,7 @@ function show1or5or15or30or60MinutesImage(minutesType) {
     }
     document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = buttonText;
     clearTimeImageTimeout();
+    fundInvesterPositionSetButton();
     setStockImage(minutesType);
     $("#time-image-new").show();
     $("#time-image").html('');
