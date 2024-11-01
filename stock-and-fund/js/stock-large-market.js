@@ -28,6 +28,9 @@ async function initLargeMarketDataCallBack(bigStocks) {
     str += largetMarketTotalStr;
     for(let k in bigStocks) {
         var name = bigStocks[k].f14;
+        if (bigStocks[k].f12 == 'CN00Y') {
+            name = 'A50期指';
+        }
         var change = bigStocks[k].f4;
         var now = parseFloat(bigStocks[k].f2).toFixed(2);
         var changePercent = parseFloat(bigStocks[k].f3).toFixed(2);
