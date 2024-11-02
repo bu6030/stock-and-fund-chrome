@@ -127,6 +127,7 @@ var allTotalIncomePercent = '--';
 var allTotalIncomePercentStyle = '';
 var autoSync = false;
 var syncDataCloudUuid = '';
+var opacityPercent;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -552,6 +553,12 @@ async function initLoad() {
         || mainPageRefreshTime == 'undefined') {
         mainPageRefreshTime = 20000;
     }
+    opacityPercent = await readCacheData('opacity-percent');
+    if (opacityPercent == null || opacityPercent == '' || opacityPercent == undefined
+        || opacityPercent == 'undefined') {
+            opacityPercent = "1";
+    }
+    initOpacity();
     // 展示密码保护按钮
     $("#show-password-protect-button")[0].style.display = 'inline';
     $("#data-export-button")[0].style.display = 'inline';
@@ -1080,6 +1087,8 @@ document.addEventListener(
         // 设置页面，点击开启/关闭自动同步
         document.getElementById('close-auto-sync-button').addEventListener('click', changeAutoSync);
         document.getElementById('open-auto-sync-button').addEventListener('click', changeAutoSync);
+        // 设置页面，变更透明度
+        document.getElementById('opacity-control-range').addEventListener('click', changeOpacity);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -3062,9 +3071,6 @@ async function initFontStyle() {
 async function initWindowsSize() {
     console.log('改变windowsSize');
     var currentURL = window.location.href;
-    if (currentURL.indexOf('full-screen.html') > 0) {
-        return;
-    }
     let myDiv = document.getElementById('my-div');
     let myInputGroup = document.getElementById('my-input-group');
     let stockLargeMarket = document.getElementById('stock-large-market');
@@ -3088,6 +3094,20 @@ async function initWindowsSize() {
     let timeImageBody = document.getElementById('time-image-body');
     let groupMenuButton = document.getElementById('group-menu-button');
     let fullScreenMenuButton = document.getElementById('full-screen-menu-button');
+    if (largeMarketCode == null || largeMarketCode == '' || largeMarketCode == []) {
+        myInputGroup.style.marginTop='1px';
+        myHeader.style.height = '0px';
+        stockLargeMarket.style.height = '0px';
+        myBody.style.marginTop='40px';
+    } else {
+        myInputGroup.style.marginTop='10px';
+        myHeader.style.height = '80px';
+        stockLargeMarket.style.height = '50px';
+        myBody.style.marginTop='90px';
+    }
+    if (currentURL.indexOf('full-screen.html') > 0) {
+        return;
+    }
     if (windowSize == 'NORMAL') {
         // 设置首页各项内容宽度 800px
         myWindows.style.width = '800px';
@@ -3168,17 +3188,18 @@ async function initWindowsSize() {
         volumnImageEchart.style.width = '380px';
         volumnImageEchart.style.height = '80px';
     }
-    if (largeMarketCode == null || largeMarketCode == '' || largeMarketCode == []) {
-        myInputGroup.style.marginTop='1px';
-        myHeader.style.height = '0px';
-        stockLargeMarket.style.height = '0px';
-        myBody.style.marginTop='40px';
-    } else {
-        myInputGroup.style.marginTop='10px';
-        myHeader.style.height = '80px';
-        stockLargeMarket.style.height = '50px';
-        myBody.style.marginTop='90px';
-    }
+}
+
+function initOpacity() {
+    document.getElementById('opacity-control-range').value = opacityPercent * 100;
+    document.body.style.opacity = opacityPercent;
+}
+
+function changeOpacity() {
+    let opacity = parseFloat(document.getElementById('opacity-control-range').value + "");
+    opacityPercent = (opacity/100).toFixed(2);
+    document.body.style.opacity = opacityPercent;
+    saveCacheData('opacity-percent', opacityPercent);
 }
 
 // 样式切换，股票基金数据字体加粗加大

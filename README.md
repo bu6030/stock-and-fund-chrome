@@ -364,6 +364,7 @@
 337. 增加设置点击股票基金默认展示1分钟/5分钟/15分钟/30分钟/60分钟线图 2024/10/30 version 2.2.2.8 -- end
 338. 没有大盘指数时候，不显示空行 2024/10/31
 339. A50期货指数名字显示修改 2024/11/1
+340. 增加设置透明度 2024/11/2
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

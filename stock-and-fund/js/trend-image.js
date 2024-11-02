@@ -1287,7 +1287,7 @@ function setEchartsSize(myChart, volumnChart) {
     // 设置容器的宽度和高度
     if (windowSize == 'NORMAL') {
         myChart.getDom().style.width = '630px';
-        myChart.getDom().style.height = '360px';
+        myChart.getDom().style.height = '330px';
         volumnChart.getDom().style.width = '630px';
     } else if (windowSize == 'SMALL') {
         myChart.getDom().style.width = '580px';
