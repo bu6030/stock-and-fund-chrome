@@ -1790,6 +1790,7 @@ async function initStockAndFundHtml() {
                 $("#stock-bonds").val(stockList[this.sectionRowIndex].bonds);
                 $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
                 $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
+                $("#stock-desc").val(stockList[this.sectionRowIndex].desc);
                 if (stockList[this.sectionRowIndex].newBuy == true && stockList[this.sectionRowIndex].newBuyDate == getBeijingDate()) {
                     $("#new-buy-checkbox").prop("checked", true);
                 } else {
@@ -2053,8 +2054,9 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             var stockStrOrder = columnOrder.map(function (column) {
                 var columnName = Object.keys(column)[0];
                 var html;
+                var nameOrDesc = result[k].desc ? result[k].desc : stockName;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\">" + stockName + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
+                    html = "<td class=\"stock-fund-name-and-code\">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th') {
@@ -2560,6 +2562,7 @@ async function saveStock() {
     var monitorLowPrice = $("#stock-monitor-low-price").val();
     var monitorUpperPercent = $("#stock-monitor-upper-percent").val();
     var monitorLowerPercent = $("#stock-monitor-lower-percent").val();
+    var desc = $("#stock-desc").val();
     var newBuy = $("#new-buy-checkbox").prop("checked");
     var newBuyDate = getBeijingDate();
     
@@ -2584,6 +2587,7 @@ async function saveStock() {
         "monitorLowerPercent": monitorLowerPercent,
         "newBuy": newBuy,
         "newBuyDate": newBuyDate,
+        "desc": desc
     }
     for (var k in stockList) {
         if (stockList[k].code == stock.code) {
@@ -2597,6 +2601,7 @@ async function saveStock() {
             stockList[k].newBuy = stock.newBuy;
             stockList[k].newBuyDate = stock.newBuyDate;
             stockList[k].monitorAlert = '';
+            stockList[k].desc = stock.desc;
             if (stockList[k].addTimePrice == null || stockList[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stockList[k].code);
                 stockList[k].addTimePrice = checkStockExsitResult.now;
@@ -4387,6 +4392,7 @@ async function syncDataToCloud() {
             "monitorLowPrice" : stockListCache[k].monitorLowPrice,
             "monitorUpperPercent" : stockListCache[k].monitorUpperPercent,
             "monitorLowerPercent" : stockListCache[k].monitorLowerPercent,
+            "desc" : stockListCache[k].desc
         }
         syncStocks.push(syncStock);
     }
@@ -4395,7 +4401,8 @@ async function syncDataToCloud() {
         let syncFund = {
             "fundCode" : fundListCache[k].fundCode,
             "costPrise" : fundListCache[k].costPrise,
-            "bonds" : fundListCache[k].bonds
+            "bonds" : fundListCache[k].bonds,
+            "desc" : fundListCache[k].desc
         }
         syncFunds.push(syncFund);
     }
