@@ -47,6 +47,7 @@ var klineMAList;
 let klineMAListDisplay = [];
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
+var monitorShowMore = true;
 var lastSort;
 var huilvConvert = false;
 var s2nDate;
@@ -317,6 +318,14 @@ async function initLoad() {
         monitorTop20Stock = true;
     } else if(monitorTop20Stock == "false") {
         monitorTop20Stock = false;
+    }
+    monitorShowMore  = await readCacheData('monitor-show-more');
+    if (monitorShowMore == null) {
+        monitorShowMore = true;
+    } else if(monitorShowMore == "true") {
+        monitorShowMore = true;
+    } else if(monitorShowMore == "false") {
+        monitorShowMore = false;
     }
     timeImageNewOrOld = await readCacheData('time-image-new-or-old');
     if (timeImageNewOrOld == null) {
@@ -1037,9 +1046,12 @@ document.addEventListener(
         document.getElementById('monitor-day-income-change-button').addEventListener('click', changeMonitorPriceOrPercent);
         // 设置页面，点击当日总收益涨跌幅按钮
         document.getElementById('monitor-day-income-percent-change-button').addEventListener('click', changeMonitorPriceOrPercent);
-        // 设置页面，点击展示/不展示前5个股票价格
+        // 设置页面，点击扩展程序图标鼠标悬停后展示/不展示前5个股票价格
         document.getElementById('monitor-dont-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
         document.getElementById('monitor-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
+        // 设置页面，点击扩展程序图标鼠标悬停后展示/不展示大盘指数和收益汇总
+        document.getElementById('monitor-dont-show-more-button').addEventListener('click', changeMonitorShowMore);
+        document.getElementById('monitor-show-more-button').addEventListener('click', changeMonitorShowMore);
         // 设置页面，点击切换隐蔽/默认图标按钮
         document.getElementById('change-icon-default-button').addEventListener('click', changeIcon);
         document.getElementById('change-icon-hidden-button').addEventListener('click', changeIcon);
@@ -6281,6 +6293,19 @@ async function changemonitorTop20Stock(event) {
     settingButtonInit();
 }
 
+// 修改鼠标悬停扩展程序图标，展示/不展示前5只股票
+async function changeMonitorShowMore(event) {
+    let targetId = event.target.id;
+    if (targetId == 'monitor-show-more-button') {
+        monitorShowMore = true;
+    } else {
+        monitorShowMore = false;
+    }
+    saveCacheData('monitor-show-more', monitorShowMore);
+    $("#setting-modal").modal("hide");
+    settingButtonInit();
+}
+
 // 清理分时图timeout，不再刷新分时图
 async function clearTimeImageTimeout() {
     if(timerId != undefined && timerId != '') {
@@ -7142,6 +7167,13 @@ async function settingButtonInit(){
     } else {
         document.getElementById('monitor-dont-top-20-stock-change-button').classList.add('active');
         document.getElementById('monitor-top-20-stock-change-button').classList.remove('active');
+    }
+    if (monitorShowMore) {
+        document.getElementById('monitor-show-more-button').classList.add('active');
+        document.getElementById('monitor-dont-show-more-button').classList.remove('active');
+    } else {
+        document.getElementById('monitor-show-more-button').classList.remove('active');
+        document.getElementById('monitor-dont-show-more-button').classList.add('active');
     }
     if (largetMarketTotalDisplay) {
         document.getElementById('larget-market-total-dont-display-change-button').classList.remove('active');

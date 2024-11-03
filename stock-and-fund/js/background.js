@@ -456,7 +456,18 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             stockArr = '[]';
         }
         var stockList = JSON.parse(stockArr);
-        var secIdStockArr = '1.000001,0.399001,0.399006,100.HSI,';
+        var secIdStockArr = '';
+        let monitorShowMore = await getData('monitor-show-more');
+        if (monitorShowMore == null) {
+            monitorShowMore = true;
+        } else if(monitorShowMore == "true") {
+            monitorShowMore = true;
+        } else if(monitorShowMore == "false") {
+            monitorShowMore = false;
+        }
+        if (monitorShowMore) {
+            secIdStockArr = '1.000001,0.399001,0.399006,100.HSI,';
+        }
         for (var k in stockList) {
             let code = stockList[k].code;
             secIdStockArr += getSecidBack(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
@@ -553,9 +564,11 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         let funcDayIncome = funcIncome.fundDayIncome;
         let totalDayIncome = funcDayIncome + stockDayIncome;
         let fundMarketValue = funcIncome.fundMarketValue;
-        title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
-        title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
-        title += '\n当日总收益：' + totalDayIncome.toFixed(2);
+        if (monitorShowMore) {
+            title += '\n\n当日股票收益：' + stockDayIncome.toFixed(2);
+            title += '\n当日基金收益：' + funcDayIncome.toFixed(2);
+            title += '\n当日总收益：' + totalDayIncome.toFixed(2);
+        }
         let blueColor = await getData('blueColor');
         if (blueColor == null) {
             blueColor = '#093';
