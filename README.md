@@ -366,7 +366,7 @@
 339. A50期货指数名字显示修改 2024/11/1
 340. 增加设置透明度 2024/11/2
 341. 增加股票设置别名 2024/11/2 version 2.2.2.9 -- end
-342. 优化鼠标悬浮图标显示内容 2024/11/4
+342. 优化鼠标悬浮图标显示内容 2024/11/4 version 2.2.3.0 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
