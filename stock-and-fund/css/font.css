@@ -173,3 +173,11 @@ input[type="checkbox"] {
 .am-input-sm{
     height: 23px;
 }
+
+.my-echart-new {
+    margin-top:10px;
+    margin-bottom:0px;
+    width:540px;
+    height:350px;
+    margin-right:10px;
+}

@@ -161,5 +161,14 @@
 .volumn-echart {
     width: 540px;
     height: 80px;
-    margin-right:10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.my-echart-new {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width:540px;
+    height:350px;
 }
