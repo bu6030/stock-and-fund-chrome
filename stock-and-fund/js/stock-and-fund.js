@@ -961,15 +961,19 @@ document.addEventListener(
         });
 
         // 密码保护页面，password-save-button点击，缓存密码
-        document.getElementById('password-save-button').addEventListener('click', async function () {
-            saveCacheData('password', $("#password").val());
-            $("#password-protect-modal").modal("hide");
+        document.getElementById('password-save-button').addEventListener('click', savePassword);
+        // 密码保护页面，在密码输入框中点击回车
+        document.getElementById('password').addEventListener('keydown', async function (event) {
+            if (event.key === 'Enter') {
+                await savePassword();
+            }
         });
         // 验证密码页面，password-check-button点击，验证密码
-        document.getElementById('password-check-button').addEventListener('click', async function () {
-            if ($("#password-check").val() == await readCacheData('password')) {
-                $("#password-check-modal").modal("hide");
-                initLoad();
+        document.getElementById('password-check-button').addEventListener('click', checkPassword);
+        // 验证密码页面，在密码输入框中点击回车
+        document.getElementById('password-check').addEventListener('keydown',  async function (event) {
+            if (event.key === 'Enter') {
+                await checkPassword();
             }
         });
 
@@ -7535,4 +7539,18 @@ async function changeAutoSync(event) {
     }
     saveCacheData('auto-sync', autoSync);
     settingButtonInit();
+}
+
+// 点击保存密码
+async function savePassword() {
+    saveCacheData('password', $("#password").val());
+    $("#password-protect-modal").modal("hide");
+}
+
+// 点击验证密码
+async function checkPassword() {
+    if ($("#password-check").val() == await readCacheData('password')) {
+        $("#password-check-modal").modal("hide");
+        initLoad();
+    }
 }
