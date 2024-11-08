@@ -2072,7 +2072,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var html;
                 var nameOrDesc = result[k].desc ? result[k].desc : stockName;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
+                    html = "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th') {
@@ -2241,7 +2241,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\">" + nameOrDesc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
+                    html = "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th'){
