@@ -1122,8 +1122,10 @@ document.addEventListener(
         document.getElementById('big-stock-money-button').addEventListener('click', showDataCenter);
         // 数据中心页面，点击北向资金
         document.getElementById('beixiang-money-button').addEventListener('click', showBeiXiang);
+        document.getElementById('beixiang-money-button').style.display = 'none';
         // 数据中心页面，点击南向资金
         document.getElementById('nanxiang-money-button').addEventListener('click', showNanXiang);
+        document.getElementById('nanxiang-money-button').style.display = 'none';
         // 数据中心页面，点击每日盈利
         document.getElementById('day-income-history-button').addEventListener('click', showDayIncomeHistory);
         // 数据中心页面，点击涨跌分布
