@@ -120,7 +120,7 @@
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="set-top-button">置顶</button>
+                        <!-- <button type="button" class="btn btn-primary" id="set-top-button">置顶</button> -->
                         <button type="button" class="btn btn-primary"
                             id="fund-show-time-image-button">走势图</button>
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-2">持仓明细</button>
@@ -206,7 +206,7 @@
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="set-top-button-2">置顶</button>
+                        <!-- <button type="button" class="btn btn-primary" id="set-top-button-2">置顶</button> -->
                         <button type="button" class="btn btn-primary"
                             id="stock-show-time-image-button">走势图</button>
                         <button type="button" class="btn btn-primary" id="stock-monitor-button">监控价格</button>
@@ -1110,7 +1110,16 @@
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="set-top-button-3">置顶</button>
+                        <div class="btn-group">
+                            <button type="button" id="show-set-top-or-end-button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            置顶/底
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" id="set-top-button">置顶</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" id="set-end-button">置底</a>
+                            </div>
+                        </div>
                         <button type="button" class="btn btn-primary" id="add-stock-button">加入自选</button>
                         <button type="button" class="btn btn-primary" id="stock-fund-monitor-button">监控价格</button>
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-3">持仓明细</button>

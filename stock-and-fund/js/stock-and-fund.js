@@ -879,9 +879,10 @@ document.addEventListener(
         document.getElementById('fund-net-diagram-button-2').addEventListener('click', setFundNetDiagram);
         document.getElementById('fund-net-diagram-button-3').addEventListener('click', setFundNetDiagram);
         // 走势图页面，股票/基金编辑页面，点击置顶按钮
-        document.getElementById('set-top-button').addEventListener('click', setTop);
-        document.getElementById('set-top-button-2').addEventListener('click', setTop);
-        document.getElementById('set-top-button-3').addEventListener('click', setTop);
+        document.getElementById('set-top-button').addEventListener('click', setTopOrEnd);
+        document.getElementById('set-end-button').addEventListener('click', setTopOrEnd);
+        // document.getElementById('set-top-button-2').addEventListener('click', setTop);
+        // document.getElementById('set-top-button-3').addEventListener('click', setTop);
         // 走势图页面，股票/基金编辑页面，点击买/卖股票
         document.getElementById('show-buy-button').addEventListener('click', showBuyOrSell);
         document.getElementById('show-buy-button-2').addEventListener('click', showBuyOrSell);
@@ -4259,38 +4260,75 @@ async function enableChromeNotice(event) {
 }
 
 // 置顶股票基金
-async function setTop() {
-    // 基金编辑页面/基金分时图页面点击置顶
-    if (timeImageType == 'FUND') {
-        let currentFund;
-        for (var k in fundList) {
-            if (fundList[k].fundCode == timeImageCode) {
-                currentFund = fundList[k];
-                fundList.splice(k, 1)
-                break;
+async function setTopOrEnd(event) {
+    let targetId = event.target.id;
+    if (targetId == 'set-top-button') {
+        // 基金分时图页面点击置顶
+        if (timeImageType == 'FUND') {
+            let currentFund;
+            for (var k in fundList) {
+                if (fundList[k].fundCode == timeImageCode) {
+                    currentFund = fundList[k];
+                    fundList.splice(k, 1)
+                    break;
+                }
+            }
+            fundList.unshift(currentFund);
+            if (currentGroup == 'default-group') {
+                saveCacheData('funds', JSON.stringify(fundList));
+            } else {
+                saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+            }
+        // 股票分时图页面点击置顶
+        } else {
+            let currentStock;
+            for (var k in stockList) {
+                if (stockList[k].code == timeImageCode) {
+                    currentStock = stockList[k];
+                    stockList.splice(k, 1)
+                    break;
+                }
+            }
+            stockList.unshift(currentStock);
+            if (currentGroup == 'default-group') {
+                saveCacheData('stocks', JSON.stringify(stockList));
+            } else {
+                saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
             }
         }
-        fundList.unshift(currentFund);
-        if (currentGroup == 'default-group') {
-            saveCacheData('funds', JSON.stringify(fundList));
-        } else {
-            saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
-        }
-    // 股票编辑页面/股票分时图页面点击置顶
     } else {
-        let currentStock;
-        for (var k in stockList) {
-            if (stockList[k].code == timeImageCode) {
-                currentStock = stockList[k];
-                stockList.splice(k, 1)
-                break;
+        // 基金分时图页面点击置顶
+        if (timeImageType == 'FUND') {
+            let currentFund;
+            for (var k in fundList) {
+                if (fundList[k].fundCode == timeImageCode) {
+                    currentFund = fundList[k];
+                    fundList.splice(k, 1)
+                    break;
+                }
             }
-        }
-        stockList.unshift(currentStock);
-        if (currentGroup == 'default-group') {
-            saveCacheData('stocks', JSON.stringify(stockList));
+            fundList.push(currentFund);
+            if (currentGroup == 'default-group') {
+                saveCacheData('funds', JSON.stringify(fundList));
+            } else {
+                saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+            }
+        // 股票分时图页面点击置顶
         } else {
-            saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+            let currentStock;
+            for (var k in stockList) {
+                if (stockList[k].code == timeImageCode) {
+                    currentStock = stockList[k];
+                    stockList.splice(k, 1)
+                    break;
+                }
+            }
+            stockList.push(currentStock);
+            if (currentGroup == 'default-group') {
+                saveCacheData('stocks', JSON.stringify(stockList));
+            } else {
+                saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+            }
         }
     }
     $("#time-image-modal").modal("hide");

@@ -274,7 +274,7 @@ function initLargeMarketClick() {
     $("#fund-invers-position-button-3")[0].style.display = 'none';
     $("#fund-net-diagram-button-3")[0].style.display = 'none';
     $("#stock-fund-monitor-button")[0].style.display = 'block';
-    $("#set-top-button-3")[0].style.display = 'none';
+    // $("#set-top-button-3")[0].style.display = 'none';
     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
     if (trendImageType == 'MINUTE') {
         showMinuteImage('1DAY');

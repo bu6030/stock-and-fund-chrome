@@ -25,7 +25,7 @@ function showMinuteImage(ndays) {
         && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
         && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y') {
         $("#update-stock-fund-button")[0].style.display = 'block';
-        $("#set-top-button-3")[0].style.display = 'block';
+        // $("#set-top-button-3")[0].style.display = 'block';
         if (timeImageType == "STOCK") {
             $("#show-buy-or-sell-button-2")[0].style.display = 'block';
         }
@@ -1323,7 +1323,7 @@ function fundInvesterPositionSetButton() {
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     // 说明该基金是从持仓明细进入的
     if (fundOrStockName == timeImageCode) {
-        $("#set-top-button-3")[0].style.display = 'none';
+        // $("#set-top-button-3")[0].style.display = 'none';
         $("#stock-fund-monitor-button")[0].style.display = 'none';
         $("#fund-invers-position-button-3")[0].style.display = 'none';
         $("#fund-net-diagram-button-3")[0].style.display = 'none';
