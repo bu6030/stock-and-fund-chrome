@@ -371,7 +371,7 @@
 344. 输入密码，验证密码时，输入框中点机回车键自动保存验证 2024/11/8
 345. 股票名称颜色随着当日盈亏颜色变化 2024/11/8
 346. 隐藏大盘数据中的南北向按钮 2024/11/8
-347. 增加置底按钮 2024/11/8
+347. 增加置底按钮 2024/11/8 version 2.2.3.2 -- end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
