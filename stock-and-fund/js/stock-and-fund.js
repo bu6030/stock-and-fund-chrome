@@ -1365,7 +1365,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                 stock = stockList[l];
                 // 本来想这里break出去，结果会导致一些数据undefined，继续遍历吧
                 stock.name = stoksArr[k].f14 + "";
-                if (stock.name.indexOf('ETF') >= 0) {
+                if (stock.name.indexOf('ETF') >= 0 || stock.name.indexOf('LOF') >= 0) {
                     toFixedVolume = 3;
                 }
                 stock.gztime = getDateStrFromTimestamp(stoksArr[k].f124*1000);
@@ -4557,7 +4557,7 @@ async function showBuyOrSell(event) {
         }
     }
     $("#buy-or-sell-name").val(stockName);
-    if (stockName.endsWith('ETF')) {
+    if (stockName.endsWith('ETF') || stockName.endsWith('LOF')) {
         $("#buy-or-sell-cost").val(0);
     } else {
         $("#buy-or-sell-cost").val(5);
