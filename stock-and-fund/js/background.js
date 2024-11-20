@@ -447,6 +447,15 @@ function setChromeTitle(title) {
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
 async function monitorTop20StockChromeTitle(monitoTop20Stock) {
+    let mainPageRefreshTime = awaitgetData('main-page-refresh-time');
+    if (mainPageRefreshTime == null || mainPageRefreshTime == '' || mainPageRefreshTime == undefined
+        || mainPageRefreshTime == 'undefined') {
+        mainPageRefreshTime = 20000;
+    }
+    if (mainPageRefreshTime == 1000000000) {
+        console.log('设定后台不刷新');
+        return;
+    }
     var date = new Date();
     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {

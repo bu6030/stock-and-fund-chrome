@@ -771,7 +771,7 @@ document.addEventListener(
         // 首页，点击加入微信群
         document.getElementById('show-wechat-group-button').addEventListener('click', showQrCodeModal);
         // 首页，点击刷新按钮
-        document.getElementById('refresh-button').addEventListener('click', initData);
+        document.getElementById('refresh-button').addEventListener('click', autoRefresh);
         // 首页，点击清除角标按钮
         document.getElementById('remove-badgetext-button').addEventListener('click', removeBadgeText);
         // 首页，点击全屏显示按钮
@@ -1089,6 +1089,7 @@ document.addEventListener(
         document.getElementById('main-page-refresh-time-10s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-5s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-3s-button').addEventListener('click', changeMainPageRefreshTime);
+        document.getElementById('main-page-refresh-time-dont-button').addEventListener('click', changeMainPageRefreshTime);
         // 设置页面，点击切换新旧获取股票信息接口
         document.getElementById('stock-api-gtimg-button').addEventListener('click', changeStockApi);
         document.getElementById('stock-api-eastmoney-button').addEventListener('click', changeStockApi);
@@ -7144,6 +7145,8 @@ async function changeMainPageRefreshTime(event) {
         mainPageRefreshTime = 5000;
     } else if (targetId == 'main-page-refresh-time-3s-button') {
         mainPageRefreshTime = 3000;
+    } else if (targetId == 'main-page-refresh-time-dont-button') {
+        mainPageRefreshTime = 1000000000;
     }
     $("#setting-modal").modal("hide");
     saveCacheData('main-page-refresh-time', mainPageRefreshTime);
@@ -7254,21 +7257,31 @@ async function settingButtonInit(){
         document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
     } else if(mainPageRefreshTime == 10000) {
         document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.add('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
     }  else if(mainPageRefreshTime == 5000) {
         document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.add('active');
         document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
-    } else {
+        document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
+    } else if(mainPageRefreshTime == 3000) {
         document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-3s-button').classList.add('active');
+        document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
+    } else {
+        document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+        document.getElementById('main-page-refresh-time-dont-button').classList.add('active');
     }
     if (stockApi == 'GTIMG') {
         document.getElementById('stock-api-gtimg-button').classList.add('active');

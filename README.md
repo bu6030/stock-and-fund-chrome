@@ -375,6 +375,7 @@
 348. 部分场内基金小数点后三位小数修改 2024/11/13 version 2.2.3.3 -- end
 349. 大盘股指数不显示置顶/置底按钮 2024/11/19 version 2.2.3.4 --end
 350. 增加隐藏首页未添加股票基金时显示的“股票基金使用说明” 2024/11/20
+351. 增加不自动刷新按钮 2024/11/20
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
