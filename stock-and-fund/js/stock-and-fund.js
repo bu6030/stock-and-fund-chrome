@@ -129,6 +129,7 @@ var allTotalIncomePercentStyle = '';
 var autoSync = false;
 var syncDataCloudUuid = '';
 var opacityPercent;
+var showHelpButton = true;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -432,6 +433,12 @@ async function initLoad() {
         mainDeleteButtonDisplay = false;
     } else if(mainDeleteButtonDisplay == "true") {
         mainDeleteButtonDisplay = true;
+    }
+    showHelpButton = await readCacheData('show-help-button');
+    if (showHelpButton == null || showHelpButton == "true") {
+        showHelpButton = true;
+    } else if(mainDeleteButtonDisplay == "false") {
+        showHelpButton = false;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -1106,6 +1113,8 @@ document.addEventListener(
         document.getElementById('open-auto-sync-button').addEventListener('click', changeAutoSync);
         // 设置页面，变更透明度
         document.getElementById('opacity-control-range').addEventListener('click', changeOpacity);
+        // 设置页面，点击隐藏使用说明按钮
+        document.getElementById('close-help-button').addEventListener('click', changeShowHelpButton);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -3263,7 +3272,7 @@ function alertMessage(message) {
 
 // 第一次安装后没有数据，展示使用说明
 function initFirstInstall() {
-    if (stockList.length == 0 && fundList.length == 0) {
+    if (showHelpButton && stockList.length == 0 && fundList.length == 0) {
         $("#help-document-alert")[0].style.display = 'block';
     } else {
         $("#help-document-alert")[0].style.display = 'none';
@@ -7593,4 +7602,10 @@ async function checkPassword() {
         $("#password-check-modal").modal("hide");
         initLoad();
     }
+}
+
+// 点击隐藏使用说明
+async function changeShowHelpButton() {
+    showHelpButton = false;
+    saveCacheData('show-help-button', showHelpButton);
 }
