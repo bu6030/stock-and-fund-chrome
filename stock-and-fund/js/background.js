@@ -447,7 +447,7 @@ function setChromeTitle(title) {
 }
 // 扩展程序图标鼠标悬停后展示前20个股票价格
 async function monitorTop20StockChromeTitle(monitoTop20Stock) {
-    let mainPageRefreshTime = awaitgetData('main-page-refresh-time');
+    let mainPageRefreshTime = await getData('main-page-refresh-time');
     if (mainPageRefreshTime == null || mainPageRefreshTime == '' || mainPageRefreshTime == undefined
         || mainPageRefreshTime == 'undefined') {
         mainPageRefreshTime = 20000;
