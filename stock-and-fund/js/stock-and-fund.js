@@ -130,6 +130,7 @@ var autoSync = false;
 var syncDataCloudUuid = '';
 var opacityPercent;
 var showHelpButton = true;
+var showBatchDeleteButton = true;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -352,6 +353,12 @@ async function initLoad() {
     } else if(autoSync == "true") {
         autoSync = true;
     }
+    // showBatchDeleteButton = await readCacheData('show-batch-delete-button');
+    // if (showBatchDeleteButton == null || showBatchDeleteButton == "false") {
+    //     showBatchDeleteButton = false;
+    // } else if(showBatchDeleteButton == "true") {
+    //     showBatchDeleteButton = true;
+    // }
     largetMarketTotalDisplay = await readCacheData('larget-market-total-display');
     if (largetMarketTotalDisplay == null || largetMarketTotalDisplay == "false") {
         largetMarketTotalDisplay = false;
@@ -616,17 +623,21 @@ async function initHtml() {
     }).join("");
     let deleteButton;
     if (mainDeleteButtonDisplay) {
-        deleteButton = '<td></td>';
+        deleteButton = '<th></th>';
     } else {
         deleteButton = '';
     }
-    var stockHead = " <tr id=\"stock-tr-title\"> " + stockHeadOrder + deleteButton + " </tr>";
+    let batchDeleteHtml = '';
+    if (showBatchDeleteButton) {
+        batchDeleteHtml = '<th>批量删除</th>';
+    }
+    var stockHead = " <tr id=\"stock-tr-title\"> " + batchDeleteHtml + stockHeadOrder + deleteButton + " </tr>";
     // 基金标题
     var fundHeadOrder = columnOrder.map(function (column) {
         var columnName = Object.keys(column)[0];
         return getThColumnHtml(columnName, 'FUND');
     }).join("");
-    var fundHead = " <tr id=\"fund-tr-title\"> " + fundHeadOrder + deleteButton + " </tr>";
+    var fundHead = " <tr id=\"fund-tr-title\"> " + batchDeleteHtml + fundHeadOrder + deleteButton + " </tr>";
 
     // 持仓明细标题
     var fundInversPositionHead = " <tr >" +
@@ -782,6 +793,8 @@ document.addEventListener(
         document.getElementById('add-stock-from-tonghuashun-xueqiu').addEventListener('click', addStockFromTonghuashunXueqiu);
         // 首页，点击小程序按钮
         document.getElementById('show-wechat-mini-button').addEventListener('click', showQrCodeModal);
+        // 首页，点击批量删除
+        document.getElementById('batch-delete-button').addEventListener('click', batchDelete);
 
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
@@ -1797,6 +1810,11 @@ async function initStockAndFundHtml() {
         $("#total-nr").html(str3);
     }  
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
+        if (showBatchDeleteButton) {
+            $('.batch-delete-stock-checkbox').on('click', function(event) {
+                event.stopPropagation();
+            });
+        }
         for (k in stockList) {
             if (mainDeleteButtonDisplay) {
                 let deleteButton = document.getElementById('stock-delete-button-' + k);
@@ -1901,6 +1919,11 @@ async function initStockAndFundHtml() {
         }
     }
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        if (showBatchDeleteButton) {
+            $('.batch-delete-fund-checkbox').on('click', function(event) {
+                event.stopPropagation();
+            });
+        }
         for (k in fundList) {
             if (mainDeleteButtonDisplay) {
                 let deleteButton = document.getElementById('fund-delete-button-' + k);
@@ -2085,7 +2108,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var html;
                 var nameOrDesc = result[k].desc ? result[k].desc : stockName;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
+                    var batchDeleteHtml = showBatchDeleteButton ? "<td><input type=\"checkbox\" value=\""+result[k].code+"\" id=\"batch-delete-stock-checkbox\" class=\"batch-delete-stock-checkbox\" /></td>" : "";
+                    html = batchDeleteHtml + "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th') {
@@ -2166,7 +2190,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         var columnName = Object.keys(column)[0];
         var html;
         if (columnName == 'name-th') {
-            html = "<td>合计</td>";
+            var batchDeleteHtml = showBatchDeleteButton ? "<td></td>" : "";
+            html = batchDeleteHtml + "<td>合计</td>";
         } else if (columnName == 'mini-image-th') {
             html = "<td></td>";
         } else if (columnName == 'belong-group-th') {
@@ -2254,7 +2279,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
-                    html = "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
+                    var batchDeleteHtml = showBatchDeleteButton ? "<td><input type=\"checkbox\" value=\""+result[k].fundCode+"\" id=\"batch-delete-fund-checkbox\" class=\"batch-delete-fund-checkbox\"/></td>" : "";
+                    html = batchDeleteHtml + "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th'){
@@ -2330,7 +2356,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         var columnName = Object.keys(column)[0];
         var html;
         if (columnName == 'name-th') {
-            html = "<td>合计</td>";
+            var batchDeleteHtml = showBatchDeleteButton ? "<td></td>" : "";
+            html = batchDeleteHtml + "<td>合计</td>";
         } else if (columnName == 'mini-image-th') {
             html = "<td></td>";
         } else if(columnName == 'belong-group-th') {
@@ -2407,7 +2434,8 @@ function getTotalTableHtml(totalMarketValueResult) {
         var columnName = Object.keys(column)[0];
         var html;
         if (columnName == 'name-th') {
-            html = "<td>汇总合计</td>";
+            var batchDeleteHtml = showBatchDeleteButton ? "<td></td>" : "";
+            html = batchDeleteHtml + "<td>汇总合计</td>";
         } else if (columnName == 'mini-image-th') {
             html = "<td></td>";
         } else if(columnName == 'belong-group-th') {
@@ -7621,4 +7649,25 @@ async function checkPassword() {
 async function changeShowHelpButton() {
     showHelpButton = false;
     saveCacheData('show-help-button', showHelpButton);
+}
+
+async function batchDelete() {
+    
+    // 使用 jQuery 选择所有选中的复选框
+    let checkboxesStock = $('input#batch-delete-stock-checkbox:checked');
+    // 提取选中的值
+    let selectedDataStock = checkboxesStock.map(function() {
+        return this.value;
+    }).get();
+
+    // 使用 jQuery 选择所有选中的复选框
+    let checkboxesFund = $('input#batch-delete-fund-checkbox:checked');
+    // 提取选中的值
+    let selectedDataFund = checkboxesFund.map(function() {
+        return this.value;
+    }).get();
+
+    alert(selectedDataStock);
+
+    alert(selectedDataFund);
 }
