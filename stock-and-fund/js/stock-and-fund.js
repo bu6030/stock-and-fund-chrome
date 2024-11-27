@@ -3802,6 +3802,9 @@ async function setFundNetDiagram(event) {
         interval = Math.floor(fundNetDiagram.length / 3);
     }
     let fundNetDiagramName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
+    let imageTextSize = 8; 
+    let toFixedVolume = 3;
+    let preClose = 1.00;
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
     option = {
@@ -3815,16 +3818,65 @@ async function setFundNetDiagram(event) {
                 interval: interval // 调整刻度显示间隔
             },
         },
-        yAxis: {
-            scale: true,
-            type: 'value',
-        },
+        yAxis: [
+            {
+                scale: true,
+                type: 'value',
+                position: 'left',  // 左侧 Y 轴
+                axisLabel: {
+                    textStyle: {
+                        fontSize: imageTextSize // 调小字体大小使其适应空间
+                    },
+                    formatter: function(value) {
+                        let price = parseFloat(value).toFixed(toFixedVolume);  // 左侧 Y 轴刻度显示价格
+                        return price;
+                    },
+                    rich: {
+                        a: {
+                            color: redColor,
+                            fontWeight: 'bold'
+                        },
+                        b: {
+                            color: blueColor,
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+
+            },
+            {
+                scale: true,
+                type: 'value',
+                position: 'right',  // 右侧 Y 轴
+                axisLabel: {
+                    textStyle: {
+                        fontSize: imageTextSize // 调小字体大小使其适应空间
+                    },
+                    formatter: function(value) {
+                        // 计算涨跌比例，假设初始价格为 prePrice
+                        var changePercent = ((value - preClose) / preClose * 100);
+                        return changePercent.toFixed(2) + '%';
+                    },
+                    rich: {
+                        a: {
+                            color: redColor,
+                            fontWeight: 'bold'
+                        },
+                        b: {
+                            color: blueColor,
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+            },
+        ],
         series: [
             {
                 name: '单位净值',
                 data: dataDwjz,
                 type: 'line',
                 smooth: true,
+                yAxisIndex: 0,  // 关联侧 Y 轴
                 color: 'blue',
                 showSymbol: false,  // 不显示小圆点
             },
@@ -3832,10 +3884,37 @@ async function setFundNetDiagram(event) {
                 name: '累计净值',
                 data: dataLJJZ,
                 type: 'line',
+                yAxisIndex: 0,  // 关联侧 Y 轴
                 smooth: true,
                 color: 'red',
                 showSymbol: false,  // 不显示小圆点
-            }
+            },
+            {
+                data: dataDwjz,
+                type: 'line',
+                smooth: true,
+                yAxisIndex: 1,  // 关联侧 Y 轴
+                showSymbol: false,  // 不显示小圆点
+                lineStyle: {
+                    opacity: 0, // 设置透明度为 0，隐藏线条
+                },
+                itemStyle: {
+                    opacity: 0, // 设置数据点透明度为 0，隐藏数据点
+                },
+            },
+            {
+                data: dataLJJZ,
+                type: 'line',
+                smooth: true,
+                yAxisIndex: 1,  // 关联侧 Y 轴
+                showSymbol: false,  // 不显示小圆点
+                lineStyle: {
+                    opacity: 0, // 设置透明度为 0，隐藏线条
+                },
+                itemStyle: {
+                    opacity: 0, // 设置数据点透明度为 0，隐藏数据点
+                },
+            },
         ],
         // 添加事件监听器，鼠标放在上面显示横纵坐标值
         tooltip: {
@@ -3852,7 +3931,24 @@ async function setFundNetDiagram(event) {
             if (params.length > 0) {
                 var outputContent = "";
                 if(params.length > 1) {
-                    outputContent = "日期：" + params[0].name + "<br>" + params[0].seriesName + "：" + params[0].value + "<br>" + params[1].seriesName + "：" + params[1].value;
+                    let changePercent;
+                    let dwjzContent = "";
+                    let ljjzContent = "";
+                    if (params[1].dataIndex == 0) {
+                        changePercent = 0;
+                    } else {
+                        changePercent = ((dataDwjz[params[0].dataIndex] - dataDwjz[params[0].dataIndex-1]) / dataDwjz[params[0].dataIndex-1] * 100).toFixed(2);
+                    }
+                    for (let k = 0; k < params.length; k++) {
+                        if (params[k].seriesName == '单位净值') {
+                            let totalChangePercent1 = ((params[k].value - 1) / 1 * 100).toFixed(2);
+                            dwjzContent = params[k].seriesName + "：" + params[k].value + "<br>单日涨幅：" + changePercent + "%  累计涨幅：" + totalChangePercent1 + "%<br>";
+                        } else if (params[k].seriesName == '累计净值') {
+                            let totalChangePercent2 = ((params[k].value - 1) / 1 * 100).toFixed(2);
+                            ljjzContent = params[k].seriesName + "：" + params[k].value + "<br>单日涨幅：" + changePercent + "%  累计涨幅：" + totalChangePercent2 + "%";
+                        }
+                    }
+                    outputContent = "日期：" + params[0].name + "<br>" + dwjzContent + ljjzContent;
                 } else {
                     outputContent = "日期：" + params[0].name + "<br>" + params[0].seriesName + "：" + params[0].value;
                 }
