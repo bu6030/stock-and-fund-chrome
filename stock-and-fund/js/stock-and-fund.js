@@ -353,12 +353,12 @@ async function initLoad() {
     } else if(autoSync == "true") {
         autoSync = true;
     }
-    // showBatchDeleteButton = await readCacheData('show-batch-delete-button');
-    // if (showBatchDeleteButton == null || showBatchDeleteButton == "false") {
-    //     showBatchDeleteButton = false;
-    // } else if(showBatchDeleteButton == "true") {
-    //     showBatchDeleteButton = true;
-    // }
+    showBatchDeleteButton = await readCacheData('show-batch-delete-button');
+    if (showBatchDeleteButton == null || showBatchDeleteButton == "false") {
+        showBatchDeleteButton = false;
+    } else if(showBatchDeleteButton == "true") {
+        showBatchDeleteButton = true;
+    }
     largetMarketTotalDisplay = await readCacheData('larget-market-total-display');
     if (largetMarketTotalDisplay == null || largetMarketTotalDisplay == "false") {
         largetMarketTotalDisplay = false;
@@ -1129,6 +1129,9 @@ document.addEventListener(
         document.getElementById('opacity-control-range').addEventListener('click', changeOpacity);
         // 设置页面，点击隐藏使用说明按钮
         document.getElementById('close-help-button').addEventListener('click', changeShowHelpButton);
+        // 设置页面，点击首页展示/隐藏批量删除按钮
+        document.getElementById('batch-delete-button-dont-display-change-button').addEventListener('click', changeBatchDeleteButton);
+        document.getElementById('batch-delete-button-display-change-button').addEventListener('click', changeBatchDeleteButton);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -7466,6 +7469,15 @@ async function settingButtonInit(){
         document.getElementById('close-auto-sync-button').classList.add('active');
         document.getElementById('open-auto-sync-button').classList.remove('active');
     }
+    if (showBatchDeleteButton) {
+        $("#batch-delete-button")[0].style.display = 'block';
+        document.getElementById('batch-delete-button-dont-display-change-button').classList.remove('active');
+        document.getElementById('batch-delete-button-display-change-button').classList.add('active');
+    } else {
+        $("#batch-delete-button")[0].style.display = 'none';
+        document.getElementById('batch-delete-button-dont-display-change-button').classList.add('active');
+        document.getElementById('batch-delete-button-display-change-button').classList.remove('active');
+    }
 }
 
 // 设置全部/股票/基金按钮激活显示状态
@@ -7652,7 +7664,10 @@ async function changeShowHelpButton() {
 }
 
 async function batchDelete() {
-    
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法批量删除，请切换到指定分组后再批量删除～');
+        return;
+    }
     // 使用 jQuery 选择所有选中的复选框
     let checkboxesStock = $('input#batch-delete-stock-checkbox:checked');
     // 提取选中的值
@@ -7666,8 +7681,42 @@ async function batchDelete() {
     let selectedDataFund = checkboxesFund.map(function() {
         return this.value;
     }).get();
+    // 删除基金
+    for (let k = fundList.length - 1; k >= 0; k--) {
+        if (selectedDataFund.includes(fundList[k].fundCode)) {
+            // delete funds[k];
+            fundList.splice(k, 1)
+        }
+    }
+    if (currentGroup == 'default-group') {
+        saveCacheData('funds', JSON.stringify(fundList));
+    } else {
+        saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+    }
+    // 删除基金
+    for (let k = stockList.length - 1; k >= 0; k--) {
+        if (selectedDataStock.includes(stockList[k].code)) {
+            // delete funds[k];
+            stockList.splice(k, 1)
+        }
+    }
+    if (currentGroup == 'default-group') {
+        saveCacheData('stocks', JSON.stringify(stockList));
+    } else {
+        saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+    }
+    reloadDataAndHtml();
+}
 
-    alert(selectedDataStock);
 
-    alert(selectedDataFund);
+async function changeBatchDeleteButton (event) {
+    let targetId = event.target.id;
+    if (targetId == 'batch-delete-button-dont-display-change-button') {
+        showBatchDeleteButton = false;
+    } else {
+        showBatchDeleteButton = true;
+    }
+    saveCacheData('show-batch-delete-button', showBatchDeleteButton);
+    settingButtonInit();
+    reloadDataAndHtml();
 }
