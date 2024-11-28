@@ -3804,7 +3804,8 @@ async function setFundNetDiagram(event) {
     let fundNetDiagramName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     let imageTextSize = 8; 
     let toFixedVolume = 3;
-    let preClose = 1.00;
+    let preCloseDWJZ = dataDwjz[0];
+    let preCloseLJJZ = dataLJJZ[0];
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("fund-net-diagram"));
     option = {
@@ -3854,7 +3855,7 @@ async function setFundNetDiagram(event) {
                     },
                     formatter: function(value) {
                         // 计算涨跌比例，假设初始价格为 prePrice
-                        var changePercent = ((value - preClose) / preClose * 100);
+                        var changePercent = ((value - preCloseDWJZ) / preCloseDWJZ * 100);
                         return changePercent.toFixed(2) + '%';
                     },
                     rich: {
@@ -3875,7 +3876,7 @@ async function setFundNetDiagram(event) {
                 name: '单位净值',
                 data: dataDwjz,
                 type: 'line',
-                smooth: true,
+                smooth: false,
                 yAxisIndex: 0,  // 关联侧 Y 轴
                 color: 'blue',
                 showSymbol: false,  // 不显示小圆点
@@ -3885,14 +3886,14 @@ async function setFundNetDiagram(event) {
                 data: dataLJJZ,
                 type: 'line',
                 yAxisIndex: 0,  // 关联侧 Y 轴
-                smooth: true,
+                smooth: false,
                 color: 'red',
                 showSymbol: false,  // 不显示小圆点
             },
             {
                 data: dataDwjz,
                 type: 'line',
-                smooth: true,
+                smooth: false,
                 yAxisIndex: 1,  // 关联侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
                 lineStyle: {
@@ -3905,7 +3906,7 @@ async function setFundNetDiagram(event) {
             {
                 data: dataLJJZ,
                 type: 'line',
-                smooth: true,
+                smooth: false,
                 yAxisIndex: 1,  // 关联侧 Y 轴
                 showSymbol: false,  // 不显示小圆点
                 lineStyle: {
@@ -3941,10 +3942,10 @@ async function setFundNetDiagram(event) {
                     }
                     for (let k = 0; k < params.length; k++) {
                         if (params[k].seriesName == '单位净值') {
-                            let totalChangePercent1 = ((params[k].value - 1) / 1 * 100).toFixed(2);
+                            let totalChangePercent1 = ((params[k].value - preCloseDWJZ) / preCloseDWJZ * 100).toFixed(2);
                             dwjzContent = params[k].seriesName + "：" + params[k].value + "<br>单日涨幅：" + changePercent + "%  累计涨幅：" + totalChangePercent1 + "%<br>";
                         } else if (params[k].seriesName == '累计净值') {
-                            let totalChangePercent2 = ((params[k].value - 1) / 1 * 100).toFixed(2);
+                            let totalChangePercent2 = ((params[k].value - preCloseLJJZ) / preCloseLJJZ * 100).toFixed(2);
                             ljjzContent = params[k].seriesName + "：" + params[k].value + "<br>单日涨幅：" + changePercent + "%  累计涨幅：" + totalChangePercent2 + "%";
                         }
                     }
