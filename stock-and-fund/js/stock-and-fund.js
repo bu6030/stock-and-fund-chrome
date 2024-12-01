@@ -1580,7 +1580,11 @@ async function initFund() {
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             fundList[k].income = marketValue.subtract(costPriceValue) + "";
-                            fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
+                            if (costPrice <= 0) {
+                                fundList[k].incomePercent = "0";
+                            } else {
+                                fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
+                            }
                         } else {
                             fundList[k].existJZ = false;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
@@ -1678,7 +1682,11 @@ async function initFund() {
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             fundList[k].income = marketValue.subtract(costPriceValue) + "";
-                            fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
+                            if (costPrice <= 0) {
+                                fundList[k].incomePercent = "0";
+                            } else {
+                                fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
+                            }
                         } else {
                             fundList[k].existJZ = false;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));

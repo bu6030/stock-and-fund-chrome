@@ -380,6 +380,7 @@
 353. 增加批量删除 2024/11/27
 354. 增加基金历史净值涨跌百分比 2024/11/27 version 2.2.3.8 --end
 355. 基金历史净值走势图平滑曲线修改为折线 2024/11/27 version 2.2.3.9 --end
+356. 当日净值出了之后并且成本为0时，页面报错 2024/12/1
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
