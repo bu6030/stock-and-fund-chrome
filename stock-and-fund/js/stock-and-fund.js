@@ -131,6 +131,7 @@ var syncDataCloudUuid = '';
 var opacityPercent;
 var showHelpButton = true;
 var showBatchDeleteButton = true;
+var kLineNumbers = 100;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -563,6 +564,10 @@ async function initLoad() {
             })
         }
     }
+    kLineNumbers = await readCacheData('k-line-numbers');
+    if (kLineNumbers == null || kLineNumbers == '' || kLineNumbers == undefined) {
+        kLineNumbers = 0;
+    }
     syncDataCloudUuid = await readCacheData('sync-data-cloud-uuid');
     if (syncDataCloudUuid == null || syncDataCloudUuid == '') {
         syncDataCloudUuid = generateRandomUUID();
@@ -759,6 +764,7 @@ document.addEventListener(
         // 首页，点击设置按钮
         document.getElementById('show-setting-button').addEventListener('click', async function () {
             $("#setting-modal").modal();
+            $("#k-line-numbers").val(kLineNumbers);
             generateColumnList();
             selectLargeMarketCodeCheckbox();
         });
@@ -1132,6 +1138,8 @@ document.addEventListener(
         // 设置页面，点击首页展示/隐藏批量删除按钮
         document.getElementById('batch-delete-button-dont-display-change-button').addEventListener('click', changeBatchDeleteButton);
         document.getElementById('batch-delete-button-display-change-button').addEventListener('click', changeBatchDeleteButton);
+        // 设置页面，点击保存K线图显示日期个数按钮
+        document.getElementById('k-line-numbers-save-button').addEventListener('click', saveKLineNumbers);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -7824,4 +7832,12 @@ async function changeBatchDeleteButton (event) {
     saveCacheData('show-batch-delete-button', showBatchDeleteButton);
     settingButtonInit();
     reloadDataAndHtml();
+}
+
+async function saveKLineNumbers() {
+    kLineNumbers = $("#k-line-numbers").val();
+    if (kLineNumbers == '' || kLineNumbers == null || kLineNumbers == undefined) {
+        kLineNumbers = 0;
+    }
+    saveCacheData('k-line-numbers', kLineNumbers);
 }

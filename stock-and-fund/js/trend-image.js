@@ -811,6 +811,14 @@ function setStockImage(type) {
         interval = 12;
         zoomStart = 90;
     }
+    if (kLineNumbers > 30) {
+        if (kLineNumbers >= data0.values.length) {
+            zoomStart = 0;
+        } else {
+            var kLinePercent = kLineNumbers/data0.values.length * 100;
+            zoomStart = 100 - kLinePercent;
+        }
+    }
     let optionSeries = [
         {
             type: 'candlestick',
