@@ -1587,6 +1587,7 @@ async function initFund() {
                             fundList[k].existJZ = true;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                            fundList[k].gszzl = parseFloat((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + "")).multiply(new BigDecimal("100")).divide(new BigDecimal(previousDayJingzhi + ""), 2) + "").toFixed(2);
                             fundList[k].income = marketValue.subtract(costPriceValue) + "";
                             if (costPrice <= 0) {
                                 fundList[k].incomePercent = "0";
@@ -1689,6 +1690,7 @@ async function initFund() {
                             fundList[k].existJZ = true;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+                            fundList[k].gszzl = parseFloat((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + "")).multiply(new BigDecimal("100")).divide(new BigDecimal(previousDayJingzhi + ""), 2) + "").toFixed(2);
                             fundList[k].income = marketValue.subtract(costPriceValue) + "";
                             if (costPrice <= 0) {
                                 fundList[k].incomePercent = "0";
