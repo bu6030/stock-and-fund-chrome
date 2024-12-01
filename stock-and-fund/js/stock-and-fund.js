@@ -131,7 +131,7 @@ var syncDataCloudUuid = '';
 var opacityPercent;
 var showHelpButton = true;
 var showBatchDeleteButton = true;
-var kLineNumbers = 100;
+var kLineNumbers = 0;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
