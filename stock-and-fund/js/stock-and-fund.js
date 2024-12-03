@@ -925,6 +925,8 @@ document.addEventListener(
         $("#time-image-modal").on("hidden.bs.modal", clearTimeImageTimeout);
         // 走势图页面，点击添加自选
         document.getElementById('add-stock-button').addEventListener('click', addStock);
+        // 走势图页面，点击设置备注星级
+        document.getElementById('show-desc-star-button').addEventListener('click', showDescStarModal);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -7865,4 +7867,8 @@ async function saveKLineNumbers() {
         kLineNumbers = 0;
     }
     saveCacheData('k-line-numbers', kLineNumbers);
+}
+
+async function showDescStarModal() {
+    $("#desc-star-modal").modal();
 }

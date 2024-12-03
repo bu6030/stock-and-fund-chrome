@@ -1123,6 +1123,7 @@
                                 <button type="button" class="btn btn-outline-primary" id="time-image-old-button">旧版走势图</button>
                                 <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-button">东方财富走势图</button>
                                 <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-detail-button">东方财富查看详细信息</button>
+                                <button type="button" class="btn btn-outline-primary" id="show-desc-star-button">设置备注星级</button>
                             </div>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
@@ -1283,7 +1284,57 @@
                 </div>
             </div>
         </div>
+        <!-- 设置备注星级模态框 -->
+        <div class="modal fade" id="desc-star-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
 
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">设置备注星级</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 模态框主体 -->
+                    <div class="modal-body my-font">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">股票/基金名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="desc-star-name"
+                                    placeholder="基金名称">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">备注：</div>
+                            <div class="you">
+                                <input type="text" class="am-input-sm my-text" id="desc-star-desc"
+                                    placeholder="备注">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">星级：</div>
+                            <div class="you">
+                                <select data-am-selected="{btnSize: 'sm'}" id="desc-star-star">
+                                    <option value="5">5</option>
+                                    <option value="4">4</option>
+                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                    <option value="1">1</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-primary" id="set-top-button">置顶</button> -->
+                        <button type="button" class="btn btn-primary" id="desc-star-save-button">保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <!-- 股票基金主体页面 start -->
         <div class="my-center-child my-main-content" id="my-main-content">
             <div>
