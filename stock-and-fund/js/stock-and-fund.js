@@ -925,8 +925,6 @@ document.addEventListener(
         $("#time-image-modal").on("hidden.bs.modal", clearTimeImageTimeout);
         // 走势图页面，点击添加自选
         document.getElementById('add-stock-button').addEventListener('click', addStock);
-        // 走势图页面，点击设置备注星级
-        document.getElementById('show-desc-star-button').addEventListener('click', showDescStarModal);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -1863,6 +1861,8 @@ async function initStockAndFundHtml() {
                 $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
                 $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
                 $("#stock-desc").val(stockList[this.sectionRowIndex].desc);
+                $("#stock-star-desc").val(stockList[this.sectionRowIndex].starDesc);
+                $("#stock-star").val(stockList[this.sectionRowIndex].star);
                 if (stockList[this.sectionRowIndex].newBuy == true && stockList[this.sectionRowIndex].newBuyDate == getBeijingDate()) {
                     $("#new-buy-checkbox").prop("checked", true);
                 } else {
@@ -1971,6 +1971,8 @@ async function initStockAndFundHtml() {
                 $("#fund-costPrise").val(fundList[this.sectionRowIndex].costPrise);
                 $("#fund-bonds").val(fundList[this.sectionRowIndex].bonds);
                 $("#fund-desc").val(fundList[this.sectionRowIndex].desc);
+                $("#fund-star-desc").val(fundList[this.sectionRowIndex].starDesc);
+                $("#fund-star").val(fundList[this.sectionRowIndex].star);
                 if (isCycleInvest) {
                     $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
                     $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
@@ -2648,6 +2650,8 @@ async function saveStock() {
     var monitorLowerPercent = $("#stock-monitor-lower-percent").val();
     var desc = $("#stock-desc").val();
     var newBuy = $("#new-buy-checkbox").prop("checked");
+    var starDesc = $("#stock-star-desc").val();
+    var star = $("#stock-star").val();
     var newBuyDate = getBeijingDate();
     
     var code = $("#stock-code").val();
@@ -2671,7 +2675,9 @@ async function saveStock() {
         "monitorLowerPercent": monitorLowerPercent,
         "newBuy": newBuy,
         "newBuyDate": newBuyDate,
-        "desc": desc
+        "desc": desc,
+        "starDesc": starDesc,
+        "star": star
     }
     for (var k in stockList) {
         if (stockList[k].code == stock.code) {
@@ -2686,6 +2692,9 @@ async function saveStock() {
             stockList[k].newBuyDate = stock.newBuyDate;
             stockList[k].monitorAlert = '';
             stockList[k].desc = stock.desc;
+            stockList[k].starDesc = stock.starDesc;
+            stockList[k].star = stock.star;
+
             if (stockList[k].addTimePrice == null || stockList[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stockList[k].code);
                 stockList[k].addTimePrice = checkStockExsitResult.now;
@@ -2833,6 +2842,8 @@ async function saveFund() {
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
     var desc = $("#fund-desc").val();
+    var starDesc = $("#fund-star-desc").val();
+    var star = $("#fund-star").val();
     if (isCycleInvest) {
         var fundCycleInvestType = $("#fund-cycle-invest-type").val();
         var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
@@ -2883,6 +2894,8 @@ async function saveFund() {
             "costPrise": costPrise,
             "bonds": bonds,
             "desc": desc,
+            "starDesc": starDesc,
+            "star": star
         }
     }
     for (var k in fundList) {
@@ -2891,6 +2904,8 @@ async function saveFund() {
             fundList[k].costPrise = fund.costPrise;
             fundList[k].bonds = fund.bonds;
             fundList[k].desc = fund.desc;
+            fundList[k].starDesc = fund.starDesc;
+            fundList[k].star = fund.star;
             if (isCycleInvest) {
                 fundList[k].fundCycleInvestType = fund.fundCycleInvestType;
                 fundList[k].fundCycleInvestDate = fund.fundCycleInvestDate;
@@ -7867,8 +7882,4 @@ async function saveKLineNumbers() {
         kLineNumbers = 0;
     }
     saveCacheData('k-line-numbers', kLineNumbers);
-}
-
-async function showDescStarModal() {
-    $("#desc-star-modal").modal();
 }
