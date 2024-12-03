@@ -916,6 +916,8 @@ document.addEventListener(
         document.getElementById('show-sell-button-2').addEventListener('click', showBuyOrSell);
         // 走势图页面，点击东方财富走势图
         document.getElementById('go-to-eastmoney-button').addEventListener('click', goToEastMoney);
+        // 走势图页面，点击东方财富查看详细信息
+        document.getElementById('go-to-eastmoney-detail-button').addEventListener('click', goToEastMoneyDetail);
         // 走势图页面，切换新旧走势图
         document.getElementById('time-image-new-button').addEventListener('click', changeTimeImage);
         document.getElementById('time-image-old-button').addEventListener('click', changeTimeImage);
@@ -1870,6 +1872,7 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-delete-button")[0].style.display = 'inline';
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-button")[0].style.display = 'inline';
+                $("#go-to-eastmoney-detail-button")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
                 (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
                     $("#fund-invers-position-button-3")[0].style.display = 'inline';
@@ -1982,6 +1985,7 @@ async function initStockAndFundHtml() {
                 $("#fund-net-diagram-button-3")[0].style.display = 'inline';
                 $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 $("#go-to-eastmoney-button")[0].style.display = 'none';
+                $("#go-to-eastmoney-detail-button")[0].style.display = 'none';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -6012,6 +6016,25 @@ async function goToEastMoney() {
     } else if(timeImageCode.startsWith('us') || timeImageCode.startsWith('US')) {
         let code = timeImageCode.substring(2, timeImageCode.length);
         url = Env.GO_TO_EASTMONEY_2_URL + "/us/" + code + ".html#fullScreenChart"; 
+    }
+    chrome.tabs.create({ url: url });
+}
+
+// 去东方财富查看股票详情
+async function goToEastMoneyDetail() {
+    let url;
+    if(timeImageCode.startsWith('sh') || timeImageCode.startsWith('SH')){
+        let code = timeImageCode;
+        url = Env.GO_TO_EASTMONEY_2_URL + "/" + code + ".html";
+    } else if(timeImageCode.startsWith('sz') || timeImageCode.startsWith('SZ') || timeImageCode.startsWith('bj') || timeImageCode.startsWith('BJ')) {
+        let code = timeImageCode;
+        url = Env.GO_TO_EASTMONEY_2_URL + "/" + code + ".html";
+    } else if(timeImageCode.startsWith('hk') || timeImageCode.startsWith('HK')) {
+        let code = timeImageCode.substring(2, timeImageCode.length);
+        url = Env.GO_TO_EASTMONEY_2_URL + "/hk/" + code + ".html"; 
+    } else if(timeImageCode.startsWith('us') || timeImageCode.startsWith('US')) {
+        let code = timeImageCode.substring(2, timeImageCode.length).replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','')
+        url = Env.GO_TO_EASTMONEY_2_URL + "/us/" + code + ".html"; 
     }
     chrome.tabs.create({ url: url });
 }
