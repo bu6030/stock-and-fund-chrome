@@ -42,46 +42,43 @@
 
                     <!-- 模态框主体 -->
                     <div class="modal-body my-font">
-                        <div class="am-form-group am-cf">
-                            <div class="zuo">基金名称：</div>
+                        <div class="am-form-group am-cf zou-you-parent">
+                            <div class="zuo">基金名称/编码：</div>
                             <div class="you">
-                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="fund-name"
+                                <input type="text" disabled="disabled" class="am-input-sms my-text" id="fund-name"
                                     placeholder="基金名称">
                             </div>
-                        </div>
-                        <div class="am-form-group am-cf">
-                            <div class="zuo">基金编码：</div>
                             <div class="you">
-                                <input type="text" class="am-input-sm my-text" id="fund-code" placeholder="请输入6位基金编码" disabled="disabled">
+                                <input type="text" class="am-input-sms my-text" id="fund-code" placeholder="请输入6位基金编码" disabled="disabled">
                             </div>
                         </div>
-                        <div class="am-form-group am-cf">
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">持仓成本单价（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" id="fund-costPrise"
                                     placeholder="请输入持仓成本单价">
                             </div>
                         </div>
-                        <div class="am-form-group am-cf">
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">持有份额（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" id="fund-bonds" placeholder="请输入持有份额">
                             </div>
                         </div>
-                        <div class="am-form-group am-cf">
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">所属分组：</div>
                             <div class="you">
                                 <select id="fund-belong-group-select">
                                 </select>
                             </div>
                         </div>
-                        <div class="am-form-group am-cf">
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">别名：</div>
                             <div class="you">
                                 <input type="text" class="am-input-sm my-text" id="fund-desc" placeholder="基金别名，防止名字过长显示，只显示别名">
                             </div>
                         </div>
-                        <div class="am-form-group am-cf">
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">备注：</div>
                             <div class="you">
                                 <input type="text" class="am-input-sm my-text" id="fund-star-desc"
@@ -158,62 +155,69 @@
 
                     <!-- 模态框主体 -->
                     <div class="modal-body">
-                        <div class="am-form-group am-cf">
-                            <div class="zuo">股票名称：</div>
+                        <div class="am-form-group am-cf zou-you-parent">
+                            <div class="zuo">股票名称/编码：</div>
                             <div class="you">
-                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="stock-name"
+                                <input type="text" disabled="disabled" class="am-input-sms my-text" id="stock-name"
                                     placeholder="股票名称">
                             </div>
-                            <div class="zuo">股票编码：</div>
                             <div class="you">
-                                <input type="text" class="am-input-sm my-text" id="stock-code" disabled="disabled"
+                                <input type="text" class="am-input-sms my-text" id="stock-code" disabled="disabled"
                                     placeholder="股票请输入编码sh(上证)/sz(深证)开头+6位股票编码">
                             </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">持仓成本单价（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" id="stock-costPrise"
                                     placeholder="请输入持仓成本单价">
                             </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">持有份额（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" id="stock-bonds" placeholder="请输入持有份额">
                             </div>
-                            <div class="zuo">所属分组：</div>
-                            <div class="you">
-                                <select id="stock-belong-group-select">
-                                </select>
-                            </div>
-                            <div class="zuo"><input type="checkbox" value="" id="new-buy-checkbox">是否当天新买入股票，否则当日计算收益有差异</div>
-                            <!-- <div class="zuo">备注：</div>
-                            <div class="you">
-                                <input type="text" class="am-input-sm my-text" id="stock-desc" placeholder="股票备注">
-                            </div> -->
                         </div>
-                        <div class="am-form-group am-cf">
+                        <div class="am-form-group am-cf zou-you-parent">
+                            <div class="zuo">是否当天新买入股票(否则当日计算收益有差异)：<input type="checkbox" value="" id="new-buy-checkbox"></div>
+                            <div class="you">所属分组：<select id="stock-belong-group-select"></select></div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">监控涨破最高价格（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" id="stock-monitor-high-price"
                                     placeholder="请输入监控突破最高价格">
                             </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">监控跌破最低价格（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" id="stock-monitor-low-price"
                                     placeholder="请输入监控跌破最低价格">
                             </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">日涨幅超过%提醒（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" max="20" min="0"  id="stock-monitor-upper-percent"
                                     placeholder="请输入日涨幅%">
                             </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">日跌幅超过%提醒（可选）：</div>
                             <div class="you">
                                 <input type="number" class="am-input-sm my-text" max="20" min="0" id="stock-monitor-lower-percent"
                                     placeholder="请输入日跌幅%">
                             </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">别名（可选）：</div>
                             <div class="you">
                                 <input type="text" class="am-input-sm my-text" id="stock-desc" placeholder="股票别名，设置后不显示股票名称，只显示别名">
                             </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
                             <div class="zuo">备注：</div>
                             <div class="you">
                                 <input type="text" class="am-input-sm my-text" id="stock-star-desc"

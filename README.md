@@ -385,6 +385,7 @@
 358. 当日净值出了之后，根据当日净值计算涨跌幅 2024/12/1 version 2.2.4.0 --end
 359. 增加跳转东方财富详情页面 2024/12/3
 360. 增加星级备注 2024/12/4 version 2.2.4.1 --end
+361. 编辑股票页面内容太多导致保存按钮遮挡问题修改 2024/12/11 version 2.2.4.2 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

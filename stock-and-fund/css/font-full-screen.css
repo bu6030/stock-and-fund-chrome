@@ -172,3 +172,17 @@
     width:540px;
     height:350px;
 }
+
+.zuo {
+    margin-right: auto; /* 将.zuo推向左边 */
+}
+  
+.you {
+    margin-left: auto; /* 将.you推向右边 */
+}
+
+.zou-you-parent {
+    display: flex; /* 启用Flexbox布局 */
+    align-items: center; /* 垂直居中对齐 */
+    justify-content: space-between; /* 元素之间的间距 */
+}
