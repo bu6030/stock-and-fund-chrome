@@ -181,6 +181,8 @@ function click1or5or15or30or60MinutesImage(event) {
         show1or5or15or30or60MinutesImage('30MIN');
     } else if (targetId == 'time-image-60min-button') {
         show1or5or15or30or60MinutesImage('60MIN');
+    } else if (targetId == 'time-image-120min-button') {
+        show1or5or15or30or60MinutesImage('120MIN');
     }
 }
 function show1or5or15or30or60MinutesImage(minutesType) {
@@ -195,6 +197,8 @@ function show1or5or15or30or60MinutesImage(minutesType) {
         buttonText = '30分';
     } else if (minutesType == '60MIN') {
         buttonText = '60分';
+    } else if (minutesType == '120MIN') {
+        buttonText = '120分';
     }
     document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = buttonText;
     clearTimeImageTimeout();
@@ -787,6 +791,8 @@ function setStockImage(type) {
         kType = '30分钟';
     } else if (type == '60MIN') {
         kType = '60分钟';
+    } else if (type == '120MIN') {
+        kType = '120分钟';
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
     // 说明该基金是从持仓明细进入的

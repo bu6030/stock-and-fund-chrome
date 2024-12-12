@@ -319,6 +319,8 @@ function ajaxGetStockTimeImage(code, type, end) {
         klt = 30;
     } else if (type == '60MIN') {
         klt = 60;
+    } else if (type == '120MIN') {
+        klt = 120;
     }
     let secid = getSecid(code);
     if (secid == null || secid == '' || secid == undefined) {
