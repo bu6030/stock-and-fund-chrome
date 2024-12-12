@@ -734,11 +734,15 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     // 使用配置项设置成交量图
     volumnChart.setOption(volumnOption);
     $("#time-image-modal").modal();
+    let stockMinitesImageRefresh = 20000;
+    if (mainPageRefreshTime <= 10000) {
+        stockMinitesImageRefresh = 10000;
+    }
     // 20s刷新
     timerId = setTimeout(function () {
         console.log('20s执行');
         setStockMinitesImage();
-    }, 20000);
+    }, stockMinitesImageRefresh);
     console.log("下一次分时图timerId:", timerId);
 }
 // 展示日线/周线/月线图
