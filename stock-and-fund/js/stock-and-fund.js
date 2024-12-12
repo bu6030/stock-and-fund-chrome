@@ -835,16 +835,25 @@ document.addEventListener(
         document.getElementById('time-image-minute-button').addEventListener('click', async function () {
             showMinuteImage('1DAY');
         });
+        document.getElementById('time-image-minute-button2').addEventListener('click', async function () {
+            showMinuteImage('1DAY');
+        });
         // 走势图页面，点击分时图按钮
         document.getElementById('time-image-minute-5day-button').addEventListener('click', async function () {
             showMinuteImage('5DAY');
         });
+        document.getElementById('time-image-minute-5day-button2').addEventListener('click', async function () {
+            showMinuteImage('5DAY');
+        });
         // 走势图页面，日线图按钮点击
         document.getElementById('time-image-day-button').addEventListener('click', showDayImage);
+        document.getElementById('time-image-day-button2').addEventListener('click', showDayImage);
         // 走势图页面，周线图按钮点击
         document.getElementById('time-image-week-button').addEventListener('click', showWeekImage);
+        document.getElementById('time-image-week-button2').addEventListener('click', showWeekImage);
         // 走势图页面，月线图按钮点击
         document.getElementById('time-image-month-button').addEventListener('click', showMonthImage);
+        document.getElementById('time-image-month-button2').addEventListener('click', showMonthImage);
         // 走势图页面，1分钟线图按钮点击
         document.getElementById('time-image-1min-button').addEventListener('click', click1or5or15or30or60MinutesImage);
         // 走势图页面，5分钟线图按钮点击
@@ -1918,6 +1927,18 @@ async function initStockAndFundHtml() {
                     $("#time-image-day-button")[0].style.display = 'none';
                     $("#time-image-week-button")[0].style.display = 'none';
                     $("#time-image-month-button")[0].style.display = 'none';
+                    
+                    $("#time-image-minute-button2")[0].style.display = 'inline';
+                    $("#time-image-minute-5day-button2")[0].style.display = 'inline';
+                    $("#time-image-day-button2")[0].style.display = 'inline';
+                    $("#time-image-week-button2")[0].style.display = 'inline';
+                    $("#time-image-month-button2")[0].style.display = 'inline';
+
+                    $("#time-image-minute-button2-line")[0].style.display = 'block';
+                    $("#time-image-minute-5day-button2-line")[0].style.display = 'block';
+                    $("#time-image-day-button2-line")[0].style.display = 'block';
+                    $("#time-image-week-button2-line")[0].style.display = 'block';
+
                     $("#stock-show-time-image-button")[0].style.display = 'none';
                     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                     // $("#show-time-image-5min15min30min60min-button")[0].style.display = 'inline';
@@ -1927,6 +1948,18 @@ async function initStockAndFundHtml() {
                     $("#time-image-day-button")[0].style.display = 'inline';
                     $("#time-image-week-button")[0].style.display = 'inline';
                     $("#time-image-month-button")[0].style.display = 'inline';
+
+                    $("#time-image-minute-button2")[0].style.display = 'none';
+                    $("#time-image-minute-5day-button2")[0].style.display = 'none';
+                    $("#time-image-day-button2")[0].style.display = 'none';
+                    $("#time-image-week-button2")[0].style.display = 'none';
+                    $("#time-image-month-button2")[0].style.display = 'none';
+
+                    $("#time-image-minute-button2-line")[0].style.display = 'none';
+                    $("#time-image-minute-5day-button2-line")[0].style.display = 'none';
+                    $("#time-image-day-button2-line")[0].style.display = 'none';
+                    $("#time-image-week-button2-line")[0].style.display = 'none';
+
                     $("#stock-show-time-image-button")[0].style.display = 'inline';
                     $("#show-buy-or-sell-button-2")[0].style.display = 'inline';
                     // $("#show-time-image-5min15min30min60min-button")[0].style.display = 'inline';
@@ -2015,12 +2048,34 @@ async function initStockAndFundHtml() {
                     $("#time-image-day-button")[0].style.display = 'none';
                     $("#time-image-week-button")[0].style.display = 'none';
                     $("#time-image-month-button")[0].style.display = 'none';
+                    
+                    $("#time-image-minute-button2")[0].style.display = 'inline';
+                    $("#time-image-minute-5day-button2")[0].style.display = 'inline';
+                    $("#time-image-day-button2")[0].style.display = 'inline';
+                    $("#time-image-week-button2")[0].style.display = 'inline';
+                    $("#time-image-month-button2")[0].style.display = 'inline';
+
+                    $("#time-image-minute-button2-line")[0].style.display = 'block';
+                    $("#time-image-minute-5day-button2-line")[0].style.display = 'block';
+                    $("#time-image-day-button2-line")[0].style.display = 'block';
+                    $("#time-image-week-button2-line")[0].style.display = 'block';
                 } else {
                     $("#time-image-minute-button")[0].style.display = 'inline';
                     $("#time-image-minute-5day-button")[0].style.display = 'inline';
                     $("#time-image-day-button")[0].style.display = 'inline';
                     $("#time-image-week-button")[0].style.display = 'inline';
                     $("#time-image-month-button")[0].style.display = 'inline';
+
+                    $("#time-image-minute-button2")[0].style.display = 'none';
+                    $("#time-image-minute-5day-button2")[0].style.display = 'none';
+                    $("#time-image-day-button2")[0].style.display = 'none';
+                    $("#time-image-week-button2")[0].style.display = 'none';
+                    $("#time-image-month-button2")[0].style.display = 'none';
+
+                    $("#time-image-minute-button2-line")[0].style.display = 'none';
+                    $("#time-image-minute-5day-button2-line")[0].style.display = 'none';
+                    $("#time-image-day-button2-line")[0].style.display = 'none';
+                    $("#time-image-week-button2-line")[0].style.display = 'none';
                 }
                 if (trendImageType == 'MINUTE') {
                     showMinuteImage('1DAY');

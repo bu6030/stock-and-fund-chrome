@@ -66,6 +66,10 @@ function showMinuteImage(ndays) {
 }
 // 展示日线图
 function showDayImage() {
+    let currentURL = window.location.href;
+    if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) { 
+        document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = '日K';
+    }
     clearTimeImageTimeout();
     let path = "";
     fundInvesterPositionSetButton();
@@ -102,6 +106,10 @@ function showDayImage() {
 }
 // 展示周线图
 function showWeekImage() {
+    let currentURL = window.location.href;
+    if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) { 
+        document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = '周K';
+    }
     clearTimeImageTimeout();
     fundInvesterPositionSetButton();
     let path = "";
@@ -136,6 +144,10 @@ function showWeekImage() {
 }
 // 展示月线图
 function showMonthImage() {
+    let currentURL = window.location.href;
+    if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) { 
+        document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = '月K';
+    }
     clearTimeImageTimeout();
     fundInvesterPositionSetButton();
     let path = "";
@@ -225,9 +237,16 @@ function toEditPage() {
 }
 // 展示分时图
 function setStockMinitesImage(type) {
+    let currentURL = window.location.href;
     if (type == '1DAY') {
+        if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) { 
+            document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = '分时';
+        }
         ajaxGetStockTimeImageMinute(timeImageCode);
     } else if (type == '5DAY') {
+        if (windowSize == 'MINI' && currentURL.indexOf('full-screen.html') == -1) { 
+            document.getElementById("show-time-image-5min15min30min60min-button").innerHTML = '5日';
+        }
         ajaxGetStockTimeImageMinuteHis(timeImageCode, 5);
     }
 }
