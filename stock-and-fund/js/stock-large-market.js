@@ -286,6 +286,18 @@ function initLargeMarketClick() {
         showWeekImage();
     } else if (trendImageType == 'MONTH') {
         showMonthImage();
+    } else if (trendImageType == '1MIN') {
+        show1or5or15or30or60MinutesImage('1MIN');
+    } else if (trendImageType == '5MIN') {
+        show1or5or15or30or60MinutesImage('5MIN');
+    } else if (trendImageType == '15MIN') {
+        show1or5or15or30or60MinutesImage('15MIN');
+    } else if (trendImageType == '30MIN') {
+        show1or5or15or30or60MinutesImage('30MIN');
+    } else if (trendImageType == '60MIN') {
+        show1or5or15or30or60MinutesImage('60MIN');
+    } else if (trendImageType == '120MIN') {
+        show1or5or15or30or60MinutesImage('120MIN');
     }
 }
 
