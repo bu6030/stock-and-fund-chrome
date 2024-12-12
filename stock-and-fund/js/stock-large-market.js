@@ -265,6 +265,8 @@ function initLargeMarketClick() {
     timeImageType = "STOCK";
     $("#stock-code").val(timeImageCode);
     $("#stock-modal").modal("hide");
+    $("#time-image-minute-button")[0].style.display = 'block';
+    $("#time-image-minute-5day-button")[0].style.display = 'block';
     $("#time-image-day-button")[0].style.display = 'block';
     $("#time-image-week-button")[0].style.display = 'block';
     $("#time-image-month-button")[0].style.display = 'block';
