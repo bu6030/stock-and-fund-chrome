@@ -1550,6 +1550,110 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
     await initFund();
 }
 
+// // 异步初始化首页基金列表数据
+// async function initFund() {
+//     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+//         for (var l in fundList) {
+//             var fundCode = fundList[l].fundCode;
+//             var last = false;
+//             if (l == fundList.length - 1) {
+//                 last = true;
+//             }
+//             ajaxGetFundFromTiantianjijinAsync(fundCode, last);
+//         }
+//     }
+// }
+
+// // 基金异步回调方法
+// async function ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last) {
+//     for (var k in fundList) {
+//         if (fundList[k].fundCode == fund.fundCode) {
+            
+//             fundList[k].name = fund.name + "";
+//             fundList[k].dwjz = fund.dwjz + "";
+//             fundList[k].jzrq = fund.jzrq + "";
+//             fundList[k].gsz = fund.gsz + "";
+//             fundList[k].gztime = fund.gztime + "";
+//             var gsz = new BigDecimal(fund.gsz + "");
+//             var dwjz = new BigDecimal(fund.dwjz + "");
+//             if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
+//                 var gszzl = 0 - parseFloat(fund.gszzl);
+//                 fundList[k].gszzl = gszzl + "";
+//             } else {
+//                 fundList[k].gszzl = fund.gszzl + "";
+//             }
+//             var now = new BigDecimal(fund.gsz + "");
+//             if (fund.gszzl == "--" || fund.gszzl == '' || fund.gszzl == undefined || fund.gszzl == null) {
+//                 fundList[k].gszzl = "0";
+//             } else if(cheatMeFlag && parseFloat(fund.gszzl) < 0) {
+//                 var gszzl = 0 - parseFloat(fund.gszzl);
+//                 fundList[k].gszzl = gszzl + "";
+//             } else {
+//                 fundList[k].gszzl = fund.gszzl + "";
+//             }
+//             fundList[k].income = "0";
+//             fundList[k].incomePercent = "0";
+//             fundList[k].name = fund.name;
+//             var costPrice = new BigDecimal(fundList[k].costPrise + "");
+//             var now = new BigDecimal(fund.dwjz + "");
+//             var incomeDiff = now.add(costPrice.negate());
+//             if (costPrice <= 0) {
+//                 fundList[k].incomePercent = "0";
+//             } else {
+//                 let incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
+//                     .multiply(BigDecimal.TEN)
+//                     .multiply(BigDecimal.TEN)
+//                     .setScale(3, MathContext.ROUND_HALF_UP);
+//                 let bonds = new BigDecimal(fundList[k].bonds + "");
+//                 let income = incomeDiff.multiply(bonds)
+//                     .setScale(2, MathContext.ROUND_HALF_UP);
+//                 fundList[k].income = income + "";
+//                 fundList[k].incomePercent = incomePercent + "";
+//             }
+//             // 计算其他属性
+//             let dayIncome = new BigDecimal("0");
+//             let marketValue = new BigDecimal("0");
+//             // 获取到当日净值已出
+//             let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fund.fundCode);
+//             let gztime = fundList[k].gztime;
+//             if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
+//                 // gztime = gztime.substring(0, 10).replaceAll('-', '')
+//                 gztime = gztime.substring(0, 10).replace(/-/g, '')
+//             }
+//             var costPrice = new BigDecimal(fundList[k].costPrise + "");
+//             var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+//             fundList[k].costPriceValue = costPriceValue + "";
+//             if (currentDayNetDiagramDate == gztime) {
+//                 let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fund.fundCode);
+//                 let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fund.fundCode);
+//                 fundList[k].gsz = currentDayJingzhi;
+//                 fundList[k].existJZ = true;
+//                 dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+//                 marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+//                 fundList[k].gszzl = parseFloat((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + "")).multiply(new BigDecimal("100")).divide(new BigDecimal(previousDayJingzhi + ""), 2) + "").toFixed(2);
+//                 fundList[k].income = marketValue.subtract(costPriceValue) + "";
+//                 if (costPrice <= 0) {
+//                     fundList[k].incomePercent = "0";
+//                 } else {
+//                     fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
+//                 }
+//             } else {
+//                 fundList[k].existJZ = false;
+//                 dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
+//                 marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
+//             }
+//             fundList[k].dayIncome = dayIncome + "";
+//             fundList[k].marketValue = marketValue + "";
+//             break;
+//         }
+//     }
+//     if(last){
+//         setTimeout(function () {
+//             initStockAndFundHtml();
+//         }, 1000);
+//     }
+// }
+
 // 初始化首页基金列表数据
 async function initFund() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {

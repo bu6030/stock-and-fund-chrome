@@ -50,6 +50,35 @@ function ajaxGetFundFromEastMoney(code) {
 }
 
 // 接口调用
+function ajaxGetFundFromEastMoneyAsync(code, last) {
+    let fund = {};
+    $.ajax({
+        url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
+        timeout: 10000, // 设置超时时间为10000毫秒（10秒）
+        type: "get",
+        data: {},
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            var json = data.JJXQ.Datas;
+            fund.fundCode = code;
+            fund.name = json.SHORTNAME + "";
+            fund.dwjz = json.DWJZ + "";
+            fund.now = json.DWJZ + "";
+            fund.gszzl = json.RZDF + "";
+            fund.gsz = fund.dwjz;
+            fund.gztime = "--";
+            ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}
+
+// 接口调用
 function ajaxGetFundCodeFromTiantianjijin() {
     let result;
     $.ajax({
@@ -186,6 +215,36 @@ function ajaxGetFundFromTiantianjijin(code) {
         }
     });
     return result;
+}
+
+// 接口调用
+function ajaxGetFundFromTiantianjijinAsync(code, last) {
+    let timestamp = Date.now();
+    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN + '?' + timestamp;
+    FUND_URL = FUND_URL.replace('{CODE}', code);
+    $.ajax({
+        url: FUND_URL,
+        timeout: 10000, // 设置超时时间为10000毫秒（10秒）
+        type: "get",
+        data: {},
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data != "jsonpgz();") {
+                var fund = jQuery.parseJSON(data.substring(8, data.length - 2));
+                fund.fundCode = code;
+                ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last);
+            } else {
+                ajaxGetFundFromEastMoneyAsync(code, last);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+            ajaxGetFundFromEastMoneyAsync(code, last);
+        }
+    });
 }
 
 // 接口调用
