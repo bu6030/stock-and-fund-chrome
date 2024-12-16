@@ -390,6 +390,7 @@
 363. 分时图自动刷新时间默认20s，当首页数据自动刷新时间修改为10s/5s/3s时，分时图自动刷新为10s 2024/12/12
 364. 迷你模式下显示1分钟/5分钟/15分钟/30分钟/60分钟/120分钟线图按钮 2024/12/12 version 2.2.4.3 --end
 365. 迷你模式下1分钟/5分钟/15分钟/30分钟/60分钟/120分钟线图按钮和分时/五日/日线/周线/月线合一 2024/12/12 version 2.2.4.4 --end
+366. 迷你模式下，编辑保存按钮显示不全 2024/12/16 version 2.2.4.5 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
