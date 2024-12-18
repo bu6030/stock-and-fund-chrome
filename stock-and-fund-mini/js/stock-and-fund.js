@@ -925,9 +925,7 @@ document.addEventListener(
         // document.getElementById('change-red-blue-button').addEventListener('click', changeBlueRed);
         // 设置黑暗，点击隐身模式
         document.getElementById('change-black-button').addEventListener('click', changeBlueRed);
-        // document.getElementById('disable-change-black-button').addEventListener('click', changeBlueRed);
-        // 设置页面，点击全屏按钮
-        document.getElementById('full-screen-button').addEventListener('click', fullScreen);
+        // document.getElementById('disable-change-black-button').addEventListener('click', changeBlueRed);】
         // 设置页面，点击样式切换
         document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
         document.getElementById('bolder-font-change-button').addEventListener('click', changeFontStyle);
@@ -976,9 +974,6 @@ document.addEventListener(
         document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
         // 设置页面，点击反馈建议按钮
         document.getElementById('show-advice-button').addEventListener('click', showAdvice);
-        // 设置页面，点击在大盘指数位置展示/不展示持仓盈亏
-        document.getElementById('larget-market-total-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
-        document.getElementById('larget-market-total-dont-display-change-button').addEventListener('click', changeLargeMarketTotalDisplay);
         // 设置页面，点击在大盘指数位置展示/不展示涨跌值
         document.getElementById('larget-market-count-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
         document.getElementById('larget-market-count-dont-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
@@ -3226,12 +3221,6 @@ function removeAllData() {
 // 打开使用说明文档
 function helpDocument () {
     chrome.tabs.create({ url: Env.GET_HELP_DOCUMENT });
-}
-
-// 全屏展示
-async function fullScreen() {
-    $("#setting-modal").modal("hide");
-    chrome.tabs.create({ url: "full-screen.html" });
 }
 
 // 弹出窗口展示
@@ -6275,21 +6264,6 @@ async function showDayIncomeHistory() {
         dataZoom: dataZoomOption,
     };
     myChart.setOption(option);
-}
-
-// 切换/隐藏持仓盈亏
-async function changeLargeMarketTotalDisplay(event) {
-    let targetId = event.target.id;
-    if (targetId == 'larget-market-total-display-change-button') {
-        largetMarketTotalDisplay = true;
-    } else {
-        largetMarketTotalDisplay = false;
-    }
-    saveCacheData('larget-market-total-display', largetMarketTotalDisplay);
-    $("#setting-modal").modal('hide');
-    reloadDataAndHtml();
-    initLargeMarketData();
-    settingButtonInit();
 }
 
 // 切换/隐藏MA5/MA10/MA20/MA30/MA50/MA250

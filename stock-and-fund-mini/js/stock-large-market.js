@@ -2,13 +2,6 @@
 function initLargeMarketData() {
     var codes = largeMarketCode.join(',');
     let largetMarketTotalStr = '';
-    if (largetMarketTotalDisplay) {
-        largetMarketTotalStr = '<div class=\"stock-large-market-box\" id=\"larget-market-total\">' +
-            '<p>持仓盈亏</p>' +
-            '<p style=\"color:' + redColor + ';\">--</p>' +
-            '<p style=\"color:' + redColor + ';\">--%</p>' +
-        '</div>'
-    }
     // 如果没设置大盘指数，则设置大盘指数DIV为空
     if (codes == "") {
         $("#stock-large-market").html('<div class=\"stock-large-market-container\">' + largetMarketTotalStr + '</div>');
@@ -19,9 +12,6 @@ function initLargeMarketData() {
 // 初始化首页大盘股数据回调方法
 async function initLargeMarketDataCallBack(bigStocks) {
     let largetMarketTotalStr = '';
-    if (largetMarketTotalDisplay) {
-        largetMarketTotalStr = getlargetMarketTotalHtml();
-    }
     largeMarketStockMaxs = '';
     largeMarketStockMins = '';
     var str = "<div class=\"stock-large-market-container\">";
