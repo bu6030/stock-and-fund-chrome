@@ -148,27 +148,6 @@ function ajaxGetStockFromGtimg(code) {
 }
 
 // 接口调用
-function ajaxGetStockFromGtimgAsync(code, stocks) {
-    $.ajax({
-        url: Env.GET_STOCK_FROM_GTIMG + "q=" + code,
-        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
-        type: "get",
-        data: {},
-        dataType: 'text',
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data) {
-            // result = data;
-            initStockGtimgCallBack(data, stocks);
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-        }
-    });
-}
-
-// 接口调用
 function ajaxGetStockFromEastMoney(code, stocks) {
     $.ajax({
         url: Env.GET_STOCK_FROM_EAST_MONEY_URL

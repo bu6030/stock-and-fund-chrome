@@ -54,7 +54,6 @@ var huilvConvert = false;
 var s2nDate;
 var n2sDate;
 var bigStockMoneyDate;
-var timeImageNewOrOld;
 var columnOrder;
 var columnOrderTemp;
 var largeMarketCode;
@@ -122,14 +121,11 @@ const hiddenIconPath = {
 };
 // 初始状态为默认图标
 var defaultIcon;
-var stockApi;
 let hangYeOrGaiNian;
 var allTotalIncome = '--';
 var allTotalIncomePercent = '--';
 var allTotalIncomePercentStyle = '';
 var syncDataCloudUuid = '';
-var opacityPercent;
-var showHelpButton = true;
 var showBatchDeleteButton = true;
 var kLineNumbers = 0;
 
@@ -330,19 +326,11 @@ async function initLoad() {
     } else if(monitorShowMore == "false") {
         monitorShowMore = false;
     }
-    timeImageNewOrOld = await readCacheData('time-image-new-or-old');
-    if (timeImageNewOrOld == null) {
-        timeImageNewOrOld = 'NEW';
-    }
     defaultIcon = await readCacheData('default-icon');
     if (defaultIcon == null || defaultIcon == "true") {
         defaultIcon = true;
     } else if(defaultIcon == "false") {
         defaultIcon = false;
-    }
-    stockApi = await readCacheData('stock-api');
-    if (stockApi == null || stockApi == '') {
-        stockApi = 'EASTMONEY';
     }
     trendImageType = await readCacheData('trend-image-type');
     if (trendImageType == null || trendImageType == '') {
@@ -435,12 +423,6 @@ async function initLoad() {
         mainDeleteButtonDisplay = false;
     } else if(mainDeleteButtonDisplay == "true") {
         mainDeleteButtonDisplay = true;
-    }
-    showHelpButton = await readCacheData('show-help-button');
-    if (showHelpButton == null || showHelpButton == "true") {
-        showHelpButton = true;
-    } else if(mainDeleteButtonDisplay == "false") {
-        showHelpButton = false;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
@@ -539,12 +521,6 @@ async function initLoad() {
         || mainPageRefreshTime == 'undefined') {
         mainPageRefreshTime = 20000;
     }
-    opacityPercent = await readCacheData('opacity-percent');
-    if (opacityPercent == null || opacityPercent == '' || opacityPercent == undefined
-        || opacityPercent == 'undefined') {
-            opacityPercent = "1";
-    }
-    initOpacity();
     // 展示密码保护按钮
     $("#show-password-protect-button")[0].style.display = 'inline';
     $("#data-export-button")[0].style.display = 'inline';
@@ -841,9 +817,6 @@ document.addEventListener(
         document.getElementById('go-to-eastmoney-button').addEventListener('click', goToEastMoney);
         // 走势图页面，点击东方财富查看详细信息
         document.getElementById('go-to-eastmoney-detail-button').addEventListener('click', goToEastMoneyDetail);
-        // 走势图页面，切换新旧走势图
-        document.getElementById('time-image-new-button').addEventListener('click', changeTimeImage);
-        document.getElementById('time-image-old-button').addEventListener('click', changeTimeImage);
         // 走势图页面，分时图关闭监听
         $("#time-image-modal").on("hidden.bs.modal", clearTimeImageTimeout);
         // 走势图页面，点击添加自选
@@ -1034,9 +1007,6 @@ document.addEventListener(
         document.getElementById('main-page-refresh-time-5s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-3s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-dont-button').addEventListener('click', changeMainPageRefreshTime);
-        // 设置页面，点击切换新旧获取股票信息接口
-        document.getElementById('stock-api-gtimg-button').addEventListener('click', changeStockApi);
-        document.getElementById('stock-api-eastmoney-button').addEventListener('click', changeStockApi);
         // 设置页面，点击切换默认展示分时图/日线图/周线图/月线图
         document.getElementById('trend-image-type-minute-button').addEventListener('click', changeTrendImageType);
         document.getElementById('trend-image-type-minute-5day-button').addEventListener('click', changeTrendImageType);
@@ -1054,10 +1024,6 @@ document.addEventListener(
         // 设置页面，点击首页展示/隐藏删除按钮
         document.getElementById('main-delete-button-dont-display-change-button').addEventListener('click', changeMainDeleteButton);
         document.getElementById('main-delete-button-display-change-button').addEventListener('click', changeMainDeleteButton);
-        // 设置页面，变更透明度
-        document.getElementById('opacity-control-range').addEventListener('click', changeOpacity);
-        // 设置页面，点击隐藏使用说明按钮
-        document.getElementById('close-help-button').addEventListener('click', changeShowHelpButton);
         // 设置页面，点击首页展示/隐藏批量删除按钮
         document.getElementById('batch-delete-button-dont-display-change-button').addEventListener('click', changeBatchDeleteButton);
         document.getElementById('batch-delete-button-display-change-button').addEventListener('click', changeBatchDeleteButton);
@@ -1120,180 +1086,20 @@ async function initData() {
     initFirstInstall();
     var stocks = "";
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
-        // 走GTIMG获取股票接口
-        if (stockApi == 'GTIMG') {
-            for (var k in stockList) {
-                stocks += stockList[k].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') + ",";
-            }
-            // 没有股票不调用接口请求
-            if (stocks != "") {
-                ajaxGetStockFromGtimgAsync(stocks, stocks);
-            }
-        // 走东方财富获取股票接口
-        } else {
-            var secIdStockArr = '';
-            for (var k in stockList) {
-                stocks += stockList[k].code + ",";
-                let code = stockList[k].code;
-                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj','').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
-            }
-            // let result = "";
-            // let stoksArr = [];
-            // 没有股票不调用接口请求
-            if (stocks != "") {
-                ajaxGetStockFromEastMoney(secIdStockArr, stocks);
-            }
+        var secIdStockArr = '';
+        for (var k in stockList) {
+            stocks += stockList[k].code + ",";
+            let code = stockList[k].code;
+            secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj','').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+        }
+        // 没有股票不调用接口请求
+        if (stocks != "") {
+            ajaxGetStockFromEastMoney(secIdStockArr, stocks);
         }
     }
     if (stocks == "") {
         initFund();
     }
-}
-
-async function initStockGtimgCallBack(result, stocks) {
-    let huilvHK;
-    let huilvUS;
-    // 只有切换了汇率才获取汇率接口数据
-    if(huilvConvert){
-        if (stocks.indexOf('hk') || stocks.indexOf('HK')) {
-            huilvHK = await getHuilv('HKD');
-        }
-        if (stocks.indexOf('us') || stocks.indexOf('US')) {
-            huilvUS = await getHuilv('USD');
-        }
-    }
-    var stoksArr = result.split("\n");
-    turnOverRate = "";
-    stockMaxs = "";
-    stockMins = "";
-    for (var k in stoksArr) {
-        for (var l in stockList) {
-            // console.log(stockList[l].code ,"===", stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("=")))
-            if (stockList[l].code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','') == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
-                var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                var values = dataStr.split("~");
-                stockList[l].name = values[1] + "";
-                stockList[l].gztime = changeTimeFormate(values[30]) + "";
-                // 可转债上市前加格默认为 0
-                if (parseFloat(values[3]) == 0 && (values[1].indexOf("发债") != -1 || values[1].indexOf("转债") != -1)) {
-                    stockList[l].now = "100.00";
-                } else {
-                    stockList[l].now = values[3] + "";
-                }
-                // 9点至9点15分，股票价格如果为0就取昨日收盘价格
-                if (parseFloat(stockList[l].now) == 0) {
-                    stockList[l].now = values[4] + "";
-                }
-                if (cheatMeFlag && parseFloat(values[31]) < 0) {
-                    var change = 0 - parseFloat(values[31]);
-                    var changePercent = 0 - parseFloat(values[32]);
-                    stockList[l].change = change + "";
-                    stockList[l].changePercent = changePercent + "";
-                } else {
-                    stockList[l].change = values[31] + "";
-                    stockList[l].changePercent = values[32] + "";
-                }
-                stockList[l].time = values[30] + "";
-                stockList[l].max = values[33] + "";
-                stockList[l].min = values[34] + "";
-                // stockList[l].buyOrSellStockRequestList = [];
-                var now = new BigDecimal(stockList[l].now + "");
-                var costPrise = new BigDecimal(stockList[l].costPrise + "")
-                var incomeDiff = now.add(costPrise.negate());
-                if (costPrise <= 0) {
-                    stockList[l].incomePercent = 0 + "";
-                } else {
-                    var incomePercent = incomeDiff.divide(costPrise, 5, 4)
-                        .multiply(BigDecimal.TEN)
-                        .multiply(BigDecimal.TEN)
-                        .setScale(3);
-                    stockList[l].incomePercent = incomePercent + "";
-                }
-                var bonds = new BigDecimal(stockList[l].bonds);
-                var income = parseFloat(incomeDiff.multiply(bonds) + "").toFixed(2);
-                if (huilvConvert) {
-                    if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                        income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                    } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                        income = parseFloat((new BigDecimal(income + "")).multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                    }
-                }
-                stockList[l].income = income + "";
-                // 计算股票中的部分值
-                var buyOrSells = stockList[l].buyOrSellStockRequestList;
-                var todayBuyIncom = new BigDecimal("0");
-                var todaySellIncom = new BigDecimal("0");
-                var dayIncome = new BigDecimal("0");
-                var marketValue = new BigDecimal("0");
-                var maxBuyOrSellBonds = 0;
-                //当天新买，计算当日收益，（最新价格-成本价格）*持仓数
-                if (stockList[l].newBuy && stockList[l].newBuyDate == getBeijingDate()) {
-                    dayIncome = (now.add(costPrise.negate())).multiply(new BigDecimal(stockList[l].bonds));
-                //不是当天新买
-                } else {
-                    for (var g in buyOrSells) {
-                        let beijingDate = getBeijingDate();
-                        // 当天购买过
-                        if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
-                            maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
-                            var buyIncome = (new BigDecimal(stockList[l].now))
-                                .subtract(new BigDecimal(buyOrSells[g].price + ""))
-                                .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
-                                .subtract(new BigDecimal(buyOrSells[g].cost + ""));
-                            todayBuyIncom = todayBuyIncom.add(buyIncome);
-                        }
-                        // 当天卖出过
-                        if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
-                            todaySellIncom = todaySellIncom.add(new BigDecimal(buyOrSells[g].income + ""));
-                        }
-                    }
-                    if (maxBuyOrSellBonds < stockList[l].bonds) {
-                        var restBonds = (new BigDecimal(stockList[l].bonds)).subtract(new BigDecimal(maxBuyOrSellBonds + ""));
-                        dayIncome = (new BigDecimal(stockList[l].change)).multiply(restBonds);
-                    } else {
-                        dayIncome = new BigDecimal("0");
-                    }
-                    dayIncome = dayIncome.add(todayBuyIncom).add(todaySellIncom);
-                }
-                if (huilvConvert) {
-                    if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                        dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                    } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                        dayIncome = parseFloat(dayIncome.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                    }
-                }
-                stockList[l].dayIncome = dayIncome + "";
-                marketValue = (new BigDecimal(stockList[l].now)).multiply(new BigDecimal(stockList[l].bonds));
-                if (huilvConvert) {
-                    if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                        marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                    } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                        marketValue = parseFloat(marketValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                    }
-                }
-                stockList[l].marketValue = marketValue + "";
-                var costPrice = new BigDecimal(stockList[l].costPrise + "");
-                var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(stockList[l].bonds))).toFixed(2));
-                if (huilvConvert) {
-                    if (stockList[l].code.indexOf("hk") >= 0 || stockList[l].code.indexOf("HK") >= 0) {
-                        costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvHK + ""))).toFixed(2);
-                    } else if (stockList[l].code.indexOf("us") >= 0 || stockList[l].code.indexOf("US") >= 0) {
-                        costPriceValue = parseFloat(costPriceValue.multiply(new BigDecimal(huilvUS + ""))).toFixed(2);
-                    }
-                }
-                stockList[l].upSpeed = "--";
-                stockList[l].amplitude = values[43];
-                stockList[l].costPriceValue = costPriceValue + "";
-                // 设置换手率
-                turnOverRate += stockList[l].code + '~' + values[38] + '-';
-                stockList[l].turnOverRate = values[38];
-                stockMaxs += stockList[l].code + '~' + stockList[l].max + '-';
-                stockMins += stockList[l].code + '~' + stockList[l].min + '-';
-                stockList[l].quantityRelativeRatio = values[49];
-            }
-        }
-    }
-    await initFund();
 }
 
 async function initStockEastMoneyCallBack(stoksArr, stocks) {
@@ -3144,18 +2950,6 @@ async function initWindowsSize() {
     }
 }
 
-function initOpacity() {
-    document.getElementById('opacity-control-range').value = opacityPercent * 100;
-    document.body.style.opacity = opacityPercent;
-}
-
-function changeOpacity() {
-    let opacity = parseFloat(document.getElementById('opacity-control-range').value + "");
-    opacityPercent = (opacity/100).toFixed(2);
-    document.body.style.opacity = opacityPercent;
-    saveCacheData('opacity-percent', opacityPercent);
-}
-
 // 样式切换，股票基金数据字体加粗加大
 async function changeFontStyle(event) {
     let targetId = event.target.id;
@@ -3193,7 +2987,7 @@ function alertMessage(message) {
 
 // 第一次安装后没有数据，展示使用说明
 function initFirstInstall() {
-    if (showHelpButton && stockList.length == 0 && fundList.length == 0) {
+    if (stockList.length == 0 && fundList.length == 0) {
         $("#help-document-alert")[0].style.display = 'block';
     } else {
         $("#help-document-alert")[0].style.display = 'none';
@@ -5794,18 +5588,6 @@ function getSecid(code) {
     return secid;
 }
 
-// 切换新旧走势图
-async function changeTimeImage(event) {
-    let targetId = event.target.id;
-    if (targetId == 'time-image-old-button') {
-        timeImageNewOrOld = 'OLD';
-    } else {
-        timeImageNewOrOld = 'NEW';
-    }
-    saveCacheData('time-image-new-or-old', timeImageNewOrOld);
-    showMinuteImage();
-}
-
 // 根据顺序拼接html信息
 function getThColumnHtml(columnId, type) {
     // 这里可以根据需要定义每个列的显示名称
@@ -6809,19 +6591,6 @@ async function changeMainPageRefreshTime(event) {
     location.reload();
 }
 
-// 点击切换新旧获取股票信息接口
-async function changeStockApi(event) {
-    let targetId = event.target.id;
-    if (targetId == 'stock-api-gtimg-button') {
-        stockApi = 'GTIMG';
-    } else {
-        stockApi = 'EASTMONEY';
-    }
-    $("#setting-modal").modal("hide");
-    saveCacheData('stock-api', stockApi);
-    location.reload();
-}
-
 // 设置页面按钮组展示是否生效的样式
 async function settingButtonInit(){
     if (windowSize == 'NORMAL') {
@@ -6938,13 +6707,6 @@ async function settingButtonInit(){
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-dont-button').classList.add('active');
-    }
-    if (stockApi == 'GTIMG') {
-        document.getElementById('stock-api-gtimg-button').classList.add('active');
-        document.getElementById('stock-api-eastmoney-button').classList.remove('active');
-    } else {
-        document.getElementById('stock-api-gtimg-button').classList.remove('active');
-        document.getElementById('stock-api-eastmoney-button').classList.add('active');
     }
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
@@ -7286,12 +7048,6 @@ async function checkPassword() {
         $("#password-check-modal").modal("hide");
         initLoad();
     }
-}
-
-// 点击隐藏使用说明
-async function changeShowHelpButton() {
-    showHelpButton = false;
-    saveCacheData('show-help-button', showHelpButton);
 }
 
 async function batchDelete() {
