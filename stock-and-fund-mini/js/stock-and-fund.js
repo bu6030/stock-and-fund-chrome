@@ -974,9 +974,6 @@ document.addEventListener(
         document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
         // 设置页面，点击反馈建议按钮
         document.getElementById('show-advice-button').addEventListener('click', showAdvice);
-        // 设置页面，点击在大盘指数位置展示/不展示涨跌值
-        document.getElementById('larget-market-count-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
-        document.getElementById('larget-market-count-dont-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
         // 设置页面，点击在K线图展示/不展示MA5/MA250
         document.getElementById("kline-ma5-display-checkbox").addEventListener('change', changeKlineDisplay);
         document.getElementById("kline-ma10-display-checkbox").addEventListener('change', changeKlineDisplay);
@@ -6326,21 +6323,6 @@ async function changeKlineDisplay(event) {
     settingButtonInit();
 }
 
-// 切换/隐藏大盘涨跌值
-async function changeLargeMarketCountDisplay(event) {
-    let targetId = event.target.id;
-    if (targetId == 'larget-market-count-display-change-button') {
-        largetMarketCountDisplay = true;
-    } else {
-        largetMarketCountDisplay = false;
-    }
-    saveCacheData('larget-market-count-display', largetMarketCountDisplay);
-    $("#setting-modal").modal('hide');
-    reloadDataAndHtml();
-    initLargeMarketData();
-    settingButtonInit();
-}
-
 // 滚动到指定行
 function scrollToTableRow(rowIndex, type) {
     // 获取表格元素
@@ -6581,13 +6563,6 @@ async function settingButtonInit(){
     } else {
         document.getElementById('larget-market-total-dont-display-change-button').classList.add('active');
         document.getElementById('larget-market-total-display-change-button').classList.remove('active');
-    }
-    if (largetMarketCountDisplay) {
-        document.getElementById('larget-market-count-dont-display-change-button').classList.remove('active');
-        document.getElementById('larget-market-count-display-change-button').classList.add('active');
-    } else {
-        document.getElementById('larget-market-count-dont-display-change-button').classList.add('active');
-        document.getElementById('larget-market-count-display-change-button').classList.remove('active');
     }
     if (defaultIcon) {
         document.getElementById('change-icon-default-button').classList.add('active');

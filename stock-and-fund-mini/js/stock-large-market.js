@@ -29,21 +29,12 @@ async function initLargeMarketDataCallBack(bigStocks) {
         largeMarketStockMins += bigStocks[k].f12 + '~' + bigStocks[k].f16 + '-';
         var style = "style=\""
             + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
-        if (largetMarketCountDisplay) {
-            str = str + 
-            '<div class=\"stock-large-market-box\"' + aId + '>' +
-                '<p>' + name +'</p>' +
-                '<p ' + style + '>' + now + '</p>' +
-                '<p ' + style + '>' + change + '(' + changePercent + '%)</p>' +
-            '</div>';
-        } else {
-            str = str + 
+        str = str + 
             '<div class=\"stock-large-market-box\"' + aId + '>' +
                 '<p>' + name +'</p>' +
                 '<p ' + style + '>' + now + '</p>' +
                 '<p ' + style + '>' + changePercent + '%</p>' +
             '</div>';
-        }
     }
     str = str + '</div>';
     $("#stock-large-market").html(str);
