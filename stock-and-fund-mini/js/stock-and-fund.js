@@ -11,7 +11,6 @@ var fundList;
 var stockList;
 var blueColor = '#093';
 var redColor = '#ee2500';
-var cheatMeFlag = false;
 var showStockOrFundOrAll = 'all';
 var windowSize = 'NORMAL'; // 窗口大小
 var marketValueDisplay = 'DISPLAY';
@@ -157,14 +156,6 @@ async function initLoad() {
     redColor = await readCacheData('redColor');
     if (redColor == null) {
         redColor = '#ee2500';
-    }
-    cheatMeFlag = await readCacheData('cheatMeFlag');
-    if (cheatMeFlag == null) {
-        cheatMeFlag = false;
-    } else if(cheatMeFlag == "true") {
-        cheatMeFlag = true;
-    } else if(cheatMeFlag == "false") {
-        cheatMeFlag = false;
     }
     huilvConvert = await readCacheData('huilvConvert');
     if (huilvConvert == null) {
@@ -935,9 +926,6 @@ document.addEventListener(
         // 设置黑暗，点击隐身模式
         document.getElementById('change-black-button').addEventListener('click', changeBlueRed);
         // document.getElementById('disable-change-black-button').addEventListener('click', changeBlueRed);
-        // 设置页面，点击忽悠自己按钮
-        document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
-        document.getElementById('disable-cheat-me-button').addEventListener('click', cheatMe);
         // 设置页面，点击全屏按钮
         document.getElementById('full-screen-button').addEventListener('click', fullScreen);
         // 设置页面，点击样式切换
@@ -1143,15 +1131,9 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                     stock.max = parseFloat(stoksArr[k].f18 + "").toFixed(toFixedVolume);
                     stock.min = parseFloat(stoksArr[k].f18 + "").toFixed(toFixedVolume);
                 }
-                if (cheatMeFlag && parseFloat(stoksArr[k].f4) < 0) {
-                    var change = 0 - parseFloat(stoksArr[k].f4);
-                    var changePercent = 0 - parseFloat(stoksArr[k].f3);
-                    stock.change = change.toFixed(toFixedVolume)
-                    stock.changePercent = changePercent.toFixed(2);
-                } else {
-                    stock.change = parseFloat(stoksArr[k].f4).toFixed(toFixedVolume)
-                    stock.changePercent = parseFloat(stoksArr[k].f3 + "").toFixed(2);
-                }
+                stock.change = parseFloat(stoksArr[k].f4).toFixed(toFixedVolume)
+                stock.changePercent = parseFloat(stoksArr[k].f3 + "").toFixed(2);
+                
                 stock.time = getDateStrFromTimestamp(stoksArr[k].f124*1000);
                 var now = new BigDecimal(stock.now + "");
                 var costPrise = new BigDecimal(stock.costPrise + "")
@@ -1278,18 +1260,10 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
 //             fundList[k].gztime = fund.gztime + "";
 //             var gsz = new BigDecimal(fund.gsz + "");
 //             var dwjz = new BigDecimal(fund.dwjz + "");
-//             if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
-//                 var gszzl = 0 - parseFloat(fund.gszzl);
-//                 fundList[k].gszzl = gszzl + "";
-//             } else {
-//                 fundList[k].gszzl = fund.gszzl + "";
-//             }
+//             fundList[k].gszzl = fund.gszzl + "";
 //             var now = new BigDecimal(fund.gsz + "");
 //             if (fund.gszzl == "--" || fund.gszzl == '' || fund.gszzl == undefined || fund.gszzl == null) {
 //                 fundList[k].gszzl = "0";
-//             } else if(cheatMeFlag && parseFloat(fund.gszzl) < 0) {
-//                 var gszzl = 0 - parseFloat(fund.gszzl);
-//                 fundList[k].gszzl = gszzl + "";
 //             } else {
 //                 fundList[k].gszzl = fund.gszzl + "";
 //             }
@@ -1372,9 +1346,6 @@ async function initFund() {
                         fundList[k].gztime = fund.gztime;
                         if (fund.gszzl == "--" || fund.gszzl == '' || fund.gszzl == undefined || fund.gszzl == null) {
                             fundList[k].gszzl = "0";
-                        } else if(cheatMeFlag && parseFloat(fund.gszzl) < 0) {
-                            var gszzl = 0 - parseFloat(fund.gszzl);
-                            fundList[k].gszzl = gszzl + "";
                         } else {
                             fundList[k].gszzl = fund.gszzl + "";
                         }
@@ -1446,13 +1417,7 @@ async function initFund() {
                             fundList[k].gztime = json.gztime + "";
                             var gsz = new BigDecimal(json.gsz + "");
                             var dwjz = new BigDecimal(json.dwjz + "");
-
-                            if (cheatMeFlag && parseFloat(json.gszzl) < 0) {
-                                var gszzl = 0 - parseFloat(json.gszzl);
-                                fundList[k].gszzl = gszzl + "";
-                            } else {
-                                fundList[k].gszzl = json.gszzl + "";
-                            }
+                            fundList[k].gszzl = json.gszzl + "";
                             var now = new BigDecimal(json.gsz + "");
                             var costPrice = new BigDecimal(fundList[k].costPrise + "");
                             var incomeDiff = now.add(costPrice.negate());
@@ -1474,12 +1439,7 @@ async function initFund() {
                             fundList[k].dwjz = fund.dwjz;
                             fundList[k].gsz = fund.dwjz;
                             fundList[k].gztime = fund.gztime;
-                            if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
-                                var gszzl = 0 - parseFloat(fund.gszzl);
-                                fundList[k].gszzl = gszzl + "";
-                            } else {
-                                fundList[k].gszzl = fund.gszzl + "";
-                            }
+                            fundList[k].gszzl = fund.gszzl + "";
                             fundList[k].income = "0";
                             fundList[k].incomePercent = "0";
                             fundList[k].name = fund.name;
@@ -2941,7 +2901,6 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
         showDataCenterButton.style.display = "none";
-        groupMenuButton.style.display = "none";
         timeImageDialog.style.maxWidth = '400px';
         timeImageNew.style.width = '380px';
         timeImageNew.style.height = '280px';
@@ -3212,20 +3171,6 @@ async function changeBlueRed(event) {
     saveCacheData('blueColor', blueColor);
     initData();
     initLargeMarketData();
-    settingButtonInit();
-}
-
-// 欺骗自己，愣是把当日亏损变成盈利
-async function cheatMe(event) {
-    // let type;
-    if (event.target.id == 'disable-cheat-me-button') {
-        cheatMeFlag = false;
-    } else {
-        cheatMeFlag = true;
-    } 
-    $("#setting-modal").modal("hide");
-    await saveCacheData('cheatMeFlag', cheatMeFlag);
-    initData();
     settingButtonInit();
 }
 
@@ -6723,13 +6668,6 @@ async function settingButtonInit(){
     } else {
         document.getElementById('font-change-button').classList.remove('active');
         document.getElementById('bolder-font-change-button').classList.add('active');
-    }
-    if (cheatMeFlag) {
-        document.getElementById('cheat-me-button').classList.add('active');
-        document.getElementById('disable-cheat-me-button').classList.remove('active');
-    } else {
-        document.getElementById('cheat-me-button').classList.remove('active');
-        document.getElementById('disable-cheat-me-button').classList.add('active');
     }
     if (mainDeleteButtonDisplay) {
         document.getElementById('main-delete-button-display-change-button').classList.add('active');
