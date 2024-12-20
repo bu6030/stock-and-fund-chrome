@@ -135,6 +135,7 @@ var opacityPercent;
 var showHelpButton = true;
 var showBatchDeleteButton = true;
 var kLineNumbers = 0;
+var addtimePriceNewline = false;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -368,6 +369,12 @@ async function initLoad() {
         showBatchDeleteButton = false;
     } else if(showBatchDeleteButton == "true") {
         showBatchDeleteButton = true;
+    }
+    addtimePriceNewline = await readCacheData('addtime-price-newline');
+    if (addtimePriceNewline == null || addtimePriceNewline == "false") {
+        addtimePriceNewline = false;
+    } else if(addtimePriceNewline == "true") {
+        addtimePriceNewline = true;
     }
     largetMarketTotalDisplay = await readCacheData('larget-market-total-display');
     if (largetMarketTotalDisplay == null || largetMarketTotalDisplay == "false") {
@@ -1164,6 +1171,9 @@ document.addEventListener(
         document.getElementById('batch-delete-button-display-change-button').addEventListener('click', changeBatchDeleteButton);
         // 设置页面，点击保存K线图显示日期个数按钮
         document.getElementById('k-line-numbers-save-button').addEventListener('click', saveKLineNumbers);
+        // 设置页面，点击开启/关闭自选价格日期换行
+        document.getElementById("open-addtime-price-newline-button").addEventListener('click', changeAddtimePriceNewlineButton);
+        document.getElementById("close-addtime-price-newline-button").addEventListener('click', changeAddtimePriceNewlineButton);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -2244,7 +2254,13 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
             var incomePercent = parseFloat(result[k].incomePercent);
             var incomePercentStyle = incomePercent == 0 ? "" : (incomePercent >= 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-            let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
+            let addTimePrice = "--";
+            if (addtimePriceNewline) {
+                addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "<br>" + result[k].addTime + "";
+            } else {
+                addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
+            }
+            
             if (result[k].costPriceValue) {
                 stockTotalCostValue = stockTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
             }
@@ -2474,7 +2490,12 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             var incomePercent = parseFloat(result[k].incomePercent);
             var incomePercentStyle = incomePercent == 0 ? "" : (incomePercent > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             var totalIncomeStyle = result[k].income == 0 ? "" : (result[k].income > 0 ? "style=\"color:" + redColor + "\"" : "style=\"color:" + blueColor + "\"");
-            let addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
+            let addTimePrice = "--";
+            if (addtimePriceNewline) {
+                addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "<br>" + result[k].addTime + "";
+            } else {
+                addTimePrice = !result[k].addTimePrice ? "--" : result[k].addTimePrice + "(" + result[k].addTime + ")";
+            }
             // 计算基金总成本
             fundTotalCostValue = fundTotalCostValue.add(new BigDecimal(result[k].costPriceValue + ""));
             let showMinuteImageMini = await readCacheData('show-minute-image-mini');
@@ -7863,6 +7884,13 @@ async function settingButtonInit(){
         document.getElementById('batch-delete-button-dont-display-change-button').classList.add('active');
         document.getElementById('batch-delete-button-display-change-button').classList.remove('active');
     }
+    if (addtimePriceNewline) {
+        document.getElementById('close-addtime-price-newline-button').classList.remove('active');
+        document.getElementById('open-addtime-price-newline-button').classList.add('active');
+    } else {
+        document.getElementById('close-addtime-price-newline-button').classList.add('active');
+        document.getElementById('open-addtime-price-newline-button').classList.remove('active');
+    }
 }
 
 // 设置全部/股票/基金按钮激活显示状态
@@ -8114,4 +8142,17 @@ async function saveKLineNumbers() {
         kLineNumbers = 0;
     }
     saveCacheData('k-line-numbers', kLineNumbers);
+}
+
+async function changeAddtimePriceNewlineButton(event) {
+    let targetId = event.target.id;
+    if (targetId == 'close-addtime-price-newline-button') {
+        addtimePriceNewline = false;
+    } else {
+        addtimePriceNewline = true;
+    }
+    saveCacheData('addtime-price-newline', addtimePriceNewline);
+    $("#setting-modal").modal('hide');
+    settingButtonInit();
+    reloadDataAndHtml();
 }
