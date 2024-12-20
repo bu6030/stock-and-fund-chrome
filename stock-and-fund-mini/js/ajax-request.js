@@ -54,7 +54,7 @@ function ajaxGetFundFromEastMoneyAsync(code, last) {
     let fund = {};
     $.ajax({
         url: Env.GET_FUND_FROM_EAST_MONEY + code + ".json",
-        timeout: 10000, // 设置超时时间为10000毫秒（10秒）
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         dataType: 'json',
@@ -74,6 +74,14 @@ function ajaxGetFundFromEastMoneyAsync(code, last) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            fund.fundCode = code;
+            fund.name = "基金错误";
+            fund.dwjz = "0.00";
+            fund.now = "0.00";
+            fund.gszzl = "0.00";
+            fund.gsz = "0.00";
+            fund.gztime = "--";
+            ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last);
         }
     });
 }
@@ -203,7 +211,7 @@ function ajaxGetFundFromTiantianjijinAsync(code, last) {
     FUND_URL = FUND_URL.replace('{CODE}', code);
     $.ajax({
         url: FUND_URL,
-        timeout: 10000, // 设置超时时间为10000毫秒（10秒）
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
         type: "get",
         data: {},
         dataType: 'text',
