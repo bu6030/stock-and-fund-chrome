@@ -28,7 +28,7 @@ let Env = {
     GO_TO_EASTMONEY_2_URL: "https://quote.eastmoney.com",
     ADVICE_URL: "http://110.40.187.161:8080/chrome/advice",
     CLOUD_SERVER_DATA_SYNC: "https://dav.jianguoyun.com/dav/stock-and-fund/",
-    CLOUD_SERVER_DATA_SYNC_BASIC_AUTH: "Basic YnV4dWVzb25nQGZveG1haWwuY29tOmF1ZGZoeXNzcmg4bWlmc2U=",
+    CLOUD_SERVER_DATA_SYNC_BASIC_AUTH: "请申请自己的云账户",
     // 下面这两个地址可以通过本地启动stock-and-fund项目
     // github地址为：https://github.com/bu6030/stock-and-fund
     // GET_FUND_FROM_LOCAL_SERVICE: "http://127.0.0.1:8080/chrome/fund",
@@ -42,4 +42,4 @@ let Env = {
     GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://110.40.187.161:8080/chrome/stockAndFund",
 }
 
-let develop = true;
+let develop = false;
