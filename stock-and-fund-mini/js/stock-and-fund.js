@@ -449,7 +449,6 @@ async function initLoad() {
             {"income-th": 0},
             {"update-time-th": 0},
             {"addtime-price-th": 0},
-            {"star-desc-th": 0},
         ];
     } else {
         try {
@@ -1227,6 +1226,7 @@ async function initFund() {
             ajaxGetFundFromTiantianjijinAsync(fundCode, last);
         }
     }
+    initStockAndFundHtml();
 }
 
 // 基金异步回调方法
@@ -3480,7 +3480,6 @@ async function setDisplayTr(event) {
         saveCacheData('up-speed-display', dispaly);
         saveCacheData('max-display', dispaly);
         saveCacheData('min-display', dispaly);
-        saveCacheData('star-desc-display', dispaly);
         saveCacheData('cost-price-display', dispaly);
         saveCacheData('bonds-display', dispaly);
         saveCacheData('income-display', dispaly);
@@ -3500,7 +3499,6 @@ async function setDisplayTr(event) {
             $("#up-speed-display-checkbox").prop("checked", true);
             $("#max-display-checkbox").prop("checked", true);
             $("#min-display-checkbox").prop("checked", true);
-            $("#star-desc-display-checkbox").prop("checked", false);
             $("#day-income-display-checkbox").prop("checked", true);
             $("#cost-price-display-checkbox").prop("checked", true);
             $("#bonds-display-checkbox").prop("checked", true);
@@ -3521,7 +3519,6 @@ async function setDisplayTr(event) {
             $("#up-speed-display-checkbox").prop("checked", false);
             $("#max-display-checkbox").prop("checked", false);
             $("#min-display-checkbox").prop("checked", false);
-            $("#star-desc-display-checkbox").prop("checked", false);
             $("#day-income-display-checkbox").prop("checked", false);
             $("#cost-price-display-checkbox").prop("checked", false);
             $("#bonds-display-checkbox").prop("checked", false);
