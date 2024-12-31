@@ -6344,6 +6344,8 @@ function getSecid(code) {
             secid = '124';
         } else if(code == 'CN00Y'){
             secid = '104';
+        } else if(code == 'BK1158'){
+            secid = '90';
         }
     }
     return secid;
@@ -6920,6 +6922,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case '931582':
                 name = '数字经济';
+                break;
+            case 'BK1158':
+                name = '微盘股';
                 break;
             default:
                 name = timeImageCode;

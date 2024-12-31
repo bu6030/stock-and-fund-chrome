@@ -257,6 +257,12 @@ async function initLargeMarketDataCallBack(bigStocks) {
             timeImageCode = "931582";
             initLargeMarketClick();
         });
+        // 点击微盘股
+        if(document.getElementById('large-market-BK1158'))
+        document.getElementById('large-market-BK1158').addEventListener('click', function () {
+            timeImageCode = "BK1158";
+            initLargeMarketClick();
+        });
     }, 300);
 }
 
