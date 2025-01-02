@@ -223,6 +223,59 @@ function monitorStockPrice(stockList) {
                                     console.log("================日跌幅提醒", lowerPercent, "%============");
                                 }
                             }
+                            // 20日均线提醒
+                            if (typeof monitorStock.monitorMA20 != 'undefined' && monitorStock.monitorMA20 != '') {
+                                let klt = 101;
+                                if(monitorStock.code.startsWith('sh') || monitorStock.code.startsWith('SH')){
+                                    secid = '1';
+                                } else if(monitorStock.code.startsWith('sz') || monitorStock.code.startsWith('SZ') || monitorStock.code.startsWith('bj') || monitorStock.code.startsWith('BJ')) {
+                                    secid = '0';
+                                } else {
+                                    secid = '2';
+                                }
+                                let code = monitorStock.code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
+                                let end = getBeijingDateNoSlash();
+                                // now
+                                fetch("https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=400&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1")
+                                .then(response => response.text())
+                                .then(repsonse => JSON.parse(repsonse))
+                                .then(data => {
+                                    const klines = data.data.klines;
+                                    let stockName = data.data.name;
+                                    const transformedData = klines.map((kline) => {
+                                        const [date, open, close, high, low, volume, money, change] = kline.split(",");
+                                        return [date, parseFloat(open), parseFloat(close), parseFloat(low), parseFloat(high), parseFloat(volume), parseFloat(money), parseFloat(change)];
+                                    });
+                                    const categoryData = [];
+                                    const volumnData = [];
+                                    const priceData = [];
+                                    const values = [];
+                                    const changes = [];
+                                    for (var i = 0; i < transformedData.length; i++) {
+                                        categoryData.push(transformedData[i].splice(0, 1)[0]);
+                                        values.push(transformedData[i]);
+                                        volumnData.push(transformedData[i][4]);
+                                        priceData.push(transformedData[i][3]);
+                                        changes.push(transformedData[i][6]);
+                                    }
+                                    const data0 = {
+                                        categoryData: categoryData,
+                                        volumnData: volumnData,
+                                        priceData: priceData,
+                                        values: values,
+                                        changes: changes,
+                                    };
+                                    let ma20List = calculateMA(20, data0.values);
+                                    let ma20 = ma20List[ma20List.length - 1];
+                                    let text = '';
+                                    if (now > ma20) {
+                                        text = '股票：' + stockName + '，当前价格' + now + '大于20日均线' + ma20 + '，可以买入';
+                                    } else if (now < ma20) {
+                                        text = '股票：' + stockName + '，当前价格' + now + '小于20日均线' + ma20 + '，需要卖出';
+                                    }
+                                    showNotification("通知", text);
+                                });
+                            }
                         }
                     });
                 });
@@ -759,7 +812,6 @@ async function changeDefaultIcon() {
         console.warn(`Change default icon : ${error}`);
     }
 }
-
 // 获取市场id
 function getSecidBack(code) {
     let secid;
@@ -814,7 +866,6 @@ function getDateStrFromTimestamp(timestamp) {
         return '1970-01-01 00:00:00';
     }
 }
-
 // 获取北京时间格式的日期，2023-01-01格式
 function getBeijingDate() {
     let date = new Date();
@@ -827,4 +878,37 @@ function getBeijingDate() {
     };
     let formattedDate = date.toLocaleString('zh-CN', options);
     return formattedDate.replace(/\//g, '-');
+}
+// 获取北京时间格式的日期，20230101格式
+function getBeijingDateNoSlash() {
+    let date = new Date();
+    let options = {
+      timeZone: 'Asia/Shanghai',
+      hour12: false,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    };
+    let formattedDate = date.toLocaleString('zh-CN', options);
+    return formattedDate.replace(/\//g, '');
+}
+// 自定义函数，计算五日均线数据
+function calculateMA(dayCount, data) {
+    let toFixedVolume = 2;
+    if (parseFloat(data[0]) <= 5) {
+        toFixedVolume = 3;
+    }
+    let result = [];
+    for (let i = 0, len = data.length; i < len; i++) {
+        if (i < dayCount) {
+            result.push('-');
+            continue;
+        }
+        let sum = 0;
+        for (let j = 0; j < dayCount; j++) {
+            sum += parseFloat(data[i - j][1]); // 这里假设收盘价在数据中的索引为 1
+        }
+        result.push((sum / dayCount).toFixed(toFixedVolume));
+    }
+    return result;
 }

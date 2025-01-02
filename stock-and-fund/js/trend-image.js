@@ -1259,26 +1259,6 @@ function setStockImage(type) {
     });
 
 }
-// 自定义函数，计算五日均线数据
-function calculateMA(dayCount, data) {
-    let toFixedVolume = 2;
-    if (parseFloat(data[0]) <= 5) {
-        toFixedVolume = 3;
-    }
-    let result = [];
-    for (let i = 0, len = data.length; i < len; i++) {
-        if (i < dayCount) {
-            result.push('-');
-            continue;
-        }
-        let sum = 0;
-        for (let j = 0; j < dayCount; j++) {
-            sum += parseFloat(data[i - j][1]); // 这里假设收盘价在数据中的索引为 1
-        }
-        result.push((sum / dayCount).toFixed(toFixedVolume));
-    }
-    return result;
-}
 // 处理分时线数据
 function transformMinuteData(apiData) {
     const trends = apiData.data.trends;
