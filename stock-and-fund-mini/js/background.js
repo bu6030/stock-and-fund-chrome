@@ -271,18 +271,18 @@ function monitorStockPrice(stockList) {
                                         let ma20 = ma20List[ma20List.length - 1];
                                         const currentPrice = data0.values[data0.values.length - 1][1];
                                         let text = '';
-                                        console.log(stockName, "20日均线价格：", ma20, "；当前价格：", currentPrice);
+                                        // console.log(stockName, "20日均线价格：", ma20, "；当前价格：", currentPrice);
+                                        let monitorAlert = '';
                                         if (currentPrice > ma20) {
-                                            monitorStock.monitorAlert = '5';
-                                            monitorStock.monitorAlertDate = Date.now();
-                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '大于20日均线' + ma20 + '，可以买入';
+                                            monitorAlert = '5';
+                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '，大于20日均线' + ma20 + '，可以买入';
                                         } else if (currentPrice < ma20) {
-                                            monitorStock.monitorAlert = '6';
-                                            monitorStock.monitorAlertDate = Date.now();
-                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '小于20日均线' + ma20 + '，需要卖出';
+                                            monitorAlert = '6';
+                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '，小于20日均线' + ma20 + '，需要卖出';
                                         }
-                                        saveData('stocks', JSON.stringify(stockList));
-                                        showNotification("通知", text);
+                                        updateStocksMA20(data.data.code, monitorAlert);
+                                        console.log(text);
+                                        // showNotification("通知", text);
                                     });
                                 } catch (error) {
                                     console.warn("执行20日均线提醒任务:", error);
@@ -923,4 +923,20 @@ function calculateMA(dayCount, data) {
         result.push((sum / dayCount).toFixed(toFixedVolume));
     }
     return result;
+}
+// 更新监控的MA20股票数据
+async function updateStocksMA20(code, monitorAlert) {
+    let stockArr = await getData('stocks');
+    if (stockArr == null || stockArr == undefined) {
+        stockArr = '[]';
+    }
+    var stockList = JSON.parse(stockArr);
+    for (let i = 0; i < stockList.length; i++) {
+        if (stockList[i].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') == code) {
+            stockList[i].monitorAlert = monitorAlert;
+            stockList[i].monitorAlertDate = Date.now();
+            break;
+        }
+    }
+    saveData('stocks', JSON.stringify(stockList));
 }
