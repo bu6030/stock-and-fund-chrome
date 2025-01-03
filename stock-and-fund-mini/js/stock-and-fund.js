@@ -1454,6 +1454,11 @@ async function initStockAndFundHtml() {
                 $("#stock-monitor-high-price").val(stockList[this.sectionRowIndex].monitorHighPrice);
                 $("#stock-monitor-low-price").val(stockList[this.sectionRowIndex].monitorLowPrice);
                 $("#stock-desc").val(stockList[this.sectionRowIndex].desc);
+                if (stockList[this.sectionRowIndex].monitorMA20) {
+                    $("#stock-monitor-ma20-checkbox").prop("checked", true);
+                } else {
+                    $("#stock-monitor-ma20-checkbox").prop("checked", false);
+                }
                 if (stockList[this.sectionRowIndex].newBuy == true && stockList[this.sectionRowIndex].newBuyDate == getBeijingDate()) {
                     $("#new-buy-checkbox").prop("checked", true);
                 } else {
@@ -1728,6 +1733,10 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(日涨幅" + result[k].monitorUpperPercent + "%)</span>";
                 } else if(result[k].monitorAlert == '4') {
                     alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(日跌幅" + result[k].monitorLowerPercent + "%)</span>";
+                } else if(result[k].monitorAlert == '5') {
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(20日均线以上)</span>";
+                } else if(result[k].monitorAlert == '6') {
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(20日均线以下)</span>";
                 }
             }
             let stockName = result[k].name ? result[k].name : result[k].code;
@@ -2269,6 +2278,7 @@ async function saveStock() {
     var newBuy = $("#new-buy-checkbox").prop("checked");
     var star = $("#stock-star").val();
     var newBuyDate = getBeijingDate();
+    var monitorMA20 = $("#stock-monitor-ma20-checkbox").prop("checked");
     
     var code = $("#stock-code").val();
     if (code == null || code == '') {
@@ -2292,7 +2302,8 @@ async function saveStock() {
         "newBuy": newBuy,
         "newBuyDate": newBuyDate,
         "desc": desc,
-        "star": star
+        "star": star,
+        "monitorMA20": monitorMA20
     }
     for (var k in stockList) {
         if (stockList[k].code == stock.code) {
@@ -2308,6 +2319,7 @@ async function saveStock() {
             stockList[k].monitorAlert = '';
             stockList[k].desc = stock.desc;
             stockList[k].star = stock.star;
+            stockList[k].monitorMA20 = stock.monitorMA20;
 
             if (stockList[k].addTimePrice == null || stockList[k].addTimePrice == '') {
                 let checkStockExsitResult = checkStockExsit(stockList[k].code);
