@@ -269,15 +269,17 @@ function monitorStockPrice(stockList) {
                                         };
                                         let ma20List = calculateMA(20, data0.values);
                                         let ma20 = ma20List[ma20List.length - 1];
+                                        const currentPrice = data0.values[data0.values.length - 1][1];
                                         let text = '';
-                                        if (now > ma20) {
+                                        console.log(stockName, "20日均线价格：", ma20, "；当前价格：", currentPrice);
+                                        if (currentPrice > ma20) {
                                             monitorStock.monitorAlert = '5';
                                             monitorStock.monitorAlertDate = Date.now();
-                                            text = '股票：' + stockName + '，当前价格' + now + '大于20日均线' + ma20 + '，可以买入';
-                                        } else if (now < ma20) {
+                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '大于20日均线' + ma20 + '，可以买入';
+                                        } else if (currentPrice < ma20) {
                                             monitorStock.monitorAlert = '6';
                                             monitorStock.monitorAlertDate = Date.now();
-                                            text = '股票：' + stockName + '，当前价格' + now + '小于20日均线' + ma20 + '，需要卖出';
+                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '小于20日均线' + ma20 + '，需要卖出';
                                         }
                                         saveData('stocks', JSON.stringify(stockList));
                                         showNotification("通知", text);
