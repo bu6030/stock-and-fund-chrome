@@ -393,6 +393,7 @@
 366. 迷你模式下，编辑保存按钮显示不全 2024/12/16 version 2.2.4.5 --end
 367. 增加自选价格日期换行按钮 2024/12/20 version 2.2.4.6 --end
 368. 增加微盘股大盘指数 2024/12/31 2024/12/31 version 2.2.4.8 --end
+369. 走势图页面增加上一个下一个 2025/1/5
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

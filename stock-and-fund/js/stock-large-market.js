@@ -284,6 +284,8 @@ function initLargeMarketClick() {
     $("#stock-fund-monitor-button")[0].style.display = 'block';
     $("#show-set-top-or-end-button")[0].style.display = 'none';
     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
+    $("#time-image-pre-button")[0].style.display = 'none';
+    $("#time-image-next-button")[0].style.display = 'none';
     if (trendImageType == 'MINUTE') {
         showMinuteImage('1DAY');
     } else if (trendImageType == '5DAY') {

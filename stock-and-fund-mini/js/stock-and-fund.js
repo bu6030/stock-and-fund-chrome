@@ -802,6 +802,9 @@ document.addEventListener(
         $("#time-image-modal").on("hidden.bs.modal", clearTimeImageTimeout);
         // 走势图页面，点击添加自选
         document.getElementById('add-stock-button').addEventListener('click', addStock);
+        // 走势图页面，点击上一个下一个
+        document.getElementById('time-image-pre-button').addEventListener('click', timeImagePreNext);
+        document.getElementById('time-image-next-button').addEventListener('click', timeImagePreNext);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -1471,6 +1474,8 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'inline';
+                $("#time-image-pre-button")[0].style.display = 'inline';
+                $("#time-image-next-button")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
                 (stockList[this.sectionRowIndex].code + "").includes('sz1') || (stockList[this.sectionRowIndex].code + "").includes('sh1')) {
                     $("#fund-invers-position-button-3")[0].style.display = 'inline';
@@ -1610,6 +1615,8 @@ async function initStockAndFundHtml() {
                 $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 $("#go-to-eastmoney-button")[0].style.display = 'none';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'none';
+                $("#time-image-pre-button")[0].style.display = 'inline';
+                $("#time-image-next-button")[0].style.display = 'inline';
                 let fundCode = $("#fund-code").val();
                 timeImageCode = fundCode;
                 timeImageType = "FUND";
@@ -6730,4 +6737,82 @@ async function saveKLineNumbers() {
         kLineNumbers = 0;
     }
     saveCacheData('k-line-numbers', kLineNumbers);
+}
+
+async function timeImagePreNext(event) {
+    let targetId = event.target.id;
+    if (targetId == 'time-image-pre-button') {
+        // 遍历股票或者基金
+        if(timeImageType == 'STOCK') {
+            for (let i = stockList.length - 1; i >= 0; i--) {
+                if (stockList[i].code == timeImageCode) {
+                    if (i == 0) {
+                        timeImageCode = stockList[stockList.length - 1].code;
+                    } else {
+                        timeImageCode = stockList[i - 1].code;
+                    }
+                    break;
+                }
+            }
+        } else {
+            for (let i = fundList.length - 1; i >= 0; i--) {
+                if (fundList[i].fundCode == timeImageCode) {
+                    if (i == 0) {
+                        timeImageCode = fundList[fundList.length - 1].fundCode;
+                    } else {
+                        timeImageCode = fundList[i - 1].fundCode;
+                    }
+                    break;
+                }
+            }
+        }
+    } else if (targetId == 'time-image-next-button') {
+        // 遍历股票或者基金
+        if(timeImageType == 'STOCK') {
+            for (let i = 0; i < stockList.length; i++) {
+                if (stockList[i].code == timeImageCode) {
+                    if (i == stockList.length - 1) {
+                        timeImageCode = stockList[0].code;
+                    } else {
+                        timeImageCode = stockList[i + 1].code;
+                    }
+                    break;
+                }
+            }
+        } else {
+            for (let i = 0; i < fundList.length; i++) {
+                if (fundList[i].fundCode == timeImageCode) {
+                    if (i == fundList.length - 1) {
+                        timeImageCode = fundList[0].fundCode;
+                    } else {
+                        timeImageCode = fundList[i + 1].fundCode;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    if (trendImageType == 'MINUTE') {
+        showMinuteImage('1DAY');
+    } else if (trendImageType == '5DAY') {
+        showMinuteImage('5DAY');
+    } else if (trendImageType == 'DAY') {
+        showDayImage();
+    } else if (trendImageType == 'WEEK') {
+        showWeekImage();
+    } else if (trendImageType == 'MONTH') {
+        showMonthImage();
+    } else if (trendImageType == '1MIN') {
+        show1or5or15or30or60MinutesImage('1MIN');
+    } else if (trendImageType == '5MIN') {
+        show1or5or15or30or60MinutesImage('5MIN');
+    } else if (trendImageType == '15MIN') {
+        show1or5or15or30or60MinutesImage('15MIN');
+    } else if (trendImageType == '30MIN') {
+        show1or5or15or30or60MinutesImage('30MIN');
+    } else if (trendImageType == '60MIN') {
+        show1or5or15or30or60MinutesImage('60MIN');
+    } else if (trendImageType == '120MIN') {
+        show1or5or15or30or60MinutesImage('120MIN');
+    }
 }
