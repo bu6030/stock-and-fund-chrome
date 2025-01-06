@@ -1447,6 +1447,39 @@ async function initStockAndFundHtml() {
                     timeImageType = 'STOCK';
                     deleteStockAndFund();
                 });
+                let editButton = document.getElementById('stock-edit-button-' + k);
+                editButton.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    let buttonId = this.id; // 获取按钮的id
+                    let buttonIndex = buttonId.split('-').pop(); // 从id中提取编号
+                    console.log(stockList[buttonIndex].name);
+                    timeImageCode = stockList[buttonIndex].code;
+                    timeImageType = 'STOCK';
+                    $("#stock-name").val(stockList[buttonIndex].name);
+                    $("#stock-name").attr("disabled", "disabled");
+                    $("#stock-code").val(stockList[buttonIndex].code);
+                    $("#stock-costPrise").val(stockList[buttonIndex].costPrise);
+                    $("#stock-bonds").val(stockList[buttonIndex].bonds);
+                    $("#stock-monitor-high-price").val(stockList[buttonIndex].monitorHighPrice);
+                    $("#stock-monitor-low-price").val(stockList[buttonIndex].monitorLowPrice);
+                    $("#stock-desc").val(stockList[buttonIndex].desc);
+                    $("#stock-star-desc").val(stockList[buttonIndex].starDesc);
+                    $("#stock-star").val(stockList[buttonIndex].star);
+                    if (stockList[buttonIndex].monitorMA20) {
+                        $("#stock-monitor-ma20-checkbox").prop("checked", true);
+                    } else {
+                        $("#stock-monitor-ma20-checkbox").prop("checked", false);
+                    }
+                    if (stockList[buttonIndex].newBuy == true && stockList[buttonIndex].newBuyDate == getBeijingDate()) {
+                        $("#new-buy-checkbox").prop("checked", true);
+                    } else {
+                        $("#new-buy-checkbox").prop("checked", false);
+                    }
+                    $("#stock-monitor-upper-percent").val(stockList[buttonIndex].monitorUpperPercent);
+                    $("#stock-monitor-lower-percent").val(stockList[buttonIndex].monitorLowerPercent);
+                
+                    $("#stock-modal").modal();
+                });
             }
             let stockTr = document.getElementById('stock-tr-' + k);
             stockTr.addEventListener('click', function () {
@@ -1589,6 +1622,24 @@ async function initStockAndFundHtml() {
                     timeImageCode = fundList[buttonIndex].fundCode;
                     timeImageType = 'FUND';
                     deleteStockAndFund();
+                });
+                let editButton = document.getElementById('fund-edit-button-' + k);
+                editButton.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    let buttonId = this.id; // 获取按钮的id
+                    let buttonIndex = buttonId.split('-').pop(); // 从id中提取编号
+                    console.log(fundList[buttonIndex].name);
+                    timeImageCode = fundList[buttonIndex].fundCode;
+                    timeImageType = 'FUND';
+                    $("#fund-name").val(fundList[buttonIndex].name);
+                    $("#fund-name").attr("disabled", "disabled");
+                    $("#fund-code").val(fundList[buttonIndex].fundCode);
+                    $("#fund-costPrise").val(fundList[buttonIndex].costPrise);
+                    $("#fund-bonds").val(fundList[buttonIndex].bonds);
+                    $("#fund-desc").val(fundList[buttonIndex].desc);
+                    $("#fund-star-desc").val(fundList[buttonIndex].starDesc);
+                    $("#fund-star").val(fundList[buttonIndex].star);
+                    $("#fund-modal").modal();
                 });
             }
             let fundTr = document.getElementById('fund-tr-' + k);
@@ -1840,7 +1891,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             }).join("");
             let deleteButton;
             if (mainDeleteButtonDisplay) {
-                deleteButton = '<td><button type="button" class="btn btn-primary" id="stock-delete-button-' + k + '">删除</button></td>';
+                deleteButton = '<td><button type="button" class="btn btn-primary" id="stock-delete-button-' + k + '">删除</button> <button type="button" class="btn btn-primary" id="stock-edit-button-' + k + '">编辑</button></td>';
             } else {
                 deleteButton = '';
             }
@@ -2003,7 +2054,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             }).join("");
             let deleteButton;
             if (mainDeleteButtonDisplay) {
-                deleteButton = '<td><button type="button" class="btn btn-primary" id="fund-delete-button-' + k + '">删除</button></td>';
+                deleteButton = '<td><button type="button" class="btn btn-primary" id="fund-delete-button-' + k + '">删除</button> <button type="button" class="btn btn-primary" id="fund-edit-button-' + k + '">编辑</button></td>';
             } else {
                 deleteButton = '';
             }
