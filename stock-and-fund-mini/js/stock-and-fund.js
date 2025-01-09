@@ -33,6 +33,7 @@ var amplitudeDisplay = 'DISPLAY';
 var upSpeedDisplay = 'DISPLAY';
 var maxDisplay = 'DISPLAY';
 var minDisplay = 'DISPLAY';
+var zjlDisplay = 'HIDDEN';
 var mainDeleteButtonDisplay;
 var largetMarketTotalDisplay;
 var largetMarketCountDisplay;
@@ -69,6 +70,7 @@ var stockColumnNames = {
     "change-th": "涨跌",
     "amplitude-th": "振幅",
     "price-th": "当前价",
+    "zjl-th": "折价率",
     "cost-price-th": "成本价",
     "up-speed-th": "涨速",
     "max-th":"最高价",
@@ -92,6 +94,7 @@ var fundColumnNames = {
     "change-th": "涨跌",
     "amplitude-th": "振幅",
     "price-th": "估算净值",
+    "zjl-th": "折价率",
     "cost-price-th": "持仓成本单价",
     "up-speed-th": "涨速",
     "max-th":"最高价",
@@ -223,6 +226,12 @@ async function initLoad() {
         minDisplay = 'DISPLAY';
     } else {
         minDisplay = 'HIDDEN';
+    }
+    zjlDisplay = await readCacheData('zjl-display');
+    if (zjlDisplay == null || zjlDisplay == 'HIDDEN') {
+        zjlDisplay = 'HIDDEN';
+    } else {
+        zjlDisplay = 'DISPLAY';
     }
     costPriceDisplay = await readCacheData('cost-price-display');
     if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
@@ -437,6 +446,7 @@ async function initLoad() {
             {"quantity-relative-ratio-th": 0},
             {"change-th": 0},
             {"price-th": 0},
+            {"zjl-th": 0},
             {"cost-price-th": 0},
             {"up-speed-th": 0},
             {"max-th": 0},
@@ -527,7 +537,7 @@ function autoRefresh() {
 
 // 初始化 Html 页面
 async function initHtml() {
-    document.getElementById('stock-monitor-ma20-div').style.display = 'none';
+    // document.getElementById('stock-monitor-ma20-div').style.display = 'none';
     if (develop) {
         document.getElementById('import-from-local-springboot-div').style.display = 'block';
     } else {
@@ -1114,6 +1124,14 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                     stock.now = parseFloat(stoksArr[k].f18 + "").toFixed(toFixedVolume);
                     stock.max = parseFloat(stoksArr[k].f18 + "").toFixed(toFixedVolume);
                     stock.min = parseFloat(stoksArr[k].f18 + "").toFixed(toFixedVolume);
+                }
+                // 计算折价率
+                if (stock.name.indexOf('ETF') >= 0 || stock.name.indexOf('LOF') >= 0) {
+                    let realJZ = parseFloat(stoksArr[k].f145 + "");
+                    // console.log('=============',realJZ);
+                    // 通过实际净值realJZ和now的价格比较，计算折价率
+                    stock.zjl = parseFloat((realJZ - parseFloat(stock.now + "")) / parseFloat(stock.now + "") * 100 + "").toFixed(2);;
+                    // console.log(stock.name, '折价率', stock.zjl);
                 }
                 stock.change = parseFloat(stoksArr[k].f4).toFixed(toFixedVolume)
                 stock.changePercent = parseFloat(stoksArr[k].f3 + "").toFixed(2);
@@ -1843,6 +1861,10 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 var nameOrDesc = result[k].desc ? result[k].desc : stockName;
+                let zjl = result[k].zjl + "%";
+                if ((nameOrDesc.indexOf('ETF') < 0 && nameOrDesc.indexOf('LOF') < 0)) {
+                    zjl = '--';
+                }
                 if (columnName == 'name-th') {
                     var batchDeleteHtml = showBatchDeleteButton ? "<td><input type=\"checkbox\" value=\""+result[k].code+"\" id=\"batch-delete-stock-checkbox\" class=\"batch-delete-stock-checkbox\" /></td>" : "";
                     html = batchDeleteHtml + "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
@@ -1854,6 +1876,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = (maxDisplay == 'DISPLAY' ? "<td>" + result[k].max + "</td>": "");
                 } else if(columnName == 'min-th') {
                     html = (minDisplay == 'DISPLAY' ? "<td>" + result[k].min + "</td>": "");
+                } else if(columnName == 'zjl-th') {
+                    html = (zjlDisplay == 'DISPLAY' ? "<td>" + zjl + "</td>": "");
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -1936,6 +1960,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "");
+        } else if(columnName == 'zjl-th') {
+            html = (zjlDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'change-percent-th') {
             html = "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>";
         } else if(columnName == 'change-th') {
@@ -2017,6 +2043,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = (maxDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'min-th'){
                     html = (minDisplay == 'DISPLAY' ? "<td>--</td>" : "");
+                } else if(columnName == 'zjl-th') {
+                    html = (zjlDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -2092,6 +2120,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = (maxDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'min-th'){
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'zjl-th') {
+            html = (zjlDisplay == 'DISPLAY' ? "<td></td>": "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "");
         } else if(columnName == 'change-percent-th') {
@@ -2168,6 +2198,8 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = (maxDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'min-th'){
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'zjl-th') {
+            html = (zjlDisplay == 'DISPLAY' ? "<td></td>": "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" );
         } else if(columnName == 'change-percent-th') {
@@ -3491,6 +3523,9 @@ async function setDisplayTr(event) {
     } else if(type == 'min-display-checkbox') {
         minDisplay = dispaly;
         saveCacheData('min-display', dispaly);
+    } else if(type == 'zjl-display-checkbox') {
+        zjlDisplay = dispaly;
+        saveCacheData('zjl-display', dispaly);
     } else if(type == 'day-income-display-checkbox') {
         dayIncomeDisplay = dispaly;
         saveCacheData('day-income-display', dispaly);
@@ -3530,6 +3565,7 @@ async function setDisplayTr(event) {
         upSpeedDisplay = dispaly;
         maxDisplay = dispaly;
         minDisplay = dispaly;
+        zjlDisplay = dispaly;
         costPriceDisplay = dispaly;
         bondsDisplay = dispaly;
         incomeDisplay = dispaly;
@@ -3551,6 +3587,7 @@ async function setDisplayTr(event) {
         saveCacheData('up-speed-display', dispaly);
         saveCacheData('max-display', dispaly);
         saveCacheData('min-display', dispaly);
+        saveCacheData('zjl-display', dispaly);
         saveCacheData('cost-price-display', dispaly);
         saveCacheData('bonds-display', dispaly);
         saveCacheData('income-display', dispaly);
@@ -3570,6 +3607,7 @@ async function setDisplayTr(event) {
             $("#up-speed-display-checkbox").prop("checked", true);
             $("#max-display-checkbox").prop("checked", true);
             $("#min-display-checkbox").prop("checked", true);
+            $("#zjl-checkbox").prop("checked", true);
             $("#day-income-display-checkbox").prop("checked", true);
             $("#cost-price-display-checkbox").prop("checked", true);
             $("#bonds-display-checkbox").prop("checked", true);
@@ -3590,6 +3628,7 @@ async function setDisplayTr(event) {
             $("#up-speed-display-checkbox").prop("checked", false);
             $("#max-display-checkbox").prop("checked", false);
             $("#min-display-checkbox").prop("checked", false);
+            $("#zjl-display-checkbox").prop("checked", false);
             $("#day-income-display-checkbox").prop("checked", false);
             $("#cost-price-display-checkbox").prop("checked", false);
             $("#bonds-display-checkbox").prop("checked", false);
@@ -5368,6 +5407,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'min-th' && minDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'zjl-th' && zjlDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'change-th' && changeDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'amplitude-th' && amplitudeDisplay != 'DISPLAY') {
@@ -5546,6 +5587,13 @@ function addDragAndDropListeners() {
         minDisplay = 'HIDDEN';
         $("#min-display-checkbox").prop("checked", false);
     }
+    if (zjlDisplay == null || zjlDisplay == 'HIDDEN') {
+        zjlDisplay = 'HIDDEN';
+        $("#zjl-display-checkbox").prop("checked", false);
+    } else {
+        zjlDisplay = 'DISPLAY';
+        $("#zjl-display-checkbox").prop("checked", true);
+    }
     if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
         costPriceDisplay = 'DISPLAY';
         $("#cost-price-display-checkbox").prop("checked", true);
@@ -5652,6 +5700,8 @@ function addDragAndDropListeners() {
     document.getElementById("turn-over-rate-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，量比
     document.getElementById("quantity-relative-ratio-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，折价率
+    document.getElementById("zjl-display-checkbox").addEventListener('change', setDisplayTr);
 }
 
 // 拖拽完成后切换列表的顺序
@@ -5678,6 +5728,7 @@ function recoveryColumnOrder() {
         {"up-speed-th": 0},
         {"max-th": 0},
         {"min-th": 0},
+        {"zjl-th": 0},
         {"bonds-th": 0},
         {"market-value-th": 0},
         {"market-value-percent-th": 0},

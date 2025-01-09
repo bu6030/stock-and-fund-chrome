@@ -35,6 +35,7 @@ var upSpeedDisplay = 'DISPLAY';
 var maxDisplay = 'DISPLAY';
 var minDisplay = 'DISPLAY';
 var starDescDisplay = 'HIDDEN';
+var zjlDisplay = 'HIDDEN';
 var mainDeleteButtonDisplay;
 var largetMarketTotalDisplay;
 var largetMarketCountDisplay;
@@ -73,6 +74,7 @@ var stockColumnNames = {
     "change-th": "涨跌",
     "amplitude-th": "振幅",
     "price-th": "当前价",
+    "zjl-th": "折价率",
     "cost-price-th": "成本价",
     "up-speed-th": "涨速",
     "max-th":"最高价",
@@ -98,6 +100,7 @@ var fundColumnNames = {
     "change-th": "涨跌",
     "amplitude-th": "振幅",
     "price-th": "估算净值",
+    "zjl-th": "折价率",
     "cost-price-th": "持仓成本单价",
     "up-speed-th": "涨速",
     "max-th":"最高价",
@@ -255,6 +258,12 @@ async function initLoad() {
         starDescDisplay = 'HIDDEN';
     } else {
         starDescDisplay = 'DISPLAY';
+    }
+    zjlDisplay = await readCacheData('zjl-display');
+    if (zjlDisplay == null || zjlDisplay == 'HIDDEN') {
+        zjlDisplay = 'HIDDEN';
+    } else {
+        zjlDisplay = 'DISPLAY';
     }
     costPriceDisplay = await readCacheData('cost-price-display');
     if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
@@ -496,6 +505,7 @@ async function initLoad() {
             {"quantity-relative-ratio-th": 0},
             {"change-th": 0},
             {"price-th": 0},
+            {"zjl-th": 0},
             {"cost-price-th": 0},
             {"up-speed-th": 0},
             {"max-th": 0},
@@ -633,7 +643,7 @@ function autoRefresh() {
 
 // 初始化 Html 页面
 async function initHtml() {
-    document.getElementById('stock-monitor-ma20-div').style.display = 'none';
+    // document.getElementById('stock-monitor-ma20-div').style.display = 'none';
     if (develop) {
         document.getElementById('import-from-local-springboot-div').style.display = 'block';
     } else {
@@ -1302,6 +1312,15 @@ async function initStockGtimgCallBack(result, stocks) {
                 if (parseFloat(stockList[l].now) == 0) {
                     stockList[l].now = values[4] + "";
                 }
+                // 计算折价率
+                if (stockList[l].name.indexOf('ETF') >= 0 || stockList[l].name.indexOf('LOF') >= 0) {
+                    // let realJZ = parseFloat(values[78] + "");
+                    // console.log('=============',realJZ);
+                    // // 通过实际净值realJZ和now的价格比较，计算折价率
+                    // stockList[l].zjl = parseFloat((realJZ - parseFloat(stockList[l].now + "")) / parseFloat(stockList[l].now + "") * 100 + "").toFixed(2);
+                    // console.log(stockList[l].name, '折价率', stockList[l].zjl);
+                    stockList[l].zjl = 0;
+                }
                 if (cheatMeFlag && parseFloat(values[31]) < 0) {
                     var change = 0 - parseFloat(values[31]);
                     var changePercent = 0 - parseFloat(values[32]);
@@ -1449,6 +1468,14 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                 }
                 stock.max = parseFloat(stoksArr[k].f15 + "").toFixed(toFixedVolume);
                 stock.min = parseFloat(stoksArr[k].f16 + "").toFixed(toFixedVolume);
+                // 计算折价率
+                if (stock.name.indexOf('ETF') >= 0 || stock.name.indexOf('LOF') >= 0) {
+                    let realJZ = parseFloat(stoksArr[k].f145 + "");
+                    // console.log('=============',realJZ);
+                    // 通过实际净值realJZ和now的价格比较，计算折价率
+                    stock.zjl = parseFloat((realJZ - parseFloat(stock.now + "")) / parseFloat(stock.now + "") * 100 + "").toFixed(2);;
+                    // console.log(stock.name, '折价率', stock.zjl);
+                }
                 // 9点至9点15分，股票价格如果为0就取昨日收盘价格
                 if (parseFloat(stock.now) == 0) {
                     stock.now = parseFloat(stoksArr[k].f18 + "").toFixed(toFixedVolume);
@@ -2396,6 +2423,10 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 var nameOrDesc = result[k].desc ? result[k].desc : stockName;
+                let zjl = result[k].zjl + "%";
+                if ((nameOrDesc.indexOf('ETF') < 0 && nameOrDesc.indexOf('LOF') < 0)) {
+                    zjl = '--';
+                }
                 if (columnName == 'name-th') {
                     var batchDeleteHtml = showBatchDeleteButton ? "<td><input type=\"checkbox\" value=\""+result[k].code+"\" id=\"batch-delete-stock-checkbox\" class=\"batch-delete-stock-checkbox\" /></td>" : "";
                     html = batchDeleteHtml + "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].code + "" : "") + "</td>"
@@ -2413,6 +2444,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     var star = result[k].star ? result[k].star + "星;" : "未知星;";
                     var starDesc = result[k].starDesc ? result[k].starDesc : "";
                     html = (starDescDisplay == 'DISPLAY' ? "<td>" + star  + starDesc + "</td>": "");
+                } else if(columnName == 'zjl-th') {
+                    html = (zjlDisplay == 'DISPLAY' ? "<td>" + zjl + "</td>": "");
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + dayIncome + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -2499,6 +2532,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = (starDescDisplay == 'DISPLAY' ? "<td></td>": "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncome + "").toFixed(2) + "</td>" : "");
+        } else if(columnName == 'zjl-th') {
+            html = (zjlDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'change-percent-th') {
             html = "<td " + stockDayIncomePercentStyle + ">" + parseFloat(stockDayIncomePercent + "").toFixed(2) + "%</td>";
         } else if(columnName == 'change-th') {
@@ -2595,6 +2630,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     var star = result[k].star ? result[k].star + "星;" : "未知星;";
                     var starDesc = result[k].starDesc ? result[k].starDesc : "";
                     html = (starDescDisplay == 'DISPLAY' ? "<td>" + star + starDesc + "</td>": "");
+                } else if(columnName == 'zjl-th') {
+                    html = (zjlDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
@@ -2674,6 +2711,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'star-desc-th') {
             html = (starDescDisplay == 'DISPLAY' ? "<td></td>": "");
+        } else if(columnName == 'zjl-th') {
+            html = (zjlDisplay == 'DISPLAY' ? "<td></td>": "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + fundDayIncomePercentStyle + ">" + fundDayIncome + "</td>" : "");
         } else if(columnName == 'change-percent-th') {
@@ -2754,6 +2793,8 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = (minDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'star-desc-th') {
             html = (starDescDisplay == 'DISPLAY' ? "<td></td>": "");
+        } else if(columnName == 'zjl-th') {
+            html = (zjlDisplay == 'DISPLAY' ? "<td></td>": "");
         } else if(columnName == 'day-income-th') {
             html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + allDayIncomePercentStyle + ">" + parseFloat(allDayIncome + "").toFixed(2) + "</td>" : "" );
         } else if(columnName == 'change-percent-th') {
@@ -4360,6 +4401,9 @@ async function setDisplayTr(event) {
     } else if(type == 'star-desc-display-checkbox') {
         starDescDisplay = dispaly;
         saveCacheData('star-desc-display', dispaly);
+    } else if(type == 'zjl-display-checkbox') {
+        zjlDisplay = dispaly;
+        saveCacheData('zjl-display', dispaly);
     } else if(type == 'day-income-display-checkbox') {
         dayIncomeDisplay = dispaly;
         saveCacheData('day-income-display', dispaly);
@@ -4400,6 +4444,7 @@ async function setDisplayTr(event) {
         maxDisplay = dispaly;
         minDisplay = dispaly;
         starDescDisplay = dispaly;
+        zjlDisplay = dispaly;
         costPriceDisplay = dispaly;
         bondsDisplay = dispaly;
         incomeDisplay = dispaly;
@@ -4422,6 +4467,7 @@ async function setDisplayTr(event) {
         saveCacheData('up-speed-display', dispaly);
         saveCacheData('max-display', dispaly);
         saveCacheData('min-display', dispaly);
+        saveCacheData('zjl-display', dispaly);
         saveCacheData('star-desc-display', dispaly);
         saveCacheData('cost-price-display', dispaly);
         saveCacheData('bonds-display', dispaly);
@@ -4443,6 +4489,7 @@ async function setDisplayTr(event) {
             $("#up-speed-display-checkbox").prop("checked", true);
             $("#max-display-checkbox").prop("checked", true);
             $("#min-display-checkbox").prop("checked", true);
+            $("#zjl-checkbox").prop("checked", true);
             $("#star-desc-display-checkbox").prop("checked", false);
             $("#day-income-display-checkbox").prop("checked", true);
             $("#cost-price-display-checkbox").prop("checked", true);
@@ -4465,6 +4512,7 @@ async function setDisplayTr(event) {
             $("#up-speed-display-checkbox").prop("checked", false);
             $("#max-display-checkbox").prop("checked", false);
             $("#min-display-checkbox").prop("checked", false);
+            $("#zjl-display-checkbox").prop("checked", false);
             $("#star-desc-display-checkbox").prop("checked", false);
             $("#day-income-display-checkbox").prop("checked", false);
             $("#cost-price-display-checkbox").prop("checked", false);
@@ -6436,6 +6484,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'star-desc-th' && starDescDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'zjl-th' && zjlDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'change-th' && changeDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'amplitude-th' && amplitudeDisplay != 'DISPLAY') {
@@ -6628,6 +6678,13 @@ function addDragAndDropListeners() {
         starDescDisplay = 'DISPLAY';
         $("#star-desc-display-checkbox").prop("checked", true);
     }
+    if (zjlDisplay == null || zjlDisplay == 'HIDDEN') {
+        zjlDisplay = 'HIDDEN';
+        $("#zjl-display-checkbox").prop("checked", false);
+    } else {
+        zjlDisplay = 'DISPLAY';
+        $("#zjl-display-checkbox").prop("checked", true);
+    }
     if (costPriceDisplay == null || costPriceDisplay == 'DISPLAY') {
         costPriceDisplay = 'DISPLAY';
         $("#cost-price-display-checkbox").prop("checked", true);
@@ -6738,6 +6795,8 @@ function addDragAndDropListeners() {
     document.getElementById("quantity-relative-ratio-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，星级备注
     document.getElementById("star-desc-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，折价率
+    document.getElementById("zjl-display-checkbox").addEventListener('change', setDisplayTr);
 }
 
 // 拖拽完成后切换列表的顺序
@@ -6761,6 +6820,7 @@ function recoveryColumnOrder() {
         {"quantity-relative-ratio-th": 0},
         {"change-th": 0},
         {"price-th": 0},
+        {"zjl-th": 0},
         {"cost-price-th": 0},
         {"up-speed-th": 0},
         {"max-th": 0},
