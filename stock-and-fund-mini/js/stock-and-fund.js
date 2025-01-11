@@ -974,8 +974,6 @@ document.addEventListener(
         // 设置页面，点击切换隐蔽/默认图标按钮
         document.getElementById('change-icon-default-button').addEventListener('click', changeIcon);
         document.getElementById('change-icon-hidden-button').addEventListener('click', changeIcon);
-        // 设置页面，点击保存大盘指数
-        document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
         // 设置页面，点击反馈建议按钮
         document.getElementById('show-advice-button').addEventListener('click', showAdvice);
         // 设置页面，点击在K线图展示/不展示MA5/MA250

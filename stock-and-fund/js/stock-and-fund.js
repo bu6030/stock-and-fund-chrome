@@ -1133,7 +1133,7 @@ document.addEventListener(
         document.getElementById('change-icon-default-button').addEventListener('click', changeIcon);
         document.getElementById('change-icon-hidden-button').addEventListener('click', changeIcon);
         // 设置页面，点击保存大盘指数
-        document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
+        // document.getElementById('large-market-code-save-button').addEventListener('click', largeMarketCodeSave);
         // 设置页面，点击反馈建议按钮
         document.getElementById('show-advice-button').addEventListener('click', showAdvice);
         // 设置页面，点击在大盘指数位置展示/不展示持仓盈亏
