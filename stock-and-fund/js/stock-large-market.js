@@ -320,7 +320,7 @@ function largeMarketCodeSave() {
     }).get();
     largeMarketCode = selectedData;
     saveCacheData('large-market-code', JSON.stringify(selectedData));
-    $("#setting-modal").modal("hide");
+    // $("#setting-modal").modal("hide");
     initWindowsSize();
     initLargeMarketData();
 }
@@ -332,4 +332,41 @@ function getlargetMarketTotalHtml (){
         '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncomePercent + '%</p>' +
         '</div>';
     return str;
+}
+
+async function addLargeMarketCheckEvent() {
+    $('input#large-market-code-checkbox[value="1.000001"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="0.399001"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="0.399006"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.HSI"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="124.HSTECH"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="104.CN00Y"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.SPX"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.DJIA"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.NDX"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.N225"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.KS11"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.FTSE"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.GDAXI"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.FCHI"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.SENSEX"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.TWII"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.VNINDEX"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="1.000928"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="1.000933"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="1.000300"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="0.399905"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="1.000852"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="0.899050"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="1.000688"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="0.399997"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="1.000926"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="2.930641"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="2.930708"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="0.399989"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="0.399986"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="1.000941"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="2.931071"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="2.931582"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="90.BK1158"]').on('change', largeMarketCodeSave);
 }

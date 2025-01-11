@@ -7060,6 +7060,7 @@ async function selectLargeMarketCodeCheckbox() {
         // 使用属性选择器选择对应值的复选框，并将其设置为选中状态
         $('input#large-market-code-checkbox[value="' + value + '"]').prop('checked', true);
     });
+    addLargeMarketCheckEvent();
 }
 
 // 展示反馈建议页面
