@@ -130,8 +130,8 @@ var kLineNumbers = 0;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
-    // //启动时发送消息
-    // chrome.runtime.sendMessage({ 'message' : 'scheduleTask' });
+    //启动时发送消息
+    chrome.runtime.sendMessage({ 'message' : 'scheduleTask' });
     let password = await readCacheData('password');
     // 如果 password 存在，需要验证密码
     if (password != null && password != '') {
