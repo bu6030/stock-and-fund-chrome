@@ -709,6 +709,8 @@ document.addEventListener(
         document.getElementById('show-wechat-mini-button').addEventListener('click', showQrCodeModal);
         // 首页，点击批量删除
         document.getElementById('batch-delete-button').addEventListener('click', batchDelete);
+        // 首页，点击滚动到底部
+        document.getElementById('scroll-button').addEventListener('click', scrollToBottomOrTop);
 
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
@@ -6866,5 +6868,27 @@ async function timeImagePreNext(event) {
         show1or5or15or30or60MinutesImage('60MIN');
     } else if (trendImageType == '120MIN') {
         show1or5or15or30or60MinutesImage('120MIN');
+    }
+}
+
+// 滚动到底部或顶部函数
+function scrollToBottomOrTop() {
+    const content = document.getElementById('my-div');
+    const scrollTop = content.scrollTop; // 当前滚动距离
+    const scrollHeight = content.scrollHeight; // 内容总高度
+    const clientHeight = content.clientHeight; // 可见区域高度
+    // 判断是否已经在底部
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
+        // 滚动到顶部
+        content.scrollTo({
+            top: 0,
+            behavior: 'smooth' // 平滑滚动效果
+        });
+    } else {
+        // 滚动到底部
+        content.scrollTo({
+            top: scrollHeight,
+            behavior: 'smooth' // 平滑滚动效果
+        });
     }
 }
