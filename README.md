@@ -396,6 +396,8 @@
 369. 走势图页面增加上一个下一个 2025/1/5
 370. 首页增加编辑按钮 2025/1/6 version 2.2.4.9 --end
 371. 增加折价率 2025/1/9
+372. 首页增加一键滚动到顶部底部按钮 2025/1/11
+373. 拖拽调整页面属性顺行直接调整，不需要点击保存按钮 2025/1/11
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

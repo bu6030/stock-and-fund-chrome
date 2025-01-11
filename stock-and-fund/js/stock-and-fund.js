@@ -1114,7 +1114,7 @@ document.addEventListener(
         // 设置页面，点击恢复默认顺序按钮
         document.getElementById('column-order-recovery-button').addEventListener('click', recoveryColumnOrder);
         // 设置页面，点击保存顺序按钮
-        document.getElementById('column-order-save-button').addEventListener('click', saveColumnOrder);
+        // document.getElementById('column-order-save-button').addEventListener('click', saveColumnOrder);
         // 设置页面，点击实时价格按钮
         document.getElementById('monitor-price-change-button').addEventListener('click', changeMonitorPriceOrPercent);
         // 设置页面，点击涨跌幅按钮
@@ -6593,6 +6593,7 @@ function addDragAndDropListeners() {
             if(newIndex == -1) newIndex = Array.from(columnList.children).indexOf(e.target.parentNode);
             columnOrderTemp = arrayMove(columnOrderTemp, columnOrderTemp.findIndex(col => col[draggedColumn] !== undefined), newIndex);
             generateColumnList();
+            saveColumnOrder();
         });
         columnList.hasDropListener = true; // 标记为已添加
     }
@@ -6846,7 +6847,7 @@ function recoveryColumnOrder() {
 function saveColumnOrder() {
     columnOrder = columnOrderTemp;
     saveCacheData('column-order', columnOrder);
-    $("#setting-modal").modal("hide");
+    // $("#setting-modal").modal("hide");
     reloadDataAndHtml();
 }
 
