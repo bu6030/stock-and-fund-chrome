@@ -537,10 +537,11 @@ function autoRefresh() {
 
 // 初始化 Html 页面
 async function initHtml() {
-    // document.getElementById('stock-monitor-ma20-div').style.display = 'none';
     if (develop) {
+        document.getElementById('stock-monitor-ma20-div').style.display = 'block';
         document.getElementById('import-from-local-springboot-div').style.display = 'block';
     } else {
+        document.getElementById('stock-monitor-ma20-div').style.display = 'none';
         document.getElementById('import-from-local-springboot-div').style.display = 'none';
     }
     // 股票标题
