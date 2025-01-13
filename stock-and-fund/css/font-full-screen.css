@@ -186,3 +186,24 @@
     align-items: center; /* 垂直居中对齐 */
     justify-content: space-between; /* 元素之间的间距 */
 }
+
+.scroll-button{
+    display: none;
+    position:fixed;
+    right:20px;
+    top:80%;
+    transform:translateY(-50%);
+    padding:10px 15px;
+    background-color:rgba(0,123,255,0.5);
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    box-shadow:0 4px 6px rgba(0,0,0,0.1);
+    transition:background-color 0.3s,opacity 0.3s;
+    pointer-events:auto
+}
+
+.scroll-button:hover{
+    background-color:#0056b3
+}
