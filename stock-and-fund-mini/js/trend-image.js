@@ -23,7 +23,7 @@ function showMinuteImage(ndays) {
         && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
         && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
         && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y'
-        && timeImageCode != 'BK1158') {
+        && timeImageCode != 'BK1158' && timeImageCode != 'GC00Y') {
             $("#update-stock-fund-button")[0].style.display = 'block';
             $("#show-set-top-or-end-button")[0].style.display = 'block';
         if (timeImageType == "STOCK") {

@@ -244,6 +244,12 @@ async function initLargeMarketDataCallBack(bigStocks) {
             timeImageCode = "BK1158";
             initLargeMarketClick();
         });
+        // 点击COMEX黄金
+        if(document.getElementById('large-market-GC00Y'))
+            document.getElementById('large-market-GC00Y').addEventListener('click', function () {
+                timeImageCode = "GC00Y";
+                initLargeMarketClick();
+        });
     }, 300);
 }
 
@@ -351,4 +357,5 @@ async function addLargeMarketCheckEvent() {
     $('input#large-market-code-checkbox[value="2.931071"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="2.931582"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="90.BK1158"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="101.GC00Y"]').on('change', largeMarketCodeSave);
 }

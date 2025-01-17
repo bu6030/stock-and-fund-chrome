@@ -6454,6 +6454,8 @@ function getSecid(code) {
             secid = '104';
         } else if(code == 'BK1158'){
             secid = '90';
+        } else if(code == 'GC00Y'){
+            secid = '101';
         }
     }
     return secid;
@@ -7046,6 +7048,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'BK1158':
                 name = '微盘股';
+                break;
+            case 'GC00Y':
+                name = 'COMEX黄金';
                 break;
             default:
                 name = timeImageCode;
