@@ -5372,6 +5372,8 @@ function getSecid(code) {
                 }
             } else if(code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
                 secid = '100';
+            } else if(code == 'USDCNH') {
+                secid = '133';
             }
         } catch (error) {
             console.warn(error);
@@ -5391,6 +5393,10 @@ function getSecid(code) {
             secid = '90';
         } else if(code == 'GC00Y'){
             secid = '101';
+        } else if(code == 'UDI'){
+            secid = '100';
+        } else if(code == 'CL00Y'){
+            secid = '102';
         }
     }
     return secid;
@@ -5951,6 +5957,15 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'GC00Y':
                 name = 'COMEX黄金';
+                break;
+            case 'USDCNH':
+                name = '美元离岸人民币';
+                break;
+            case 'UDI':
+                name = '美元指数';
+                break;
+            case 'CL00Y':
+                name = 'NYMEX原油';
                 break;
             default:
                 name = timeImageCode;

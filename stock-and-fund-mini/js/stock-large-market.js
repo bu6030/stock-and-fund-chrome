@@ -250,6 +250,24 @@ async function initLargeMarketDataCallBack(bigStocks) {
                 timeImageCode = "GC00Y";
                 initLargeMarketClick();
         });
+        // 点击美元离岸人民币
+        if(document.getElementById('large-market-USDCNH'))
+            document.getElementById('large-market-USDCNH').addEventListener('click', function () {
+                timeImageCode = "USDCNH";
+                initLargeMarketClick();
+        });
+        // 点击美元指数
+        if(document.getElementById('large-market-UDI'))
+            document.getElementById('large-market-UDI').addEventListener('click', function () {
+                timeImageCode = "UDI";
+                initLargeMarketClick();
+        });
+        // 点击NYMEX原油
+        if(document.getElementById('large-market-CL00Y'))
+            document.getElementById('large-market-CL00Y').addEventListener('click', function () {
+                timeImageCode = "CL00Y";
+                initLargeMarketClick();
+        });
     }, 300);
 }
 
@@ -358,4 +376,7 @@ async function addLargeMarketCheckEvent() {
     $('input#large-market-code-checkbox[value="2.931582"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="90.BK1158"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="101.GC00Y"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="133.USDCNH"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.UDI"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="102.CL00Y"]').on('change', largeMarketCodeSave);
 }
