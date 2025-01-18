@@ -201,3 +201,28 @@ input[type="checkbox"] {
     height:350px;
     margin-right:10px;
 }
+
+.scroll-button{
+    position: fixed;
+    right: 20px;
+    top: 80%;
+    /* transform: translateY(-90%); */
+    width: 40px; /* 设置按钮的宽度 */
+    height: 40px; /* 设置按钮的高度 */
+    padding: 0; /* 移除内边距，确保按钮是圆形 */
+    background-color: rgba(0, 123, 255, 0.4);
+    color: white;
+    border: none;
+    border-radius: 50%; /* 设置圆形 */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, opacity 0.3s;
+    pointer-events: auto;
+    display: flex;
+    justify-content: center; /* 使内容居中 */
+    align-items: center; /* 使内容居中 */
+}
+
+.scroll-button:hover{
+    background-color:#0056b3
+}
