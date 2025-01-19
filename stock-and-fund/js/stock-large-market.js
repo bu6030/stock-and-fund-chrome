@@ -35,6 +35,9 @@ async function initLargeMarketDataCallBack(bigStocks) {
         }
         var change = bigStocks[k].f4;
         var now = parseFloat(bigStocks[k].f2).toFixed(2);
+        if (bigStocks[k].f12 == 'USDCNH') {
+            now = parseFloat(bigStocks[k].f2).toFixed(4);
+        }
         var changePercent = parseFloat(bigStocks[k].f3).toFixed(2);
         var aId = "id = 'large-market-" + bigStocks[k].f12 + "'";
         largeMarketStockMaxs += bigStocks[k].f12 + '~' + bigStocks[k].f15 + '-';

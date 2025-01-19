@@ -403,6 +403,7 @@
 376. 全屏/弹窗隐藏顶部底部按钮 2025/1/13 2.2.5.1 --end
 377. 大盘指数增加黄金COMEX指数 2025/1/17
 378. 一键滚动到顶部底部修改成圆形 2025/1/18 2.2.5.2 --end
+379. 增加大盘股指数COMEX黄金，美元离岸人民币，美元指数，NYMEX原油 2025/1/19
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

@@ -185,6 +185,9 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     if (preClose <= 5) {
         toFixedVolume = 3;
     }
+    if (timeImageCode == 'USDCNH') {
+        toFixedVolume = 4;
+    }
     let maxPrice = preClose;
     let minPrice = preClose;
     let ndaysMarkLineSet = [];
@@ -201,10 +204,10 @@ function setStockMinitesImageCallBack(result, ndays, code) {
         if (price < minPrice) {
             minPrice = price;
         }
-        if (averagePrice > maxPrice) {
+        if (averagePrice != 0 && averagePrice > maxPrice) {
             maxPrice = averagePrice;
         }
-        if (averagePrice < minPrice) {
+        if (averagePrice != 0 && averagePrice < minPrice) {
             minPrice = averagePrice;
         }
         dataStr.push(price);
@@ -319,6 +322,13 @@ function setStockMinitesImageCallBack(result, ndays, code) {
             interval = 390;
         } else if (timeImageCode.startsWith("hk") || timeImageCode.startsWith("HK")) {
             interval = 330;
+        }
+        if (timeImageCode == 'UDI' || timeImageCode == 'USDCNH' || timeImageCode == 'GC00Y' || timeImageCode == 'CL00Y') {
+            interval = 1500;
+        }
+    } else {
+        if (timeImageCode == 'UDI' || timeImageCode == 'USDCNH' || timeImageCode == 'GC00Y' || timeImageCode == 'CL00Y') {
+            interval = 130;
         }
     }
     let fundOrStockName = getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType);
