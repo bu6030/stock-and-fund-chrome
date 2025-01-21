@@ -4601,6 +4601,11 @@ async function fileInput (e) {
             // 文本格式非json，需要单独处理，contents文本的每一行只有code读取到stocks中
             if (fileName.indexOf('FUND') >= 0 || fileName.indexOf('fund') >= 0) {
                 var lines = contents.split('\n');
+                if (lines[0].length > 20) {
+                    $("#data-import-modal").modal("hide");
+                    alertMessage("导入数据格式错误，请检查数据格式是否正确");
+                    return;
+                }
                 lines.forEach(function(line) {
                     // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
                     var code = line.trim(); // 去除每行开头和结尾的空白字符
@@ -4616,6 +4621,11 @@ async function fileInput (e) {
                 saveCacheData('funds', JSON.stringify(fundList));
             } else {
                 var lines = contents.split('\n');
+                if (lines[0].length > 20) {
+                    $("#data-import-modal").modal("hide");
+                    alertMessage("导入数据格式错误，请检查数据格式是否正确");
+                    return;
+                }
                 lines.forEach(function(line) {
                     // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
                     var code = line.trim(); // 去除每行开头和结尾的空白字符
