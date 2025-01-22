@@ -850,7 +850,9 @@ function getSecidBack(code) {
         }
         if (code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
             secid = '100';
-        }
+        } else if(code === 'USDCNH') {
+            secid = '133';
+        } 
     } else if(code.startsWith('9')) {
         secid = '2';
     } else {
@@ -859,6 +861,16 @@ function getSecidBack(code) {
             secid = '100';
         } else if(code == 'HSTECH'){
             secid = '124';
+        } else if(code == 'CN00Y'){
+            secid = '104';
+        } else if(code == 'BK1158'){
+            secid = '90';
+        } else if(code == 'GC00Y'){
+            secid = '101';
+        } else if(code == 'UDI'){
+            secid = '100';
+        } else if(code == 'CL00Y'){
+            secid = '102';
         }
     }
     return secid;

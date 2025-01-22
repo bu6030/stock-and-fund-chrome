@@ -3130,14 +3130,16 @@ async function stockMonitor () {
     let code = $("#stock-code").val();
     let monitorStockCode = await readCacheData("MONITOR_STOCK_CODE");
     if (monitorStockCode != null && monitorStockCode != '' 
-    && monitorStockCode != undefined && monitorStockCode != 'undefined' && monitorStockCode == code) {
+    && monitorStockCode != undefined && monitorStockCode != 'undefined' && monitorStockCode == code.replace('SH','').replace('sh','').replace('SZ','').replace('sz','').replace('BJ','').replace('bj').replace('HK','').replace('hk','').replace('US','').replace('us','')) {
         saveCacheData("MONITOR_STOCK_CODE", '');
         sendChromeBadge('#FFFFFF', '#FFFFFF', '');
         return;
     }
-    let stock = checkStockExsit(code);
-    let now = stock.now;
-    let openPrice = stock.openPrice;
+    let secId = getSecid(code);
+    code = code.replace('SH','').replace('sh','').replace('SZ','').replace('sz','').replace('BJ','').replace('bj').replace('HK','').replace('hk','').replace('US','').replace('us','');
+    let stock = ajaxGetStockFromEastMoneyNoAsync(secId + '.' + code);
+    let now = stock[0].f2 + "";
+    let openPrice = stock[0].f18 + "";
     let badgeBackgroundColor;
     if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
         if (parseFloat(now) >= parseFloat(openPrice)) {
@@ -3165,7 +3167,7 @@ async function stockMonitor () {
             changeMonitorPriceOrPercent(param);
         }
     } else {
-        let changePercent = parseFloat(stock.changePercent);
+        let changePercent = parseFloat(stock[0].f3 + "");
         if(changePercent < 0) {
             changePercent = 0 - changePercent;
         }
