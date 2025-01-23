@@ -4013,6 +4013,9 @@ async function stockMonitor () {
     }
     let secId = getSecid(code);
     let codeNoPre = code.replace('SH','').replace('sh','').replace('SZ','').replace('sz','').replace('BJ','').replace('bj').replace('HK','').replace('hk','').replace('US','').replace('us','');
+    if (code == 'USDCNH') {
+        codeNoPre = code;
+    }
     let stock = ajaxGetStockFromEastMoneyNoAsync(secId + '.' + codeNoPre);
     let now = stock[0].f2 + "";
     let openPrice = stock[0].f18 + "";
