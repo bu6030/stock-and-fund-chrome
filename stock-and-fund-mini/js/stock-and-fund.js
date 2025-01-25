@@ -1480,8 +1480,6 @@ async function initStockAndFundHtml() {
                     $("#stock-monitor-high-price").val(stockList[buttonIndex].monitorHighPrice);
                     $("#stock-monitor-low-price").val(stockList[buttonIndex].monitorLowPrice);
                     $("#stock-desc").val(stockList[buttonIndex].desc);
-                    $("#stock-star-desc").val(stockList[buttonIndex].starDesc);
-                    $("#stock-star").val(stockList[buttonIndex].star);
                     if (stockList[buttonIndex].monitorMA20) {
                         $("#stock-monitor-ma20-checkbox").prop("checked", true);
                     } else {
@@ -1654,8 +1652,6 @@ async function initStockAndFundHtml() {
                     $("#fund-costPrise").val(fundList[buttonIndex].costPrise);
                     $("#fund-bonds").val(fundList[buttonIndex].bonds);
                     $("#fund-desc").val(fundList[buttonIndex].desc);
-                    $("#fund-star-desc").val(fundList[buttonIndex].starDesc);
-                    $("#fund-star").val(fundList[buttonIndex].star);
                     $("#fund-modal").modal();
                 });
             }
