@@ -408,6 +408,7 @@
 381. 大盘股指数监控问题修改 2025/1/23 2.2.5.4 --end
 382. 星级备注拆分 2025/1/25 2.2.5.5 --end
 383. 分时图自动刷新问题修改 2025/1/26
+384. 涨速增加排序 2025/1/26
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

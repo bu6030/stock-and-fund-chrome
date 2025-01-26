@@ -740,6 +740,8 @@ async function initHtml() {
             document.getElementById('stock-change-percent-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-turn-over-rate-th'))
             document.getElementById('stock-turn-over-rate-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-up-speed-th'))
+            document.getElementById('stock-up-speed-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-quantity-relative-ratio-th'))
             document.getElementById('stock-quantity-relative-ratio-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-price-th'))
@@ -5488,6 +5490,12 @@ async function sortStockAndFund(totalMarketValue) {
                     return parseFloat(a.turnOverRate + "") - parseFloat(b.turnOverRate + "");
                 } else {
                     return parseFloat(b.turnOverRate + "") - parseFloat(a.turnOverRate + "");
+                }
+            } else if (targetId == 'stock-up-speed-th') {
+                if(lastSort.stock.sortType == 'asc'){
+                    return parseFloat(a.upSpeed + "") - parseFloat(b.upSpeed + "");
+                } else {
+                    return parseFloat(b.upSpeed + "") - parseFloat(a.upSpeed + "");
                 }
             } else if (targetId == 'stock-quantity-relative-ratio-th') {
                 if(lastSort.stock.sortType == 'asc'){
