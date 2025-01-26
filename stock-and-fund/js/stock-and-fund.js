@@ -5417,10 +5417,12 @@ async function clickSortStockAndFund(event) {
             if (currentGroup != 'default-group') {
                 stocks = await readCacheData(currentGroup + '_stocks');
             }
-            stockList = jQuery.parseJSON(stocks);
-            stockList.forEach(item => {
-                item.belongGroup = currentGroup;
-            })
+            if (currentGroup != 'all-group') {
+                stockList = jQuery.parseJSON(stocks);
+                stockList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
+            }
         } else {
             lastSort.fund.sortType = 'order';
             lastSort.fund.targetId = '';
@@ -5431,15 +5433,21 @@ async function clickSortStockAndFund(event) {
             if (currentGroup != 'default-group') {
                 funds = await readCacheData(currentGroup + '_funds');
             }
-            fundList = jQuery.parseJSON(funds);
-            fundList.forEach(item => {
-                item.belongGroup = currentGroup;
-            })
+            if (currentGroup != 'all-group') {
+                fundList = jQuery.parseJSON(funds);
+                fundList.forEach(item => {
+                    item.belongGroup = currentGroup;
+                })
+            }
         }
     }
     saveCacheData("last-sort", lastSort);
-    initHtml();
-    initData();
+    if (currentGroup == 'all-group') {
+        changeGroup('all-group');
+    } else {
+        initHtml();
+        initData();
+    }
 }
 
 // 对股票/基金按照点击的列进行排序
