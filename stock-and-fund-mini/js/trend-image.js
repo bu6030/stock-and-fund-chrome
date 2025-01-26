@@ -668,7 +668,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     // 20s刷新
     timerId = setTimeout(function () {
         console.log('20s执行');
-        setStockMinitesImage();
+        setStockMinitesImage(ndays == 5 ? '5DAY' : '1DAY');
     }, stockMinitesImageRefresh);
     console.log("下一次分时图timerId:", timerId);
 }
