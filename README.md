@@ -411,6 +411,7 @@
 384. 涨速增加排序 2025/1/26
 385. 全部分组下第三次点击排序报错 2025/1/26 2.2.5.6 --end
 386. 首页分时图去掉动画效果 2025/2/1
+387. 当前价可以隐藏 2025/2/1
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

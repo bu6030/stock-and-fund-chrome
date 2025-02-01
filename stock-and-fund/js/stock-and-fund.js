@@ -29,6 +29,7 @@ var changeDisplay = 'DISPLAY';
 var updateTimeDisplay = 'DISPLAY';
 var turnOverRateDisplay = 'DISPLAY';
 var quantityRelativeRatioDisplay = 'DISPLAY';
+var priceDisplay = 'DISPLAY';
 var belongGroupDisplay = 'DISPLAY';
 var amplitudeDisplay = 'DISPLAY';
 var upSpeedDisplay = 'DISPLAY';
@@ -337,6 +338,12 @@ async function initLoad() {
         quantityRelativeRatioDisplay = 'DISPLAY';
     } else {
         quantityRelativeRatioDisplay = 'HIDDEN';
+    }
+    priceDisplay = await readCacheData('price-display');
+    if (priceDisplay == null || priceDisplay == 'DISPLAY') {
+        priceDisplay = 'DISPLAY';
+    } else {
+        priceDisplay = 'HIDDEN';
     }
     monitorPriceOrPercent = await readCacheData('monitor-price-or-percent');
     if (monitorPriceOrPercent == null) {
@@ -2476,7 +2483,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'quantity-relative-ratio-th') {
                     html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td>" + result[k].quantityRelativeRatio + "</td>" : "");
                 } else if(columnName == 'price-th') {
-                    html = "<td>" + now + "</td>";
+                    html = (priceDisplay == 'DISPLAY' ? "<td>" + now + "</td>": "");
                 } else if(columnName == 'cost-price-th') {
                     html = (costPriceDisplay == 'DISPLAY' ? "<td>" + costPrise + "</td>" : "");
                 } else if(columnName == 'bonds-th') {
@@ -2564,7 +2571,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
         } else if(columnName == 'quantity-relative-ratio-th') {
             html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'price-th') {
-            html = "<td></td>";
+            html = (priceDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'cost-price-th') {
             html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'bonds-th') {
@@ -2666,7 +2673,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'quantity-relative-ratio-th') {
                     html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'price-th') {
-                    html = "<td>" + result[k].gsz + exsitJZStr + "</td>";
+                    html = (priceDisplay == 'DISPLAY' ? "<td>" + result[k].gsz + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'cost-price-th') {
                     html = (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "");
                 } else if(columnName == 'bonds-th') {
@@ -2747,9 +2754,9 @@ async function getFundTableHtml(result, totalMarketValueResult) {
         } else if(columnName == 'turn-over-rate-th') {
             html = (turnOverRateDisplay == 'DISPLAY' ? "<td></td>" : "")
         } else if(columnName == 'quantity-relative-ratio-th') {
-            html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "")
+            html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'price-th') {
-            html = "<td></td>";
+            html = (priceDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'cost-price-th') {
             html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         } else if(columnName == 'bonds-th') {
@@ -2831,9 +2838,9 @@ function getTotalTableHtml(totalMarketValueResult) {
         } else if(columnName == 'turn-over-rate-th') {
             html = (turnOverRateDisplay == 'DISPLAY' ? "<td></td>" : "")
         } else if(columnName == 'quantity-relative-ratio-th') {
-            html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "")
+            html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'price-th') {
-            html = "<td></td>";
+            html = (priceDisplay == 'DISPLAY' ?  "<td></td>" : "");
         } else if(columnName == 'cost-price-th') {
             html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" );
         } else if(columnName == 'bonds-th') {
@@ -4463,6 +4470,9 @@ async function setDisplayTr(event) {
     } else if(type == 'quantity-relative-ratio-display-checkbox') {
         quantityRelativeRatioDisplay = dispaly;
         saveCacheData('quantity-relative-ratio-display', dispaly);
+    } else if(type == 'price-display-checkbox') {
+        priceDisplay = dispaly;
+        saveCacheData('price-display', dispaly);
     } else if(type == 'update-time-display-checkbox') {
         updateTimeDisplay = dispaly;
         saveCacheData('update-time-display', dispaly);
@@ -4490,6 +4500,7 @@ async function setDisplayTr(event) {
         updateTimeDisplay = dispaly;
         turnOverRateDisplay = dispaly;
         quantityRelativeRatioDisplay = dispaly;
+        priceDisplay = dispaly;
         allDisplay = dispaly;
         saveCacheData('all-display', dispaly);
         saveCacheData('code-display', dispaly);
@@ -4514,6 +4525,7 @@ async function setDisplayTr(event) {
         saveCacheData('update-time-display', dispaly);
         saveCacheData('turn-over-rate-display', dispaly);
         saveCacheData('quantity-relative-ratio-display', dispaly);
+        saveCacheData('price-display', dispaly);
         if(dispaly == 'DISPLAY') {
             $("#all-display-checkbox").prop("checked", true);
             $("#code-display-checkbox").prop("checked", true);
@@ -4538,6 +4550,7 @@ async function setDisplayTr(event) {
             $("#update-time-display-checkbox").prop("checked", true);
             $("#turn-over-rate-display-checkbox").prop("checked", true);
             $("#quantity-relative-ratio-display-checkbox").prop("checked", true);
+            $("#price-display-checkbox").prop("checked", true);
         } else {
             $("#all-display-checkbox").prop("checked", false);
             $("#code-display-checkbox").prop("checked", false);
@@ -4562,6 +4575,7 @@ async function setDisplayTr(event) {
             $("#update-time-display-checkbox").prop("checked", false);
             $("#turn-over-rate-display-checkbox").prop("checked", false);
             $("#quantity-relative-ratio-display-checkbox").prop("checked", false);
+            $("#price-display-checkbox").prop("checked", false);
         }
     }
     initHtml();
@@ -6569,6 +6583,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'quantity-relative-ratio-th' && quantityRelativeRatioDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'price-th' && priceDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'bonds-th' && bondsDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'market-value-th' && marketValueDisplay != 'DISPLAY') {
@@ -6607,7 +6623,7 @@ function generateColumnList() {
         checkbox.type = 'checkbox';
         checkbox.value = '';
         checkbox.id = columnName.replace('-th', '') + '-display-checkbox';
-        if (columnName == 'name-th' || columnName == 'change-percent-th' || columnName == 'price-th' || columnName == 'mini-image-th') {
+        if (columnName == 'name-th' || columnName == 'change-percent-th' || columnName == 'mini-image-th') {
             checkbox.disabled = true;
         }
         // Create label for checkbox
@@ -6836,6 +6852,13 @@ function addDragAndDropListeners() {
         quantityRelativeRatioDisplay = 'DISPLAY';
         $("#quantity-relative-ratio-display-checkbox").prop("checked", true);
     }
+    if (priceDisplay == null || priceDisplay == 'HIDDEN') {
+        priceDisplay = 'HIDDEN';
+        $("#price-display-checkbox").prop("checked", false);
+    } else {
+        priceDisplay = 'DISPLAY';
+        $("#price-display-checkbox").prop("checked", true);
+    }
     // 设置页面，隐藏/展示页面展示项，编码
     document.getElementById("code-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，市值/金额
@@ -6852,6 +6875,8 @@ function addDragAndDropListeners() {
     document.getElementById("day-income-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，所属分组
     document.getElementById("belong-group-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，当前价格
+    document.getElementById("price-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，涨速
     document.getElementById("up-speed-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，最高价
