@@ -2945,6 +2945,8 @@ async function setDetailChart(elementId, dataStr, color, preClose, maxPrice, min
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById(elementId));
     option = {
+        animation: false, // 禁用动画
+        animationDuration: 0, // 动画时长为 0，立即显示
         xAxis: {
             axisLabel: {
                 show: false // 隐藏x轴坐标标签
