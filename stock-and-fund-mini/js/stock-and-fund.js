@@ -6340,7 +6340,7 @@ async function showUpDownCounts() {
     myChart.clear();
     option = {
         title: {
-            text: upDownCountsDate + ' 涨跌分布', // 设置整个图表的标题
+            text: upDownCountsDate + ' 涨跌分布（不包含ST股）', // 设置整个图表的标题
             left: 'center', // 标题水平居中
             top: 0 // 标题距离图表顶部的距离
         },
