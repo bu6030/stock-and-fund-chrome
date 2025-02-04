@@ -199,10 +199,10 @@ async function initLoad() {
         incomePercentDisplay = 'HIDDEN';
     }
     addtimePriceDisplay = await readCacheData('addtime-price-display');
-    if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
-        addtimePriceDisplay = 'DISPLAY';
-    } else {
+    if (addtimePriceDisplay == null || addtimePriceDisplay == 'HIDDEN') {
         addtimePriceDisplay = 'HIDDEN';
+    } else {
+        addtimePriceDisplay = 'DISPLAY';
     }
     dayIncomeDisplay = await readCacheData('day-income-display');
     if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
@@ -211,10 +211,10 @@ async function initLoad() {
         dayIncomeDisplay = 'HIDDEN';
     }
     upSpeedDisplay = await readCacheData('up-speed-display');
-    if (upSpeedDisplay == null || upSpeedDisplay == 'DISPLAY') {
-        upSpeedDisplay = 'DISPLAY';
-    } else {
+    if (upSpeedDisplay == null || upSpeedDisplay == 'HIDDEN') {
         upSpeedDisplay = 'HIDDEN';
+    } else {
+        upSpeedDisplay = 'DISPLAY';
     }
     maxDisplay = await readCacheData('max-display');
     if (maxDisplay == null || maxDisplay == 'DISPLAY') {
@@ -275,10 +275,10 @@ async function initLoad() {
         changeDisplay = 'DISPLAY';
     }
     amplitudeDisplay = await readCacheData('amplitude-display');
-    if (amplitudeDisplay == null || amplitudeDisplay == 'DISPLAY') {
-        amplitudeDisplay = 'DISPLAY';
-    } else {
+    if (amplitudeDisplay == null || amplitudeDisplay == 'HIDDEN') {
         amplitudeDisplay = 'HIDDEN';
+    } else {
+        amplitudeDisplay = 'DISPLAY';
     }
     updateTimeDisplay = await readCacheData('update-time-display');
     if (updateTimeDisplay == null || updateTimeDisplay == 'DISPLAY') {
@@ -287,16 +287,16 @@ async function initLoad() {
         updateTimeDisplay = 'HIDDEN';
     }
     turnOverRateDisplay = await readCacheData('turn-over-rate-display');
-    if (turnOverRateDisplay == null || turnOverRateDisplay == 'DISPLAY') {
-        turnOverRateDisplay = 'DISPLAY';
-    } else {
+    if (turnOverRateDisplay == null || turnOverRateDisplay == 'HIDDEN') {
         turnOverRateDisplay = 'HIDDEN';
+    } else {
+        turnOverRateDisplay = 'DISPLAY';
     }
     quantityRelativeRatioDisplay = await readCacheData('quantity-relative-ratio-display');
-    if (quantityRelativeRatioDisplay == null || quantityRelativeRatioDisplay == 'DISPLAY') {
-        quantityRelativeRatioDisplay = 'DISPLAY';
-    } else {
+    if (quantityRelativeRatioDisplay == null || quantityRelativeRatioDisplay == 'HIDDEN') {
         quantityRelativeRatioDisplay = 'HIDDEN';
+    } else {
+        quantityRelativeRatioDisplay = 'DISPLAY';
     }
     priceDisplay = await readCacheData('price-display');
     if (priceDisplay == null || priceDisplay == 'DISPLAY') {
