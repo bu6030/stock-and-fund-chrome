@@ -203,6 +203,8 @@ input[type="checkbox"] {
 }
 
 .scroll-button{
+    writing-mode: vertical-lr; /* 垂直排列，从左到右 */
+    text-orientation: upright; /* 保持字符直立 */
     position: fixed;
     right: 20px;
     top: 80%;
