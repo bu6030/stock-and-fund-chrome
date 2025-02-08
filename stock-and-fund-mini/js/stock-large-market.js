@@ -294,7 +294,7 @@ function initLargeMarketClick() {
     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
     $("#time-image-pre-button")[0].style.display = 'none';
     $("#time-image-next-button")[0].style.display = 'none';
-
+    $("#go-to-tiantianjijin-detail-button")[0].style.display = 'none';
     if (trendImageType == 'MINUTE') {
         showMinuteImage('1DAY');
     } else if (trendImageType == '5DAY') {

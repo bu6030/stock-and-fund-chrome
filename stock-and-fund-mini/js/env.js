@@ -26,6 +26,7 @@ let Env = {
     GO_TO_EASTMONEY_1_URL: "https://quote.eastmoney.com/basic/h5chart-iframe.html",
     GET_UP_DOWN_COUNTS_URL: "https://push2ex.eastmoney.com/getTopicZDFenBu",
     GO_TO_EASTMONEY_2_URL: "https://quote.eastmoney.com",
+    GO_TO_TIANTIANJIJIN_URL: "https://fund.eastmoney.com",
     ADVICE_URL: "http://110.40.187.161:8080/chrome/advice",
     CLOUD_SERVER_DATA_SYNC: "https://dav.jianguoyun.com/dav/stock-and-fund/",
     CLOUD_SERVER_DATA_SYNC_BASIC_AUTH: "请申请自己的云账户",

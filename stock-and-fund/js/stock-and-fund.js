@@ -989,6 +989,8 @@ document.addEventListener(
         // 走势图页面，点击上一个下一个
         document.getElementById('time-image-pre-button').addEventListener('click', timeImagePreNext);
         document.getElementById('time-image-next-button').addEventListener('click', timeImagePreNext);
+        // 走势图页面，点击天天基金查看详细信息
+        document.getElementById('go-to-tiantianjijin-detail-button').addEventListener('click', goToTiantianjijinDetail);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -2102,6 +2104,7 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'inline';
+                $("#go-to-tiantianjijin-detail-button")[0].style.display = 'none';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
@@ -2263,6 +2266,7 @@ async function initStockAndFundHtml() {
                 $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 $("#go-to-eastmoney-button")[0].style.display = 'none';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'none';
+                $("#go-to-tiantianjijin-detail-button")[0].style.display = 'inline';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
                 let fundCode = $("#fund-code").val();
@@ -6453,6 +6457,12 @@ async function goToEastMoneyDetail() {
         let code = timeImageCode.substring(2, timeImageCode.length).replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','')
         url = Env.GO_TO_EASTMONEY_2_URL + "/us/" + code + ".html"; 
     }
+    chrome.tabs.create({ url: url });
+}
+
+// 去天天基金查看股票详情
+async function goToTiantianjijinDetail() {
+    let url = Env.GO_TO_TIANTIANJIJIN_URL + "/" + timeImageCode + ".html";
     chrome.tabs.create({ url: url });
 }
 
