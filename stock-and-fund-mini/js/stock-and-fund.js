@@ -655,6 +655,8 @@ async function initHtml() {
             document.getElementById('stock-change-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-amplitude-th'))
             document.getElementById('stock-amplitude-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-zjl-th'))
+            document.getElementById('stock-zjl-th').addEventListener('click', clickSortStockAndFund);
         if (lastSort.stock.targetId != null && lastSort.stock.targetId != '' && document.getElementById(lastSort.stock.targetId)) {
             if (document.getElementById(lastSort.stock.targetId).classList.contains('order')) {
                 document.getElementById(lastSort.stock.targetId).classList.remove('order');
@@ -4483,6 +4485,12 @@ async function sortStockAndFund(totalMarketValue) {
                     return parseFloat(a.income + "") - parseFloat(b.income + "");
                 } else {
                     return parseFloat(b.income + "") - parseFloat(a.income + "");
+                }
+            } else if (targetId == 'stock-zjl-th') {
+                if(lastSort.stock.sortType == 'asc'){
+                    return parseFloat(a.zjl + "") - parseFloat(b.zjl + "");
+                } else {
+                    return parseFloat(b.zjl + "") - parseFloat(a.zjl + "");
                 }
             } else {
                 return 0;

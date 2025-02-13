@@ -414,6 +414,7 @@
 387. 当前价可以隐藏 2025/2/1 version 2.2.5.7 --end
 388. 一键滚动到顶部底部按钮修改样式 2025/2/6
 389. 基金页面增加跳转天天基金详情页 2025/2/8 version 2.2.5.8 --end
+390. 折价率增加排序 2025/2/13
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
