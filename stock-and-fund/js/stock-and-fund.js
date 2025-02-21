@@ -2238,6 +2238,8 @@ async function initStockAndFundHtml() {
                     $("#fund-desc").val(fundList[buttonIndex].desc);
                     $("#fund-star-desc").val(fundList[buttonIndex].starDesc);
                     $("#fund-star").val(fundList[buttonIndex].star);
+                    $("#fund-monitor-high-price").val(fundList[this.sectionRowIndex].monitorHighPrice);
+                    $("#fund-monitor-low-price").val(fundList[this.sectionRowIndex].monitorLowPrice);
                     $("#fund-modal").modal();
                 });
             }
@@ -2251,6 +2253,8 @@ async function initStockAndFundHtml() {
                 $("#fund-desc").val(fundList[this.sectionRowIndex].desc);
                 $("#fund-star-desc").val(fundList[this.sectionRowIndex].starDesc);
                 $("#fund-star").val(fundList[this.sectionRowIndex].star);
+                $("#fund-monitor-high-price").val(fundList[this.sectionRowIndex].monitorHighPrice);
+                $("#fund-monitor-low-price").val(fundList[this.sectionRowIndex].monitorLowPrice);
                 if (isCycleInvest) {
                     $("#fund-cycle-invest-type").val(fundList[this.sectionRowIndex].fundCycleInvestType);
                     $("#fund-cycle-invest-date").val(fundList[this.sectionRowIndex].fundCycleInvestDate);
@@ -2641,13 +2645,23 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             var exsitJZStr = result[k].existJZ !== null && result[k].existJZ !== undefined
                 && result[k].existJZ ? '(实)' : '(估)';
             var nameOrDesc = result[k].desc ? result[k].desc : result[k].name;
+            let nowTimestamp = Date.now();
+            let monitorAlertDate = result[k].monitorAlertDate;
+            let alertStyle = "";
+            if ((nowTimestamp - monitorAlertDate) <= Env.TIME_CACHED_ONE_DAY) {
+                if (result[k].monitorAlert == '1') {
+                    alertStyle = "<span style=\"color: " + redColor + "; font-weight: bold\">(涨破" + result[k].monitorHighPrice + ")</span>";
+                } else if(result[k].monitorAlert == '2') {
+                    alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破" + result[k].monitorLowPrice + ")</span>";
+                }
+            }
             // 新顺序拼接TR行HTML
             var fundStrOrder = columnOrder.map(function (column) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 if (columnName == 'name-th') {
                     var batchDeleteHtml = showBatchDeleteButton ? "<td><input type=\"checkbox\" value=\""+result[k].fundCode+"\" id=\"batch-delete-fund-checkbox\" class=\"batch-delete-fund-checkbox\"/></td>" : "";
-                    html = batchDeleteHtml + "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
+                    html = batchDeleteHtml + "<td class=\"stock-fund-name-and-code\"" + dayIncomeStyle + ">" + nameOrDesc + alertStyle + (codeDisplay == 'DISPLAY' ? "<br>" + result[k].fundCode + "" : "") + "</td>";
                 } else if (columnName == 'mini-image-th') {
                     html = "<td>" + minuteImageMiniDiv + "</td>";
                 } else if(columnName == 'belong-group-th'){
@@ -3205,6 +3219,8 @@ async function saveFund() {
     var desc = $("#fund-desc").val();
     var starDesc = $("#fund-star-desc").val();
     var star = $("#fund-star").val();
+    var monitorHighPrice = $("#fund-monitor-high-price").val();
+    var monitorLowPrice = $("#fund-monitor-low-price").val();
     if (isCycleInvest) {
         var fundCycleInvestType = $("#fund-cycle-invest-type").val();
         var fundCycleInvestDate = $("#fund-cycle-invest-date").val();
@@ -3256,7 +3272,9 @@ async function saveFund() {
             "bonds": bonds,
             "desc": desc,
             "starDesc": starDesc,
-            "star": star
+            "star": star,
+            "monitorHighPrice": monitorHighPrice,
+            "monitorLowPrice": monitorLowPrice,
         }
     }
     for (var k in fundList) {
@@ -3267,6 +3285,9 @@ async function saveFund() {
             fundList[k].desc = fund.desc;
             fundList[k].starDesc = fund.starDesc;
             fundList[k].star = fund.star;
+            fundList[k].monitorHighPrice = fund.monitorHighPrice;
+            fundList[k].monitorLowPrice = fund.monitorLowPrice;
+            fundList[k].monitorAlert = '';
             if (isCycleInvest) {
                 fundList[k].fundCycleInvestType = fund.fundCycleInvestType;
                 fundList[k].fundCycleInvestDate = fund.fundCycleInvestDate;

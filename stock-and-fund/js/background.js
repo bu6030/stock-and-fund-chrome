@@ -67,10 +67,16 @@ function performTask() {
             }
         });
         getData('funds').then((fundArr) => {
+            // 去掉定投，增加监控基金净值
+            // if (fundArr != null && fundArr != "[]") {
+            //     monitorFundCycleInvest(JSON.parse(fundArr));
+            // } else {
+            //     monitorFundCycleInvest(JSON.parse("[]"));
+            // }
             if (fundArr != null && fundArr != "[]") {
-                monitorFundCycleInvest(JSON.parse(fundArr));
+                monitorFundPrice(JSON.parse(fundArr));
             } else {
-                monitorFundCycleInvest(JSON.parse("[]"));
+                monitorFundPrice(JSON.parse("[]"));
             }
         });
         getData('monitor-top-20-stock').then((monitoTop20Stock) => {
@@ -99,10 +105,10 @@ function getData(key) {
 function saveData(key, value) {
     chrome.storage.local.set({ [key]: value });
 }
-// 后台监控突破价格并提示
+// 后台监控股票突破价格并提示
 function monitorStockPrice(stockList) {
     var date = new Date();
-    console.log("执行突破价格监控任务...", date.toLocaleString());
+    console.log("执行突破股票价格监控任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
         var stocks = "";
@@ -300,7 +306,6 @@ function monitorStockPrice(stockList) {
         console.log("非交易时间，停止执行任务...");
     }
 }
-
 // 基金定投
 function monitorFundCycleInvest(fundList) {
     var date = new Date();
@@ -951,4 +956,98 @@ async function updateStocksMA20(code, monitorAlert) {
         }
     }
     saveData('stocks', JSON.stringify(stockList));
+}
+// 后台监控基金突破价格并提示
+async function monitorFundPrice(fundList) {
+    var date = new Date();
+    console.log("执行基金突破价格监控任务...", date.toLocaleString());
+    if (!isTradingTime(date)) {
+        return;
+    }
+    console.log("交易时间，执行任务...");
+    var funds = [];
+    for (let k in fundList) {
+        if (fundList[k].monitorAlert == '1' || fundList[k].monitorAlert == '2' 
+            || fundList[k].monitorAlert == '3'|| fundList[k].monitorAlert == '4') {
+            continue;
+        }
+        if ((typeof fundList[k].monitorLowPrice != 'undefined' && fundList[k].monitorHighPrice != '')
+            || (typeof fundList[k].monitorLowPrice != 'undefined' && fundList[k].monitorLowPrice != '')
+            || (typeof fundList[k].monitorUpperPercent != 'undefined' && fundList[k].monitorUpperPercent != '')
+            || (typeof fundList[k].monitorLowerPercent != 'undefined' && fundList[k].monitorLowerPercent != '')) {
+            funds.push(fundList[k]);
+        }
+    }
+    if (funds == "") {
+        console.log("没有监控的基金，返回...");
+        return;
+    }
+    var blueColor = await getData('blueColor');
+    if (blueColor == null) {
+        blueColor = '#093';
+    }
+    var redColor = await getData('redColor');
+    if (redColor == null) {
+        redColor = '#ee2500';
+    }
+    if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
+        blueColor = lightBlue;
+        redColor = lightRed;
+    }
+    // 在这里处理返回的数据
+    for (let k in funds) {
+        try {
+            let now = '';
+            let fundNetDiagramResponse = await fetch(`https://fundmobapi.eastmoney.com/FundMApi/FundNetDiagram.ashx?FCODE=${funds[k].fundCode}&RANGE=y&deviceid=Wap&plat=Wap&product=EFund&version=2.0.0&_=`);
+            let fundNetDiagramData = await fundNetDiagramResponse.text();
+            let fundNetDiagramJson = JSON.parse(fundNetDiagramData);
+            let currentDayNetDiagram = null;
+            for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
+                if (fundNetDiagramJson.Datas[i].FSRQ.replace(/-/g, '') == date) {
+                    currentDayNetDiagram = fundNetDiagramJson.Datas[i];
+                    break;
+                }
+            }
+            if (currentDayNetDiagram != null) {
+                now = parseFloat(currentDayNetDiagram.DWJZ + '');
+            } else {
+                let response = await fetch(`http://fundgz.1234567.com.cn/js/${funds[k].fundCode}.js`);
+                let data = await response.text();
+                if (data != 'jsonpgz();') {
+                    var json = JSON.parse(data.substring(8, data.length - 2));
+                    now = parseFloat(json.dwjz + '');
+                }
+            }
+            // 没获取估值和净值，跳过
+            if (now == '') {
+                continue;
+            }
+            if (typeof funds[k].monitorHighPrice != 'undefined' && funds[k].monitorHighPrice != '') {
+                var highPrice = parseFloat(funds[k].monitorHighPrice);
+                if (now > highPrice) {
+                    funds[k].monitorAlert = '1';
+                    funds[k].monitorAlertDate = Date.now();
+                    sendChromeBadge('#FFFFFF', redColor, "" + now);
+                    var text = funds[k].name + "涨破监控价格" + highPrice + "，达到" + now;
+                    saveData('funds', JSON.stringify(fundList));
+                    showNotification("通知", text);
+                    console.log("================监控价格涨破", highPrice, "============");
+                }
+            }
+            if (typeof funds[k].monitorLowPrice != 'undefined' && funds[k].monitorLowPrice != '') {
+                var lowPrice = parseFloat(funds[k].monitorLowPrice);
+                if (now < lowPrice) {
+                    funds[k].monitorAlert = '2';
+                    funds[k].monitorAlertDate = Date.now();
+                    sendChromeBadge('#FFFFFF', blueColor, "" + now);
+                    var text = funds[k].name + "跌破监控价格" + lowPrice + "，达到" + now;
+                    saveData('funds', JSON.stringify(fundList));
+                    showNotification("通知", text);
+                    console.log("================监控价格跌破", lowPrice, "============");
+                }
+            }
+        } catch (error) {
+            console.warn(`Error fetching data for fund ${fund.fundCode}: ${error}`);
+        }
+    }
 }
