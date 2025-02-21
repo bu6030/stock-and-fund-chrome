@@ -4198,14 +4198,15 @@ function sortedByDrag() {
                     targetIndex = fundList.length - 1;
                 }
                 let currentFund = fundList[sourceIndex];
-                fundList.splice(sourceIndex, 1);
-                fundList.splice(targetIndex, 0, currentFund);
-                saveCacheData('funds', JSON.stringify(fundList));
-                
-                if (lastSort.fund.targetId.indexOf('fund') >= 0) {
-                    lastSort.fund.targetId = '';
-                    lastSort.fund.sortType = 'order';
-                    saveCacheData('last-sort', lastSort);
+                if (currentFund != null) {
+                    fundList.splice(sourceIndex, 1);
+                    fundList.splice(targetIndex, 0, currentFund);
+                    saveCacheData('funds', JSON.stringify(fundList));
+                    if (lastSort.fund.targetId.indexOf('fund') >= 0) {
+                        lastSort.fund.targetId = '';
+                        lastSort.fund.sortType = 'order';
+                        saveCacheData('last-sort', lastSort);
+                    }
                 }
             } else {
                 if (dragTargetType == 'stock'  && targetIndex == 'title') {
@@ -4215,13 +4216,15 @@ function sortedByDrag() {
                     targetIndex = stockList.length - 1;
                 } 
                 let currentStock = stockList[sourceIndex];
-                stockList.splice(sourceIndex, 1);
-                stockList.splice(targetIndex, 0, currentStock);
-                saveCacheData('stocks', JSON.stringify(stockList));
-                if (lastSort.stock.targetId.indexOf('stock') >= 0) {
-                    lastSort.stock.targetId = '';
-                    lastSort.stock.sortType = 'order';
-                    saveCacheData('last-sort', lastSort);
+                if (currentStock != null) {
+                    stockList.splice(sourceIndex, 1);
+                    stockList.splice(targetIndex, 0, currentStock);
+                    saveCacheData('stocks', JSON.stringify(stockList));
+                    if (lastSort.stock.targetId.indexOf('stock') >= 0) {
+                        lastSort.stock.targetId = '';
+                        lastSort.stock.sortType = 'order';
+                        saveCacheData('last-sort', lastSort);
+                    }
                 }
             }
             initHtml();

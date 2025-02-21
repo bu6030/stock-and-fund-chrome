@@ -583,8 +583,9 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                 } else {
                     changePercent = ((params[0].value - preClose) / preClose * 100).toFixed(2);
                 }
-                return result.data.name + "<br>时间：" + params[0].name + "<br>价格：" + params[0].value
-                     + "<br>涨跌幅：" + changePercent + "%<br>成交量：" + volumn + "万";
+                let styleColor = changePercent >= 0 ? redColor : blueColor; // 根据涨跌幅决定颜色
+                return result.data.name + "<br>时间：" + params[0].name + "<br>价格：<span style='color:" + styleColor + ";'>" + params[0].value
+                     + "</span><br>涨跌幅：<span style='color:" + styleColor + ";'>" + changePercent + "%</span><br>成交量：" + volumn + "万";
             }
         },
     };
@@ -973,12 +974,13 @@ function setStockImage(type) {
                             }
                     }
                 });
+                let styleColor = values[7] >= 0 ? redColor : blueColor; // 根据涨跌幅决定颜色
                 let formatContext = result.data.name + "<br>时间：" + params[0].name
                 + "<br>开盘：" + values[1] + "&nbsp;&nbsp;收盘：" + values[2] 
                 + "<br>最低：" + values[3] + "&nbsp;&nbsp;最高：" + values[4]
                 + "<br>成交量：" + volumn + "万"
                 + "<br>成交额：" + money + "亿" 
-                + "<br>涨跌幅：" + values[7] + "%<br>";
+                + "<br>涨跌幅：<span style='color:" + styleColor + ";'>" + values[7] + "%</span><br>";
                 // + (ma5 !== null ? "MA5：" + ma5 + "&nbsp;&nbsp;" : "")
                 // + (ma10 !== null ? "MA10：" + ma10 + "&nbsp;&nbsp;" : "")
                 // + (ma20 !== null ? "<br>MA20：" + ma20 + "&nbsp;&nbsp;" : "")
