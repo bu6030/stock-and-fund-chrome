@@ -122,7 +122,6 @@ function monitorStockPrice(stockList) {
                 || (typeof stockList[k].monitorUpperPercent != 'undefined' && stockList[k].monitorUpperPercent != '')
                 || (typeof stockList[k].monitorLowerPercent != 'undefined' && stockList[k].monitorLowerPercent != '')
                 || (typeof stockList[k].monitorMA20 != 'undefined' && stockList[k].monitorMA20 != '' && stockList[k].monitorMA20)) {
-                // stocks += stockList[k].code + ",";
                 stocks += getSecidBack(stockList[k].code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
             }
         }
@@ -144,26 +143,18 @@ function monitorStockPrice(stockList) {
                             redColor = '#ee2500';
                         }
                         if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
-                            // blueColor = '#093'; 
-                            // redColor = '#ee2500';
                             blueColor = lightBlue;
                             redColor = lightRed;
                         }
                         // 在这里处理返回的数据
-                        // var stoksArr = data.split("\n");
                         var stoksArr = response.data.diff;
                         for (let k in stoksArr) {
                             var monitorStock;
                             for (let l in stockList) {
-                                // if (stockList[l].code == stoksArr[k].substring(stoksArr[k].indexOf("_") + 1, stoksArr[k].indexOf("="))) {
                                 if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
                                     monitorStock = stockList[l];
                                 }
                             }
-                            // var dataStr = stoksArr[k].substring(stoksArr[k].indexOf("=") + 2, stoksArr[k].length - 2);
-                            // var values = dataStr.split("~");
-                            // var name = monitorStock.name;
-                            // var now = parseFloat(values[3]);
                             var name = stoksArr[k].f14 + "";
                             var now = parseFloat(stoksArr[k].f2 + "");
                             // 9点至9点15分，股票价格如果为0就取昨日收盘价格
@@ -178,7 +169,6 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', redColor, "" + now);
                                     var text = name + "涨破监控价格" + highPrice + "，达到" + now;
                                     saveData('stocks', JSON.stringify(stockList));
-                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================监控价格涨破", highPrice, "============");
                                 }
@@ -191,7 +181,6 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', blueColor, "" + now);
                                     var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
                                     saveData('stocks', JSON.stringify(stockList));
-                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================监控价格跌破", lowPrice, "============");
                                 }
@@ -199,7 +188,6 @@ function monitorStockPrice(stockList) {
                             // 日涨幅提醒
                             if (typeof monitorStock.monitorUpperPercent != 'undefined' && monitorStock.monitorUpperPercent != '') {
                                 var upperPercent = parseFloat(monitorStock.monitorUpperPercent);
-                                // var openPrice = parseFloat(values[4]);
                                 var openPrice = parseFloat(stoksArr[k].f18 + "");
                                 let currentPercent = (now - openPrice) / openPrice * 100;
                                 if (currentPercent >= upperPercent) {
@@ -208,7 +196,6 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', redColor, upperPercent + "%");
                                     var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
                                     saveData('stocks', JSON.stringify(stockList));
-                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================日涨幅提醒", upperPercent, "%============");
                                 }
@@ -216,7 +203,6 @@ function monitorStockPrice(stockList) {
                             // 日跌幅提醒
                             if (typeof monitorStock.monitorLowerPercent != 'undefined' && monitorStock.monitorLowerPercent != '') {
                                 var lowerPercent = parseFloat(monitorStock.monitorLowerPercent);
-                                // var openPrice = parseFloat(values[4]);
                                 var openPrice = parseFloat(stoksArr[k].f18 + "");
                                 let currentPercent = (openPrice - now) / openPrice * 100;
                                 if (currentPercent >= lowerPercent) {
@@ -225,7 +211,6 @@ function monitorStockPrice(stockList) {
                                     sendChromeBadge('#FFFFFF', blueColor, lowerPercent + "%");
                                     var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
                                     saveData('stocks', JSON.stringify(stockList));
-                                    // saveData("MONITOR_STOCK_CODE", '');
                                     showNotification("通知", text);
                                     console.log("================日跌幅提醒", lowerPercent, "%============");
                                 }
@@ -277,7 +262,6 @@ function monitorStockPrice(stockList) {
                                         let ma20 = ma20List[ma20List.length - 1];
                                         const currentPrice = data0.values[data0.values.length - 1][1];
                                         let text = '';
-                                        // console.log(stockName, "20日均线价格：", ma20, "；当前价格：", currentPrice);
                                         let monitorAlert = '';
                                         if (currentPrice > ma20) {
                                             monitorAlert = '5';
@@ -288,7 +272,6 @@ function monitorStockPrice(stockList) {
                                         }
                                         updateStocksMA20(data.data.code, monitorAlert);
                                         console.log(text);
-                                        // showNotification("通知", text);
                                     });
                                 } catch (error) {
                                     console.warn("执行20日均线提醒任务:", error);
@@ -385,21 +368,10 @@ function monitorStock(code) {
                             redColor = '#ee2500';
                         }
                         if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
-                            // blueColor = '#093'; 
-                            // redColor = '#ee2500';
                             blueColor = lightBlue;
                             redColor = lightRed;
                         }
-                        // const decoder = new TextDecoder('GBK');
-                        // data = decoder.decode(data);
-                        // 在这里处理返回的数据
-                        // var stoksArr = data.split("\n");
-                        // var dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
-                        // var values = dataStr.split("~");
                         let stock = response.data.diff[0];
-                        // var name = values[1];
-                        // var now = values[3];
-                        // var openPrice = values[4];
                         var name = stock.f14 + "";
                         var now = stock.f2 + "";
                         // 9点至9点15分，股票价格如果为0就取昨日收盘价格
@@ -408,13 +380,10 @@ function monitorStock(code) {
                         }
                         var openPrice = parseFloat(stock.f18 + "");
                         var badgeBackgroundColor;
-                        // var changePercent = parseFloat(values[32]);
                         var changePercent = parseFloat(stock.f3).toFixed(2);
                         if (parseFloat(now) >= parseFloat(openPrice)) {
-                            // badgeBackgroundColor = '#ee2500';
                             badgeBackgroundColor = redColor
                         } else {
-                            // badgeBackgroundColor = '#093';
                             badgeBackgroundColor = blueColor;
                         }
                         if (now.length >= 5) {
@@ -624,7 +593,6 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                         title += (name + kongge + now + '(' + changePercent + "%)\n");
                     }
                 }
-                // var value30 = getDateStrFromTimestamp(stoksArr[k].f124*1000).replaceAll('/','').replaceAll('-','').replaceAll(' ','').replaceAll(':','');
                 var value30 = getDateStrFromTimestamp(stoksArr[k].f124*1000).replace(/\//g,'').replace(/-/g,'').replace(/\s/g,'').replace(/:/g,'');
                 if (value30.substring(0, 8) > date) {
                     // 如果当前日期大于之前存储的最大日期，则更新最大日期
@@ -657,8 +625,6 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             redColor = '#ee2500';
         }
         if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
-            // blueColor = '#093'; 
-            // redColor = '#ee2500';
             blueColor = lightBlue;
             redColor = lightRed;
         }
@@ -731,7 +697,6 @@ async function getFundIncome(date) {
                 let fundNetDiagramJson = JSON.parse(fundNetDiagramData);
                 let currentDayNetDiagram = null;
                 for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
-                    // if (fundNetDiagramJson.Datas[i].FSRQ.replaceAll('-', '') == date) {
                     if (fundNetDiagramJson.Datas[i].FSRQ.replace(/-/g, '') == date) {
                         currentDayNetDiagram = fundNetDiagramJson.Datas[i];
                         break;
@@ -756,7 +721,6 @@ async function getFundIncome(date) {
                     let data = await response.text();
                     if (data != 'jsonpgz();') {
                         var json = JSON.parse(data.substring(8, data.length - 2));
-                        // let gztime = json.gztime.substring(0, 10).replaceAll('-', '');
                         let gztime = json.gztime.substring(0, 10).replace(/-/g, '');
                         // 如果日期不一致不在计算
                         if (date != gztime) return;
@@ -803,10 +767,8 @@ async function getHuilvDayIncome(dayIncome, type) {
     } else if (huilvConvert && type == 'US') {
         huilv = await getData('USD_huilv_cached');
     }
-    // console.log('huilv',huilv);
     if (huilvConvert) {
         newDayIncome = parseFloat(dayIncome + "") * parseFloat(huilv + "");
-        // console.log('newDayIncome',newDayIncome);
         return newDayIncome;
     } else {
         return dayIncome;
@@ -1003,7 +965,7 @@ async function monitorFundPrice(fundList) {
             let fundNetDiagramJson = JSON.parse(fundNetDiagramData);
             let currentDayNetDiagram = null;
             for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
-                if (fundNetDiagramJson.Datas[i].FSRQ.replace(/-/g, '') == date) {
+                if (fundNetDiagramJson.Datas[i].FSRQ.replace(/-/g, '') == getBeijingDateNoSlash()) {
                     currentDayNetDiagram = fundNetDiagramJson.Datas[i];
                     break;
                 }
@@ -1028,8 +990,8 @@ async function monitorFundPrice(fundList) {
                     funds[k].monitorAlert = '1';
                     funds[k].monitorAlertDate = Date.now();
                     sendChromeBadge('#FFFFFF', redColor, "" + now);
-                    var text = funds[k].name + "涨破监控价格" + highPrice + "，达到" + now;
                     saveData('funds', JSON.stringify(fundList));
+                    var text = funds[k].fundName + "涨破监控价格" + highPrice + "，达到" + now;
                     showNotification("通知", text);
                     console.log("================监控价格涨破", highPrice, "============");
                 }
@@ -1040,8 +1002,8 @@ async function monitorFundPrice(fundList) {
                     funds[k].monitorAlert = '2';
                     funds[k].monitorAlertDate = Date.now();
                     sendChromeBadge('#FFFFFF', blueColor, "" + now);
-                    var text = funds[k].name + "跌破监控价格" + lowPrice + "，达到" + now;
                     saveData('funds', JSON.stringify(fundList));
+                    var text = funds[k].fundName + "跌破监控价格" + lowPrice + "，达到" + now;
                     showNotification("通知", text);
                     console.log("================监控价格跌破", lowPrice, "============");
                 }

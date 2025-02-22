@@ -1003,7 +1003,7 @@ async function monitorFundPrice(fundList) {
             let fundNetDiagramJson = JSON.parse(fundNetDiagramData);
             let currentDayNetDiagram = null;
             for (let i = 0; i < fundNetDiagramJson.Datas.length; i++) {
-                if (fundNetDiagramJson.Datas[i].FSRQ.replace(/-/g, '') == date) {
+                if (fundNetDiagramJson.Datas[i].FSRQ.replace(/-/g, '') == getBeijingDateNoSlash()) {
                     currentDayNetDiagram = fundNetDiagramJson.Datas[i];
                     break;
                 }
@@ -1028,8 +1028,8 @@ async function monitorFundPrice(fundList) {
                     funds[k].monitorAlert = '1';
                     funds[k].monitorAlertDate = Date.now();
                     sendChromeBadge('#FFFFFF', redColor, "" + now);
-                    var text = funds[k].name + "涨破监控价格" + highPrice + "，达到" + now;
                     saveData('funds', JSON.stringify(fundList));
+                    var text = funds[k].fundName + "涨破监控价格" + highPrice + "，达到" + now;
                     showNotification("通知", text);
                     console.log("================监控价格涨破", highPrice, "============");
                 }
@@ -1040,8 +1040,8 @@ async function monitorFundPrice(fundList) {
                     funds[k].monitorAlert = '2';
                     funds[k].monitorAlertDate = Date.now();
                     sendChromeBadge('#FFFFFF', blueColor, "" + now);
-                    var text = funds[k].name + "跌破监控价格" + lowPrice + "，达到" + now;
                     saveData('funds', JSON.stringify(fundList));
+                    var text = funds[k].fundName + "跌破监控价格" + lowPrice + "，达到" + now;
                     showNotification("通知", text);
                     console.log("================监控价格跌破", lowPrice, "============");
                 }
