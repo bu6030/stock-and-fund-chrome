@@ -71,6 +71,20 @@
                                 <input type="text" class="am-input-sm my-text" id="fund-desc" placeholder="基金别名，防止名字过长显示，只显示别名">
                             </div>
                         </div>
+                        <div class="am-form-group am-cf zou-you-parent">
+                            <div class="zuo">监控涨破最高价格：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="fund-monitor-high-price"
+                                    placeholder="请输入监控突破最高价格">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf zou-you-parent">
+                            <div class="zuo">监控跌破最低价格：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="fund-monitor-low-price"
+                                    placeholder="请输入监控跌破最低价格">
+                            </div>
+                        </div>
                         <div id="fund-cycle-invest" style="display: none;">
                             <div class="am-form-group am-cf">
                                 <div class="zuo">定投周期（可选）：</div>
@@ -207,7 +221,6 @@
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-primary" id="set-top-button-2">置顶</button> -->
                         <button type="button" class="btn btn-primary"
                             id="stock-show-time-image-button">走势图</button>
                         <button type="button" class="btn btn-primary" id="stock-monitor-button">监控价格</button>
@@ -989,30 +1002,6 @@
                 </div>
             </div>
         </div>
-        <!-- 每日盈利模态框 -->
-        <!-- <div class="modal fade" id="day-income-history-modal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">每日盈利（点击数据弹出提示：确认是否删除？）</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div> -->
-
-                    <!-- 模态框主体 -->
-                    <!-- <div class="modal-body day-income-history">
-                        <div id="day-income-image" class="my-echart-new"></div>
-                        <table class="table table-hover my-font no-wrap table-striped">
-                            <thead id="day-income-history-head" />
-                            <tbody id="day-income-history-nr" />
-                        </table>
-                    </div> -->
-
-                    <!-- 模态框底部 -->
-                    <!-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
         </div> -->
         <!-- 分时图模态框 -->
         <div class="modal fade" id="time-image-modal">
@@ -1059,9 +1048,6 @@
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-button-3">历史净值</button>
                         <button type="button" class="btn btn-primary" id="update-stock-fund-button">编辑</button>
                         <div class="btn-group">
-                            <!-- <button type="button" id="time-image-button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              走势图
-                            </button> -->
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn btn-primary" id="time-image-minute-button">分时线</button>
                                 <button type="button" class="btn btn-primary" id="time-image-minute-5day-button">五日</button>
@@ -1204,9 +1190,6 @@
         <div class="my-center-child my-main-content" id="my-main-content">
             <div>
                 <div class="my-header no-wrap" id="my-header">
-                    <dl>
-                        <!-- <div id="monitor-text" class="my-monitor-text no-wrap">搜索输入股票基金编码或名称后点击回车即可搜索！！！按钮都放到设置中了！！！</div> -->
-                    </dl>
                     <div class="stock-large-market" id="stock-large-market">上证指数  深证成指  创业版指</div>
                     <div class="input-group my-input-group" id="my-input-group">
                         <div class="input-group-prepend">
