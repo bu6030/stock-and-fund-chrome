@@ -128,6 +128,7 @@ var allTotalIncomePercentStyle = '';
 var syncDataCloudUuid = '';
 var showBatchDeleteButton = true;
 var kLineNumbers = 0;
+var riseFallSort = 0;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -1061,6 +1062,8 @@ document.addEventListener(
         document.getElementById('bankuai-money-10days-button').addEventListener('click', function() {
             showBanKuai(hangYeOrGaiNian, '10');
         });
+        // 数据中心页面，点击涨跌幅榜
+        document.getElementById('show-rise-fall-button').addEventListener('click', showRiseFall);
 
         // 反馈建议页面，点击保存
         document.getElementById('save-advice-button').addEventListener('click', saveAdvice);
@@ -7053,4 +7056,59 @@ function scrollToBottomOrTop() {
             behavior: 'smooth' // 平滑滚动效果
         });
     }
+}
+
+// 展示涨跌幅榜
+async function showRiseFall() {
+    ajaxGetStockListFromEastMoney();
+}
+// 展示涨跌幅榜
+async function showRiseFallCallback(result) {
+    var dayIncomeHistoryHead = " <tr id = 'rise-fall-head'>" +
+        " <th >股票名称</th>" +
+        " <th >最新</th>" +
+        " <th >涨/跌幅（点击切换）</th>" +
+        " <th >板块</th>" +
+        " </tr>";
+    $("#day-income-history-head").html(dayIncomeHistoryHead);
+    let str = "";
+    // 遍历 dayIncomeHistory 数组
+    if (result != null && result != '' && result != undefined) {
+        if (riseFallSort == 0) {
+            for (let index = 0; index < result.length; index++) {
+                // 对于数组中的每个项目，拼接一个表格行
+                let item = result[index];
+                let styleColor = parseFloat(item.f3 + "") >= 0 ? redColor : blueColor; // 根据涨跌幅决定颜色
+                str += "<tr id='day-income-history-tr-" + index + "'>"
+                    + "<td>" + item.f14 + "</td>"
+                    + "<td><span style='color:" + styleColor + ";'>" + parseFloat(item.f2+'').toFixed(2) + "</span></td>"
+                    + "<td><span style='color:" + styleColor + ";'>" + parseFloat(item.f3+'').toFixed(2) + "%</span></td>"
+                    + "<td>" + item.f100 + "</td>"
+                    + "</tr>";
+            }
+        } else {
+            for (let index = result.length -1; index > 0; index--) {
+                // 对于数组中的每个项目，拼接一个表格行
+                let item = result[index];
+                let styleColor = parseFloat(item.f3 + "") >= 0 ? redColor : blueColor; // 根据涨跌幅决定颜色
+                str += "<tr id='day-income-history-tr-" + index + "'>"
+                    + "<td>" + item.f14 + "</td>"
+                    + "<td><span style='color:" + styleColor + ";'>" + parseFloat(item.f2+'').toFixed(2)  + "</span></td>"
+                    + "<td><span style='color:" + styleColor + ";'>" + parseFloat(item.f3+'').toFixed(2) + "%</span></td>"
+                    + "<td>" + item.f100 + "</td>"
+                    + "</tr>";
+            }
+        }
+    }
+    $("#day-income-history-nr").html(str);
+    // rise-fall-head点击事件，点击后倒叙
+    $("#rise-fall-head").click(function () {
+        if (riseFallSort == 0) {
+            riseFallSort = 1;
+            showRiseFallCallback(result);
+        } else {
+            riseFallSort = 0;
+            showRiseFallCallback(result);
+        }
+    });
 }

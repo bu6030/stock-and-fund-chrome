@@ -839,3 +839,23 @@ function ajaxGetStockFromEastMoneyNoAsync(code) {
     });
     return stocksArr;
 }
+
+// 接口调用
+async function ajaxGetStockListFromEastMoney() {
+    $.ajax({
+        url: Env.GET_ALL_STOCK_LIST_FROM_EAST_MONEY_URL,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
+        type: "get",
+        data: {},
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            showRiseFallCallback(data.data.diff);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+}

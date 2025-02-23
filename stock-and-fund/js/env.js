@@ -41,6 +41,7 @@ let Env = {
     TIME_CACHED_ONE_DAY: 24 * 60 * 60 * 1000,
     TIME_CACHED_ONE_HOUR: 1 * 60 * 60 * 1000,
     GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://110.40.187.161:8080/chrome/stockAndFund",
+    GET_ALL_STOCK_LIST_FROM_EAST_MONEY_URL: "https://24.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=6000&po=1&np=3&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23,m:0+t:81+s:2048&fields=f3,f2,f14,f100",
 }
 
 let develop = false;
