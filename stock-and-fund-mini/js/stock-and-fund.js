@@ -3167,7 +3167,7 @@ async function stockMonitor () {
     let code = $("#stock-code").val();
     let monitorStockCode = await readCacheData("MONITOR_STOCK_CODE");
     if (monitorStockCode != null && monitorStockCode != '' 
-    && monitorStockCode != undefined && monitorStockCode != 'undefined' && monitorStockCode == code.replace('SH','').replace('sh','').replace('SZ','').replace('sz','').replace('BJ','').replace('bj').replace('HK','').replace('hk','').replace('US','').replace('us','')) {
+    && monitorStockCode != undefined && monitorStockCode != 'undefined' && monitorStockCode == code) {
         saveCacheData("MONITOR_STOCK_CODE", '');
         sendChromeBadge('#FFFFFF', '#FFFFFF', '');
         return;

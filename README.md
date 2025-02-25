@@ -420,6 +420,7 @@
 393. 拖拽股票基金异常处理 2025/2/21 version 2.2.5.9 --end
 394. 增加监控基金净值突破跌破提醒 2025/2/21 version 2.2.6.0 --end
 395. 大盘数据增加涨跌幅榜 2025/2/23 version 2.2.6.1 --end
+396. 价格监控问题修改 2025/2/25 version 2.2.6.2 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
