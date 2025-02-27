@@ -5055,7 +5055,8 @@ async function syncDataToCloud() {
             "monitorLowPrice" : stockListCache[k].monitorLowPrice,
             "monitorUpperPercent" : stockListCache[k].monitorUpperPercent,
             "monitorLowerPercent" : stockListCache[k].monitorLowerPercent,
-            "desc" : stockListCache[k].desc
+            "desc" : stockListCache[k].desc,
+            "starDesc" : stockListCache[k].starDesc
         }
         syncStocks.push(syncStock);
     }
@@ -5065,7 +5066,8 @@ async function syncDataToCloud() {
             "fundCode" : fundListCache[k].fundCode,
             "costPrise" : fundListCache[k].costPrise,
             "bonds" : fundListCache[k].bonds,
-            "desc" : fundListCache[k].desc
+            "desc" : fundListCache[k].desc,
+            "starDesc" : fundListCache[k].starDesc
         }
         syncFunds.push(syncFund);
     }
