@@ -4073,7 +4073,7 @@ async function stockMonitor () {
         return;
     }
     let secId = getSecid(code);
-    let codeNoPre = code.replace('SH','').replace('sh','').replace('SZ','').replace('sz','').replace('BJ','').replace('bj').replace('HK','').replace('hk','').replace('US','').replace('us','');
+    let codeNoPre = code.replace('SH','').replace('sh','').replace('SZ','').replace('sz','').replace('BJ','').replace('bj','').replace('HK','').replace('hk','').replace('US','').replace('us','');
     if (code == 'USDCNH') {
         codeNoPre = code;
     }
