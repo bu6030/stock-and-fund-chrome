@@ -484,25 +484,7 @@ async function initLoad() {
         }
     }
     columnOrderTemp = columnOrder;
-    var funds = await readCacheData('funds');
-    if (funds == null || funds == 'null') {
-        fundList = [];
-    } else {
-        fundList = jQuery.parseJSON(funds);
-        fundList.forEach(item => {
-            item.belongGroup = currentGroup;
-        })
-    }
-    var stocks = await readCacheData('stocks');
-    if (stocks == null || stocks == 'null') {
-        stockList = [];
-    } else {
-        stockList = jQuery.parseJSON(stocks);
-        stockList.forEach(item => {
-            item.belongGroup = currentGroup;
-        })
-    }
-    
+    await initStockAndFundFromCache();
     kLineNumbers = await readCacheData('k-line-numbers');
     if (kLineNumbers == null || kLineNumbers == '' || kLineNumbers == undefined) {
         kLineNumbers = 0;
@@ -540,6 +522,27 @@ function autoRefresh() {
     if (isTradingTime(date)) {
         initData();
         initLargeMarketData();
+    }
+}
+
+async function initStockAndFundFromCache() {
+    var funds = await readCacheData('funds');
+    if (funds == null || funds == 'null') {
+        fundList = [];
+    } else {
+        fundList = jQuery.parseJSON(funds);
+        fundList.forEach(item => {
+            item.belongGroup = currentGroup;
+        })
+    }
+    var stocks = await readCacheData('stocks');
+    if (stocks == null || stocks == 'null') {
+        stockList = [];
+    } else {
+        stockList = jQuery.parseJSON(stocks);
+        stockList.forEach(item => {
+            item.belongGroup = currentGroup;
+        })
     }
 }
 
@@ -1080,6 +1083,7 @@ function A2U(str) {
 
 // 初始化首页股票列表数据
 async function initData() {
+    await initStockAndFundFromCache();
     initFirstInstall();
     var stocks = "";
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
