@@ -1,6 +1,7 @@
 let Env = {
     GET_STOCK_FROM_GTIMG: "http://qt.gtimg.cn/",
     GET_STOCK_CODE_BY_NAME_FROM_GTIMG: "https://smartbox.gtimg.cn/s3/",
+    GET_STOCK_CODE_BY_NAME_FROM_CFCFW: "https://search-codetable.eastmoney.com/codetable/search/web/",
     GET_STOCK_TIME_IMAGE_MINUTE_FROM_SINA: "http://image.sinajs.cn/newchart/min/n/",
     GET_STOCK_TIME_IMAGE_DAY_FROM_SINA: "http://image.sinajs.cn/newchart/daily/n/",
     GET_STOCK_TIME_IMAGE_FROM_EASTMONEY: "https://push2his.eastmoney.com/api/qt/stock/kline/get",

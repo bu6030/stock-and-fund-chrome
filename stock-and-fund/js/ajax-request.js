@@ -125,6 +125,31 @@ function ajaxGetStockCodeByNameFromGtimg(name) {
 }
 
 // 接口调用
+function ajaxGetStockCodeByNameFromDFCFW(name) {
+    let result;
+    $.ajax({
+        url: Env.GET_STOCK_CODE_BY_NAME_FROM_CFCFW + "?client=web&clientType=webSuggest&clientVersion=lastest&keyword=" + name + "&pageIndex=1&pageSize=5",
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            // data 转成 json
+            var data = JSON.parse(data);
+            result = data.result;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+// 接口调用
 function ajaxGetStockFromGtimg(code) {
     let result;
     $.ajax({

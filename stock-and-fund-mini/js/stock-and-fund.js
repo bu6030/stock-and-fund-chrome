@@ -2325,10 +2325,26 @@ function searchStockByName(name) {
                 $("#stock-name").val("");
                 return;
             }
+        // gtimg 找不到，换一个接着找
         } else {
-            alertMessage("不存在该股票");
-            $("#stock-name").val("");
-            return;
+            let arr = ajaxGetStockCodeByNameFromDFCFW(name);
+            console.log(arr);
+            if (arr == [] || arr.length == 0) {
+                alertMessage("不存在该股票");
+                $("#stock-name").val("");
+                return;
+            } else {
+                result = "";
+                arr.forEach(item => {
+                    if (item.securityTypeName == '京A') {
+                        if (result == "") {
+                            result = result + "bj~" + item.code + "~" +item.shortName;
+                        } else {
+                            result = result  + "^" + "bj~" + item.code + "~" +item.shortName;
+                        }
+                    }
+                });
+            }
         }
     }
     if (result.indexOf("v_cate_hint") != -1) {
