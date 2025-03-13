@@ -1819,8 +1819,9 @@ async function initFund() {
                             fundList[k].gztime = json.gztime + "";
                             var gsz = new BigDecimal(json.gsz + "");
                             var dwjz = new BigDecimal(json.dwjz + "");
-
-                            if (cheatMeFlag && parseFloat(json.gszzl) < 0) {
+                            if (json.gszzl == '--') {
+                                fundList[k].gszzl = "0";
+                            } else if (cheatMeFlag && parseFloat(json.gszzl) < 0) {
                                 var gszzl = 0 - parseFloat(json.gszzl);
                                 fundList[k].gszzl = gszzl + "";
                             } else {
@@ -1847,7 +1848,9 @@ async function initFund() {
                             fundList[k].dwjz = fund.dwjz;
                             fundList[k].gsz = fund.dwjz;
                             fundList[k].gztime = fund.gztime;
-                            if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
+                            if (fund.gszzl == '--') {
+                                fundList[k].gszzl = "0";
+                            } else if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
                                 var gszzl = 0 - parseFloat(fund.gszzl);
                                 fundList[k].gszzl = gszzl + "";
                             } else {
