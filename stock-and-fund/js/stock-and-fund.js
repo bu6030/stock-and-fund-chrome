@@ -938,6 +938,11 @@ document.addEventListener(
                 } else {
                     $("#fund-belong-group-select").val(currentGroup);
                 }
+                if (currentGroup == 'all-group') {
+                    $("#fund-belong-group-select").prop("disabled", true);
+                } else {
+                    $("#fund-belong-group-select").prop("disabled", false);
+                }
                 $("#fund-modal").modal();
             } else {
                 // 初始化页面的belong-group
@@ -958,6 +963,11 @@ document.addEventListener(
                     $("#stock-belong-group-select").val(belongGroup);
                 } else {
                     $("#stock-belong-group-select").val(currentGroup);
+                }
+                if (currentGroup == 'all-group') {
+                    $("#stock-belong-group-select").prop("disabled", true);
+                } else {
+                    $("#stock-belong-group-select").prop("disabled", false);
                 }
                 $("#stock-modal").modal();
             }
@@ -3034,12 +3044,12 @@ async function searchFundByName(name) {
 // 保存股票
 async function saveStock() {
     // 当前是全部分组，需要特殊处理
-    if (currentGroup == 'all-group') {
-        alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
-        $("#stock-modal").modal("hide");
-        $("#search-stock-modal").modal("hide");
-        return;
-    }
+    // if (currentGroup == 'all-group') {
+    //     alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
+    //     $("#stock-modal").modal("hide");
+    //     $("#search-stock-modal").modal("hide");
+    //     return;
+    // }
     var belongGroup = $("#stock-belong-group-select").val();
     var costPrise = $("#stock-costPrise").val();
     var bonds = $("#stock-bonds").val();
@@ -3103,11 +3113,40 @@ async function saveStock() {
                 stockList[k].addTime = getCurrentDate();
             }
             // 当前是全部分组，需要特殊处理
-            if (currentGroup == 'all-group') {
-                alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
-                $("#stock-modal").modal("hide");
-                $("#search-stock-modal").modal("hide");
-                return;
+            if (currentGroup == "all-group") {
+                // alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
+                // $("#stock-modal").modal("hide");
+                // $("#search-stock-modal").modal("hide");
+                // return;
+                // 默认group，更新默认分组
+                if (belongGroup == "default-group") {
+                    var stocks = await readCacheData('stocks');
+                    if (stocks == null) {
+                        stocks = [];
+                    } else {
+                        stocks = jQuery.parseJSON(stocks);
+                    }
+                    for (var l in stocks) {
+                        if (stocks[l].code == stockList[k].code) {
+                            stocks[l] = stockList[k];
+                            saveCacheData('stocks', JSON.stringify(stocks));
+                        }
+                    }
+                // 非默认分组，更新该分组
+                } else {
+                    var stocks = await readCacheData(belongGroup + '_stocks');
+                    if (stocks == null) {
+                        stocks = [];
+                    } else {
+                        stocks = jQuery.parseJSON(stocks);
+                    }
+                    for (var l in stocks) {
+                        if (stocks[l].code == stockList[k].code) {
+                            stocks[l] = stockList[k];
+                            saveCacheData(belongGroup + '_stocks', JSON.stringify(stocks));
+                        }
+                    }
+                }
             // 如果新设置的group是currentGroup则默认保存，实际上就是分组不变
             } else if (belongGroup == currentGroup) {
                 // 同样都是默认group
@@ -3234,12 +3273,12 @@ async function saveStock() {
 // 保存基金
 async function saveFund() {
     // 当前是全部分组，需要特殊处理
-    if (currentGroup == 'all-group') {
-        alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
-        $("#fund-modal").modal("hide");
-        $("#search-fund-modal").modal("hide");
-        return;
-    }
+    // if (currentGroup == 'all-group') {
+    //     alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
+    //     $("#fund-modal").modal("hide");
+    //     $("#search-fund-modal").modal("hide");
+    //     return;
+    // }
     var belongGroup = $("#fund-belong-group-select").val();
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
@@ -3328,10 +3367,39 @@ async function saveFund() {
             }
             // 当前是全部分组，需要特殊处理
             if(currentGroup == 'all-group') {
-                alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
-                $("#fund-modal").modal("hide");
-                $("#search-fund-modal").modal("hide");
-                return;
+                // alertMessage('全部分组时无法编辑，请切换到指定分组后再编辑～');
+                // $("#fund-modal").modal("hide");
+                // $("#search-fund-modal").modal("hide");
+                // return;
+                // 默认group，更新默认分组
+                if (belongGroup == "default-group") {
+                    var funds = await readCacheData('funds');
+                    if (funds == null) {
+                        funds = [];
+                    } else {
+                        funds = jQuery.parseJSON(funds);
+                    }
+                    for (var l in funds) {
+                        if (funds[l].fundCode == fundList[k].fundCode) {
+                            funds[l] = fundList[k];
+                            saveCacheData('funds', JSON.stringify(funds));
+                        }
+                    }
+                // 非默认分组，更新该分组
+                } else {
+                    var funds = await readCacheData(belongGroup + '_funds');
+                    if (funds == null) {
+                        funds = [];
+                    } else {
+                        funds = jQuery.parseJSON(funds);
+                    }
+                    for (var l in funds) {
+                        if (funds[l].fundCode == fundList[k].fundCode) {
+                            funds[l] = fundList[k];
+                            saveCacheData(belongGroup + '_funds', JSON.stringify(funds));
+                        }
+                    }
+                }
             // 如果新设置的group是currentGroup则默认保存，实际上就是分组不变
             } else if (belongGroup == currentGroup) {
                 if (currentGroup == 'default-group') {

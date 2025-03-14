@@ -426,6 +426,7 @@
 399. 全屏模式监控价格页面刷新显示突破 2025/3/3 version 2.2.6.4 --end
 400. 增加北交所股票名称查询 2025/3/6 version 2.2.6.5 --end
 401. 场外债券基金估值问题修改 2025/3/13
+402. 全部分组下，可以编辑股票基金 2025/3/14
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
