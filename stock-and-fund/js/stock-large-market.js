@@ -49,7 +49,7 @@ async function initLargeMarketDataCallBack(bigStocks) {
             '<div class=\"stock-large-market-box\"' + aId + '>' +
                 '<p>' + name +'</p>' +
                 '<p ' + style + '>' + now + '</p>' +
-                '<p ' + style + '>' + change + '(' + changePercent + '%)</p>' +
+                '<p ' + style + '>' + parseFloat(change+'').toFixed(2) + '(' + changePercent + '%)</p>' +
             '</div>';
         } else {
             str = str + 
