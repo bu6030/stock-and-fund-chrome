@@ -858,6 +858,8 @@ document.addEventListener(
         document.getElementById('batch-delete-button').addEventListener('click', batchDelete);
         // 首页，点击滚动到底部
         document.getElementById('scroll-button').addEventListener('click', scrollToBottomOrTop);
+        // 首页，点击快速定位
+        document.getElementById('stock-name-search-position').addEventListener('change', stockNameSearchPosition);
 
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
@@ -8693,4 +8695,26 @@ async function showRiseFallCallback(result) {
             showRiseFallCallback(result);
         }
     });
+}
+
+async function stockNameSearchPosition() {
+    let stockNameSearchText = $("#stock-name-search-position").val();
+    $("#stock-name-search-position").val('');
+    const tableRows = document.querySelectorAll('#sortable-table tbody tr');
+    // 遍历表格行
+    for (let i = 0; i < tableRows.length; i++) {
+        const row = tableRows[i];
+        const fundName = row.querySelector('.stock-fund-name-and-code')?.textContent.trim();
+        // 如果找到匹配的行
+        if (fundName && fundName.includes(stockNameSearchText)) {
+            // 滚动到匹配行
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // 高亮匹配行
+            row.classList.add('highlight');
+            setTimeout(() => {
+                row.classList.remove('highlight');
+            }, 2000); // 2秒后移除高亮
+            return; // 找到后停止搜索
+        }
+    }
 }
