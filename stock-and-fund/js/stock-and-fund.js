@@ -487,7 +487,7 @@ async function initLoad() {
     showHelpButton = await readCacheData('show-help-button');
     if (showHelpButton == null || showHelpButton == "true") {
         showHelpButton = true;
-    } else if(mainDeleteButtonDisplay == "false") {
+    } else if(showHelpButton == "false") {
         showHelpButton = false;
     }
     lastSort = await readCacheData('last-sort');
@@ -1232,9 +1232,11 @@ document.addEventListener(
         document.getElementById("open-addtime-price-newline-button").addEventListener('click', changeAddtimePriceNewlineButton);
         document.getElementById("close-addtime-price-newline-button").addEventListener('click', changeAddtimePriceNewlineButton);
 
-        // 云同步页面，向服务器同步数据/从服务器同步数据
+        // 云同步页面，向服务器同步数据/从服务器同步数据/向服务器同步配置/从云服务器同步配置
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
         document.getElementById('sync-data-from-cloud-button').addEventListener('click', syncDataFromCloud);
+        document.getElementById('sync-config-to-cloud-button').addEventListener('click', syncConfigToCloud);
+        document.getElementById('sync-config-from-cloud-button').addEventListener('click', syncConfigFromCloud);
 
         // 打赏页面，点击微信
         document.getElementById("wechat-pay-button").addEventListener('click',  showQrCodeModal);
@@ -5178,6 +5180,223 @@ async function syncDataToCloud() {
     let result = ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     saveCacheData('sync-data-local-time', data.updateTime);
+    if (result == 'fail') {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("云同步失败，请检查网络是否可以访问云服务器");
+    } else {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("云同步成功");
+    }
+}
+
+// 从云服务器获取数据
+async function syncConfigFromCloud() {
+    let syncDataCloudUuid = $("#sync-data-cloud-uuid").val();
+    if (syncDataCloudUuid == null || syncDataCloudUuid == '') {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("请输入云同步唯一标识");
+        return;
+    }
+    saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    let result = ajaxSyncDataFromCloud(syncDataCloudUuid + '_CONFIG');
+    if (result != null && result != '' && result != undefined) {
+        var checkResult = confirm("这些云同步数据是在" + result.updateTime + "同步的，是否确认是您本人同步的数据？");
+        if (checkResult) {
+            blueColor = result.blueColor;
+            saveCacheData('blueColor', blueColor);
+            redColor = result.redColor;
+            saveCacheData('redColor', redColor);
+            cheatMeFlag = result.cheatMeFlag;
+            saveCacheData('cheatMeFlag', cheatMeFlag);
+            showStockOrFundOrAll = result.showStockOrFundOrAll;
+            saveCacheData('showStockOrFundOrAll', showStockOrFundOrAll);
+            windowSize = result.windowSize;
+            saveCacheData('window-size', windowSize);
+            marketValueDisplay = result.marketValueDisplay;
+            saveCacheData('market-value-display', marketValueDisplay);
+            marketValuePercentDisplay = result.marketValuePercentDisplay;
+            saveCacheData('market-value-percent-display', marketValuePercentDisplay);
+            costPriceValueDisplay = result.costPriceValueDisplay;
+            saveCacheData('cost-price-value-display', costPriceValueDisplay);
+            incomePercentDisplay = result.incomePercentDisplay;
+            saveCacheData('income-percent-display', incomePercentDisplay);
+            addtimePriceDisplay = result.addtimePriceDisplay;
+            saveCacheData('addtime-price-display', addtimePriceDisplay);
+            dayIncomeDisplay = result.dayIncomeDisplay;
+            saveCacheData('day-income-display', dayIncomeDisplay);
+            costPriceDisplay = result.costPriceDisplay;
+            saveCacheData('cost-price-display', costPriceDisplay);
+            bondsDisplay = result.bondsDisplay;
+            saveCacheData('bonds-display', bondsDisplay);
+            incomeDisplay = result.incomeDisplay;
+            saveCacheData('income-display', incomeDisplay);
+            allDisplay = result.allDisplay;
+            saveCacheData('all-display', allDisplay);
+            codeDisplay = result.codeDisplay;
+            saveCacheData('code-display', codeDisplay);
+            changeDisplay = result.changeDisplay;
+            saveCacheData('change-display', changeDisplay);
+            updateTimeDisplay = result.updateTimeDisplay;
+            saveCacheData('update-time-display', updateTimeDisplay);
+            turnOverRateDisplay = result.turnOverRateDisplay;
+            saveCacheData('turn-over-rate-display', turnOverRateDisplay);
+            quantityRelativeRatioDisplay = result.quantityRelativeRatioDisplay;
+            saveCacheData('quantity-relative-ratio-display', quantityRelativeRatioDisplay);
+            priceDisplay = result.priceDisplay;
+            saveCacheData('price-display', priceDisplay);
+            belongGroupDisplay = result.belongGroupDisplay;
+            saveCacheData('belong-group-display', belongGroupDisplay);
+            amplitudeDisplay = result.amplitudeDisplay;
+            saveCacheData('amplitude-display', amplitudeDisplay);
+            upSpeedDisplay = result.upSpeedDisplay;
+            saveCacheData('up-speed-display', upSpeedDisplay);
+            maxDisplay = result.maxDisplay;
+            saveCacheData('max-display', maxDisplay);
+            minDisplay = result.minDisplay;
+            saveCacheData('min-display', minDisplay);
+            starDisplay = result.starDisplay;
+            saveCacheData('star-display', starDisplay);
+            starDescDisplay = result.starDescDisplay;
+            saveCacheData('star-desc-display', starDescDisplay);
+            zjlDisplay = result.zjlDisplay;
+            saveCacheData('zjl-display', zjlDisplay);
+            mainDeleteButtonDisplay = result.mainDeleteButtonDisplay;
+            saveCacheData('main-delete-button-display', mainDeleteButtonDisplay);
+            largetMarketTotalDisplay = result.largetMarketTotalDisplay;
+            saveCacheData('larget-market-total-display', largetMarketTotalDisplay);
+            largetMarketCountDisplay = result.largetMarketCountDisplay;
+            saveCacheData('larget-market-count-display', largetMarketCountDisplay);
+            klineMA5Display = result.klineMA5Display;
+            saveCacheData('kline-ma5-display', klineMA5Display);
+            klineMA10Display = result.klineMA10Display;
+            saveCacheData('kline-ma10-display', klineMA10Display);
+            klineMA20Display = result.klineMA20Display;
+            saveCacheData('kline-ma20-display', klineMA20Display);
+            klineMA30Display = result.klineMA30Display;
+            saveCacheData('kline-ma30-display', klineMA30Display);
+            klineMA50Display = result.klineMA50Display;
+            saveCacheData('kline-ma50-display', klineMA50Display);
+            klineMA250Display = result.klineMA250Display;
+            saveCacheData('kline-ma250-display', klineMA250Display);
+            // klineMAList = result.klineMAList;
+            // klineMAListDisplay = result.klineMAListDisplay;
+            monitorPriceOrPercent = result.monitorPriceOrPercent;
+            saveCacheData('monitor-price-or-percent', monitorPriceOrPercent);
+            monitorTop20Stock = result.monitorTop20Stock;
+            saveCacheData('monitor-top-20-stock', monitorTop20Stock);
+            monitorShowMore = result.monitorShowMore;
+            saveCacheData('monitor-show-more', monitorShowMore);
+            huilvConvert = result.huilvConvert;
+            saveCacheData('huilvConvert', huilvConvert);
+            defaultIcon = result.defaultIcon;
+            saveCacheData('default-icon', defaultIcon);
+            stockApi = result.stockApi;
+            saveCacheData('stock-api', stockApi);
+            hangYeOrGaiNian = result.hangYeOrGaiNian;
+            showHelpButton = result.showHelpButton;
+            saveCacheData('show-help-button', showHelpButton);
+            showBatchDeleteButton = result.showBatchDeleteButton;
+            saveCacheData('show-batch-delete-button', showBatchDeleteButton);
+            kLineNumbers = result.kLineNumbers;
+            saveCacheData('k-line-numbers', kLineNumbers);
+            addtimePriceNewline = result.addtimePriceNewline;
+            saveCacheData('addtime-price-newline', addtimePriceNewline);
+            riseFallSort = result.riseFallSort;
+            opacityPercent = result.opacityPercent;
+            saveCacheData('opacity-percent', opacityPercent);
+            largeMarketCode = result.largeMarketCode;
+            saveCacheData('large-market-code', JSON.stringify(largeMarketCode));
+            initHtml();
+            initLargeMarketData();
+            reloadDataAndHtml();
+            $("#sync-data-cloud-modal").modal('hide');
+        } else {
+            $("#sync-data-cloud-modal").modal('hide');
+            alertMessage("您取消了云同步");
+        }
+    } else {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("云同步数据不存在!");
+    }
+}
+
+// 向云服务器存储配置
+async function syncConfigToCloud() {
+    var checkResult = false;
+    if (autoSync) {
+        checkResult = true;
+    } else {
+        checkResult = confirm("您是否要同步配置到云服务器？");
+    }
+    if (!checkResult) {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("您取消了云同步");
+        return;
+    }
+    let syncDataCloudUuid = $("#sync-data-cloud-uuid").val();
+    if (syncDataCloudUuid == null || syncDataCloudUuid == '') {
+        $("#sync-data-cloud-modal").modal('hide');
+        alertMessage("请输入云同步唯一标识");
+        return;
+    }
+    saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
+    var data = {};
+    data.blueColor = blueColor;
+    data.redColor = redColor;
+    data.cheatMeFlag = cheatMeFlag;
+    data.showStockOrFundOrAll = showStockOrFundOrAll;
+    data.windowSize = windowSize;
+    data.marketValueDisplay = marketValueDisplay;
+    data.marketValuePercentDisplay = marketValuePercentDisplay;
+    data.costPriceValueDisplay = costPriceValueDisplay;
+    data.incomePercentDisplay = incomePercentDisplay;
+    data.addtimePriceDisplay = addtimePriceDisplay;
+    data.dayIncomeDisplay = dayIncomeDisplay;
+    data.costPriceDisplay = costPriceDisplay;
+    data.bondsDisplay = bondsDisplay;
+    data.incomeDisplay = incomeDisplay;
+    data.allDisplay = allDisplay;
+    data.codeDisplay = codeDisplay;
+    data.changeDisplay = changeDisplay;
+    data.updateTimeDisplay = updateTimeDisplay;
+    data.turnOverRateDisplay = turnOverRateDisplay;
+    data.quantityRelativeRatioDisplay = quantityRelativeRatioDisplay;
+    data.priceDisplay = priceDisplay;
+    data.belongGroupDisplay = belongGroupDisplay;
+    data.amplitudeDisplay = amplitudeDisplay;
+    data.upSpeedDisplay = upSpeedDisplay;
+    data.maxDisplay = maxDisplay;
+    data.minDisplay = minDisplay;
+    data.starDisplay = starDisplay;
+    data.starDescDisplay = starDescDisplay;
+    data.zjlDisplay = zjlDisplay;
+    data.mainDeleteButtonDisplay = mainDeleteButtonDisplay;
+    data.largetMarketTotalDisplay = largetMarketTotalDisplay;
+    data.largetMarketCountDisplay = largetMarketCountDisplay;
+    data.klineMA5Display = klineMA5Display;
+    data.klineMA10Display = klineMA10Display;
+    data.klineMA20Display = klineMA20Display;
+    data.klineMA30Display = klineMA30Display;
+    data.klineMA50Display = klineMA50Display;
+    data.klineMA250Display = klineMA250Display;
+    data.klineMAList = klineMAList;
+    data.klineMAListDisplay = klineMAListDisplay;
+    data.monitorPriceOrPercent = monitorPriceOrPercent;
+    data.monitorTop20Stock = monitorTop20Stock;
+    data.monitorShowMore = monitorShowMore;
+    data.huilvConvert = huilvConvert;
+    data.defaultIcon = defaultIcon;
+    data.stockApi = stockApi;
+    data.hangYeOrGaiNian = hangYeOrGaiNian;
+    data.showHelpButton = showHelpButton;
+    data.showBatchDeleteButton = showBatchDeleteButton;
+    data.kLineNumbers = kLineNumbers;
+    data.addtimePriceNewline = addtimePriceNewline;
+    data.riseFallSort = riseFallSort;
+    data.opacityPercent = opacityPercent;
+    data.largeMarketCode = largeMarketCode;
+    data.updateTime = getBeijingTime();
+    let result = ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid + '_CONFIG');
     if (result == 'fail') {
         $("#sync-data-cloud-modal").modal('hide');
         alertMessage("云同步失败，请检查网络是否可以访问云服务器");

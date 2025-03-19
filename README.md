@@ -429,6 +429,7 @@
 402. 全部分组下，可以编辑股票基金 2025/3/14 version 2.2.6.6 --end
 403. 大盘指数涨跌值格式化两位小数 2025/3/18
 404. 增加快速定位搜索 2025/3/18 version 2.2.6.7 --end
+405. 增加云同步本地配置 2025/3/19 version 2.2.6.8 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
