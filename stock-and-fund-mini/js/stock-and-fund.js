@@ -1277,13 +1277,19 @@ async function ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last) {
             
             fundList[k].name = fund.name + "";
             fundList[k].dwjz = fund.dwjz + "";
+            if (fund.dwjz == '--') {
+                fundList[k].dwjz = '0';
+            }
             fundList[k].jzrq = fund.jzrq + "";
             fundList[k].gsz = fund.gsz + "";
+            if (fund.gsz == '--') {
+                fundList[k].gsz = '0';
+            }
             fundList[k].gztime = fund.gztime + "";
-            var gsz = new BigDecimal(fund.gsz + "");
-            var dwjz = new BigDecimal(fund.dwjz + "");
+            var gsz = new BigDecimal(fundList[k].gsz + "");
+            var dwjz = new BigDecimal(fundList[k].dwjz + "");
             fundList[k].gszzl = fund.gszzl + "";
-            var now = new BigDecimal(fund.gsz + "");
+            var now = new BigDecimal(fundList[k].gsz + "");
             if (fund.gszzl == "--" || fund.gszzl == '' || fund.gszzl == undefined || fund.gszzl == null) {
                 fundList[k].gszzl = "0";
             } else {
@@ -1293,7 +1299,7 @@ async function ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last) {
             fundList[k].incomePercent = "0";
             fundList[k].name = fund.name;
             var costPrice = new BigDecimal(fundList[k].costPrise + "");
-            var now = new BigDecimal(fund.dwjz + "");
+            var now = new BigDecimal(fundList[k].dwjz + "");
             var incomeDiff = now.add(costPrice.negate());
             if (costPrice <= 0) {
                 fundList[k].incomePercent = "0";

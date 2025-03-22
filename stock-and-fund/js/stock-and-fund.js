@@ -1860,7 +1860,13 @@ async function initFund() {
                         } else {
                             let fund = checkFundExsitFromEastMoney(fundCode);
                             fundList[k].dwjz = fund.dwjz;
+                            if (fund.dwjz == '--') {
+                                fundList[k].dwjz = "0";
+                            }
                             fundList[k].gsz = fund.dwjz;
+                            if (fund.dwjz == '--') {
+                                fundList[k].gsz = "0";
+                            }
                             fundList[k].gztime = fund.gztime;
                             if (fund.gszzl == '--') {
                                 fundList[k].gszzl = "0";
@@ -1874,7 +1880,7 @@ async function initFund() {
                             fundList[k].incomePercent = "0";
                             fundList[k].name = fund.name;
                             var costPrice = new BigDecimal(fundList[k].costPrise + "");
-                            var now = new BigDecimal(fund.dwjz + "");
+                            var now = new BigDecimal(fundList[k].dwjz + "");
                             var incomeDiff = now.add(costPrice.negate());
                             if (costPrice <= 0) {
                                 fundList[k].incomePercent = "0";
