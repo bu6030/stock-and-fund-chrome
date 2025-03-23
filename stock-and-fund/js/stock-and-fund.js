@@ -3565,7 +3565,7 @@ async function readCacheData(key) {
     if (result == null || result == undefined || result == 'undefined' || result == '[]') {
         result = localStorage.getItem(key);
     }
-    console.log("读取缓存 key = " + key + ", value = " + result);
+    // console.log("读取缓存 key = " + key + ", value = " + result);
     return result;
 }
 
