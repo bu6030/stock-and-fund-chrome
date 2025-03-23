@@ -431,6 +431,7 @@
 404. 增加快速定位搜索 2025/3/18 version 2.2.6.7 --end
 405. 增加云同步本地配置 2025/3/19 version 2.2.6.8 --end
 406. 股票增加显示沪京深 2024/3/23 version 2.2.6.9 --end
+407. 分时图显示成本价格 2024/3/23
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

@@ -250,40 +250,58 @@ function setStockMinitesImageCallBack(result, ndays, code) {
             }
         }
     }
-    let markLineData = [];
-    if (ndays == 5) {
-        for (var k = 0; k < ndaysMarkLineSet.length; k++) {
-            markLineData.push({
-                 xAxis: ndaysMarkLineSet[k],
-                 lineStyle: {
-                    color: 'gray',
-                    width: 1,
-                    type: 'dashed'
-                },
-                label: { show: false },
-            })
+    let costPrice = 0;
+    if (timeImageType == "FUND") {
+        for (var k in fundList) {
+            if (fundList[k].fundCode == timeImageCode) {
+                costPrice = parseFloat(fundList[k].costPrise);
+                break;
+            }
         }
     } else {
-        markLineData = [
-            {
-                yAxis: parseFloat(preClose).toFixed(toFixedVolume),  // 在 y 轴上的 150 处添加一条横线
-                label: {
-                    show: true,  // 设置为 true，使标签一开始就可见
-                    position: 'middle',  // 调整标签位置，可以根据需要调整
-                    color: 'gray',  // 标签文本颜色
-                    fontWeight: 'bold',  // 标签文本粗细
-                    formatter : function() {
-                        return "昨日收盘：" + parseFloat(preClose).toFixed(toFixedVolume);
-                    },
-                },
-                lineStyle: {
-                    color: 'gray',
-                    width: 1,
-                    type: 'dashed'
-                },
+        for (var k in stockList) {
+            if (stockList[k].code == timeImageCode) {
+                costPrice = parseFloat(stockList[k].costPrise);
+                break;
             }
-        ]
+        }
     }
+    let markLineData = [
+        {
+            yAxis: parseFloat(preClose).toFixed(toFixedVolume),  // 在 y 轴上的 150 处添加一条横线
+            label: {
+                show: true,  // 设置为 true，使标签一开始就可见
+                position: 'middle',  // 调整标签位置，可以根据需要调整
+                color: 'gray',  // 标签文本颜色
+                fontWeight: 'bold',  // 标签文本粗细
+                formatter : function() {
+                    return "昨日收盘：" + parseFloat(preClose).toFixed(toFixedVolume);
+                },
+            },
+            lineStyle: {
+                color: 'gray',
+                width: 1,
+                type: 'dashed'
+            },
+        },
+        {
+            yAxis: parseFloat(costPrice).toFixed(toFixedVolume),  // 在 y 轴上的 150 处添加一条横线
+            label: {
+                show: true,  // 设置为 true，使标签一开始就可见
+                position: 'insideEndTop',  // 调整标签位置，可以根据需要调整
+                color: 'blue',  // 标签文本颜色
+                fontWeight: 'bold',  // 标签文本粗细
+                formatter : function() {
+                    return "成本价格：" + parseFloat(costPrice).toFixed(toFixedVolume);
+                },
+            },
+            lineStyle: {
+                color: 'blue',
+                width: 1,
+                type: 'dashed'
+            },
+        }
+    ];
     if(dataStr.length == 0) {
         return;
     }
