@@ -7904,7 +7904,7 @@ async function changeLargeMarketCountDisplay(event) {
     settingButtonInit();
 }
 
-// 切换/隐藏大盘涨跌值
+// 切换/隐藏名字后显示沪/京/深/科创板/创业板
 async function changeBanKuaiDisplay(event) {
     let targetId = event.target.id;
     if (targetId == 'bankuai-display-change-button') {

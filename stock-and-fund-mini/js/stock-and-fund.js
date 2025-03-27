@@ -38,6 +38,7 @@ var zjlDisplay = 'HIDDEN';
 var mainDeleteButtonDisplay;
 var largetMarketTotalDisplay;
 var largetMarketCountDisplay;
+var banKuaiDisplay;
 var klineMA5Display;
 var klineMA10Display;
 var klineMA20Display;
@@ -346,6 +347,12 @@ async function initLoad() {
         largetMarketTotalDisplay = false;
     } else if(largetMarketTotalDisplay == "true") {
         largetMarketTotalDisplay = true;
+    }
+    banKuaiDisplay = await readCacheData('bankuai-display');
+    if (banKuaiDisplay == null || banKuaiDisplay == "false") {
+        banKuaiDisplay = false;
+    } else if(banKuaiDisplay == "true") {
+        banKuaiDisplay = true;
     }
     largetMarketCountDisplay = await readCacheData('larget-market-count-display');
     if (largetMarketCountDisplay == null || largetMarketCountDisplay == "true") {
@@ -1027,6 +1034,9 @@ document.addEventListener(
         document.getElementById('batch-delete-button-display-change-button').addEventListener('click', changeBatchDeleteButton);
         // 设置页面，点击保存K线图显示日期个数按钮
         document.getElementById('k-line-numbers-save-button').addEventListener('click', saveKLineNumbers);
+        // 设置页面，点击在首页股票名字后展示/不展示沪/京/深/科创板/创业板
+        document.getElementById('bankuai-display-change-button').addEventListener('click', changeBanKuaiDisplay);
+        document.getElementById('bankuai-dont-display-change-button').addEventListener('click', changeBanKuaiDisplay);
 
         // 云同步页面，向服务器同步数据/从服务器同步数据
         document.getElementById('sync-data-to-cloud-button').addEventListener('click', syncDataToCloud);
@@ -1888,12 +1898,20 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 var nameOrDesc = result[k].desc ? result[k].desc : stockName;
-                if (result[k].code.startsWith('sh') || result[k].code.startsWith('SH')) {
-                    nameOrDesc =  nameOrDesc + "(沪)";
-                } else if (result[k].code.startsWith('sz') || result[k].code.startsWith('SZ')) {
-                    nameOrDesc =  nameOrDesc + "(深)";
-                } else if (result[k].code.startsWith('bj') || result[k].code.startsWith('BJ')) {
-                    nameOrDesc = nameOrDesc + "(京)";
+                if (banKuaiDisplay) {
+                    if (nameOrDesc.indexOf('ETF') >= 0 || nameOrDesc.indexOf('LOF') >= 0) {
+                        nameOrDesc =  nameOrDesc;
+                    } else if (result[k].code.startsWith('sh688') || result[k].code.startsWith('SH688')) {
+                        nameOrDesc =  nameOrDesc + "(科创板)";
+                    } else if (result[k].code.startsWith('sz300') || result[k].code.startsWith('SZ300')) {
+                        nameOrDesc = nameOrDesc + "(创业板)";
+                    } else if (result[k].code.startsWith('sh') || result[k].code.startsWith('SH')) {
+                        nameOrDesc =  nameOrDesc + "(沪)";
+                    } else if (result[k].code.startsWith('sz') || result[k].code.startsWith('SZ')) {
+                        nameOrDesc =  nameOrDesc + "(深)";
+                    } else if (result[k].code.startsWith('bj') || result[k].code.startsWith('BJ')) {
+                        nameOrDesc = nameOrDesc + "(京)";
+                    }
                 }
                 let zjl = result[k].zjl + "%";
                 if ((nameOrDesc.indexOf('ETF') < 0 && nameOrDesc.indexOf('LOF') < 0)) {
@@ -6618,6 +6636,13 @@ async function settingButtonInit(){
         document.getElementById('font-change-button').classList.remove('active');
         document.getElementById('bolder-font-change-button').classList.add('active');
     }
+    if (banKuaiDisplay) {
+        document.getElementById('bankuai-dont-display-change-button').classList.remove('active');
+        document.getElementById('bankuai-display-change-button').classList.add('active');
+    } else {
+        document.getElementById('bankuai-dont-display-change-button').classList.add('active');
+        document.getElementById('bankuai-display-change-button').classList.remove('active');
+    }
     if (mainDeleteButtonDisplay) {
         document.getElementById('main-delete-button-display-change-button').classList.add('active');
         document.getElementById('main-delete-button-dont-display-change-button').classList.remove('active');
@@ -7144,4 +7169,18 @@ async function showRiseFallCallback(result) {
             showRiseFallCallback(result);
         }
     });
+}
+
+// 切换/隐藏名字后显示沪/京/深/科创板/创业板
+async function changeBanKuaiDisplay(event) {
+    let targetId = event.target.id;
+    if (targetId == 'bankuai-display-change-button') {
+        banKuaiDisplay = true;
+    } else {
+        banKuaiDisplay = false;
+    }
+    saveCacheData('bankuai-display', banKuaiDisplay);
+    $("#setting-modal").modal('hide');
+    reloadDataAndHtml();
+    settingButtonInit();
 }
