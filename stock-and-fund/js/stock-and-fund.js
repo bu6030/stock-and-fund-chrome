@@ -2486,13 +2486,13 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 var nameOrDesc = result[k].desc ? result[k].desc : stockName;
-                if (result[k].code.startsWith('sh') || result[k].code.startsWith('SH')) {
-                    nameOrDesc =  nameOrDesc + "(沪)";
-                } else if (result[k].code.startsWith('sz') || result[k].code.startsWith('SZ')) {
-                    nameOrDesc =  nameOrDesc + "(深)";
-                } else if (result[k].code.startsWith('bj') || result[k].code.startsWith('BJ')) {
-                    nameOrDesc = nameOrDesc + "(京)";
-                }
+                // if (result[k].code.startsWith('sh') || result[k].code.startsWith('SH')) {
+                //     nameOrDesc =  nameOrDesc + "(沪)";
+                // } else if (result[k].code.startsWith('sz') || result[k].code.startsWith('SZ')) {
+                //     nameOrDesc =  nameOrDesc + "(深)";
+                // } else if (result[k].code.startsWith('bj') || result[k].code.startsWith('BJ')) {
+                //     nameOrDesc = nameOrDesc + "(京)";
+                // }
                 let zjl = result[k].zjl + "%";
                 if ((nameOrDesc.indexOf('ETF') < 0 && nameOrDesc.indexOf('LOF') < 0)) {
                     zjl = '--';
