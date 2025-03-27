@@ -41,6 +41,7 @@ var zjlDisplay = 'HIDDEN';
 var mainDeleteButtonDisplay;
 var largetMarketTotalDisplay;
 var largetMarketCountDisplay;
+var banKuaiDisplay;
 var klineMA5Display;
 var klineMA10Display;
 var klineMA20Display;
@@ -407,6 +408,12 @@ async function initLoad() {
         largetMarketTotalDisplay = false;
     } else if(largetMarketTotalDisplay == "true") {
         largetMarketTotalDisplay = true;
+    }
+    banKuaiDisplay = await readCacheData('bankuai-display');
+    if (banKuaiDisplay == null || banKuaiDisplay == "false") {
+        banKuaiDisplay = false;
+    } else if(banKuaiDisplay == "true") {
+        banKuaiDisplay = true;
     }
     largetMarketCountDisplay = await readCacheData('larget-market-count-display');
     if (largetMarketCountDisplay == null || largetMarketCountDisplay == "true") {
@@ -1183,6 +1190,9 @@ document.addEventListener(
         // 设置页面，点击在大盘指数位置展示/不展示涨跌值
         document.getElementById('larget-market-count-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
         document.getElementById('larget-market-count-dont-display-change-button').addEventListener('click', changeLargeMarketCountDisplay);
+        // 设置页面，点击在首页股票名字后展示/不展示沪/京/深/科创板/创业板
+        document.getElementById('bankuai-display-change-button').addEventListener('click', changeBanKuaiDisplay);
+        document.getElementById('bankuai-dont-display-change-button').addEventListener('click', changeBanKuaiDisplay);
         // 设置页面，点击在K线图展示/不展示MA5/MA250
         document.getElementById("kline-ma5-display-checkbox").addEventListener('change', changeKlineDisplay);
         document.getElementById("kline-ma10-display-checkbox").addEventListener('change', changeKlineDisplay);
@@ -2486,13 +2496,21 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 var columnName = Object.keys(column)[0];
                 var html;
                 var nameOrDesc = result[k].desc ? result[k].desc : stockName;
-                // if (result[k].code.startsWith('sh') || result[k].code.startsWith('SH')) {
-                //     nameOrDesc =  nameOrDesc + "(沪)";
-                // } else if (result[k].code.startsWith('sz') || result[k].code.startsWith('SZ')) {
-                //     nameOrDesc =  nameOrDesc + "(深)";
-                // } else if (result[k].code.startsWith('bj') || result[k].code.startsWith('BJ')) {
-                //     nameOrDesc = nameOrDesc + "(京)";
-                // }
+                if (banKuaiDisplay) {
+                    if (nameOrDesc.indexOf('ETF') >= 0 || nameOrDesc.indexOf('LOF') >= 0) {
+                        nameOrDesc =  nameOrDesc;
+                    } else if (result[k].code.startsWith('sh688') || result[k].code.startsWith('SH688')) {
+                        nameOrDesc =  nameOrDesc + "(科创板)";
+                    } else if (result[k].code.startsWith('sz300') || result[k].code.startsWith('SZ300')) {
+                        nameOrDesc = nameOrDesc + "(创业板)";
+                    } else if (result[k].code.startsWith('sh') || result[k].code.startsWith('SH')) {
+                        nameOrDesc =  nameOrDesc + "(沪)";
+                    } else if (result[k].code.startsWith('sz') || result[k].code.startsWith('SZ')) {
+                        nameOrDesc =  nameOrDesc + "(深)";
+                    } else if (result[k].code.startsWith('bj') || result[k].code.startsWith('BJ')) {
+                        nameOrDesc = nameOrDesc + "(京)";
+                    }
+                }
                 let zjl = result[k].zjl + "%";
                 if ((nameOrDesc.indexOf('ETF') < 0 && nameOrDesc.indexOf('LOF') < 0)) {
                     zjl = '--';
@@ -5279,6 +5297,8 @@ async function syncConfigFromCloud() {
             saveCacheData('larget-market-total-display', largetMarketTotalDisplay);
             largetMarketCountDisplay = result.largetMarketCountDisplay;
             saveCacheData('larget-market-count-display', largetMarketCountDisplay);
+            banKuaiDisplay = result.banKuaiDisplay;
+            saveCacheData('bankuai-display', banKuaiDisplay);
             klineMA5Display = result.klineMA5Display;
             saveCacheData('kline-ma5-display', klineMA5Display);
             klineMA10Display = result.klineMA10Display;
@@ -5386,6 +5406,7 @@ async function syncConfigToCloud() {
     data.mainDeleteButtonDisplay = mainDeleteButtonDisplay;
     data.largetMarketTotalDisplay = largetMarketTotalDisplay;
     data.largetMarketCountDisplay = largetMarketCountDisplay;
+    data.banKuaiDisplay = banKuaiDisplay;
     data.klineMA5Display = klineMA5Display;
     data.klineMA10Display = klineMA10Display;
     data.klineMA20Display = klineMA20Display;
@@ -7883,6 +7904,20 @@ async function changeLargeMarketCountDisplay(event) {
     settingButtonInit();
 }
 
+// 切换/隐藏大盘涨跌值
+async function changeBanKuaiDisplay(event) {
+    let targetId = event.target.id;
+    if (targetId == 'bankuai-display-change-button') {
+        banKuaiDisplay = true;
+    } else {
+        banKuaiDisplay = false;
+    }
+    saveCacheData('bankuai-display', banKuaiDisplay);
+    $("#setting-modal").modal('hide');
+    reloadDataAndHtml();
+    settingButtonInit();
+}
+
 // 滚动到指定行
 function scrollToTableRow(rowIndex, type) {
     // 获取表格元素
@@ -8276,6 +8311,13 @@ async function settingButtonInit(){
     } else {
         document.getElementById('larget-market-count-dont-display-change-button').classList.add('active');
         document.getElementById('larget-market-count-display-change-button').classList.remove('active');
+    }
+    if (banKuaiDisplay) {
+        document.getElementById('bankuai-dont-display-change-button').classList.remove('active');
+        document.getElementById('bankuai-display-change-button').classList.add('active');
+    } else {
+        document.getElementById('bankuai-dont-display-change-button').classList.add('active');
+        document.getElementById('bankuai-display-change-button').classList.remove('active');
     }
     if (defaultIcon) {
         document.getElementById('change-icon-default-button').classList.add('active');
