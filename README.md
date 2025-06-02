@@ -433,6 +433,7 @@
 406. 股票增加显示沪京深 2024/3/23 version 2.2.6.9 --end
 407. 分时图显示成本价格 2024/3/23 version 2.2.7.0 --end
 408. 优化股票增加显示沪京深 2024/3/27 version 2.2.7.1 --end
+409. 针对无法分辨红绿色，增加黄蓝模式 2024/6/2 version 2.2.7.2 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

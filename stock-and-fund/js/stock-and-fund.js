@@ -1128,9 +1128,11 @@ document.addEventListener(
         // 设置页面，点击颜色切换按钮
         document.getElementById('change-blue-red-button').addEventListener('click', changeBlueRed);
         // document.getElementById('change-red-blue-button').addEventListener('click', changeBlueRed);
-        // 设置黑暗，点击隐身模式
+        // 设置页面，点击隐身模式
         document.getElementById('change-black-button').addEventListener('click', changeBlueRed);
         // document.getElementById('disable-change-black-button').addEventListener('click', changeBlueRed);
+        // 设置页面，点击黄蓝模式
+        document.getElementById('change-yellow-button').addEventListener('click', changeBlueRed);
         // 设置页面，点击忽悠自己按钮
         document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
         document.getElementById('disable-cheat-me-button').addEventListener('click', cheatMe);
@@ -4074,6 +4076,15 @@ async function changeBlueRed(event) {
         } else { // 红绿模式下点击变更为隐身模式
             blueColor = '#545454'; 
             redColor = '#545454';
+        }
+        changeBlackButton();
+    } else if (targetId == 'change-yellow-button'){
+        if (blueColor == '#0000FF') {// 已经是隐身模式了点击变更为红绿模式
+            blueColor = '#093'; 
+            redColor = '#ee2500';
+        } else { // 红绿模式下点击变更为隐身模式
+            blueColor = '#0000FF'; 
+            redColor = '#FFD700';
         }
         changeBlackButton();
     }
