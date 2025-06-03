@@ -67,7 +67,7 @@ var currentGroup;
 var mainPageRefreshTime;
 var trendImageType;
 var stockColumnNames = {
-    "name-th": "股票名称",
+    "name-th": "股票(含ETF)名称",
     "mini-image-th": "迷你分时图",
     "belong-group-th": "所属分组",
     "day-income-th": "当日盈利",
@@ -94,7 +94,7 @@ var stockColumnNames = {
     "star-desc-th": "备注"
 };
 var fundColumnNames = {
-    "name-th": "基金名称",
+    "name-th": "场外基金名称",
     "mini-image-th": "迷你分时图",
     "belong-group-th": "所属分组",
     "day-income-th": "当日盈利",
