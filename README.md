@@ -436,6 +436,7 @@
 409. 针对无法分辨红绿色，增加黄蓝模式 2024/6/2 version 2.2.7.2 --end
 410. 修改首页股票/基金页面提示，防止歧义 2024/6/3
 411. 去掉3s自动刷新时间 2024/6/5
+412. 拼音sshn深水海纳搜不到 2024/6/5
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
