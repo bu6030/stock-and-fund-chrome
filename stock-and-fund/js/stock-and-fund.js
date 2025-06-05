@@ -2963,8 +2963,8 @@ function isNumeric(str) {
 
 // 通过股票名称搜索股票列表
 function searchStockByName(name) {
-    if (name.indexOf("sh") != -1 || name.indexOf("sz") != -1 || name.indexOf("us") != -1 || name.indexOf("bj") != -1 
-        || name.indexOf("SH") != -1 || name.indexOf("SZ") != -1 || name.indexOf("US") != -1 || name.indexOf("BJ") != -1) {
+    if (name.indexOf("sh") == 0 || name.indexOf("sz") == 0 || name.indexOf("us") == 0 || name.indexOf("bj") == 0 
+        || name.indexOf("SH") == 0 || name.indexOf("SZ") == 0 || name.indexOf("US") == 0 || name.indexOf("BJ") == 0) {
         name = name.substring(2, name.length);
     }
     var stocksArr;
