@@ -1206,7 +1206,7 @@ document.addEventListener(
         document.getElementById('main-page-refresh-time-20s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-10s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-5s-button').addEventListener('click', changeMainPageRefreshTime);
-        document.getElementById('main-page-refresh-time-3s-button').addEventListener('click', changeMainPageRefreshTime);
+        // document.getElementById('main-page-refresh-time-3s-button').addEventListener('click', changeMainPageRefreshTime);
         document.getElementById('main-page-refresh-time-dont-button').addEventListener('click', changeMainPageRefreshTime);
         // 设置页面，点击切换新旧获取股票信息接口
         document.getElementById('stock-api-gtimg-button').addEventListener('click', changeStockApi);
