@@ -689,7 +689,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
         tooltip: {
             trigger: 'axis',
             axisPointer: {
-                type: 'line',
+                type: 'cross', // 十字准星样式
                 lineStyle: {
                     color: '#999999',
                     width: 1,

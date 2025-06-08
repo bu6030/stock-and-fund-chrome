@@ -8221,8 +8221,8 @@ async function changeMainPageRefreshTime(event) {
         mainPageRefreshTime = 10000;
     } else if (targetId == 'main-page-refresh-time-5s-button') {
         mainPageRefreshTime = 5000;
-    } else if (targetId == 'main-page-refresh-time-3s-button') {
-        mainPageRefreshTime = 3000;
+    // } else if (targetId == 'main-page-refresh-time-3s-button') {
+    //     mainPageRefreshTime = 3000;
     } else if (targetId == 'main-page-refresh-time-dont-button') {
         mainPageRefreshTime = 1000000000;
     }
@@ -8341,31 +8341,31 @@ async function settingButtonInit(){
         document.getElementById('main-page-refresh-time-20s-button').classList.add('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
-        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+        // document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
     } else if(mainPageRefreshTime == 10000) {
         document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.add('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
-        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+        // document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
     }  else if(mainPageRefreshTime == 5000) {
         document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.add('active');
-        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+        // document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
     } else if(mainPageRefreshTime == 3000) {
         document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
-        document.getElementById('main-page-refresh-time-3s-button').classList.add('active');
+        // document.getElementById('main-page-refresh-time-3s-button').classList.add('active');
         document.getElementById('main-page-refresh-time-dont-button').classList.remove('active');
     } else {
         document.getElementById('main-page-refresh-time-20s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-10s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-5s-button').classList.remove('active');
-        document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
+        // document.getElementById('main-page-refresh-time-3s-button').classList.remove('active');
         document.getElementById('main-page-refresh-time-dont-button').classList.add('active');
     }
     if (stockApi == 'GTIMG') {
