@@ -438,6 +438,7 @@
 411. 去掉3s自动刷新时间 2024/6/5
 412. 拼音sshn深水海纳搜不到 2024/6/5 version 2.2.7.2 --end
 413. 分时图展示十字星跟踪样式 2024/6/8
+414. 增加鼠标右键删除 2024/6/12
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
