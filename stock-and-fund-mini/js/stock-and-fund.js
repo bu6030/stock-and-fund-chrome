@@ -1790,6 +1790,34 @@ async function initStockAndFundHtml() {
             });
         }
     }
+    // 监听右键事件以删除的行
+    document.addEventListener('contextmenu', (event) => {
+        let target = event.target;
+        // 向上查找最近的tr元素
+        while (target && target.tagName !== 'TR' && target.tagName !== 'HTML') {
+            target = target.parentElement;
+        }
+        
+        if (target && target.tagName === 'TR') {
+            let id = target.id;
+            // id格式为 stock-tr-0，截取id0
+            if (id.indexOf('stock-tr-') == 0) {
+                let stockIndex = id.substring(9);
+                // 从stockList中获取对应的股票信息
+                let stock = stockList[stockIndex];
+                timeImageCode = stock.code;
+                timeImageType = 'STOCK';
+                deleteStockAndFund();
+            }
+            if (id.indexOf('fund-tr-') == 0) {
+                let fundIndex = id.substring(8);
+                let fund = fundList[fundIndex];
+                timeImageCode = fund.fundCode;
+                timeImageType = 'FUND';
+                deleteStockAndFund();
+            }
+        }
+    }, true);
     // 增加拖拽
     sortedByDrag();
     // 首页面你走势图
