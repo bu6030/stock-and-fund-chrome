@@ -696,6 +696,9 @@ function setStockMinitesImageCallBack(result, ndays, code) {
                     type: 'solid'
                 }
             },
+            textStyle: {
+                fontSize: 10 // 设置提示框字体大小
+            },
             formatter: function(params) {
                 if (params[0].value == '') {
                     return "";
@@ -1060,6 +1063,9 @@ function setStockImage(type) {
                     width: 1,
                     type: 'solid'
                 }
+            },
+            textStyle: {
+                fontSize: 10 // 设置提示框字体大小
             },
             formatter: function(params) {
                 let values = params[0].value;
