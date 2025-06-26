@@ -843,6 +843,8 @@ document.addEventListener(
         document.getElementById('time-image-next-button').addEventListener('click', timeImagePreNext);
         // 走势图页面，点击天天基金查看详细信息
         document.getElementById('go-to-tiantianjijin-detail-button').addEventListener('click', goToTiantianjijinDetail);
+        // 走势图页面，点击F10查看详细信息
+        document.getElementById('go-to-tonghuashunf10-detail-button').addEventListener('click', goToTonghushunF10Detail);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -1560,6 +1562,7 @@ async function initStockAndFundHtml() {
                 $("#stock-fund-monitor-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'inline';
+                $("#go-to-tonghuashunf10-detail-button")[0].style.display = 'inline';
                 $("#go-to-tiantianjijin-detail-button")[0].style.display = 'none';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
@@ -1722,6 +1725,7 @@ async function initStockAndFundHtml() {
                 $("#show-buy-or-sell-button-2")[0].style.display = 'none';
                 $("#go-to-eastmoney-button")[0].style.display = 'none';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'none';
+                $("#go-to-tonghuashunf10-detail-button")[0].style.display = 'none';
                 $("#go-to-tiantianjijin-detail-button")[0].style.display = 'inline';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
@@ -5480,6 +5484,12 @@ async function goToEastMoneyDetail() {
 // 去天天基金查看股票详情
 async function goToTiantianjijinDetail() {
     let url = Env.GO_TO_TIANTIANJIJIN_URL + "/" + timeImageCode + ".html";
+    chrome.tabs.create({ url: url });
+}
+
+// 去同花顺F10查看股票详情
+async function goToTonghushunF10Detail() {
+    let url = Env.GO_TO_TONGHUASHUN_F10 + "/" + timeImageCode.replace('sh','').replace('SH','').replace('sz','').replace('SZ','').replace('bj','').replace('BJ','') + "/";
     chrome.tabs.create({ url: url });
 }
 
