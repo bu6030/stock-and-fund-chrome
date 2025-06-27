@@ -44,6 +44,8 @@ let Env = {
     GET_STOCK_AND_FUND_FROM_LOCAL_SERVICE: "http://110.40.187.161:8080/chrome/stockAndFund",
     GET_ALL_STOCK_LIST_FROM_EAST_MONEY_URL: "https://24.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=6000&po=1&np=3&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23,m:0+t:81+s:2048&fields=f3,f2,f14,f100",
     GO_TO_TONGHUASHUN_F10: "https://basic.10jqka.com.cn",
+    GO_TO_WENCAI: "https://www.iwencai.com/unifiedwap/result?w=",
+    GO_TO_GUBA: "https://guba.eastmoney.com/list,",
 }
 
 let develop = false;

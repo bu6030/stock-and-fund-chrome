@@ -1019,6 +1019,8 @@ document.addEventListener(
         document.getElementById('go-to-tiantianjijin-detail-button').addEventListener('click', goToTiantianjijinDetail);
         // 走势图页面，点击F10查看详细信息
         document.getElementById('go-to-tonghuashunf10-detail-button').addEventListener('click', goToTonghushunF10Detail);
+        document.getElementById('go-to-guba-detail-button').addEventListener('click', goToGubaDetail);
+        document.getElementById('go-to-wencai-detail-button').addEventListener('click', goToWencaiDetail);
 
         // 搜索股票页面，股票列表点击选择
         document.getElementById('search-stock-select').addEventListener('change', async function () {
@@ -2152,6 +2154,8 @@ async function initStockAndFundHtml() {
                 $("#go-to-eastmoney-button")[0].style.display = 'inline';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'inline';
                 $("#go-to-tonghuashunf10-detail-button")[0].style.display = 'inline';
+                $("#go-to-wencai-detail-button")[0].style.display = 'inline';
+                $("#go-to-guba-detail-button")[0].style.display = 'inline';
                 $("#go-to-tiantianjijin-detail-button")[0].style.display = 'none';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
@@ -2319,6 +2323,8 @@ async function initStockAndFundHtml() {
                 $("#go-to-eastmoney-button")[0].style.display = 'none';
                 $("#go-to-eastmoney-detail-button")[0].style.display = 'none';
                 $("#go-to-tonghuashunf10-detail-button")[0].style.display = 'none';
+                $("#go-to-wencai-detail-button")[0].style.display = 'none';
+                $("#go-to-guba-detail-button")[0].style.display = 'none';
                 $("#go-to-tiantianjijin-detail-button")[0].style.display = 'inline';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
@@ -6897,6 +6903,18 @@ async function goToTiantianjijinDetail() {
 // 去同花顺F10查看股票详情
 async function goToTonghushunF10Detail() {
     let url = Env.GO_TO_TONGHUASHUN_F10 + "/" + timeImageCode.replace('sh','').replace('SH','').replace('sz','').replace('SZ','').replace('bj','').replace('BJ','') + "/";
+    chrome.tabs.create({ url: url });
+}
+
+// 去股吧查看股票详情
+async function goToGubaDetail() {
+    let url = Env.GO_TO_GUBA + timeImageCode.replace('sh','').replace('SH','').replace('sz','').replace('SZ','').replace('bj','').replace('BJ','') + ".html";
+    chrome.tabs.create({ url: url });
+}
+
+// 去同花顺F10查看股票详情
+async function goToWencaiDetail() {
+    let url = Env.GO_TO_WENCAI + timeImageCode.replace('sh','').replace('SH','').replace('sz','').replace('SZ','').replace('bj','').replace('BJ','');
     chrome.tabs.create({ url: url });
 }
 
