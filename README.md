@@ -440,7 +440,7 @@
 413. 分时图展示十字星跟踪样式 2025/6/8
 414. 调整分时图，K线图中字体大小 2025/6/21 version 2.2.7.4 --end
 415. 增加F10跳转 2025/6/26
-416. 增加股吧等跳转 2025/6/27
+416. 增加股吧等跳转 2025/6/27 version 2.2.7.5 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
