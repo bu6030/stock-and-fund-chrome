@@ -1221,16 +1221,27 @@
                     <!-- 模态框头部 -->
                     <div class="modal-header">
                         <h4 class="modal-title">走势图&nbsp;&nbsp;&nbsp;</h4>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-primary" id="time-image-new-button">新走势图</button>
-                            <button type="button" class="btn btn-outline-primary" id="time-image-old-button">旧走势图</button>
-                            <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-button">东方财富走势图</button>
-                            <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-detail-button">东方财富详细信息</button>
-                            <button type="button" class="btn btn-outline-primary" id="go-to-tiantianjijin-detail-button">天天基金详细信息</button>
-                                <button type="button" class="btn btn-outline-primary" id="go-to-tonghuashunf10-detail-button">F10</button>
-                            <button type="button" class="btn btn-outline-primary" id="time-image-pre-button">上一个</button>
-                            <button type="button" class="btn btn-outline-primary" id="time-image-next-button">下一个</button>
-                        </div>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-outline-primary" id="time-image-new-button">新走势图</button>
+                                <button type="button" class="btn btn-outline-primary" id="time-image-old-button">旧走势图</button>
+                                <!-- <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-button">东方财富走势图</button>
+                                <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-detail-button">东方财富详细信息</button>
+                                <button type="button" class="btn btn-outline-primary" id="go-to-tiantianjijin-detail-button">天天基金详细信息</button> -->
+                                <button type="button" id="show-set-top-or-end-button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                跳转东财/同花顺
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" id="go-to-eastmoney-button">东方财富走势图</a>
+                                    <a class="dropdown-item" id="go-to-eastmoney-detail-button">东方财富详细信息</a>
+                                    <a class="dropdown-item" id="go-to-tiantianjijin-detail-button">天天基金详细信息</a>
+                                    <a class="dropdown-item" id="go-to-tonghuashunf10-detail-button">F10</a>
+                                    <a class="dropdown-item" id="go-to-wencai-detail-button">问财</a>
+                                    <a class="dropdown-item" id="go-to-guba-detail-button">股吧</a>
+                                </div>
+                                <!-- <button type="button" class="btn btn-outline-primary" id="go-to-tonghuashunf10-detail-button">F10</button> -->
+                                <button type="button" class="btn btn-outline-primary" id="time-image-pre-button">上一个</button>
+                                <button type="button" class="btn btn-outline-primary" id="time-image-next-button">下一个</button>
+                            </div>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
