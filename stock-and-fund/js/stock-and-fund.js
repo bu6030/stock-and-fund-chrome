@@ -30,6 +30,7 @@ var updateTimeDisplay = 'DISPLAY';
 var turnOverRateDisplay = 'DISPLAY';
 var quantityRelativeRatioDisplay = 'DISPLAY';
 var priceDisplay = 'DISPLAY';
+var priceRealDisplay = 'HIDDEN';
 var belongGroupDisplay = 'DISPLAY';
 var amplitudeDisplay = 'DISPLAY';
 var upSpeedDisplay = 'DISPLAY';
@@ -77,6 +78,7 @@ var stockColumnNames = {
     "change-th": "涨跌",
     "amplitude-th": "振幅",
     "price-th": "当前价",
+    "price-real-th": "当日净值",
     "zjl-th": "折价率",
     "cost-price-th": "成本价",
     "up-speed-th": "涨速",
@@ -104,6 +106,7 @@ var fundColumnNames = {
     "change-th": "涨跌",
     "amplitude-th": "振幅",
     "price-th": "估算净值",
+    "price-real-th": "当日净值",
     "zjl-th": "折价率",
     "cost-price-th": "持仓成本单价",
     "up-speed-th": "涨速",
@@ -347,6 +350,12 @@ async function initLoad() {
     } else {
         priceDisplay = 'HIDDEN';
     }
+    priceRealDisplay = await readCacheData('price-real-display');
+    if (priceRealDisplay == null || priceRealDisplay == 'HIDDEN') {
+        priceRealDisplay = 'HIDDEN';
+    } else {
+        priceRealDisplay = 'DISPLAY';
+    }
     monitorPriceOrPercent = await readCacheData('monitor-price-or-percent');
     if (monitorPriceOrPercent == null) {
         monitorPriceOrPercent = 'PRICE';
@@ -529,6 +538,7 @@ async function initLoad() {
             {"quantity-relative-ratio-th": 0},
             {"change-th": 0},
             {"price-th": 0},
+            {"price-real-th": 0},
             {"zjl-th": 0},
             {"cost-price-th": 0},
             {"up-speed-th": 0},
@@ -1930,6 +1940,7 @@ async function initFund() {
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
                             fundList[k].gsz = currentDayJingzhi;
                             fundList[k].existJZ = true;
+                            fundList[k].jzrq = gztime;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             fundList[k].gszzl = parseFloat((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + "")).multiply(new BigDecimal("100")).divide(new BigDecimal(previousDayJingzhi + ""), 2) + "").toFixed(2);
@@ -2590,6 +2601,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td>" + result[k].quantityRelativeRatio + "</td>" : "");
                 } else if(columnName == 'price-th') {
                     html = (priceDisplay == 'DISPLAY' ? "<td>" + now + "</td>": "");
+                } else if(columnName == 'price-real-th') {
+                    html = (priceRealDisplay == 'DISPLAY' ? "<td>--</td>": "");
                 } else if(columnName == 'cost-price-th') {
                     html = (costPriceDisplay == 'DISPLAY' ? "<td>" + costPrise + "</td>" : "");
                 } else if(columnName == 'bonds-th') {
@@ -2678,6 +2691,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'price-th') {
             html = (priceDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'price-real-th') {
+            html = (priceRealDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'cost-price-th') {
             html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'bonds-th') {
@@ -2740,6 +2755,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             }
             var exsitJZStr = result[k].existJZ !== null && result[k].existJZ !== undefined
                 && result[k].existJZ ? '(实)' : '(估)';
+            var dwjz = result[k].existJZ !== null && result[k].existJZ !== undefined
+                && result[k].existJZ ? result[k].gsz : result[k].dwjz;
             var nameOrDesc = result[k].desc ? result[k].desc : result[k].name;
             let nowTimestamp = Date.now();
             let monitorAlertDate = result[k].monitorAlertDate;
@@ -2790,6 +2807,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'price-th') {
                     html = (priceDisplay == 'DISPLAY' ? "<td>" + result[k].gsz + exsitJZStr + "</td>" : "");
+                } else if(columnName == 'price-real-th') {
+                    html = (priceRealDisplay == 'DISPLAY' ? "<td>" + dwjz + "(" + result[k].jzrq +  ")</td>" : "");
                 } else if(columnName == 'cost-price-th') {
                     html = (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "");
                 } else if(columnName == 'bonds-th') {
@@ -2873,6 +2892,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'price-th') {
             html = (priceDisplay == 'DISPLAY' ? "<td></td>" : "");
+        } else if(columnName == 'price-real-th') {
+            html = (priceRealDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'cost-price-th') {
             html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "") 
         } else if(columnName == 'bonds-th') {
@@ -2957,6 +2978,8 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'price-th') {
             html = (priceDisplay == 'DISPLAY' ?  "<td></td>" : "");
+        } else if(columnName == 'price-real-th') {
+            html = (priceRealDisplay == 'DISPLAY' ?  "<td></td>" : "");
         } else if(columnName == 'cost-price-th') {
             html = (costPriceDisplay == 'DISPLAY' ? "<td></td>" : "" );
         } else if(columnName == 'bonds-th') {
@@ -4679,6 +4702,9 @@ async function setDisplayTr(event) {
     } else if(type == 'price-display-checkbox') {
         priceDisplay = dispaly;
         saveCacheData('price-display', dispaly);
+    } else if(type == 'price-real-display-checkbox') {
+        priceRealDisplay = dispaly;
+        saveCacheData('price-real-display', dispaly);
     } else if(type == 'update-time-display-checkbox') {
         updateTimeDisplay = dispaly;
         saveCacheData('update-time-display', dispaly);
@@ -4707,6 +4733,7 @@ async function setDisplayTr(event) {
         turnOverRateDisplay = dispaly;
         quantityRelativeRatioDisplay = dispaly;
         priceDisplay = dispaly;
+        priceRealDisplay = dispaly;
         allDisplay = dispaly;
         saveCacheData('all-display', dispaly);
         saveCacheData('code-display', dispaly);
@@ -5324,6 +5351,8 @@ async function syncConfigFromCloud() {
             saveCacheData('quantity-relative-ratio-display', quantityRelativeRatioDisplay);
             priceDisplay = result.priceDisplay;
             saveCacheData('price-display', priceDisplay);
+            priceRealDisplay = result.priceRealDisplay;
+            saveCacheData('price-real-display', priceRealDisplay);
             belongGroupDisplay = result.belongGroupDisplay;
             saveCacheData('belong-group-display', belongGroupDisplay);
             amplitudeDisplay = result.amplitudeDisplay;
@@ -5444,6 +5473,7 @@ async function syncConfigToCloud() {
     data.turnOverRateDisplay = turnOverRateDisplay;
     data.quantityRelativeRatioDisplay = quantityRelativeRatioDisplay;
     data.priceDisplay = priceDisplay;
+    data.priceRealDisplay = priceRealDisplay;
     data.belongGroupDisplay = belongGroupDisplay;
     data.amplitudeDisplay = amplitudeDisplay;
     data.upSpeedDisplay = upSpeedDisplay;
@@ -7047,6 +7077,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'price-th' && priceDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'price-real-th' && priceRealDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'bonds-th' && bondsDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'market-value-th' && marketValueDisplay != 'DISPLAY') {
@@ -7321,6 +7353,13 @@ function addDragAndDropListeners() {
         priceDisplay = 'DISPLAY';
         $("#price-display-checkbox").prop("checked", true);
     }
+    if (priceRealDisplay == null || priceRealDisplay == 'HIDDEN') {
+        priceRealDisplay = 'HIDDEN';
+        $("#price-real-display-checkbox").prop("checked", false);
+    } else {
+        priceRealDisplay = 'DISPLAY';
+        $("#price-real-display-checkbox").prop("checked", true);
+    }
     // 设置页面，隐藏/展示页面展示项，编码
     document.getElementById("code-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，市值/金额
@@ -7339,6 +7378,8 @@ function addDragAndDropListeners() {
     document.getElementById("belong-group-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，当前价格
     document.getElementById("price-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，当日净值
+    document.getElementById("price-real-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，涨速
     document.getElementById("up-speed-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，最高价
@@ -7390,6 +7431,7 @@ function recoveryColumnOrder() {
         {"quantity-relative-ratio-th": 0},
         {"change-th": 0},
         {"price-th": 0},
+        {"price-real-th": 0},
         {"zjl-th": 0},
         {"cost-price-th": 0},
         {"up-speed-th": 0},
