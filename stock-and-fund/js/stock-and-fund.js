@@ -1826,7 +1826,8 @@ async function initFund() {
                         if (currentDayNetDiagramDate == gztime) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
-                            fundList[k].gsz = currentDayJingzhi;
+                            // fundList[k].gsz = currentDayJingzhi;
+                            fundList[k].currentDayJingzhi = currentDayJingzhi;
                             fundList[k].existJZ = true;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
@@ -1839,6 +1840,7 @@ async function initFund() {
                             }
                         } else {
                             fundList[k].existJZ = false;
+                            fundList[k].currentDayJingzhi = fundList[k].gsz;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                         }
@@ -1938,7 +1940,8 @@ async function initFund() {
                         if (currentDayNetDiagramDate == gztime) {
                             let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
                             let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
-                            fundList[k].gsz = currentDayJingzhi;
+                            // fundList[k].gsz = currentDayJingzhi;
+                            fundList[k].currentDayJingzhi = currentDayJingzhi;
                             fundList[k].existJZ = true;
                             fundList[k].jzrq = gztime;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
@@ -1952,6 +1955,7 @@ async function initFund() {
                             }
                         } else {
                             fundList[k].existJZ = false;
+                            fundList[k].currentDayJingzhi = fundList[k].gsz;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                         }
@@ -2755,8 +2759,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             }
             var exsitJZStr = result[k].existJZ !== null && result[k].existJZ !== undefined
                 && result[k].existJZ ? '(实)' : '(估)';
-            var dwjz = result[k].existJZ !== null && result[k].existJZ !== undefined
-                && result[k].existJZ ? result[k].gsz : result[k].dwjz;
+            var gsz = result[k].existJZ !== null && result[k].existJZ !== undefined
+                && result[k].existJZ ? result[k].currentDayJingzhi : result[k].gsz;
             var nameOrDesc = result[k].desc ? result[k].desc : result[k].name;
             let nowTimestamp = Date.now();
             let monitorAlertDate = result[k].monitorAlertDate;
@@ -2806,9 +2810,14 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'quantity-relative-ratio-th') {
                     html = (quantityRelativeRatioDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'price-th') {
-                    html = (priceDisplay == 'DISPLAY' ? "<td>" + result[k].gsz + exsitJZStr + "</td>" : "");
+                    // html = (priceDisplay == 'DISPLAY' ? "<td>" + result[k].gsz + exsitJZStr + "</td>" : "");
+                    if (priceDisplay == 'DISPLAY') { 
+                        html = (priceRealDisplay == 'DISPLAY' ? "<td>" + result[k].gsz + "</td>" : "<td>" + gsz + exsitJZStr + "</td>");
+                    } else {
+                        html = "";
+                    }
                 } else if(columnName == 'price-real-th') {
-                    html = (priceRealDisplay == 'DISPLAY' ? "<td>" + dwjz + "(" + result[k].jzrq +  ")</td>" : "");
+                    html = (priceRealDisplay == 'DISPLAY' ? "<td>" + result[k].currentDayJingzhi + "(" + result[k].jzrq +  ")</td>" : "");
                 } else if(columnName == 'cost-price-th') {
                     html = (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "");
                 } else if(columnName == 'bonds-th') {
