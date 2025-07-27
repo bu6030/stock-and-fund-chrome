@@ -324,10 +324,10 @@ async function initLoad() {
         changeDisplay = 'DISPLAY';
     }
     peDisplay = await readCacheData('pe-display');
-    if (peDisplay == null || peDisplay == 'HIDDEN') {
-        peDisplay = 'HIDDEN';
-    } else {
+    if (peDisplay == null || peDisplay == 'DISPLAY') {
         peDisplay = 'DISPLAY';
+    } else {
+        peDisplay = 'HIDDEN';
     }
     amplitudeDisplay = await readCacheData('amplitude-display');
     if (amplitudeDisplay == null || amplitudeDisplay == 'DISPLAY') {
@@ -546,6 +546,7 @@ async function initLoad() {
             {"turn-over-rate-th": 0},
             {"quantity-relative-ratio-th": 0},
             {"change-th": 0},
+            {"pe-th": 0},
             {"price-th": 0},
             {"price-real-th": 0},
             {"zjl-th": 0},
@@ -2588,7 +2589,7 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                 let pe = "";
                 if ((nameOrDesc.indexOf('ETF') < 0 && nameOrDesc.indexOf('LOF') < 0)) {
                     zjl = '--';
-                    pe = result[k].peDong + "(动)；"+ result[k].peJing + "(净)；"+ result[k].peTTM + "(TTM)";
+                    pe = result[k].peDong + "(动);"+ result[k].peJing + "(净);"+ result[k].peTTM + "(TTM)";
                 } else {
                     pe = '--';
                 }
