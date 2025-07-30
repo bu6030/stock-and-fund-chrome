@@ -1859,7 +1859,7 @@ async function initFund() {
                             }
                         } else {
                             fundList[k].existJZ = false;
-                            fundList[k].currentDayJingzhi = fundList[k].gsz;
+                            fundList[k].currentDayJingzhi = fundList[k].dwjz;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                         }
@@ -1974,7 +1974,7 @@ async function initFund() {
                             }
                         } else {
                             fundList[k].existJZ = false;
-                            fundList[k].currentDayJingzhi = fundList[k].gsz;
+                            fundList[k].currentDayJingzhi = fundList[k].dwjz;
                             dayIncome = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gszzl)).multiply((new BigDecimal(fundList[k].dwjz))).multiply(new BigDecimal(fundList[k].bonds + "")).divide(new BigDecimal("100"))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(fundList[k].gsz)).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                         }
@@ -2799,6 +2799,10 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     alertStyle = "<span style=\"color: " + blueColor + "; font-weight: bold\">(跌破" + result[k].monitorLowPrice + ")</span>";
                 }
             }
+            let jzrq = result[k].jzrq;
+            if (jzrq.length >= 8) {
+                jzrq = jzrq.substring(4);
+            }
             // 新顺序拼接TR行HTML
             var fundStrOrder = columnOrder.map(function (column) {
                 var columnName = Object.keys(column)[0];
@@ -2846,7 +2850,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                         html = "";
                     }
                 } else if(columnName == 'price-real-th') {
-                    html = (priceRealDisplay == 'DISPLAY' ? "<td>" + result[k].currentDayJingzhi + "(" + result[k].jzrq +  ")</td>" : "");
+                    html = (priceRealDisplay == 'DISPLAY' ? "<td>" + result[k].currentDayJingzhi + "(" + jzrq +  ")</td>" : "");
                 } else if(columnName == 'cost-price-th') {
                     html = (costPriceDisplay == 'DISPLAY' ? "<td>" + result[k].costPrise + "</td>" : "");
                 } else if(columnName == 'bonds-th') {
