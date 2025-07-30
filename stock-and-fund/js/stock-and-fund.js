@@ -2801,7 +2801,7 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             }
             let jzrq = result[k].jzrq;
             if (jzrq.length >= 8) {
-                jzrq = jzrq.substring(4);
+                jzrq = jzrq.substring(4,6) + "-" + jzrq.substring(6,8);
             }
             // 新顺序拼接TR行HTML
             var fundStrOrder = columnOrder.map(function (column) {
