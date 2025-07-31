@@ -7461,6 +7461,8 @@ function addDragAndDropListeners() {
     document.getElementById("income-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，涨跌
     document.getElementById("change-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，市盈率
+    document.getElementById("pe-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，振幅
     document.getElementById("amplitude-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，更新时间
