@@ -443,7 +443,7 @@
 416. 增加股吧等跳转 2025/6/27 version 2.2.7.5 --end
 417. 全屏模式点击股票问题修复 2025/7/8 version 2.2.7.6 --end
 418. 增加估算净值列 2025/7/20
-419. 增加市盈率列 2025/7/27
+419. 增加市盈率列 2025/7/27 version 2.2.7.7 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
