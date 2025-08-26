@@ -39,6 +39,7 @@ function ajaxGetFundFromEastMoney(code) {
             fund.now = json.DWJZ + "";
             fund.gszzl = json.RZDF + "";
             fund.gztime = "--";
+            fund.jzrq = json.SYRQ;
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);

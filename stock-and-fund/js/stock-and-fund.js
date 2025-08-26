@@ -1800,6 +1800,7 @@ async function initFund() {
                     if (fundList[k].fundCode == fundCode) {
                         let fund = checkFundExsitFromEastMoney(fundCode);
                         fundList[k].dwjz = fund.dwjz;
+                        fundList[k].jzrq = fund.jzrq;
                         fundList[k].gsz = fund.dwjz;
                         fundList[k].gztime = fund.gztime;
                         if (fund.gszzl == "--" || fund.gszzl == '' || fund.gszzl == undefined || fund.gszzl == null) {
@@ -1907,6 +1908,7 @@ async function initFund() {
                         } else {
                             let fund = checkFundExsitFromEastMoney(fundCode);
                             fundList[k].dwjz = fund.dwjz;
+                            fundList[k].jzrq = fund.jzrq;
                             if (fund.dwjz == '--') {
                                 fundList[k].dwjz = "0";
                             }
