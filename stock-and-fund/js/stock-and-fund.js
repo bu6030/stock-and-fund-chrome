@@ -2156,7 +2156,30 @@ async function initStockAndFundHtml() {
                     }
                     $("#stock-monitor-upper-percent").val(stockList[buttonIndex].monitorUpperPercent);
                     $("#stock-monitor-lower-percent").val(stockList[buttonIndex].monitorLowerPercent);
-                
+                    // 初始化页面的belong-group
+                    $("#stock-belong-group-select").find("option").remove();
+                    Object.keys(groups).forEach(id => {
+                        const groupName = groups[id];
+                        var option = $("<option></option>").val(id).text(groupName);
+                        $("#stock-belong-group-select").append(option);
+                    });
+                    if (currentGroup == 'all-group') {
+                        let belongGroup = '';
+                        for (var k in stockList) {
+                            if(stockList[k].code == timeImageCode) {
+                                belongGroup = stockList[k].belongGroup;
+                                break;
+                            }
+                        }
+                        $("#stock-belong-group-select").val(belongGroup);
+                    } else {
+                        $("#stock-belong-group-select").val(currentGroup);
+                    }
+                    if (currentGroup == 'all-group') {
+                        $("#stock-belong-group-select").prop("disabled", true);
+                    } else {
+                        $("#stock-belong-group-select").prop("disabled", false);
+                    }
                     $("#stock-modal").modal();
                 });
             }
@@ -2324,8 +2347,32 @@ async function initStockAndFundHtml() {
                     $("#fund-desc").val(fundList[buttonIndex].desc);
                     $("#fund-star-desc").val(fundList[buttonIndex].starDesc);
                     $("#fund-star").val(fundList[buttonIndex].star);
-                    $("#fund-monitor-high-price").val(fundList[this.sectionRowIndex].monitorHighPrice);
-                    $("#fund-monitor-low-price").val(fundList[this.sectionRowIndex].monitorLowPrice);
+                    $("#fund-monitor-high-price").val(fundList[buttonIndex].monitorHighPrice);
+                    $("#fund-monitor-low-price").val(fundList[buttonIndex].monitorLowPrice);
+                    // 初始化页面的belong-group
+                    $("#fund-belong-group-select").find("option").remove();
+                    Object.keys(groups).forEach(id => {
+                        const groupName = groups[id];
+                        var option = $("<option></option>").val(id).text(groupName);
+                        $("#fund-belong-group-select").append(option);
+                    });
+                    if (currentGroup == 'all-group') {
+                        let belongGroup = '';
+                        for (var k in fundList) {
+                            if(fundList[k].fundCode == timeImageCode) {
+                                belongGroup = fundList[k].belongGroup;
+                                break;
+                            }
+                        }
+                        $("#fund-belong-group-select").val(belongGroup);
+                    } else {
+                        $("#fund-belong-group-select").val(currentGroup);
+                    }
+                    if (currentGroup == 'all-group') {
+                        $("#fund-belong-group-select").prop("disabled", true);
+                    } else {
+                        $("#fund-belong-group-select").prop("disabled", false);
+                    }
                     $("#fund-modal").modal();
                 });
             }
