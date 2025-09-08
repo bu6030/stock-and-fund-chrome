@@ -151,6 +151,7 @@ var showBatchDeleteButton = true;
 var kLineNumbers = 0;
 var addtimePriceNewline = false;
 var riseFallSort = 0;
+var editGroupId;
 
 // 整个程序的初始化
 window.addEventListener("load", async (event) => {
@@ -7839,6 +7840,7 @@ function setAdviceUl(advices) {
 
 // 展示分组页面
 function showGroup() {
+    editGroupId = '';
     updateGroupList();
     $("#group-modal").modal();
 }
@@ -7855,7 +7857,10 @@ async function addGroup() {
     const groupNameInput = document.getElementById('group-name');
     const groupName = groupNameInput.value.trim();
     if (groupName && !Object.values(groups).includes(groupName)) {
-        const groupId = Date.now().toString();
+        let groupId = Date.now().toString();
+        if (editGroupId != null && editGroupId != '') {
+            groupId = editGroupId;
+        }
         groups[groupId] = groupName; // 添加新分组
         updateGroupList(); // 更新分组列表
         groupNameInput.value = ''; // 清空输入框
@@ -7864,6 +7869,7 @@ async function addGroup() {
     } else {
         alert('请输入有效的分组名');
     }
+    editGroupId = '';
 }
 
 // 更新分组列表数据
@@ -7891,7 +7897,9 @@ function updateGroupList() {
     document.querySelectorAll('.group-button').forEach(button => {
         button.addEventListener('click', async function(){
             let groupId = this.getAttribute('data-id');
-            changeGroup(groupId);
+            // changeGroup(groupId);
+            editGroupId = groupId;
+            $("#group-name").val(groups[groupId]);
         });
     });
 }
