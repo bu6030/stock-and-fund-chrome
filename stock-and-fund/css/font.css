@@ -231,7 +231,8 @@ input[type="checkbox"] {
 
 .scroll-input {
     position: fixed;
-    left: 40%;
+    left: 50%;
+    transform: translateX(-50%);
     top: 85%;
     width: 100px;
     padding: 10px;
