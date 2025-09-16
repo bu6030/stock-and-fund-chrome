@@ -448,7 +448,7 @@
 421. 增加净值日期报错问题处理 2025/8/26
 422. 首页编辑进入不显示分组 2025/8/26 version 2.2.7.8 --end
 423. 分组名称可以修改 2025/9/8 version 2.2.7.9 --end
-424. 修改置顶置底按钮，快速定位显示位置 2025/9/16
+424. 修改置顶置底按钮，快速定位显示位置 2025/9/16 version 2.2.8.0 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
