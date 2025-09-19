@@ -393,7 +393,10 @@
                     <div class="modal-body my-font">
                         <div>默认格式为json格式（导出数据的样式），也支持纯文本导入<br>
                             按照文件名区分，带有fund的文件为基金，不带fund默认为股票<br>
-                            每行只需要一个股票/基金编码，股票需要带有sh/sz</div>
+                            每行只需要一个股票/基金编码，股票需要带有sh/sz<br>
+                            或者每行"股票/基金编码,成本价格,持仓数"，股票需要带有sh/sz<br>
+                            或者每行"股票/基金编码,成本价格"，股票需要带有sh/sz
+                        </div>
                         <div class="am-form-group am-cf">
                             <div class="you">
                                 <input type="file" id="file-input">

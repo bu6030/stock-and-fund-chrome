@@ -1970,7 +1970,7 @@ async function initFund() {
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             fundList[k].gszzl = parseFloat((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + "")).multiply(new BigDecimal("100")).divide(new BigDecimal(previousDayJingzhi + ""), 2) + "").toFixed(2);
                             fundList[k].income = marketValue.subtract(costPriceValue) + "";
-                            if (costPrice <= 0) {
+                            if (costPrice <= 0 || costPriceValue <= 0) {
                                 fundList[k].incomePercent = "0";
                             } else {
                                 fundList[k].incomePercent = marketValue.subtract(costPriceValue).multiply(new BigDecimal("100")).divide(costPriceValue) + "";
@@ -4997,7 +4997,24 @@ async function fileInput (e) {
                 lines.forEach(function(line) {
                     // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
                     var code = line.trim(); // 去除每行开头和结尾的空白字符
-                    if (code !== '') {
+                    if (code.indexOf(",")>=0) {
+                        var codeArr = code.split(",");
+                        if (codeArr.length <= 2) {
+                            let fund = {
+                                "fundCode": codeArr[0],
+                                "costPrise": codeArr[1],
+                                "bonds": "0"
+                            }
+                            fundList.push(fund);
+                        } else {
+                            let fund = {
+                                "fundCode": codeArr[0],
+                                "costPrise": codeArr[1],
+                                "bonds": codeArr[2]
+                            }
+                            fundList.push(fund);
+                        }
+                    } else if (code !== '') {
                         let fund = {
                             "fundCode": code,
                             "costPrise":"0",
@@ -5017,7 +5034,24 @@ async function fileInput (e) {
                 lines.forEach(function(line) {
                     // 假设每行文本包含一个股票代码，可以根据需要添加额外的逻辑来处理每行的数据
                     var code = line.trim(); // 去除每行开头和结尾的空白字符
-                    if (code !== '') {
+                    if (code.indexOf(",")>=0) {
+                        var codeArr = code.split(",");
+                        if (codeArr.length <= 2) {
+                            let stock = {
+                                "code": codeArr[0],
+                                "costPrise": codeArr[1],
+                                "bonds": "0"
+                            }
+                            stockList.push(stock);
+                        } else {
+                            let stock = {
+                                "code": codeArr[0],
+                                "costPrise": codeArr[1],
+                                "bonds": codeArr[2]
+                            }
+                            stockList.push(stock);
+                        }
+                    } else if (code !== '') {
                         code = code.replace('SH','sh').replace('SZ','sz').replace('BJ','bj').replace('HK','hk');
                         let stock = {
                             "code": code,
