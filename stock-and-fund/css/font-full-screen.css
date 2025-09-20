@@ -230,3 +230,8 @@
     background-color: #e0f7fa !important; /* 高亮背景色 */
     transition: background-color 0.5s ease;
 }
+
+.advice-list-ul {
+  height: 600px;
+  overflow-y: scroll;
+}

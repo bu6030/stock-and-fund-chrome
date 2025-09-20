@@ -228,3 +228,8 @@ input[type="checkbox"] {
 .scroll-button:hover{
     background-color:#0056b3
 }
+
+.advice-list-ul {
+  height: 350px;
+  overflow-y: scroll;
+}
