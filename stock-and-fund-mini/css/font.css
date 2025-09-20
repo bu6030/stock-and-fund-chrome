@@ -207,10 +207,10 @@ input[type="checkbox"] {
     text-orientation: upright; /* 保持字符直立 */
     position: fixed;
     right: 20px;
-    top: 80%;
+    top: 90%;
     /* transform: translateY(-90%); */
-    width: 40px; /* 设置按钮的宽度 */
-    height: 40px; /* 设置按钮的高度 */
+    width: 30px; /* 设置按钮的宽度 */
+    height: 30px; /* 设置按钮的高度 */
     padding: 0; /* 移除内边距，确保按钮是圆形 */
     background-color: rgba(0, 123, 255, 0.4);
     color: white;
