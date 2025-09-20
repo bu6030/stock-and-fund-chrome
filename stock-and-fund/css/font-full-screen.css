@@ -192,7 +192,7 @@
     text-orientation: upright; /* 保持字符直立 */
     position: fixed;
     right: 20px;
-    top: 80%;
+    top: 90%;
     /* transform: translateY(-90%); */
     width: 40px; /* 设置按钮的宽度 */
     height: 40px; /* 设置按钮的高度 */
@@ -216,8 +216,9 @@
 
 .scroll-input{
     position: fixed;
-    right: 0px;
-    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 85%;
     width: 100px;
     padding: 10px;
     border: 1px solid #ccc;

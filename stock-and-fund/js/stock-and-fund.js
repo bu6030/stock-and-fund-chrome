@@ -4347,8 +4347,8 @@ async function popupWindows() {
     chrome.windows.create({
         url: chrome.runtime.getURL("full-screen.html"),
         type: "popup",
-        width: 800,
-        height: 600
+        width: 900,
+        height: 700
     });
     window.close();
 }
