@@ -5891,6 +5891,9 @@ function sortedByDrag() {
                     }
                 }
             }
+            if (autoSync) {
+                syncDataToCloud();
+            }
             initHtml();
             initData();
         });
@@ -5933,6 +5936,9 @@ async function addStockFromTonghuashunXueqiu() {
         saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
     }
     $("#setting-modal").modal("hide");
+    if (autoSync) {
+        syncDataToCloud();
+    }
     initData();
 }
 
