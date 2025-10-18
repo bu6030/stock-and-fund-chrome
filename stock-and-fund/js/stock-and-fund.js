@@ -160,17 +160,54 @@ window.addEventListener("load", async (event) => {
     let password = await readCacheData('password');
     // 如果 password 存在，需要验证密码
     if (password != null && password != '') {
+        // 隐藏主界面和底部按钮
+        hideMainInterface();
         // 展示password-check-modal
+        $('#password-check-modal').modal({ backdrop: 'static', keyboard: false });
         $('#password-check-modal').modal('show');
         // 隐藏密码保护按钮
         $("#show-password-protect-button")[0].style.display = 'none';
         $("#data-export-button")[0].style.display = 'none';
-        document.getElementById('import-from-local-springboot-div').style.display = 'none';
+        if (document.getElementById('import-from-local-springboot-div')) {
+            document.getElementById('import-from-local-springboot-div').style.display = 'none';
+        }
     } else {
         // 没有密码直接展示
         initLoad();
     }
 });
+
+// 隐藏主界面
+function hideMainInterface() {
+    // 隐藏主要内容区域，但保持宽度
+    if (document.getElementById('my-main-content')) {
+        document.getElementById('my-main-content').style.visibility = 'hidden';
+        document.getElementById('my-main-content').style.height = '0';
+        document.getElementById('my-main-content').style.overflow = 'hidden';
+    }
+    // 隐藏底部按钮区域，但保持宽度
+    if (document.getElementById('footer')) {
+        document.getElementById('footer').style.visibility = 'hidden';
+        document.getElementById('footer').style.height = '0';
+        document.getElementById('footer').style.overflow = 'hidden';
+    }
+}
+
+// 显示主界面
+function showMainInterface() {
+    // 显示主要内容区域
+    if (document.getElementById('my-main-content')) {
+        document.getElementById('my-main-content').style.visibility = 'visible';
+        document.getElementById('my-main-content').style.height = '';
+        document.getElementById('my-main-content').style.overflow = '';
+    }
+    // 显示底部按钮区域
+    if (document.getElementById('footer')) {
+        document.getElementById('footer').style.visibility = 'visible';
+        document.getElementById('footer').style.height = '';
+        document.getElementById('footer').style.overflow = '';
+    }
+}
 
 // 初始化加载基金股票，各种开关缓存
 async function initLoad() {
@@ -1108,6 +1145,8 @@ document.addEventListener(
 
         // 密码保护页面，password-save-button点击，缓存密码
         document.getElementById('password-save-button').addEventListener('click', savePassword);
+        // 密码保护页面，password-clear-button点击，清除密码
+        document.getElementById('password-clear-button').addEventListener('click', clearPassword);
         // 密码保护页面，在密码输入框中点击回车
         document.getElementById('password').addEventListener('keydown', async function (event) {
             if (event.key === 'Enter') {
@@ -8995,15 +9034,38 @@ async function changeAutoSync(event) {
 
 // 点击保存密码
 async function savePassword() {
-    saveCacheData('password', $("#password").val());
-    $("#password-protect-modal").modal("hide");
+    let passwordValue = $("#password").val();
+    if (passwordValue && passwordValue.trim() !== '') {
+        saveCacheData('password', passwordValue);
+        $("#password").val('');
+        $("#password-protect-modal").modal("hide");
+        alert('密码已保存，下次打开插件需要验证密码！');
+    } else {
+        alert('请输入密码！');
+    }
+}
+
+// 点击清除密码
+async function clearPassword() {
+    if (confirm('确定要清除密码保护吗？清除后任何人都可以直接查看您的数据！')) {
+        saveCacheData('password', '');
+        $("#password").val('');
+        $("#password-protect-modal").modal("hide");
+        alert('密码保护已关闭！');
+    }
 }
 
 // 点击验证密码
 async function checkPassword() {
     if ($("#password-check").val() == await readCacheData('password')) {
         $("#password-check-modal").modal("hide");
+        // 显示主界面
+        showMainInterface();
         initLoad();
+    } else {
+        // 密码错误提示
+        alert('密码错误，请重新输入！');
+        $("#password-check").val('');
     }
 }
 

@@ -453,6 +453,7 @@
 426. 反馈建议增加滚动条 2025/9/20 version 2.2.8.1 --end
 427. 自动同步开启时增加拖拽调整股票基金顺序后自动同步到云平台 2025/10/01 version 2.2.8.2 --end
 428. 增加大盘股拖拽调整顺序方法 2025/10/18
+429. 增加开启密码保护后密码验证阶段不显示插件界面及功能 2025/10/18
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

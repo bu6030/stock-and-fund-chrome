@@ -457,17 +457,21 @@
 
                     <!-- 模态框主体 -->
                     <div class="modal-body">
+                        <div class="alert alert-warning" role="alert">
+                            <strong>说明：</strong>设置密码后，每次打开插件都需要验证密码才能查看数据。如需关闭密码保护，请点击“清除密码”按钮。
+                        </div>
                         <div class="am-form-group am-cf">
                             <div class="zuo">密码：</div>
                             <div class="you">
-                                <input type="password" class="am-input-sm my-text" id="password" placeholder="密码">
+                                <input type="password" class="am-input-sm my-text" id="password" placeholder="请输入密码（留空则不更改）">
                             </div>
                         </div>
                     </div>
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="password-save-button">保存</button>
+                        <button type="button" class="btn btn-primary" id="password-save-button">保存密码</button>
+                        <button type="button" class="btn btn-danger" id="password-clear-button">清除密码</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
                 </div>
@@ -479,24 +483,25 @@
                 <div class="modal-content">
                     <!-- 模态框头部 -->
                     <div class="modal-header">
-                        <h4 class="modal-title">验证密码</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">密码保护已开启 - 请验证密码</h4>
                     </div>
 
                     <!-- 模态框主体 -->
                     <div class="modal-body">
+                        <div class="alert alert-info" role="alert">
+                            <strong>提示：</strong>为了保护您的数据安全，您已启用了密码保护功能。请输入正确的密码后才能查看插件界面和功能。
+                        </div>
                         <div class="am-form-group am-cf">
                             <div class="zuo">密码：</div>
                             <div class="you">
-                                <input type="password" class="am-input-sm my-text" id="password-check" placeholder="密码">
+                                <input type="password" class="am-input-sm my-text" id="password-check" placeholder="请输入密码">
                             </div>
                         </div>
                     </div>
 
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="password-check-button">查看数据</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="password-check-button">验证并查看</button>
                     </div>
                 </div>
             </div>
@@ -1531,7 +1536,7 @@
                     id="stock-name-search-position" placeholder="快速定位"></input>
         </div>
         <div id="footer-desc" class="no-wrap">
-            CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com Version 2.2.8.3
+            CopyRight@Xuesong.Bu 2023 buxuesong@foxmail.com Version 2.2.8.2
         </div>
     </div>
 </body>
