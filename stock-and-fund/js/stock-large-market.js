@@ -292,6 +292,9 @@ async function initLargeMarketDataCallBack(bigStocks) {
                 timeImageCode = "CL00Y";
                 initLargeMarketClick();
         });
+        
+        // 添加拖拽功能
+        addLargeMarketDragListeners();
     }, 300);
 }
 
@@ -362,6 +365,112 @@ function getlargetMarketTotalHtml (){
         '<p ' + allTotalIncomePercentStyle + '>' + allTotalIncomePercent + '%</p>' +
         '</div>';
     return str;
+}
+
+// 添加大盘指数拖拽监听器
+function addLargeMarketDragListeners() {
+    var boxes = document.querySelectorAll('.stock-large-market-box');
+    var draggedElement = null;
+    var draggedCode = null;
+    
+    boxes.forEach(function(box) {
+        // 排除持仓盈亏box
+        if (box.id === 'larget-market-total') {
+            return;
+        }
+        
+        // 设置为可拖拽
+        box.setAttribute('draggable', 'true');
+        box.style.cursor = 'move';
+        
+        // 拖拽开始
+        box.addEventListener('dragstart', function(e) {
+            draggedElement = this;
+            draggedCode = this.id.replace('large-market-', '');
+            this.style.opacity = '0.5';
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        });
+        
+        // 拖拽结束
+        box.addEventListener('dragend', function(e) {
+            this.style.opacity = '1';
+            boxes.forEach(function(item) {
+                item.style.border = '';
+            });
+        });
+        
+        // 拖拽经过
+        box.addEventListener('dragover', function(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        });
+        
+        // 拖拽进入
+        box.addEventListener('dragenter', function(e) {
+            if (this.id !== 'larget-market-total') {
+                this.style.border = '2px dashed #007bff';
+            }
+        });
+        
+        // 拖拽离开
+        box.addEventListener('dragleave', function(e) {
+            this.style.border = '';
+        });
+        
+        // 放置
+        box.addEventListener('drop', function(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            
+            // 排除持仓盈亏box
+            if (this.id === 'larget-market-total' || draggedElement.id === 'larget-market-total') {
+                return false;
+            }
+            
+            if (draggedElement !== this) {
+                var targetCode = this.id.replace('large-market-', '');
+                
+                // 在largeMarketCode数组中找到完整的代码
+                var draggedFullCode = null;
+                var targetFullCode = null;
+                
+                for (var i = 0; i < largeMarketCode.length; i++) {
+                    var parts = largeMarketCode[i].split('.');
+                    var code = parts[1];
+                    if (code === draggedCode) {
+                        draggedFullCode = largeMarketCode[i];
+                    }
+                    if (code === targetCode) {
+                        targetFullCode = largeMarketCode[i];
+                    }
+                }
+                
+                if (draggedFullCode && targetFullCode) {
+                    // 获取索引位置
+                    var draggedIndex = largeMarketCode.indexOf(draggedFullCode);
+                    var targetIndex = largeMarketCode.indexOf(targetFullCode);
+                    
+                    // 重新排序数组
+                    largeMarketCode.splice(draggedIndex, 1);
+                    targetIndex = largeMarketCode.indexOf(targetFullCode);
+                    largeMarketCode.splice(targetIndex, 0, draggedFullCode);
+                    
+                    // 保存到缓存
+                    saveCacheData('large-market-code', JSON.stringify(largeMarketCode));
+                    
+                    // 刷新显示
+                    initLargeMarketData();
+                }
+            }
+            
+            return false;
+        });
+    });
 }
 
 async function addLargeMarketCheckEvent() {

@@ -158,6 +158,15 @@ input[type="checkbox"] {
     width: 25%;
     /* border: 1px solid #ccc; */
     text-align: center;
+    transition: opacity 0.3s ease, border 0.3s ease;
+}
+
+.stock-large-market-box[draggable="true"] {
+    cursor: move;
+}
+
+.stock-large-market-box[draggable="true"]:hover {
+    background-color: rgba(0, 123, 255, 0.05);
 }
 
 .stock-large-market-box p {
