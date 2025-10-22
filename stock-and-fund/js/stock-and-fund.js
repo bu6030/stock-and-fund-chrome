@@ -669,7 +669,7 @@ async function initLoad() {
     settingButtonInit();
     initKlineCheckbox();
     // 默认20s刷新，通过mainPageRefreshTime获取
-    setInterval(autoRefresh, mainPageRefreshTime);
+    autoRefreshInterval = setInterval(autoRefresh, mainPageRefreshTime);
     if (autoSync) {
         syncDataFromCloud();
     }
@@ -921,6 +921,12 @@ document.addEventListener(
         document.getElementById('show-wechat-mini-button').addEventListener('click', showQrCodeModal);
         // 首页，点击批量删除
         document.getElementById('batch-delete-button').addEventListener('click', batchDelete);
+        // 首页，点击批量编辑
+        document.getElementById('batch-edit-button').addEventListener('click', batchEdit);
+        // 首页，点击批量保存
+        document.getElementById('batch-save-button').addEventListener('click', batchSave);
+        // 首页，点击批量取消
+        document.getElementById('batch-cancel-button').addEventListener('click', batchCancel);
         // 首页，点击滚动到底部
         document.getElementById('scroll-button').addEventListener('click', scrollToBottomOrTop);
         // 首页，点击快速定位
@@ -2224,7 +2230,13 @@ async function initStockAndFundHtml() {
                 });
             }
             let stockTr = document.getElementById('stock-tr-' + k);
-            stockTr.addEventListener('click', function () {
+            stockTr.addEventListener('click', function (event) {
+                // 批量编辑模式下禁用点击事件
+                if (batchEditMode) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
                 $("#stock-name").val(stockList[this.sectionRowIndex].name);
                 $("#stock-name").attr("disabled", "disabled");
                 $("#stock-code").val(stockList[this.sectionRowIndex].code);
@@ -2417,7 +2429,13 @@ async function initStockAndFundHtml() {
                 });
             }
             let fundTr = document.getElementById('fund-tr-' + k);
-            fundTr.addEventListener('click', function () {
+            fundTr.addEventListener('click', function (event) {
+                // 批量编辑模式下禁用点击事件
+                if (batchEditMode) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
                 $("#fund-name").val(fundList[this.sectionRowIndex].name);
                 $("#fund-name").attr("disabled", "disabled");
                 $("#fund-code").val(fundList[this.sectionRowIndex].fundCode);
@@ -9118,6 +9136,249 @@ async function batchDelete() {
         saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
     }
     reloadDataAndHtml();
+}
+
+// 批量编辑功能
+var batchEditMode = false;
+var batchEditData = {};
+var autoRefreshInterval = null; // 存储自动刷新的定时器ID
+
+async function batchEdit() {
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法批量编辑，请切换到指定分组后再批量编辑~');
+        return;
+    }
+    
+    batchEditMode = true;
+    batchEditData = {};
+    
+    // 停止自动刷新
+    if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+        autoRefreshInterval = null;
+    }
+    
+    // 隐藏批量编辑按钮，显示保存和取消按钮
+    document.getElementById('batch-edit-button').style.display = 'none';
+    document.getElementById('batch-save-button').style.display = 'inline-block';
+    document.getElementById('batch-cancel-button').style.display = 'inline-block';
+    
+    // 隐藏其他按钮
+    const buttonsToHide = ['show-all-button', 'show-stock-button', 'show-fund-button', 
+        'group-menu-button', 'batch-delete-button', 'refresh-button', 'show-data-center-button',
+        'remove-badgetext-button', 'full-screen-menu-button', 'show-setting-button',
+        'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button', 'show-donate-button-2'];
+    buttonsToHide.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.style.display = 'none';
+    });
+    
+    // 将持仓成本和持仓数转换为输入框
+    convertToInputFields();
+}
+
+function convertToInputFields() {
+    // 计算可见列的索引映射
+    function getVisibleColumnIndex(targetColumnName) {
+        let visibleIndex = 0;
+        for (let i = 0; i < columnOrder.length; i++) {
+            const columnName = Object.keys(columnOrder[i])[0];
+            
+            // 检查当前列是否可见
+            let isVisible = true;
+            if (columnName === 'market-value-th' && marketValueDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'market-value-percent-th' && marketValuePercentDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'cost-price-value-th' && costPriceValueDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'income-percent-th' && incomePercentDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'addtime-price-th' && addtimePriceDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'day-income-th' && dayIncomeDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'belong-group-th' && belongGroupDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'up-speed-th' && upSpeedDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'max-th' && maxDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'min-th' && minDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'star-desc-th' && starDescDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'star-th' && starDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'zjl-th' && zjlDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'cost-price-th' && costPriceDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'bonds-th' && bondsDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'income-th' && incomeDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'change-th' && changeDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'pe-th' && peDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'amplitude-th' && amplitudeDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'update-time-th' && updateTimeDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'turn-over-rate-th' && turnOverRateDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'quantity-relative-ratio-th' && quantityRelativeRatioDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'price-th' && priceDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'price-real-th' && priceRealDisplay !== 'DISPLAY') isVisible = false;
+            
+            if (columnName === targetColumnName) {
+                return isVisible ? visibleIndex : -1;
+            }
+            
+            if (isVisible) {
+                visibleIndex++;
+            }
+        }
+        return -1;
+    }
+    
+    const costPriceVisibleIndex = getVisibleColumnIndex('cost-price-th');
+    const bondsVisibleIndex = getVisibleColumnIndex('bonds-th');
+    
+    // 如果成本价或持仓列被隐藏，无法编辑
+    if (costPriceVisibleIndex === -1 && bondsVisibleIndex === -1) {
+        alertMessage('持仓成本和持仓数列都已隐藏，无法进行批量编辑！');
+        exitBatchEditMode();
+        return;
+    }
+    
+    // 处理股票
+    for (let k in stockList) {
+        const stockCode = stockList[k].code;
+        const stockTr = document.getElementById('stock-tr-' + k);
+        if (!stockTr) continue;
+        
+        const cells = stockTr.getElementsByTagName('td');
+        let offset = showBatchDeleteButton ? 1 : 0;
+        
+        for (let i = 0; i < cells.length; i++) {
+            const cell = cells[i];
+            const actualIndex = i - offset;
+            
+            if (actualIndex === costPriceVisibleIndex && costPriceDisplay === 'DISPLAY') {
+                // 持仓成本
+                const value = stockList[k].costPrise || '';
+                cell.innerHTML = `<input type="number" class="batch-edit-input" data-type="stock" data-code="${stockCode}" data-field="costPrise" value="${value}" />`;
+            } else if (actualIndex === bondsVisibleIndex && bondsDisplay === 'DISPLAY') {
+                // 持仓数
+                const value = stockList[k].bonds || '';
+                cell.innerHTML = `<input type="number" class="batch-edit-input" data-type="stock" data-code="${stockCode}" data-field="bonds" value="${value}" />`;
+            }
+        }
+    }
+    
+    // 处理基金
+    for (let k in fundList) {
+        const fundCode = fundList[k].fundCode;
+        const fundTr = document.getElementById('fund-tr-' + k);
+        if (!fundTr) continue;
+        
+        const cells = fundTr.getElementsByTagName('td');
+        let offset = showBatchDeleteButton ? 1 : 0;
+        
+        for (let i = 0; i < cells.length; i++) {
+            const cell = cells[i];
+            const actualIndex = i - offset;
+            
+            if (actualIndex === costPriceVisibleIndex && costPriceDisplay === 'DISPLAY') {
+                // 持仓成本
+                const value = fundList[k].costPrise || '';
+                cell.innerHTML = `<input type="number" class="batch-edit-input" data-type="fund" data-code="${fundCode}" data-field="costPrise" value="${value}" />`;
+            } else if (actualIndex === bondsVisibleIndex && bondsDisplay === 'DISPLAY') {
+                // 持仓数
+                const value = fundList[k].bonds || '';
+                cell.innerHTML = `<input type="number" class="batch-edit-input" data-type="fund" data-code="${fundCode}" data-field="bonds" value="${value}" />`;
+            }
+        }
+    }
+}
+
+async function batchSave() {
+    // 收集所有输入框的数据
+    const inputs = document.querySelectorAll('.batch-edit-input');
+    
+    inputs.forEach(input => {
+        const type = input.getAttribute('data-type');
+        const code = input.getAttribute('data-code');
+        const field = input.getAttribute('data-field');
+        const value = input.value;
+        
+        if (!batchEditData[type]) {
+            batchEditData[type] = {};
+        }
+        if (!batchEditData[type][code]) {
+            batchEditData[type][code] = {};
+        }
+        batchEditData[type][code][field] = value;
+    });
+    
+    // 更新股票数据
+    if (batchEditData['stock']) {
+        for (let k in stockList) {
+            const code = stockList[k].code;
+            if (batchEditData['stock'][code]) {
+                if (batchEditData['stock'][code]['costPrise']) {
+                    stockList[k].costPrise = parseFloat(batchEditData['stock'][code]['costPrise']) + "";
+                }
+                if (batchEditData['stock'][code]['bonds']) {
+                    stockList[k].bonds = parseFloat(batchEditData['stock'][code]['bonds']) + "";
+                }
+            }
+        }
+        // 保存股票数据
+        if (currentGroup == 'default-group') {
+            saveCacheData('stocks', JSON.stringify(stockList));
+        } else {
+            saveCacheData(currentGroup + '_stocks', JSON.stringify(stockList));
+        }
+    }
+    
+    // 更新基金数据
+    if (batchEditData['fund']) {
+        for (let k in fundList) {
+            const fundCode = fundList[k].fundCode;
+            if (batchEditData['fund'][fundCode]) {
+                if (batchEditData['fund'][fundCode]['costPrise']) {
+                    fundList[k].costPrise = parseFloat(batchEditData['fund'][fundCode]['costPrise']) + "";
+                }
+                if (batchEditData['fund'][fundCode]['bonds']) {
+                    fundList[k].bonds = parseFloat(batchEditData['fund'][fundCode]['bonds']) + "";
+                }
+            }
+        }
+        // 保存基金数据
+        if (currentGroup == 'default-group') {
+            saveCacheData('funds', JSON.stringify(fundList));
+        } else {
+            saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+        }
+    }
+    
+    // 退出编辑模式
+    exitBatchEditMode();
+    // 重新加载数据
+    await reloadDataAndHtml();
+    alertMessage('批量保存成功！');
+}
+
+async function batchCancel() {
+    exitBatchEditMode();
+    await reloadDataAndHtml();
+}
+
+function exitBatchEditMode() {
+    batchEditMode = false;
+    batchEditData = {};
+    
+    // 重新启动自动刷新
+    if (!autoRefreshInterval) {
+        autoRefreshInterval = setInterval(autoRefresh, mainPageRefreshTime);
+    }
+    
+    // 显示批量编辑按钮，隐藏保存和取消按钮
+    document.getElementById('batch-edit-button').style.display = 'inline-block';
+    document.getElementById('batch-save-button').style.display = 'none';
+    document.getElementById('batch-cancel-button').style.display = 'none';
+    
+    // 显示其他按钮
+    const buttonsToShow = ['show-all-button', 'show-stock-button', 'show-fund-button', 
+        'group-menu-button', 'batch-delete-button', 'refresh-button', 'show-data-center-button',
+        'remove-badgetext-button', 'full-screen-menu-button', 'show-setting-button',
+        'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button', 'show-donate-button-2'];
+    buttonsToShow.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.style.display = 'inline-block';
+    });
 }
 
 

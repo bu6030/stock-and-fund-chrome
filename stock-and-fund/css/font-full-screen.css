@@ -245,3 +245,8 @@
   height: 600px;
   overflow-y: scroll;
 }
+
+.batch-edit-input {
+    width: 120px;
+    padding: 2px;
+}

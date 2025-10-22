@@ -260,3 +260,8 @@ input[type="checkbox"] {
   height: 350px;
   overflow-y: scroll;
 }
+
+.batch-edit-input {
+    width: 70px;
+    padding: 2px;
+}
