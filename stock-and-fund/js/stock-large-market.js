@@ -24,24 +24,42 @@ async function initLargeMarketDataCallBack(bigStocks) {
     }
     largeMarketStockMaxs = '';
     largeMarketStockMins = '';
+    
+    // 加载自定义指数名称映射
+    const customIndices = await readCacheData('custom-indices');
+    const customIndexMap = {};
+    if (customIndices) {
+        const indices = JSON.parse(customIndices);
+        indices.forEach(item => {
+            customIndexMap[item.code] = item.name;
+        });
+    }
+    
     var str = "<div class=\"stock-large-market-container\">";
     str += largetMarketTotalStr;
     for(let k in bigStocks) {
         var name = bigStocks[k].f14;
-        if (bigStocks[k].f12 == 'CN00Y') {
+        var code = bigStocks[k].f12;
+        
+        // 特殊名称处理
+        if (code == 'CN00Y') {
             name = 'A50期指';
-        } else if (bigStocks[k].f12 == 'UDI') {
+        } else if (code == 'UDI') {
             name = '美元指数';
+        } else if (code.startsWith('BK') && customIndexMap[code]) {
+            // 使用自定义指数名称
+            name = customIndexMap[code];
         }
+        
         var change = bigStocks[k].f4;
         var now = parseFloat(bigStocks[k].f2).toFixed(2);
-        if (bigStocks[k].f12 == 'USDCNH') {
+        if (code == 'USDCNH') {
             now = parseFloat(bigStocks[k].f2).toFixed(4);
         }
         var changePercent = parseFloat(bigStocks[k].f3).toFixed(2);
-        var aId = "id = 'large-market-" + bigStocks[k].f12 + "'";
-        largeMarketStockMaxs += bigStocks[k].f12 + '~' + bigStocks[k].f15 + '-';
-        largeMarketStockMins += bigStocks[k].f12 + '~' + bigStocks[k].f16 + '-';
+        var aId = "id = 'large-market-" + code + "'";
+        largeMarketStockMaxs += code + '~' + bigStocks[k].f15 + '-';
+        largeMarketStockMins += code + '~' + bigStocks[k].f16 + '-';
         var style = "style=\""
             + (change == 0 ? "\"" : (change >= 0 ? "color:" + redColor + ";\"" : "color:" + blueColor + ";\""));
         if (largetMarketCountDisplay) {
@@ -63,239 +81,62 @@ async function initLargeMarketDataCallBack(bigStocks) {
     str = str + '</div>';
     $("#stock-large-market").html(str);
     setTimeout(function() {
-        // html 渲染完毕后 1s 执行
-        // 点击上证指数
-        if(document.getElementById('large-market-000001'))
-        document.getElementById('large-market-000001').addEventListener('click', function () {
-            timeImageCode = "sh000001";
-            initLargeMarketClick();
-        });
-        // 点击深证成指
-        if(document.getElementById('large-market-399001'))
-        document.getElementById('large-market-399001').addEventListener('click', function () {
-            timeImageCode = "sz399001";
-            initLargeMarketClick();
-        });
-        // 点击创业板指
-        if(document.getElementById('large-market-399006'))
-        document.getElementById('large-market-399006').addEventListener('click', function () {
-            timeImageCode = "sz399006";
-            initLargeMarketClick();
-        });
-        // 点击恒生指数
-        if(document.getElementById('large-market-HSI'))
-        document.getElementById('large-market-HSI').addEventListener('click', function () {
-            timeImageCode = "hkHSI";
-            initLargeMarketClick();
-        });
-        // 点击恒生科技指数
-        if(document.getElementById('large-market-HSTECH'))
-        document.getElementById('large-market-HSTECH').addEventListener('click', function () {
-            timeImageCode = "hkHSTECH";
-            initLargeMarketClick();
-        });
-        // 点击A50期指指数
-        if(document.getElementById('large-market-CN00Y'))
-        document.getElementById('large-market-CN00Y').addEventListener('click', function () {
-            timeImageCode = "CN00Y";
-            initLargeMarketClick();
-        });
-        // 点击纳斯达克指数
-        if(document.getElementById('large-market-NDX'))
-        document.getElementById('large-market-NDX').addEventListener('click', function () {
-            timeImageCode = "usNDX";
-            initLargeMarketClick();
-        });
-        // 点击道琼斯指数
-        if(document.getElementById('large-market-DJIA'))
-        document.getElementById('large-market-DJIA').addEventListener('click', function () {
-            timeImageCode = "usDJIA";
-            initLargeMarketClick();
-        });
-        // 点击标普500指数
-        if(document.getElementById('large-market-SPX'))
-        document.getElementById('large-market-SPX').addEventListener('click', function () {
-            timeImageCode = "usSPX";
-            initLargeMarketClick();
-        });
-        // 点击日经225指数
-        if(document.getElementById('large-market-N225'))
-        document.getElementById('large-market-N225').addEventListener('click', function () {
-            timeImageCode = "N225";
-            initLargeMarketClick();
-        });
-        // 点击韩国KOSPI指数
-        if(document.getElementById('large-market-KS11'))
-        document.getElementById('large-market-KS11').addEventListener('click', function () {
-            timeImageCode = "KS11";
-            initLargeMarketClick();
-        });
-        // 点击英国富时100指数
-        if(document.getElementById('large-market-FTSE'))
-        document.getElementById('large-market-FTSE').addEventListener('click', function () {
-            timeImageCode = "FTSE";
-            initLargeMarketClick();
-        });
-        // 点击德国DAX30指数
-        if(document.getElementById('large-market-GDAXI'))
-        document.getElementById('large-market-GDAXI').addEventListener('click', function () {
-            timeImageCode = "GDAXI";
-            initLargeMarketClick();
-        });
-        // 点击法国CAC40指数
-        if(document.getElementById('large-market-FCHI'))
-        document.getElementById('large-market-FCHI').addEventListener('click', function () {
-            timeImageCode = "FCHI";
-            initLargeMarketClick();
-        });
-        // 点击印度孟买SENSEX指数
-        if(document.getElementById('large-market-SENSEX'))
-        document.getElementById('large-market-SENSEX').addEventListener('click', function () {
-            timeImageCode = "SENSEX";
-            initLargeMarketClick();
-        });
-        // 点击印台湾加权指数
-        if(document.getElementById('large-market-TWII'))
-        document.getElementById('large-market-TWII').addEventListener('click', function () {
-            timeImageCode = "TWII";
-            initLargeMarketClick();
-        });
-        // 点击印台湾加权指数
-        if(document.getElementById('large-market-VNINDEX'))
-        document.getElementById('large-market-VNINDEX').addEventListener('click', function () {
-            timeImageCode = "VNINDEX";
-            initLargeMarketClick();
-        });
-        // 点击沪深300指数
-        if(document.getElementById('large-market-000300'))
-        document.getElementById('large-market-000300').addEventListener('click', function () {
-            timeImageCode = "sh000300";
-            initLargeMarketClick();
-        });
-        // 点击中证500指数
-        if(document.getElementById('large-market-399905'))
-        document.getElementById('large-market-399905').addEventListener('click', function () {
-            timeImageCode = "sz399905";
-            initLargeMarketClick();
-        });
-        // 点击中证1000指数
-        if(document.getElementById('large-market-000852'))
-        document.getElementById('large-market-000852').addEventListener('click', function () {
-            timeImageCode = "sh000852";
-            initLargeMarketClick();
-        });
-        // 点击北证50指数
-        if(document.getElementById('large-market-899050'))
-        document.getElementById('large-market-899050').addEventListener('click', function () {
-            timeImageCode = "899050";
-            initLargeMarketClick();
-        });
-        // 点击科创50指数
-        if(document.getElementById('large-market-000688'))
-        document.getElementById('large-market-000688').addEventListener('click', function () {
-            timeImageCode = "sh000688";
-            initLargeMarketClick();
-        });
-        // 点击中证能源
-        if(document.getElementById('large-market-000928'))
-        document.getElementById('large-market-000928').addEventListener('click', function () {
-            timeImageCode = "sh000928";
-            initLargeMarketClick();
-        });
-        // 点击中证白酒
-        if(document.getElementById('large-market-399997'))
-        document.getElementById('large-market-399997').addEventListener('click', function () {
-            timeImageCode = "sz399997";
-            initLargeMarketClick();
-        });
-        // 点击中证医药
-        if(document.getElementById('large-market-000933'))
-        document.getElementById('large-market-000933').addEventListener('click', function () {
-            timeImageCode = "sh000933";
-            initLargeMarketClick();
-        });
-        // 点击中证中药
-        if(document.getElementById('large-market-930641'))
-        document.getElementById('large-market-930641').addEventListener('click', function () {
-            timeImageCode = "930641";
-            initLargeMarketClick();
-        });
-        // 点击中证央企
-        if(document.getElementById('large-market-000926'))
-        document.getElementById('large-market-000926').addEventListener('click', function () {
-            timeImageCode = "sh000926";
-            initLargeMarketClick();
-        });
-        // 点击中证有色
-        if(document.getElementById('large-market-930708'))
-        document.getElementById('large-market-930708').addEventListener('click', function () {
-            timeImageCode = "930708";
-            initLargeMarketClick();
-        });
-        // 点击中证医疗
-        if(document.getElementById('large-market-399989'))
-        document.getElementById('large-market-399989').addEventListener('click', function () {
-            timeImageCode = "sz399989";
-            initLargeMarketClick();
-        });
-        // 点击中证银行
-        if(document.getElementById('large-market-399986'))
-        document.getElementById('large-market-399986').addEventListener('click', function () {
-            timeImageCode = "sz399986";
-            initLargeMarketClick();
-        });
-        // 点击新能源
-        if(document.getElementById('large-market-000941'))
-        document.getElementById('large-market-000941').addEventListener('click', function () {
-            timeImageCode = "sh000941";
-            initLargeMarketClick();
-        });
-        // 点击人工智能
-        if(document.getElementById('large-market-931071'))
-        document.getElementById('large-market-931071').addEventListener('click', function () {
-            timeImageCode = "931071";
-            initLargeMarketClick();
-        });
-        // 点击数字经济
-        if(document.getElementById('large-market-931582'))
-        document.getElementById('large-market-931582').addEventListener('click', function () {
-            timeImageCode = "931582";
-            initLargeMarketClick();
-        });
-        // 点击微盘股
-        if(document.getElementById('large-market-BK1158'))
-        document.getElementById('large-market-BK1158').addEventListener('click', function () {
-            timeImageCode = "BK1158";
-            initLargeMarketClick();
-        });
-        // 点击COMEX黄金
-        if(document.getElementById('large-market-GC00Y'))
-            document.getElementById('large-market-GC00Y').addEventListener('click', function () {
-                timeImageCode = "GC00Y";
-                initLargeMarketClick();
-        });
-        // 点击美元离岸人民币
-        if(document.getElementById('large-market-USDCNH'))
-            document.getElementById('large-market-USDCNH').addEventListener('click', function () {
-                timeImageCode = "USDCNH";
-                initLargeMarketClick();
-        });
-        // 点击美元指数
-        if(document.getElementById('large-market-UDI'))
-            document.getElementById('large-market-UDI').addEventListener('click', function () {
-                timeImageCode = "UDI";
-                initLargeMarketClick();
-        });
-        // 点击NYMEX原油
-        if(document.getElementById('large-market-CL00Y'))
-            document.getElementById('large-market-CL00Y').addEventListener('click', function () {
-                timeImageCode = "CL00Y";
-                initLargeMarketClick();
-        });
-        
+        // html 渲染完毕后 300ms 执行
+        attachLargeMarketClickEvents();
         // 添加拖拽功能
         addLargeMarketDragListeners();
     }, 300);
+}
+
+// 绑定大盘指数点击事件（统一管理）
+async function attachLargeMarketClickEvents() {
+    // 加载自定义指数
+    const customIndices = await readCacheData('custom-indices');
+    let customCodes = [];
+    if (customIndices) {
+        const indices = JSON.parse(customIndices);
+        customCodes = indices.map(item => item.code);
+    }
+    
+    // 为所有大盘指数box添加点击事件
+    const boxes = document.querySelectorAll('.stock-large-market-box');
+    boxes.forEach(box => {
+        if (box.id && box.id.startsWith('large-market-')) {
+            const code = box.id.replace('large-market-', '');
+            box.addEventListener('click', function() {
+                timeImageCode = convertToTimeImageCode(code);
+                initLargeMarketClick();
+            });
+        }
+    });
+}
+
+// 将显示代码转换为timeImageCode
+function convertToTimeImageCode(code) {
+    // 特殊处理需要前缀的代码
+    const prefixMap = {
+        '000001': 'sh000001',
+        '399001': 'sz399001',
+        '399006': 'sz399006',
+        '000300': 'sh000300',
+        '399905': 'sz399905',
+        '000852': 'sh000852',
+        '000688': 'sh000688',
+        '000928': 'sh000928',
+        '399997': 'sz399997',
+        '000933': 'sh000933',
+        '000926': 'sh000926',
+        '399989': 'sz399989',
+        '399986': 'sz399986',
+        '000941': 'sh000941',
+        'HSI': 'hkHSI',
+        'HSTECH': 'hkHSTECH',
+        'NDX': 'usNDX',
+        'DJIA': 'usDJIA',
+        'SPX': 'usSPX'
+    };
+    
+    return prefixMap[code] || code;
 }
 
 // 初始化大盘指数 onclick 具体方法
@@ -314,7 +155,9 @@ function initLargeMarketClick() {
     $("#fund-invers-position-button-3")[0].style.display = 'none';
     $("#fund-net-diagram-button-3")[0].style.display = 'none';
     $("#stock-fund-monitor-button")[0].style.display = 'block';
+    // 隐藏所有 show-set-top-or-end-button（头部和底部都有）
     $("#show-set-top-or-end-button")[0].style.display = 'none';
+    $("#show-jump-to-eastmoney")[0].style.display = 'none';
     $("#show-buy-or-sell-button-2")[0].style.display = 'none';
     $("#time-image-pre-button")[0].style.display = 'none';
     $("#time-image-next-button")[0].style.display = 'none';
@@ -512,4 +355,158 @@ async function addLargeMarketCheckEvent() {
     $('input#large-market-code-checkbox[value="133.USDCNH"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="100.UDI"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="102.CL00Y"]').on('change', largeMarketCodeSave);
+    
+    // 添加自定义指数输入功能
+    initCustomIndexFeature();
+}
+
+// 初始化自定义指数功能
+function initCustomIndexFeature() {
+    // 从缓存加载自定义指数
+    loadCustomIndices();
+    
+    // 添加按钮点击事件
+    document.getElementById('add-custom-index-button').addEventListener('click', function() {
+        const codeInput = document.getElementById('custom-index-code-input');
+        const nameInput = document.getElementById('custom-index-name-input');
+        const code = codeInput.value.trim().toUpperCase();
+        const name = nameInput.value.trim();
+        
+        // 验证输入
+        if (!code) {
+            alert('请输入指数代码');
+            return;
+        }
+        
+        if (!code.startsWith('BK')) {
+            alert('指数代码必须以BK开头');
+            return;
+        }
+        
+        if (!name) {
+            alert('请输入指数名称');
+            return;
+        }
+        
+        // 添加到列表
+        addCustomIndex(code, name);
+        
+        // 清空输入框
+        codeInput.value = '';
+        nameInput.value = '';
+    });
+    
+    // 支持回车键添加
+    document.getElementById('custom-index-name-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('add-custom-index-button').click();
+        }
+    });
+}
+
+// 加载自定义指数
+async function loadCustomIndices() {
+    const customIndices = await readCacheData('custom-indices');
+    if (customIndices) {
+        const indices = JSON.parse(customIndices);
+        // 将数据缓存到全局变量以便同步访问
+        window.customIndicesCache = customIndices;
+        displayCustomIndices(indices);
+    }
+}
+
+// 添加自定义指数
+async function addCustomIndex(code, name) {
+    let customIndices = await readCacheData('custom-indices');
+    let indices = customIndices ? JSON.parse(customIndices) : [];
+    
+    // 检查是否已存在
+    const exists = indices.some(item => item.code === code);
+    if (exists) {
+        alert('该指数代码已存在');
+        return;
+    }
+    
+    // 添加新指数
+    indices.push({ code: code, name: name });
+    
+    // 保存到缓存
+    const indicesStr = JSON.stringify(indices);
+    await saveCacheData('custom-indices', indicesStr);
+    // 同步到全局缓存
+    window.customIndicesCache = indicesStr;
+    
+    // 自动添加到大盘指数列表
+    const secid = '90.' + code;
+    if (!largeMarketCode.includes(secid)) {
+        largeMarketCode.push(secid);
+        await saveCacheData('large-market-code', JSON.stringify(largeMarketCode));
+    }
+    
+    // 刷新显示
+    displayCustomIndices(indices);
+    initLargeMarketData();
+}
+
+// 删除自定义指数
+async function removeCustomIndex(code) {
+    if (!confirm('确定要删除该自定义指数吗？')) {
+        return;
+    }
+    
+    let customIndices = await readCacheData('custom-indices');
+    let indices = customIndices ? JSON.parse(customIndices) : [];
+    
+    // 从列表中移除
+    indices = indices.filter(item => item.code !== code);
+    
+    // 保存到缓存
+    const indicesStr = JSON.stringify(indices);
+    await saveCacheData('custom-indices', indicesStr);
+    // 同步到全局缓存
+    window.customIndicesCache = indicesStr;
+    
+    // 从大盘指数列表中移除
+    const secid = '90.' + code;
+    largeMarketCode = largeMarketCode.filter(item => item !== secid);
+    await saveCacheData('large-market-code', JSON.stringify(largeMarketCode));
+    
+    // 刷新显示
+    displayCustomIndices(indices);
+    initLargeMarketData();
+}
+
+// 显示自定义指数列表
+function displayCustomIndices(indices) {
+    const container = document.getElementById('custom-index-list');
+    if (!indices || indices.length === 0) {
+        container.innerHTML = '<p style="color: #999; font-size: 12px; margin: 5px 0;">暂无自定义指数</p>';
+        return;
+    }
+    
+    let html = '<div style="display: flex; flex-wrap: wrap; gap: 8px;">';
+    indices.forEach(item => {
+        html += `
+            <div class="custom-index-item" style="display: inline-flex; align-items: center; padding: 5px 10px; 
+                        background: #f0f0f0; border-radius: 4px; font-size: 12px;">
+                <span style="margin-right: 8px;">${item.code} - ${item.name}</span>
+                <button class="remove-custom-index-btn" data-code="${item.code}"
+                        style="background: #dc3545; color: white; border: none; 
+                               border-radius: 3px; padding: 2px 6px; cursor: pointer; font-size: 11px;">
+                    删除
+                </button>
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    container.innerHTML = html;
+    
+    // 使用事件委托绑定删除按钮点击事件
+    container.querySelectorAll('.remove-custom-index-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const code = this.getAttribute('data-code');
+            removeCustomIndex(code);
+        });
+    });
 }

@@ -9,44 +9,45 @@ let stockMaxs = '';
 let stockMins = '';
 let largeMarketStockMaxs = '';
 let largeMarketStockMins = '';
+
+// 判断是否为大盘指数（不显示编辑、买卖、置顶等按钮）
+function isLargeMarketIndex(code) {
+    return code == "sh000001" || code == "sz399001" || code == "sz399006"
+        || code == 'N225' || code == 'KS11' || code == 'FTSE'
+        || code == 'GDAXI' || code == 'FCHI' || code == 'SENSEX'
+        || code == 'sh000300' || code == 'usNDX' || code == 'hkHSI'
+        || code == 'usSPX' || code == 'usDJIA' || code == 'sz399905'
+        || code == 'sh000852' || code == 'sh000688' || code == 'sh000928'
+        || code == 'sz399997' || code == 'sh000933' || code == 'sh000926'
+        || code == 'sz399989' || code == 'sz399986' || code == 'sh000941'
+        || code == '899050' || code == '930641' || code == '930708'
+        || code == '931071' || code == '931582' || code == 'TWII'
+        || code == 'VNINDEX' || code == 'hkHSTECH' || code == 'CN00Y'
+        || code.startsWith('BK') || code == 'GC00Y' || code == 'USDCNH'
+        || code == 'UDI' || code == 'CL00Y';
+}
 // 展示分时图
 function showMinuteImage(ndays) {
     clearTimeImageTimeout();
     let path = "";
-    if (timeImageCode != "sh000001" && timeImageCode != "sz399001" && timeImageCode != "sz399006"
-        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
-        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
-        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
-        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
-        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
-        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
-        && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
-        && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y'
-        && timeImageCode != 'BK1158' && timeImageCode != 'GC00Y' && timeImageCode != 'USDCNH'
-        && timeImageCode != 'UDI' && timeImageCode != 'CL00Y') {
-            $("#update-stock-fund-button")[0].style.display = 'block';
-            $("#show-set-top-or-end-button")[0].style.display = 'block';
+    if (!isLargeMarketIndex(timeImageCode)) {
+        $("#update-stock-fund-button")[0].style.display = 'block';
+        $("#show-set-top-or-end-button")[0].style.display = 'block';
+        $("#show-jump-to-eastmoney")[0].style.display = 'block';
         if (timeImageType == "STOCK") {
             $("#show-buy-or-sell-button-2")[0].style.display = 'block';
         }
+    } else {
+        // 隐藏大盘指数的所有按钮
+        $("#update-stock-fund-button")[0].style.display = 'none';
+        $("#show-set-top-or-end-button")[0].style.display = 'none';
+        $("#show-buy-or-sell-button-2")[0].style.display = 'none';
+        $("#show-jump-to-eastmoney")[0].style.display = 'none';
     }
     fundInvesterPositionSetButton();
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
-        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
-        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
-        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
-        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
-        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
-        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
-        && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
-        && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y'
-        && timeImageCode != 'BK1158' && timeImageCode != 'GC00Y' && timeImageCode != 'USDCNH'
-        && timeImageCode != 'UDI' && timeImageCode != 'CL00Y') {
+        && !isLargeMarketIndex(timeImageCode)) {
         if (timeImageType == "FUND") {
             path = Env.GET_FUND_TIME_IMAGE_MINUTE_FROM_DFCFW + timeImageCode + ".png";
             $("#fund-modal").modal("hide");
@@ -79,18 +80,7 @@ function showDayImage() {
     fundInvesterPositionSetButton();
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
-        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
-        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
-        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
-        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
-        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
-        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
-        && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
-        && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y'
-        && timeImageCode != 'BK1158' && timeImageCode != 'GC00Y' && timeImageCode != 'USDCNH'
-        && timeImageCode != 'UDI' && timeImageCode != 'CL00Y') {
+        && !isLargeMarketIndex(timeImageCode)) {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -121,18 +111,7 @@ function showWeekImage() {
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
-        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
-        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
-        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
-        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
-        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
-        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
-        && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
-        && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y'
-        && timeImageCode != 'BK1158' && timeImageCode != 'GC00Y' && timeImageCode != 'USDCNH'
-        && timeImageCode != 'UDI' && timeImageCode != 'CL00Y') {
+        && !isLargeMarketIndex(timeImageCode)) {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=W&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -161,18 +140,7 @@ function showMonthImage() {
     let path = "";
     if (timeImageNewOrOld == 'OLD' && !timeImageCode.startsWith("us") && !timeImageCode.startsWith("US") 
         && !timeImageCode.startsWith("hk") && !timeImageCode.startsWith("HK")
-        && timeImageCode != 'N225' && timeImageCode != 'KS11' && timeImageCode != 'FTSE'
-        && timeImageCode != 'GDAXI' && timeImageCode != 'FCHI' && timeImageCode != 'SENSEX'
-        && timeImageCode != 'sh000300' && timeImageCode != 'usNDX' && timeImageCode != 'hkHSI'
-        && timeImageCode != 'usSPX' && timeImageCode != 'usDJIA' && timeImageCode != 'sz399905'
-        && timeImageCode != 'sh000852' && timeImageCode != 'sh000688' && timeImageCode != 'sh000928'
-        && timeImageCode != 'sz399997' && timeImageCode != 'sh000933' && timeImageCode != 'sh000926'
-        && timeImageCode != 'sz399989' && timeImageCode != 'sz399986' && timeImageCode != 'sh000941'
-        && timeImageCode != '899050' && timeImageCode != '930641' && timeImageCode != '930708'
-        && timeImageCode != '931071' && timeImageCode != '931582' && timeImageCode != 'TWII'
-        && timeImageCode != 'VNINDEX' && timeImageCode != 'hkHSTECH' && timeImageCode != 'CN00Y'
-        && timeImageCode != 'BK1158' && timeImageCode != 'GC00Y' && timeImageCode != 'USDCNH'
-        && timeImageCode != 'UDI' && timeImageCode != 'CL00Y') {
+        && !isLargeMarketIndex(timeImageCode)) {
         if (timeImageType == "FUND") {
             let timestamp = (Date.now() + "").substring(0, 10);
             path = Env.GET_FUND_TIME_IMAGE_FROM_DFCFW + "?nid=0." + timeImageCode + "&type=M&unitWidth=-6&ef=&formula=RSI&AT=1&imageType=KXL&timespan=" + timestamp;
@@ -1387,6 +1355,7 @@ function fundInvesterPositionSetButton() {
     // 说明该基金是从持仓明细进入的
     if (fundOrStockName == timeImageCode) {
         $("#show-set-top-or-end-button")[0].style.display = 'none';
+        $("#show-jump-to-eastmoney")[0].style.display = 'none';
         $("#stock-fund-monitor-button")[0].style.display = 'none';
         $("#fund-invers-position-button-3")[0].style.display = 'none';
         $("#fund-net-diagram-button-3")[0].style.display = 'none';

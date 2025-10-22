@@ -830,7 +830,7 @@ function getSecidBack(code) {
             secid = '124';
         } else if(code == 'CN00Y'){
             secid = '104';
-        } else if(code == 'BK1158'){
+        } else if(code.startsWith('BK')){
             secid = '90';
         } else if(code == 'GC00Y'){
             secid = '101';

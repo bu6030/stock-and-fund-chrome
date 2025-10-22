@@ -1135,6 +1135,21 @@
                                     </div>
                                 </h6>
                             </div>
+                            <div class="you" style="margin-top: 15px;">
+                                <h6 class="modal-title">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <label style="margin: 0;">自定义指数代码（BK开头）：</label>
+                                        <input type="text" id="custom-index-code-input" placeholder="如：BK0473" 
+                                               style="width: 150px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                        <input type="text" id="custom-index-name-input" placeholder="指数名称" 
+                                               style="width: 150px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                                        <button type="button" id="add-custom-index-button" class="btn btn-primary btn-sm">添加</button>
+                                    </div>
+                                    <div id="custom-index-list" style="margin-top: 10px;">
+                                        <!-- 自定义指数列表将显示在这里 -->
+                                    </div>
+                                </h6>
+                            </div>
                         </div>
                     </div>
 
@@ -1235,7 +1250,7 @@
                                 <!-- <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-button">东方财富走势图</button>
                                 <button type="button" class="btn btn-outline-primary" id="go-to-eastmoney-detail-button">东方财富详细信息</button>
                                 <button type="button" class="btn btn-outline-primary" id="go-to-tiantianjijin-detail-button">天天基金详细信息</button> -->
-                                <button type="button" id="show-set-top-or-end-button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" id="show-jump-to-eastmoney" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 跳转东财/同花顺
                                 </button>
                                 <div class="dropdown-menu">

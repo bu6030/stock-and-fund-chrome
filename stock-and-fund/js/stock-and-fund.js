@@ -7225,7 +7225,7 @@ function getSecid(code) {
             secid = '124';
         } else if(code == 'CN00Y'){
             secid = '104';
-        } else if(code == 'BK1158'){
+        } else if(code.startsWith('BK')){
             secid = '90';
         } else if(code == 'GC00Y'){
             secid = '101';
@@ -7885,11 +7885,39 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 name = 'NYMEX原油';
                 break;
             default:
-                name = timeImageCode;
+                // 检查是否为自定义BK指数
+                if (timeImageCode.startsWith('BK')) {
+                    name = getCustomIndexName(timeImageCode);
+                    if (!name) {
+                        name = timeImageCode;
+                    }
+                } else {
+                    name = timeImageCode;
+                }
                 break;
         }
     }
     return name;
+}
+
+// 获取自定义指数名称
+function getCustomIndexName(code) {
+    try {
+        // 先尝试从 localStorage 读取
+        let customIndicesStr = localStorage.getItem('custom-indices');
+        // 如果 localStorage 中没有，尝试从 window 全局变量读取（用于同步访问）
+        if (!customIndicesStr && window.customIndicesCache) {
+            customIndicesStr = window.customIndicesCache;
+        }
+        if (customIndicesStr) {
+            const customIndices = JSON.parse(customIndicesStr);
+            const found = customIndices.find(item => item.code === code);
+            return found ? found.name : null;
+        }
+    } catch (e) {
+        console.warn('获取自定义指数名称失败:', e);
+    }
+    return null;
 }
 
 async function selectLargeMarketCodeCheckbox() {
