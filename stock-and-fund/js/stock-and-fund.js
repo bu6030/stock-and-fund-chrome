@@ -9371,7 +9371,9 @@ async function batchSave() {
             saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
         }
     }
-    
+    if(autoSync) {
+        syncDataToCloud();
+    }
     // 退出编辑模式
     exitBatchEditMode();
     // 重新加载数据
