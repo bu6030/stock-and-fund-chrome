@@ -529,7 +529,8 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         }
         response = await response.text();
         response = JSON.parse(response);
-        let stoksArr = response.data.diff;
+        // 检查 response.data 是否为 null，如果为 null 则设置为空列表
+        let stoksArr = (response.data && response.data.diff) ? response.data.diff : [];
         // 在这里处理返回的数据
         var title = '';
         var stockDayIncome = 0.00;
@@ -677,8 +678,38 @@ async function saveDayIncomehistory(stockDayIncome, fundDayIncome, date) {
     }
     saveData('DAY_INCOME_HISTORY', dayIncomeHistory);
 }
+// 获取前一个工作日的日期，格式为 20250924
+function getPreviousWorkingDay() {
+    let date = new Date();
+    // 设置为北京时间
+    let options = {
+        timeZone: 'Asia/Shanghai',
+        hour12: false
+    };
+    // 向前推一天
+    date.setDate(date.getDate() - 1);
+    // 如果是周日，再向前推两天到周五
+    if (date.getDay() === 0) {
+        date.setDate(date.getDate() - 2);
+    }
+    // 如果是周六，向前推一天到周五
+    else if (date.getDay() === 6) {
+        date.setDate(date.getDate() - 1);
+    }
+    
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}${month}${day}`;
+}
 // 统计基金当日盈利
 async function getFundIncome(date) {
+    // 如果 date 为 null 或空字符串，获取前一个工作日的日期
+    if (!date || date === '') {
+        date = getPreviousWorkingDay();
+        console.log('date 为空，使用前一个工作日日期：', date);
+    }
     let fundList = await getData('funds');
     if (fundList == null || fundList == '' || fundList == undefined || fundList == 'undefined') {
         fundList = [];

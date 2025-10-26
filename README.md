@@ -456,6 +456,7 @@
 429. 增加开启密码保护后密码验证阶段不显示插件界面及功能 2025/10/18 version 2.2.8.3 --end
 430. 首页增加批量编辑按钮 2025/10/22
 431. 增加自定义大盘指数 2025/10/22 version 2.2.8.4 --end
+432. 后台任务获取日期问题处理 2025/10/26 version 2.2.8.5 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
