@@ -5615,6 +5615,8 @@ async function syncConfigFromCloud() {
             saveCacheData('opacity-percent', opacityPercent);
             largeMarketCode = result.largeMarketCode;
             saveCacheData('large-market-code', JSON.stringify(largeMarketCode));
+            let fontChangeStyle = result.fontChangeStyle;
+            saveCacheData('font-change-style', fontChangeStyle);
             initHtml();
             initLargeMarketData();
             reloadDataAndHtml();
@@ -5707,6 +5709,8 @@ async function syncConfigToCloud() {
     data.riseFallSort = riseFallSort;
     data.opacityPercent = opacityPercent;
     data.largeMarketCode = largeMarketCode;
+    let fontChangeStyle = await readCacheData('font-change-style');
+    data.fontChangeStyle = fontChangeStyle;
     data.updateTime = getBeijingTime();
     let result = ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid + '_CONFIG');
     if (result == 'fail') {
