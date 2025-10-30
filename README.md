@@ -458,6 +458,7 @@
 431. 增加自定义大盘指数 2025/10/22 version 2.2.8.4 --end
 432. 后台任务获取日期问题处理 2025/10/26 version 2.2.8.5 --end
 433. 云同步配置增加粗体字 2025/10/26 version 2.2.8.6 --end
+434. 在搜索不到基金时，从新的接口搜索 2025/10/30 version 2.2.8.7 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

@@ -3268,7 +3268,19 @@ async function searchFundByName(name) {
             }
         }
         if (fundsArrs.length == 0) {
-            alertMessage("未搜索到该基金");
+            // 尝试使用新接口搜索
+            let result = ajaxGetFundSearchFromEastMoney(name);
+            if (result && result.ErrCode == 0 && result.Datas && result.Datas.length > 0) {
+                for (var i = 0; i < result.Datas.length; i++) {
+                    var fund = {
+                        "fundCode": result.Datas[i].CODE,
+                        "fundName": result.Datas[i].NAME
+                    };
+                    fundsArrs.push(fund);
+                }
+            } else {
+                alertMessage("未搜索到该基金");
+            }
         }
     } else {
         let result = ajaxGetFundCodeFromTiantianjijin();
@@ -3288,7 +3300,19 @@ async function searchFundByName(name) {
             }
         }
         if (fundsArrs.length == 0) {
-            alertMessage("未搜索到该基金");
+            // 尝试使用新接口搜索
+            let result = ajaxGetFundSearchFromEastMoney(name);
+            if (result && result.ErrCode == 0 && result.Datas && result.Datas.length > 0) {
+                for (var i = 0; i < result.Datas.length; i++) {
+                    var fund = {
+                        "fundCode": result.Datas[i].CODE,
+                        "fundName": result.Datas[i].NAME
+                    };
+                    fundsArrs.push(fund);
+                }
+            } else {
+                alertMessage("未搜索到该基金");
+            }
         }
     }
     return fundsArrs;

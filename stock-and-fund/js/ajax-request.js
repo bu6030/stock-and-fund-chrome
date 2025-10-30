@@ -102,6 +102,30 @@ function ajaxGetFundCodeFromTiantianjijin() {
     return result;
 }
 
+// 接口调用 - 东方财富基金搜索接口
+function ajaxGetFundSearchFromEastMoney(key) {
+    let result;
+    let timestamp = Date.now();
+    $.ajax({
+        url: Env.GET_FUND_SEARCH_FROM_EASTMONEY + "?m=1&key=" + key + "&_=" + timestamp,
+        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            result = data;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
 // 接口调用
 function ajaxGetStockCodeByNameFromGtimg(name) {
     let result;
