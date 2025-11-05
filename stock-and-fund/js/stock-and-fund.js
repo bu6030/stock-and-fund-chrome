@@ -3185,7 +3185,8 @@ function searchStockByName(name) {
     }
     var stocksArr;
     let result = ajaxGetStockCodeByNameFromGtimg(name);
-    if (result.indexOf("v_hint=\"N\";") != -1) {
+    // 如果 GTIMG 接口返回为空或 undefined，则使用东方财富接口
+    if (result == undefined || result == '' || result.indexOf("v_hint=\"N\";") != -1) {
         // 搜索可转债
         if (isNumeric(name)) {
             let stock = checkStockExsit("sh" + name);
@@ -3219,28 +3220,66 @@ function searchStockByName(name) {
         } else {
             let arr = ajaxGetStockCodeByNameFromDFCFW(name);
             console.log(arr);
-            if (arr == [] || arr.length == 0) {
+            if (arr == [] || arr == undefined || arr.length == 0) {
                 alertMessage("不存在该股票");
                 $("#stock-name").val("");
                 return;
             } else {
-                result = "";
+                result = "v_hint=\"";
+                let hasResult = false;
+                
                 arr.forEach(item => {
-                    if (item.securityTypeName == '京A') {
-                        if (result == "") {
-                            result = result + "bj~" + item.code + "~" +item.shortName;
+                    // 根据不同的市场类型确定前缀
+                    let prefix = "";
+                    let suffix = "";
+                    if (item.securityTypeName == '沪A') {
+                        prefix = "sh";
+                    } else if (item.securityTypeName == '深A') {
+                        prefix = "sz";
+                    } else if (item.securityTypeName == '京A') {
+                        prefix = "bj";
+                    } else if (item.securityTypeName == '沪B') {
+                        prefix = "sh";
+                    } else if (item.securityTypeName == '深B') {
+                        prefix = "sz";
+                    } else if (item.securityTypeName == '港股') {
+                        prefix = "hk";
+                    } else if (item.market == '105') {
+                        prefix = "us";
+                        suffix = ".OQ";
+                    } else if (item.market == '153') {
+                        prefix = "us";
+                        suffix = ".PS";
+                    } else if (item.market == '107') {
+                        prefix = "us";
+                        suffix = ".AM";
+                    }
+                    
+                    if (prefix != "") {
+                        if (!hasResult) {
+                            result = result + prefix + "~" + item.code + suffix + "~" + item.shortName;
+                            hasResult = true;
                         } else {
-                            result = result  + "^" + "bj~" + item.code + "~" +item.shortName;
+                            result = result + "^" + prefix + "~" + item.code + suffix + "~" + item.shortName;
                         }
                     }
                 });
+                
+                // 如果没有匹配的股票
+                if (!hasResult) {
+                    alertMessage("不存在该股票");
+                    $("#stock-name").val("");
+                    return;
+                }
+                
+                result = result + "\";";
             }
         }
     }
     if (result.indexOf("v_cate_hint") != -1) {
         result = result.substring(result.indexOf("\n") + 1);
     }
-    result = result.replace("v_hint=\"", "").replace(" ", "");
+    result = result.replace("v_hint=\"", "").replace(" ", "").replace("\";", "");
     stocksArr = result.split("^");
     return stocksArr;
 }
