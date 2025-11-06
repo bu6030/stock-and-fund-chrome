@@ -499,11 +499,29 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
     console.log("执行扩展程序图标鼠标悬停后展示前20个股票价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
-        let stockArr = await getData('stocks');
-        if (stockArr == null || stockArr == undefined) {
-            stockArr = '[]';
+        
+        // 检查是否启用所有分组收益统计
+        let calculateAllGroupIncome = await getData('calculate-all-group-income');
+        if (calculateAllGroupIncome == null) {
+            calculateAllGroupIncome = false;
+        } else if(calculateAllGroupIncome == "true") {
+            calculateAllGroupIncome = true;
+        } else if(calculateAllGroupIncome == "false") {
+            calculateAllGroupIncome = false;
         }
-        var stockList = JSON.parse(stockArr);
+        
+        var stockList;
+        if (calculateAllGroupIncome) {
+            // 从所有分组获取股票数据
+            stockList = await getAllStocksFromAllGroups();
+        } else {
+            // 只从默认分组获取股票数据
+            let stockArr = await getData('stocks');
+            if (stockArr == null || stockArr == undefined) {
+                stockArr = '[]';
+            }
+            stockList = JSON.parse(stockArr);
+        }
         var secIdStockArr = '';
         let monitorShowMore = await getData('monitor-show-more');
         if (monitorShowMore == null) {
@@ -710,11 +728,29 @@ async function getFundIncome(date) {
         date = getPreviousWorkingDay();
         console.log('date 为空，使用前一个工作日日期：', date);
     }
-    let fundList = await getData('funds');
-    if (fundList == null || fundList == '' || fundList == undefined || fundList == 'undefined') {
-        fundList = [];
+    
+    // 检查是否启用所有分组收益统计
+    let calculateAllGroupIncome = await getData('calculate-all-group-income');
+    if (calculateAllGroupIncome == null) {
+        calculateAllGroupIncome = false;
+    } else if(calculateAllGroupIncome == "true") {
+        calculateAllGroupIncome = true;
+    } else if(calculateAllGroupIncome == "false") {
+        calculateAllGroupIncome = false;
+    }
+    
+    let fundList;
+    if (calculateAllGroupIncome) {
+        // 从所有分组获取基金数据
+        fundList = await getAllFundsFromAllGroups();
     } else {
-        fundList = JSON.parse(fundList);
+        // 只从默认分组获取基金数据
+        fundList = await getData('funds');
+        if (fundList == null || fundList == '' || fundList == undefined || fundList == 'undefined') {
+            fundList = [];
+        } else {
+            fundList = JSON.parse(fundList);
+        }
     }
     let fundDayIncome = parseFloat("0");
     let fundTotalIncome = parseFloat("0");
@@ -1043,4 +1079,76 @@ async function monitorFundPrice(fundList) {
             console.warn(`Error fetching data for fund ${fund.fundCode}: ${error}`);
         }
     }
+}
+
+// 获取所有分组的股票数据
+async function getAllStocksFromAllGroups() {
+    // 首先获取所有分组信息
+    let groups = await getData('groups');
+    if (groups == null || groups == '' || groups == undefined || groups == 'undefined') {
+        groups = {
+            'default-group': '默认分组'
+        };
+    }
+    
+    let allStocks = [];
+    
+    // 遍历所有group
+    for (const id of Object.keys(groups)) {
+        if (id == 'default-group') {
+            var stocks = await getData('stocks');
+            if (stocks != null && stocks != '' && stocks != undefined && stocks != 'undefined' && stocks != '[]') {
+                JSON.parse(stocks).forEach(item => {
+                    item.belongGroup = 'default-group';
+                    allStocks.push(item);
+                });
+            }
+        } else {
+            var stocks = await getData(id + '_stocks');
+            if (stocks != null && stocks != '' && stocks != undefined && stocks != 'undefined' && stocks != '[]') {
+                JSON.parse(stocks).forEach(item => {
+                    item.belongGroup = id;
+                    allStocks.push(item);
+                });
+            }
+        }
+    }
+    
+    return allStocks;
+}
+
+// 获取所有分组的基金数据
+async function getAllFundsFromAllGroups() {
+    // 首先获取所有分组信息
+    let groups = await getData('groups');
+    if (groups == null || groups == '' || groups == undefined || groups == 'undefined') {
+        groups = {
+            'default-group': '默认分组'
+        };
+    }
+    
+    let allFunds = [];
+    
+    // 遍历所有group
+    for (const id of Object.keys(groups)) {
+        if (id == 'default-group') {
+            var funds = await getData('funds');
+            if (funds != null && funds != '' && funds != undefined && funds != 'undefined' && funds != '[]') {
+                JSON.parse(funds).forEach(item => {
+                    item.belongGroup = 'default-group';
+                    allFunds.push(item);
+                });
+            }
+        } else {
+            var funds = await getData(id + '_funds');
+            if (funds != null && funds != '' && funds != undefined && funds != 'undefined' && funds != '[]') {
+                JSON.parse(funds).forEach(item => {
+                    item.belongGroup = id;
+                    allFunds.push(item);
+                });
+            }
+        }
+    }
+    
+    return allFunds;
 }

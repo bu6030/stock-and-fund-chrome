@@ -55,6 +55,7 @@ let klineMAListDisplay = [];
 var monitorPriceOrPercent = 'PRICE';
 var monitorTop20Stock = false;
 var monitorShowMore = true;
+var calculateAllGroupIncome = false;
 var lastSort;
 var huilvConvert = false;
 var s2nDate;
@@ -422,6 +423,14 @@ async function initLoad() {
         monitorShowMore = true;
     } else if(monitorShowMore == "false") {
         monitorShowMore = false;
+    }
+    calculateAllGroupIncome = await readCacheData('calculate-all-group-income');
+    if (calculateAllGroupIncome == null) {
+        calculateAllGroupIncome = false;
+    } else if(calculateAllGroupIncome == "true") {
+        calculateAllGroupIncome = true;
+    } else if(calculateAllGroupIncome == "false") {
+        calculateAllGroupIncome = false;
     }
     timeImageNewOrOld = await readCacheData('time-image-new-or-old');
     if (timeImageNewOrOld == null) {
@@ -1246,6 +1255,9 @@ document.addEventListener(
         // 设置页面，点击扩展程序图标鼠标悬停后展示/不展示前5个股票价格
         document.getElementById('monitor-dont-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
         document.getElementById('monitor-top-20-stock-change-button').addEventListener('click', changemonitorTop20Stock);
+        // 设置页面，点击统计收益时只计算默认分组/所有分组
+        document.getElementById('calculate-all-group-income-disable-button').addEventListener('click', changeCalculateAllGroupIncome);
+        document.getElementById('calculate-all-group-income-enable-button').addEventListener('click', changeCalculateAllGroupIncome);
         // 设置页面，点击扩展程序图标鼠标悬停后展示/不展示大盘指数和收益汇总
         document.getElementById('monitor-dont-show-more-button').addEventListener('click', changeMonitorShowMore);
         document.getElementById('monitor-show-more-button').addEventListener('click', changeMonitorShowMore);
@@ -7790,6 +7802,19 @@ async function changeMonitorShowMore(event) {
     settingButtonInit();
 }
 
+// 修改统计收益时计算所有分组/默认分组
+async function changeCalculateAllGroupIncome(event) {
+    let targetId = event.target.id;
+    if (targetId == 'calculate-all-group-income-enable-button') {
+        calculateAllGroupIncome = true;
+    } else {
+        calculateAllGroupIncome = false;
+    }
+    saveCacheData('calculate-all-group-income', calculateAllGroupIncome);
+    $("#setting-modal").modal("hide");
+    settingButtonInit();
+}
+
 // 清理分时图timeout，不再刷新分时图
 async function clearTimeImageTimeout() {
     if(timerId != undefined && timerId != '') {
@@ -8977,6 +9002,15 @@ async function settingButtonInit(){
     } else {
         document.getElementById('close-addtime-price-newline-button').classList.add('active');
         document.getElementById('open-addtime-price-newline-button').classList.remove('active');
+    }
+    
+    // 初始化统计收益时计算所有分组/默认分组按钮
+    if (calculateAllGroupIncome) {
+        document.getElementById('calculate-all-group-income-disable-button').classList.remove('active');
+        document.getElementById('calculate-all-group-income-enable-button').classList.add('active');
+    } else {
+        document.getElementById('calculate-all-group-income-disable-button').classList.add('active');
+        document.getElementById('calculate-all-group-income-enable-button').classList.remove('active');
     }
 }
 
