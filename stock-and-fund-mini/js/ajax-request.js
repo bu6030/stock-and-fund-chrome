@@ -599,7 +599,9 @@ function ajaxSyncDataToCloud(data, syncDataCloudUuid) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            result = "fail";
+            if(XMLHttpRequest.status != 201) {
+                result = "fail";
+            }
         }
     });
     return result;
