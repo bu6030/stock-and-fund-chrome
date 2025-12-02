@@ -461,6 +461,7 @@
 434. 在搜索不到基金时，从新的接口搜索 2025/10/30 version 2.2.8.7 --end
 435. 当gtimg查询不到时，更换接口 2025/10/30 version 2.2.8.8 --end
 436. 增加全部分组/默认分组计算收益显示角标 2025/10/30 version 2.2.8.9 --end
+437. 修复计算多次购买股票计算当日收益报错问题 2025/12/2
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
