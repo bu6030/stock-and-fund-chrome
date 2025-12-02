@@ -3372,12 +3372,12 @@ async function searchFundByName(name) {
 // 保存股票
 async function saveStock() {
     // 当前是全部分组，需要特殊处理
-    // if (currentGroup == 'all-group') {
-    //     alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
-    //     $("#stock-modal").modal("hide");
-    //     $("#search-stock-modal").modal("hide");
-    //     return;
-    // }
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
+        $("#stock-modal").modal("hide");
+        $("#search-stock-modal").modal("hide");
+        return;
+    }
     var belongGroup = $("#stock-belong-group-select").val();
     var costPrise = $("#stock-costPrise").val();
     var bonds = $("#stock-bonds").val();
@@ -3601,12 +3601,12 @@ async function saveStock() {
 // 保存基金
 async function saveFund() {
     // 当前是全部分组，需要特殊处理
-    // if (currentGroup == 'all-group') {
-    //     alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
-    //     $("#fund-modal").modal("hide");
-    //     $("#search-fund-modal").modal("hide");
-    //     return;
-    // }
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法编辑/添加，请切换到指定分组后再编辑/添加～');
+        $("#fund-modal").modal("hide");
+        $("#search-fund-modal").modal("hide");
+        return;
+    }
     var belongGroup = $("#fund-belong-group-select").val();
     var costPrise = $("#fund-costPrise").val();
     var bonds = $("#fund-bonds").val();
@@ -6038,6 +6038,12 @@ function sortedByDrag() {
 
 // 从同花顺/雪球/东方财富导入
 async function addStockFromTonghuashunXueqiu() {
+    // 当前是全部分组，需要特殊处理
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法导入股票，请切换到指定分组后再导入～');
+        $("#setting-modal").modal("hide");
+        return;
+    }
     let data = await readCacheData('tonghuashun-xueqiu-stock');
     console.log('从同花顺/雪球/东方财富导入的数据：', data );
     for (let k in data) {
