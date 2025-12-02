@@ -1518,7 +1518,7 @@ async function initStockGtimgCallBack(result, stocks) {
                         let beijingDate = getBeijingDate();
                         // 当天购买过
                         if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
-                            maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
+                            maxBuyOrSellBonds = maxBuyOrSellBonds + parseFloat(buyOrSells[g].bonds + "");
                             var buyIncome = (new BigDecimal(stockList[l].now))
                                 .subtract(new BigDecimal(buyOrSells[g].price + ""))
                                 .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
@@ -1681,7 +1681,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
                         let beijingDate = getBeijingDate();
                         // 当天购买过
                         if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
-                            maxBuyOrSellBonds = maxBuyOrSellBonds + buyOrSells[g].bonds;
+                            maxBuyOrSellBonds = maxBuyOrSellBonds + parseFloat(buyOrSells[g].bonds+"");
                             var buyIncome = (new BigDecimal(stock.now))
                                 .subtract(new BigDecimal(buyOrSells[g].price + ""))
                                 .multiply(new BigDecimal(buyOrSells[g].bonds + ""))
