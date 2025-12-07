@@ -463,7 +463,7 @@
 436. 增加全部分组/默认分组计算收益显示角标 2025/10/30 version 2.2.8.9 --end
 437. 修复计算多次购买股票计算当日收益报错问题 2025/12/2
 438. 全部分组禁止编辑和新增股票基金 2025/12/2 version 2.2.9.0 --end
-439. 增加溢价率 2025/12/5
+439. 增加溢价率 2025/12/5 version 2.2.9.1 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
