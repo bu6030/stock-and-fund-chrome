@@ -761,33 +761,36 @@ function ajaxGetWholeTwoMarketMoney() {
 function ajaxGetHuiLv(type) {
     let result;
     var url = Env.GET_HUILV_URL + "?num=100&chiyouhuobi=" + type + "&duihuanhuobi=CNY&type=1&callback=jisuanjieguo";
-    $.ajax({
-        url: url,
-        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
-        type: "get",
-        data: {},
-        async: false,
-        dataType: 'text',
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data) {
-            data = data.substring(13, data.length - 2);
-            result = JSON.parse(data);
-            if (result == null || result == undefined || result == 'undefined'
-                || result.dangqianhuilv == null || result.dangqianhuilv == '') {
-                    result = {
-                        "dangqianhuilv" : "1"
-                    };
-            }
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
-            result = {
-                "dangqianhuilv" : "1"
-            }
-        }
-    });
+    // $.ajax({
+    //     url: url,
+    //     timeout: 5000, // 设置超时时间为5000毫秒（5秒）
+    //     type: "get",
+    //     data: {},
+    //     async: false,
+    //     dataType: 'text',
+    //     contentType: 'application/x-www-form-urlencoded',
+    //     success: function (data) {
+    //         data = data.substring(13, data.length - 2);
+    //         result = JSON.parse(data);
+    //         if (result == null || result == undefined || result == 'undefined'
+    //             || result.dangqianhuilv == null || result.dangqianhuilv == '') {
+    //                 result = {
+    //                     "dangqianhuilv" : "1"
+    //                 };
+    //         }
+    //     },
+    //     error: function (XMLHttpRequest, textStatus, errorThrown) {
+    //         console.log(XMLHttpRequest.status);
+    //         console.log(XMLHttpRequest.readyState);
+    //         console.log(textStatus);
+    //         result = {
+    //             "dangqianhuilv" : "1"
+    //         }
+    //     }
+    // });
+    result = {
+        "dangqianhuilv" : "1"
+    };
     return result;
 }
 
