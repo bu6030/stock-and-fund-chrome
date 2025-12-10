@@ -645,7 +645,8 @@ async function initLoad() {
             'default-group': '默认分组' // 预设一个默认分组
         };
     } else {
-        groups = groupsCache;
+        // 确保groupsCache是一个对象，如果是字符串则进行JSON反序列化
+        groups = typeof groupsCache === 'string' ? JSON.parse(groupsCache) : groupsCache;
     }
     currentGroup  = await readCacheData('current-group');
     if (currentGroup == null || currentGroup == '' || currentGroup == undefined
@@ -8150,6 +8151,68 @@ async function addGroup() {
     editGroupId = '';
 }
 
+// 拖拽相关变量
+let draggedGroupId = null;
+
+// 拖拽开始
+function dragGroup(event) {
+    draggedGroupId = event.target.getAttribute('data-id');
+    event.dataTransfer.effectAllowed = 'move';
+}
+
+// 拖拽结束
+function dropGroup(event) {
+    event.preventDefault();
+    if (!draggedGroupId) return;
+    
+    const dropTarget = event.target;
+    // 确保放置目标是分组按钮
+    const dropButton = dropTarget.classList.contains('group-button') ? dropTarget : dropTarget.closest('.group-button');
+    if (!dropButton) return;
+    
+    const dropGroupId = dropButton.getAttribute('data-id');
+    if (draggedGroupId === dropGroupId) return;
+    
+    const groupList = document.getElementById('group-list');
+    const draggedButton = document.querySelector(`[data-id="${draggedGroupId}"]`);
+    
+    if (!draggedButton) return;
+    
+    // 实际调整DOM中的按钮顺序
+    // 确定是放在dropButton之前还是之后
+    const rect = dropButton.getBoundingClientRect();
+    const y = event.clientY - rect.top;
+    const halfHeight = rect.height / 2;
+    
+    if (y < halfHeight) {
+        // 放在dropButton之前
+        groupList.insertBefore(draggedButton, dropButton);
+    } else {
+        // 放在dropButton之后
+        groupList.insertBefore(draggedButton, dropButton.nextSibling);
+    }
+    
+    // 创建新的分组顺序对象
+    const newGroups = {};
+    const buttons = groupList.querySelectorAll('.group-button');
+    
+    buttons.forEach(button => {
+        const id = button.getAttribute('data-id');
+        newGroups[id] = groups[id];
+    });
+    
+    // 更新分组对象并保存
+    groups = newGroups;
+    // 确保对象被正确序列化为JSON字符串再保存
+    saveCacheData('groups', JSON.stringify(groups));
+    
+    // 重新初始化首页分组按钮
+    initGroupButton();
+    
+    // 更新编辑页面的分组列表
+    updateGroupList();
+}
+
 // 更新分组列表数据
 function updateGroupList() {
     const groupList = document.getElementById('group-list');
@@ -8160,6 +8223,14 @@ function updateGroupList() {
         const groupHtml = groupTemplate.replace(/{id}/g, id).replace(/{name}/g, groupName);
         groupList.innerHTML += groupHtml;
     });
+    
+    // 添加拖拽事件监听器
+    groupList.addEventListener('dragover', function(event) {
+        event.preventDefault();
+    });
+    
+    groupList.addEventListener('drop', dropGroup);
+    
     document.querySelectorAll('.delete-group').forEach(button => {
         button.addEventListener('click', function(event) {
             const groupId = this.getAttribute('data-id');
@@ -8172,6 +8243,7 @@ function updateGroupList() {
             event.stopPropagation(); // 阻止冒泡，避免触发分组切换逻辑
         });
     });
+    
     document.querySelectorAll('.group-button').forEach(button => {
         button.addEventListener('click', async function(){
             let groupId = this.getAttribute('data-id');
@@ -8179,6 +8251,9 @@ function updateGroupList() {
             editGroupId = groupId;
             $("#group-name").val(groups[groupId]);
         });
+        
+        // 添加拖拽开始事件监听器
+        button.addEventListener('dragstart', dragGroup);
     });
 }
 

@@ -20,7 +20,7 @@
     <script src="js/echarts.min.js"></script>
     <!-- 分组模板 -->
     <script id="group-template" type="text/template">
-        <button type="button" class="btn btn-outline-primary group-button" data-id="{id}">
+        <button type="button" class="btn btn-outline-primary group-button" data-id="{id}" draggable="true">
             {name}
             <span class="delete-group" data-id="{id}">&times;</span>
         </button>
@@ -560,7 +560,7 @@
                         <div class="form-group">
                             <div>点击分组名编辑分组名称</div>
                             <div id="group-list">
-                                <button type="button" class="btn btn-outline-primary group-button" data-id="default-group">
+                                <button type="button" class="btn btn-outline-primary group-button" data-id="default-group" draggable="true">
                                     默认分组
                                 </button>
                                 <!-- 动态分组列表 -->

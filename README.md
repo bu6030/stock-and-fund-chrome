@@ -465,6 +465,7 @@
 438. 全部分组禁止编辑和新增股票基金 2025/12/2 version 2.2.9.0 --end
 439. 增加溢价率 2025/12/5 version 2.2.9.1 --end
 440. 汇率获取临时屏蔽 2025/12/9 version 2.2.9.2 --end
+441. 添加分组拖拽排序功能 2025/12/10
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
