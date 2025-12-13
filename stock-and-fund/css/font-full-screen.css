@@ -78,6 +78,27 @@
     font-size: 13px;
 }
 
+/* 字体大小类 */
+.my-table-font-small,
+.setting-description-text.my-table-font-small {
+    font-size: x-small;
+}
+
+.my-table-font-normal,
+.setting-description-text.my-table-font-normal {
+    font-size: small;
+}
+
+.my-table-font-large,
+.setting-description-text.my-table-font-large {
+    font-size: medium;
+}
+
+.my-table-font-xlarge,
+.setting-description-text.my-table-font-xlarge {
+    font-size: large;
+}
+
 .no-wrap {
     white-space: nowrap;
 }

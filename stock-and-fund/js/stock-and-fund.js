@@ -1233,6 +1233,25 @@ document.addEventListener(
         // 设置页面，点击样式切换
         document.getElementById('font-change-button').addEventListener('click', changeFontStyle);
         document.getElementById('bolder-font-change-button').addEventListener('click', changeFontStyle);
+        // 设置页面，点击字体大小调整
+        document.getElementById('font-size-small-button').addEventListener('click', changeFontSize);
+        document.getElementById('font-size-normal-button').addEventListener('click', changeFontSize);
+        document.getElementById('font-size-large-button').addEventListener('click', changeFontSize);
+        document.getElementById('font-size-xlarge-button').addEventListener('click', changeFontSize);
+        
+        // 监听设置页面模态框显示事件，应用字体大小到描述文本
+        $('#setting-modal').on('shown.bs.modal', async function () {
+            let fontSize = await readCacheData('font-size');
+            let fontClass = 'my-table-font-normal';
+            if (fontSize == 'small') {
+                fontClass = 'my-table-font-small';
+            } else if (fontSize == 'large') {
+                fontClass = 'my-table-font-large';
+            } else if (fontSize == 'xlarge') {
+                fontClass = 'my-table-font-xlarge';
+            }
+            applyFontSizeToSettingDescriptions(fontClass);
+        });
         // 设置页面，show-passwrod-protect-button点击，展示password-protect-modal
         document.getElementById('show-password-protect-button').addEventListener('click', showPasswordProtect);
         // 设置页面，自己开发时方便从 SpringBoot 项目直接导入数据
@@ -3990,9 +4009,12 @@ async function changeWindowSize(event) {
 // 初始化页面是，股票基金数据字体样式设定
 async function initFontStyle() {
     let fontChangeStyle = await readCacheData('font-change-style');
+    let fontSize = await readCacheData('font-size');
     var stockNr = document.getElementById('stock-nr');
     var fundNr = document.getElementById('fund-nr');
     var totalNr = document.getElementById('total-nr');
+    
+    // 应用字体样式
     if ('bolder' == fontChangeStyle) {
         stockNr.classList.add('my-table-tbody-font');
         fundNr.classList.add('my-table-tbody-font');
@@ -4002,6 +4024,95 @@ async function initFontStyle() {
         fundNr.classList.remove('my-table-tbody-font');
         totalNr.classList.remove('my-table-tbody-font');
     }
+    
+    // 应用字体大小
+    // 先移除所有字体大小类
+    stockNr.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+    fundNr.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+    totalNr.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+    
+    // 根据设置添加相应的字体大小类
+    let fontClass = 'my-table-font-normal';
+    if (fontSize == 'small') {
+        fontClass = 'my-table-font-small';
+    } else if (fontSize == 'large') {
+        fontClass = 'my-table-font-large';
+    } else if (fontSize == 'xlarge') {
+        fontClass = 'my-table-font-xlarge';
+    }
+    
+    stockNr.classList.add(fontClass);
+    fundNr.classList.add(fontClass);
+    totalNr.classList.add(fontClass);
+    
+    // 应用字体大小到设置页面的描述文本
+    applyFontSizeToSettingDescriptions(fontClass);
+}
+
+// 将字体大小应用到设置页面的描述文本
+function applyFontSizeToSettingDescriptions(fontClass) {
+    // 获取所有设置页面模态框（包括popup和full-screen）
+    const settingModals = document.querySelectorAll('#setting-modal');
+    
+    settingModals.forEach(settingModal => {
+        if (!settingModal) return;
+        
+        // 获取所有设置项的容器
+        const settingItems = settingModal.querySelectorAll('.am-form-group.am-cf .you');
+        
+        // 遍历每个设置项
+        settingItems.forEach(item => {
+            // 先检查是否已有描述文本span
+            let descriptionSpan = item.querySelector('.setting-description-text');
+            
+            if (descriptionSpan) {
+                // 如果已有span，更新其类名
+                descriptionSpan.className = 'setting-description-text ' + fontClass;
+            } else {
+                // 没有span，查找文本节点
+                let foundText = false;
+                
+                // 获取该项下的所有直接子节点
+                const childNodes = item.childNodes;
+                
+                // 遍历子节点，找到直接在.you元素下的文本节点
+                childNodes.forEach(node => {
+                    if (node.nodeType === 3 && node.textContent.trim() !== '') {
+                        foundText = true;
+                        // 文本节点，包装在span中并添加类名
+                        const span = document.createElement('span');
+                        span.className = 'setting-description-text ' + fontClass;
+                        span.textContent = node.textContent;
+                        
+                        // 替换原文本节点
+                        node.parentNode.insertBefore(span, node);
+                        node.parentNode.removeChild(node);
+                    }
+                });
+                
+                // 如果没有找到文本节点，检查是否有按钮组后面的文本
+                const btnGroup = item.querySelector('.btn-group');
+                if (btnGroup && !foundText) {
+                    // 查找按钮组后面的文本
+                    let nextSibling = btnGroup.nextSibling;
+                    while (nextSibling) {
+                        if (nextSibling.nodeType === 3 && nextSibling.textContent.trim() !== '') {
+                            // 文本节点，包装在span中并添加类名
+                            const span = document.createElement('span');
+                            span.className = 'setting-description-text ' + fontClass;
+                            span.textContent = nextSibling.textContent;
+                            
+                            // 替换原文本节点
+                            nextSibling.parentNode.insertBefore(span, nextSibling);
+                            nextSibling.parentNode.removeChild(nextSibling);
+                            break;
+                        }
+                        nextSibling = nextSibling.nextSibling;
+                    }
+                }
+            }
+        });
+    });
 }
 
 // 修改窗口大小，普通/缩小/迷你
@@ -4147,6 +4258,25 @@ async function changeFontStyle(event) {
     } else {
         saveCacheData('font-change-style', 'bolder');
     }
+    $("#setting-modal").modal("hide");
+    initFontStyle();
+    settingButtonInit();
+}
+
+// 字体大小调整
+async function changeFontSize(event) {
+    let targetId = event.target.id;
+    let fontSize = 'normal';
+    if (targetId == 'font-size-small-button') {
+        fontSize = 'small';
+    } else if (targetId == 'font-size-normal-button') {
+        fontSize = 'normal';
+    } else if (targetId == 'font-size-large-button') {
+        fontSize = 'large';
+    } else if (targetId == 'font-size-xlarge-button') {
+        fontSize = 'xlarge';
+    }
+    saveCacheData('font-size', fontSize);
     $("#setting-modal").modal("hide");
     initFontStyle();
     settingButtonInit();
@@ -8968,6 +9098,25 @@ async function settingButtonInit(){
     } else {
         document.getElementById('font-change-button').classList.remove('active');
         document.getElementById('bolder-font-change-button').classList.add('active');
+    }
+    
+    // 初始化字体大小按钮状态
+    let fontSize = await readCacheData('font-size');
+    // 先移除所有按钮的激活状态
+    document.getElementById('font-size-small-button').classList.remove('active');
+    document.getElementById('font-size-normal-button').classList.remove('active');
+    document.getElementById('font-size-large-button').classList.remove('active');
+    document.getElementById('font-size-xlarge-button').classList.remove('active');
+    
+    // 根据设置添加相应按钮的激活状态
+    if (fontSize == 'small') {
+        document.getElementById('font-size-small-button').classList.add('active');
+    } else if (fontSize == 'large') {
+        document.getElementById('font-size-large-button').classList.add('active');
+    } else if (fontSize == 'xlarge') {
+        document.getElementById('font-size-xlarge-button').classList.add('active');
+    } else {
+        document.getElementById('font-size-normal-button').classList.add('active');
     }
     if (cheatMeFlag) {
         document.getElementById('cheat-me-button').classList.add('active');
