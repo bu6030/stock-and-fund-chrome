@@ -4045,8 +4045,90 @@ async function initFontStyle() {
     fundNr.classList.add(fontClass);
     totalNr.classList.add(fontClass);
     
-    // 应用字体大小到设置页面的描述文本
+    // 更新隐藏/展示/拖拽调整页面展示项顺序区域的字体大小
+    updateFontSizeForElements('.setting-modal-style .you', fontClass);
+    updateFontSizeForElements('.setting-modal-style h5', fontClass);
+    updateFontSizeForElements('.setting-modal-style h6', fontClass);
+    
+    // 更新大盘/行业指数区域的字体大小
+    updateFontSizeForElements('.three_column_container', fontClass);
+    updateFontSizeForElements('h5.modal-title', fontClass);
+    
+    // 更新首页顶部的大盘指数显示区域字体大小
+    var stockLargeMarketBoxes = document.querySelectorAll('.stock-large-market-box');
+    stockLargeMarketBoxes.forEach(function(box) {
+        box.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+        box.classList.add(fontClass);
+    });
+    
+    // 更新设置页面中所有按钮的字体大小
+    var settingButtons = document.querySelectorAll('#setting-modal button');
+    settingButtons.forEach(function(button) {
+        button.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+        button.classList.add(fontClass);
+    });
+    
+    // 更新设置页面中所有标签的字体大小
+    var settingLabels = document.querySelectorAll('#setting-modal label');
+    settingLabels.forEach(function(label) {
+        label.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+        label.classList.add(fontClass);
+    });
+    
+    // 更新设置页面中所有复选框的字体大小
+    var settingCheckboxes = document.querySelectorAll('#setting-modal input[type="checkbox"]');
+    settingCheckboxes.forEach(function(checkbox) {
+        checkbox.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+        checkbox.classList.add(fontClass);
+    });
+    
+    // 将字体大小应用到设置页面的描述文本
     applyFontSizeToSettingDescriptions(fontClass);
+}
+
+// 新增函数：更新指定元素的字体大小
+function updateFontSizeForElements(selector, fontClass) {
+    var elements = document.querySelectorAll(selector);
+    elements.forEach(function(element) {
+        // 移除现有的字体大小类
+        element.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+        // 添加新的字体大小类
+        element.classList.add(fontClass);
+        
+        // 特别处理包含按钮的元素
+        var buttons = element.querySelectorAll('button');
+        buttons.forEach(function(button) {
+            button.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+            button.classList.add(fontClass);
+        });
+        
+        // 特别处理包含复选框和标签的元素
+        var labels = element.querySelectorAll('label');
+        labels.forEach(function(label) {
+            label.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+            label.classList.add(fontClass);
+        });
+        
+        // 特别处理包含输入框的元素
+        var inputs = element.querySelectorAll('input');
+        inputs.forEach(function(input) {
+            input.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+            input.classList.add(fontClass);
+        });
+        
+        // 特别处理包含ul/li的元素
+        var uls = element.querySelectorAll('ul');
+        uls.forEach(function(ul) {
+            ul.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+            ul.classList.add(fontClass);
+        });
+        
+        var lis = element.querySelectorAll('li');
+        lis.forEach(function(li) {
+            li.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
+            li.classList.add(fontClass);
+        });
+    });
 }
 
 // 将字体大小应用到设置页面的描述文本

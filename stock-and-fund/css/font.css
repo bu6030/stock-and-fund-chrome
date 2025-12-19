@@ -173,13 +173,28 @@ input[type="checkbox"] {
 }
 
 .stock-large-market-box {
-    font-size:11px;
     font-weight:600;
     margin-top: 5px;
     width: 25%;
     /* border: 1px solid #ccc; */
     text-align: center;
     transition: opacity 0.3s ease, border 0.3s ease;
+}
+
+.stock-large-market-box.my-table-font-small {
+    font-size: x-small;
+}
+
+.stock-large-market-box.my-table-font-normal {
+    font-size: small;
+}
+
+.stock-large-market-box.my-table-font-large {
+    font-size: medium;
+}
+
+.stock-large-market-box.my-table-font-xlarge {
+    font-size: large;
 }
 
 .stock-large-market-box[draggable="true"] {
