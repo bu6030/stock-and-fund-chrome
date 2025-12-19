@@ -466,7 +466,7 @@
 439. 增加溢价率 2025/12/5 version 2.2.9.1 --end
 440. 汇率获取临时屏蔽 2025/12/9 version 2.2.9.2 --end
 441. 添加分组拖拽排序功能 2025/12/10
-442. 添加页面字体大小调整功能，支持小、中、大、特大四种字体大小选择 2025/12/13
+442. 添加页面字体大小调整功能，支持小、中、大、特大四种字体大小选择 2025/12/13 version 2.2.9.4 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
