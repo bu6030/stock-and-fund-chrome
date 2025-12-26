@@ -177,7 +177,9 @@ window.addEventListener("load", async (event) => {
         }
     } else {
         // 没有密码直接展示
-        initLoad();
+        await initLoad();
+        // 根据配置更新底部菜单显示
+        updateFooterMenuDisplay();
     }
 });
 
@@ -909,6 +911,7 @@ document.addEventListener(
             $("#k-line-numbers").val(kLineNumbers);
             generateColumnList();
             selectLargeMarketCodeCheckbox();
+            initFooterMenuConfig();
         });
         // 首页，底部全部按钮，股票基金全部显示
         document.getElementById('show-all-button').addEventListener('click', changeShowStockOrFundOrAll);
@@ -9596,7 +9599,9 @@ async function checkPassword() {
         $("#password-check-modal").modal("hide");
         // 显示主界面
         showMainInterface();
-        initLoad();
+        await initLoad();
+        // 根据配置更新底部菜单显示
+        updateFooterMenuDisplay();
     } else {
         // 密码错误提示
         alert('密码错误，请重新输入！');
@@ -10186,5 +10191,165 @@ function toggleGroupMenu() {
         initGroupMenuHorizontal();
     } else {
         menu.style.display = 'none';
+    }
+}
+
+// 初始化底部菜单配置
+async function initFooterMenuConfig() {
+    // 获取底部菜单配置，如果不存在则使用默认值
+    const footerMenuConfig = await readCacheData('footer-menu-config');
+    if (footerMenuConfig) {
+        const config = JSON.parse(footerMenuConfig);
+        
+        // 设置复选框状态
+        document.getElementById('footer-refresh-display-checkbox').checked = config.refresh !== false;
+        document.getElementById('footer-data-center-display-checkbox').checked = config.dataCenter !== false;
+        document.getElementById('footer-clean-corner-display-checkbox').checked = config.cleanCorner !== false;
+        document.getElementById('footer-wechat-group-display-checkbox').checked = config.wechatGroup !== false;
+        document.getElementById('footer-wechat-mini-display-checkbox').checked = config.wechatMini !== false;
+        document.getElementById('footer-help-document-display-checkbox').checked = config.helpDocument !== false;
+        document.getElementById('footer-donate-display-checkbox').checked = config.donate !== false;
+        document.getElementById('footer-batch-edit-display-checkbox').checked = config.batchEdit !== false;
+    } else {
+        // 默认全部显示
+        document.getElementById('footer-refresh-display-checkbox').checked = true;
+        document.getElementById('footer-data-center-display-checkbox').checked = true;
+        document.getElementById('footer-clean-corner-display-checkbox').checked = true;
+        document.getElementById('footer-wechat-group-display-checkbox').checked = true;
+        document.getElementById('footer-wechat-mini-display-checkbox').checked = true;
+        document.getElementById('footer-help-document-display-checkbox').checked = true;
+        document.getElementById('footer-donate-display-checkbox').checked = true;
+        document.getElementById('footer-batch-edit-display-checkbox').checked = true;
+    }
+    
+    // 绑定事件监听器
+    bindFooterMenuConfigEvents();
+}
+
+// 绑定底部菜单配置事件监听器
+function bindFooterMenuConfigEvents() {
+    // 刷新按钮
+    document.getElementById('footer-refresh-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('refresh', this.checked);
+    });
+    
+    // 数据中心按钮
+    document.getElementById('footer-data-center-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('dataCenter', this.checked);
+    });
+    
+    // 清理角标按钮
+    document.getElementById('footer-clean-corner-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('cleanCorner', this.checked);
+    });
+    
+    // 微信群按钮
+    document.getElementById('footer-wechat-group-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('wechatGroup', this.checked);
+    });
+    
+    // 小程序按钮
+    document.getElementById('footer-wechat-mini-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('wechatMini', this.checked);
+    });
+    
+    // 使用说明按钮
+    document.getElementById('footer-help-document-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('helpDocument', this.checked);
+    });
+    
+    // 打赏按钮
+    document.getElementById('footer-donate-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('donate', this.checked);
+    });
+    
+    // 批量编辑按钮
+    document.getElementById('footer-batch-edit-display-checkbox').addEventListener('change', function() {
+        updateFooterMenuConfig('batchEdit', this.checked);
+    });
+}
+
+// 更新底部菜单配置
+async function updateFooterMenuConfig(key, value) {
+    let config = {};
+    const footerMenuConfig = await readCacheData('footer-menu-config');
+    if (footerMenuConfig) {
+        config = JSON.parse(footerMenuConfig);
+    }
+    
+    config[key] = value;
+    saveCacheData('footer-menu-config', JSON.stringify(config));
+    
+    // 根据配置更新底部菜单显示
+    updateFooterMenuDisplay();
+}
+
+// 根据配置更新底部菜单显示
+async function updateFooterMenuDisplay() {
+    const footerMenuConfig = await readCacheData('footer-menu-config');
+    if (footerMenuConfig) {
+        const config = JSON.parse(footerMenuConfig);
+        
+        // 更新刷新按钮显示
+        const refreshButton = document.getElementById('refresh-button');
+        if (refreshButton) {
+            refreshButton.style.display = config.refresh !== false ? 'inline-block' : 'none';
+        }
+        
+        // 更新数据中心按钮显示
+        const dataCenterButton = document.getElementById('show-data-center-button');
+        if (dataCenterButton) {
+            dataCenterButton.style.display = config.dataCenter !== false ? 'inline-block' : 'none';
+        }
+        
+        // 更新清理角标按钮显示
+        const cleanCornerButton = document.getElementById('remove-badgetext-button');
+        if (cleanCornerButton) {
+            cleanCornerButton.style.display = config.cleanCorner !== false ? 'inline-block' : 'none';
+        }
+        
+        // 更新微信群按钮显示
+        const wechatGroupButton = document.getElementById('show-wechat-group-button');
+        if (wechatGroupButton) {
+            wechatGroupButton.style.display = config.wechatGroup !== false ? 'inline-block' : 'none';
+        }
+        
+        // 更新小程序按钮显示
+        const wechatMiniButton = document.getElementById('show-wechat-mini-button');
+        if (wechatMiniButton) {
+            wechatMiniButton.style.display = config.wechatMini !== false ? 'inline-block' : 'none';
+        }
+        
+        // 更新使用说明按钮显示
+        const helpDocumentButton = document.getElementById('help-document-button');
+        if (helpDocumentButton) {
+            helpDocumentButton.style.display = config.helpDocument !== false ? 'inline-block' : 'none';
+        }
+        
+        // 更新打赏按钮显示
+        const donateButton = document.getElementById('show-donate-button-2');
+        if (donateButton) {
+            donateButton.style.display = config.donate !== false ? 'inline-block' : 'none';
+        }
+        
+        // 更新批量编辑按钮显示
+        const batchEditButton = document.getElementById('batch-edit-button');
+        if (batchEditButton) {
+            batchEditButton.style.display = config.batchEdit !== false ? 'inline-block' : 'none';
+        }
+    } else {
+        // 如果没有配置，默认全部显示
+        const buttons = [
+            'refresh-button', 'show-data-center-button', 'remove-badgetext-button',
+            'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button',
+            'show-donate-button-2', 'batch-edit-button'
+        ];
+        
+        for (const buttonId of buttons) {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.style.display = 'inline-block';
+            }
+        }
     }
 }
