@@ -301,32 +301,3 @@ input[type="checkbox"] {
     width: 70px;
     padding: 2px;
 }
-
-.group-menu-horizontal {
-    position: fixed;
-    bottom: 50px;
-    left: 0;
-    right: 0;
-    background-color: #fff;
-    border-top: 1px solid #ddd;
-    padding: 10px;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    overflow-x: auto;
-    white-space: nowrap;
-}
-
-.group-menu-horizontal::-webkit-scrollbar {
-    height: 5px;
-}
-
-.group-menu-horizontal::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 5px;
-}
-
-@media (max-width: 768px) {
-    .group-menu-horizontal {
-        bottom: 50px;
-    }
-}

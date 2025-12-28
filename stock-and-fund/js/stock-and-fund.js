@@ -946,10 +946,6 @@ document.addEventListener(
         document.getElementById('show-wechat-mini-button').addEventListener('click', showQrCodeModal);
         // 首页，点击批量删除
         document.getElementById('batch-delete-button').addEventListener('click', batchDelete);
-        // 首页，点击分组按钮
-        document.getElementById('group-menu-button').addEventListener('click', toggleGroupMenu);
-        // 首页，点击编辑分组按钮
-        document.getElementById('show-group-button').addEventListener('click', showGroup);
         // 首页，点击批量编辑
         document.getElementById('batch-edit-button').addEventListener('click', batchEdit);
         // 首页，点击批量保存
@@ -8766,45 +8762,29 @@ function changeTimeFormate(dateTime) {
 
 // 初始化首页分组按钮一键切换
 function initGroupButton() {
-    // 检查是否存在下拉菜单容器，如果存在则初始化下拉菜单
-    if (document.getElementById('group-menu')) {
-        // 清空下拉菜单，以防重复添加
-        $("#group-menu").empty();
-        var option = $("<a class='dropdown-item'></a>").attr("id", "show-all-group-button").text("全部分组");
+    // 清空下拉菜单，以防重复添加
+    $("#group-menu").empty();
+    var option = $("<a class='dropdown-item'></a>").attr("id", "show-all-group-button").text("全部分组");
+    $("#group-menu").append(option);
+    // 遍历 groups 对象，为每个组名创建一个下拉菜单选项
+    Object.keys(groups).forEach(id => {
+        const groupName = groups[id];
+        var option = $("<a class='dropdown-item'></a>").attr("id", "group-" + id).text(groupName);
         $("#group-menu").append(option);
-        // 遍历 groups 对象，为每个组名创建一个下拉菜单选项
-        Object.keys(groups).forEach(id => {
-            const groupName = groups[id];
-            var option = $("<a class='dropdown-item'></a>").attr("id", "group-" + id).text(groupName);
-            $("#group-menu").append(option);
+    });
+    option = $("<a class='dropdown-item'></a>").attr("id", "show-group-button").text("编辑分组");
+    $("#group-menu").append(option);
+    document.getElementById('show-group-button').addEventListener('click', showGroup);
+    document.getElementById('show-all-group-button').addEventListener('click', showAllGroup);
+    Object.keys(groups).forEach(id => {
+        document.getElementById("group-" + id).addEventListener('click', async function(){
+            changeGroup(id);
         });
-        option = $("<a class='dropdown-item'></a>").attr("id", "show-group-button").text("编辑分组");
-        $("#group-menu").append(option);
-        
-        // 添加事件监听器（带安全检查）
-        if (document.getElementById('show-group-button')) {
-            document.getElementById('show-group-button').addEventListener('click', showGroup);
-        }
-        if (document.getElementById('show-all-group-button')) {
-            document.getElementById('show-all-group-button').addEventListener('click', showAllGroup);
-        }
-        Object.keys(groups).forEach(id => {
-            const elementId = "group-" + id;
-            if (document.getElementById(elementId)) {
-                document.getElementById(elementId).addEventListener('click', async function(){
-                    changeGroup(id);
-                });
-            }
-        });
-    }
-    
-    // 更新分组按钮文本
-    if (document.getElementById("group-menu-button")) {
-        if (currentGroup == 'all-group') {
-            document.getElementById("group-menu-button").innerHTML = '全部分组';
-        } else {
-            document.getElementById("group-menu-button").innerHTML = groups[currentGroup];
-        }
+    });
+    if (currentGroup == 'all-group') {
+        document.getElementById("group-menu-button").innerHTML = '全部分组';
+    } else {
+        document.getElementById("group-menu-button").innerHTML = groups[currentGroup];
     }
 }
 
@@ -10114,83 +10094,6 @@ async function stockNameSearchPosition() {
             }, 2000); // 2秒后移除高亮
             return; // 找到后停止搜索
         }
-    }
-}
-
-// 初始化横向分组菜单
-function initGroupMenuHorizontal() {
-    // 检查是否存在横向菜单容器
-    if (!document.getElementById('group-menu-horizontal')) {
-        return;
-    }
-    
-    // 清空横向菜单，以防重复添加
-    $("#group-menu-horizontal").empty();
-    
-    // 创建"全部分组"按钮
-    var allGroupButton = $("<button class='btn btn-outline-primary mr-2 mb-2'></button>")
-        .attr("id", "show-all-group-button-horizontal")
-        .text("全部分组");
-    $("#group-menu-horizontal").append(allGroupButton);
-    
-    // 遍历 groups 对象，为每个组名创建一个按钮
-    Object.keys(groups).forEach(id => {
-        const groupName = groups[id];
-        var groupButton = $("<button class='btn btn-outline-primary mr-2 mb-2'></button>")
-            .attr("id", "group-" + id + "-horizontal")
-            .attr("data-group-id", id)
-            .text(groupName);
-        $("#group-menu-horizontal").append(groupButton);
-    });
-    
-    // 创建"编辑分组"按钮
-    var editGroupButton = $("<button class='btn btn-outline-danger mr-2 mb-2'></button>")
-        .attr("id", "show-group-button-horizontal")
-        .text("编辑分组");
-    $("#group-menu-horizontal").append(editGroupButton);
-    
-    // 添加事件监听器（带安全检查）
-    if (document.getElementById('show-group-button-horizontal')) {
-        document.getElementById('show-group-button-horizontal').addEventListener('click', function() {
-            showGroup();
-            // 隐藏菜单
-            if (document.getElementById('group-menu-horizontal')) {
-                document.getElementById('group-menu-horizontal').style.display = 'none';
-            }
-        });
-    }
-    if (document.getElementById('show-all-group-button-horizontal')) {
-        document.getElementById('show-all-group-button-horizontal').addEventListener('click', function() {
-            showAllGroup();
-            // 隐藏菜单
-            if (document.getElementById('group-menu-horizontal')) {
-                document.getElementById('group-menu-horizontal').style.display = 'none';
-            }
-        });
-    }
-    Object.keys(groups).forEach(id => {
-        const buttonId = "group-" + id + "-horizontal";
-        if (document.getElementById(buttonId)) {
-            document.getElementById(buttonId).addEventListener('click', async function(){
-                changeGroup(id);
-                // 隐藏菜单
-                if (document.getElementById('group-menu-horizontal')) {
-                    document.getElementById('group-menu-horizontal').style.display = 'none';
-                }
-            });
-        }
-    });
-}
-
-// 切换分组菜单显示/隐藏
-function toggleGroupMenu() {
-    const menu = document.getElementById('group-menu-horizontal');
-    if (menu.style.display === 'none' || menu.style.display === '') {
-        menu.style.display = 'block';
-        // 初始化横向分组菜单
-        initGroupMenuHorizontal();
-    } else {
-        menu.style.display = 'none';
     }
 }
 

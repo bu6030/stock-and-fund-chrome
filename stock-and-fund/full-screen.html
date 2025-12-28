@@ -1534,14 +1534,12 @@
                 <button type="button" id="show-fund-button" class="btn btn-lg btn-info"
                     data-toggle="modal">基金
                 </button>
-                <button type="button" id="show-group-button" class="btn btn-lg btn-info">
-                    分组
-                </button>
-                <button type="button" class="btn btn-lg btn-info" id="group-menu-button">
-                    分组
-                </button>
-                <div class="group-menu-horizontal" id="group-menu-horizontal" style="display: none;">
-                    <!-- 横向分组菜单将在这里动态生成 -->
+                <div class="btn-group dropup" role="group">
+                    <button type="button" class="btn btn-lg btn-info dropdown-toggle" id="group-menu-button" data-toggle="dropdown" aria-expanded="false">
+                        分组
+                    </button>
+                    <div class="dropdown-menu" style="max-height: 300px; overflow: auto" id="group-menu">
+                    </div>
                 </div>
                 <button type="button" id="batch-delete-button" class="btn btn-lg btn-info"
                     data-toggle="modal">批量删除
