@@ -5719,6 +5719,12 @@ async function syncDataFromCloud() {
                 groups = [];
                 saveCacheData('groups', groups);
             }
+            
+            // 处理自定义指数数据
+            if (result.customIndices != null && result.customIndices != undefined) {
+                await saveCacheData('custom-indices', JSON.stringify(result.customIndices));
+            }
+            
             if (currentGroup == 'default-group') {
                 stockList = result.stocks;
                 fundList = result.funds;
@@ -5812,6 +5818,9 @@ async function syncDataToCloud() {
         data[id + '_stocks'] = jQuery.parseJSON(await readCacheData(id + '_stocks'));
         data[id + '_funds'] = jQuery.parseJSON(await readCacheData(id + '_funds'));
     }));
+    // 添加自定义指数数据同步
+    let customIndices = await readCacheData('custom-indices');
+    data.customIndices = customIndices ? JSON.parse(customIndices) : [];
     let result = ajaxSyncDataToCloud(JSON.stringify(data), syncDataCloudUuid);
     saveCacheData('sync-data-cloud-uuid', syncDataCloudUuid);
     saveCacheData('sync-data-local-time', data.updateTime);
@@ -5949,6 +5958,10 @@ async function syncConfigFromCloud() {
             saveCacheData('opacity-percent', opacityPercent);
             largeMarketCode = result.largeMarketCode;
             saveCacheData('large-market-code', JSON.stringify(largeMarketCode));
+            // 处理配置同步中的自定义指数数据
+            if (result.customIndices != null && result.customIndices != undefined) {
+                await saveCacheData('custom-indices', JSON.stringify(result.customIndices));
+            }
             let fontChangeStyle = result.fontChangeStyle;
             saveCacheData('font-change-style', fontChangeStyle);
             initHtml();
@@ -6044,6 +6057,9 @@ async function syncConfigToCloud() {
     data.riseFallSort = riseFallSort;
     data.opacityPercent = opacityPercent;
     data.largeMarketCode = largeMarketCode;
+    // 添加自定义指数数据到配置同步
+    let customIndices = await readCacheData('custom-indices');
+    data.customIndices = customIndices ? JSON.parse(customIndices) : [];
     let fontChangeStyle = await readCacheData('font-change-style');
     data.fontChangeStyle = fontChangeStyle;
     data.updateTime = getBeijingTime();

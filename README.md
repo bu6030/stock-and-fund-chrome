@@ -471,6 +471,7 @@
 444. 首页底部菜单可以设置是否展示 2025/12/26
 445. 还原分组竖着展示 2025/12/28 version 2.2.9.6 --end
 446. 限制全部分组导入功能 2026/01/16
+446. 云同步自定义大盘指数问题修复 2026/01/16
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
