@@ -5305,6 +5305,12 @@ async function setDisplayTr(event) {
 
 // 抽象文件导入方法
 async function fileInput (e) {
+    // 当前是全部分组，需要特殊处理
+    if (currentGroup == 'all-group') {
+        alertMessage('全部分组时无法导入数据，请切换到指定分组后再导入～');
+        $("#data-import-modal").modal("hide");
+        return;
+    }
     var file = e.target.files[0];
     var reader = new FileReader();
     let fileName = file.name;
