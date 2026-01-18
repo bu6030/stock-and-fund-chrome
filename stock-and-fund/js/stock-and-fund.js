@@ -1245,9 +1245,11 @@ document.addEventListener(
         // 监听设置页面模态框显示事件，应用字体大小到描述文本
         $('#setting-modal').on('shown.bs.modal', async function () {
             let fontSize = await readCacheData('font-size');
-            let fontClass = 'my-table-font-normal';
+            let fontClass = 'my-table-font-small';
             if (fontSize == 'small') {
                 fontClass = 'my-table-font-small';
+            } else if (fontSize == 'normal') {
+                fontClass = 'my-table-font-normal';
             } else if (fontSize == 'large') {
                 fontClass = 'my-table-font-large';
             } else if (fontSize == 'xlarge') {
@@ -4035,9 +4037,11 @@ async function initFontStyle() {
     totalNr.classList.remove('my-table-font-small', 'my-table-font-normal', 'my-table-font-large', 'my-table-font-xlarge');
     
     // 根据设置添加相应的字体大小类
-    let fontClass = 'my-table-font-normal';
+    let fontClass = 'my-table-font-small';
     if (fontSize == 'small') {
         fontClass = 'my-table-font-small';
+    } else if (fontSize == 'normal') {
+        fontClass = 'my-table-font-normal';
     } else if (fontSize == 'large') {
         fontClass = 'my-table-font-large';
     } else if (fontSize == 'xlarge') {
@@ -4352,7 +4356,7 @@ async function changeFontStyle(event) {
 // 字体大小调整
 async function changeFontSize(event) {
     let targetId = event.target.id;
-    let fontSize = 'normal';
+    let fontSize;
     if (targetId == 'font-size-small-button') {
         fontSize = 'small';
     } else if (targetId == 'font-size-normal-button') {
@@ -4361,6 +4365,8 @@ async function changeFontSize(event) {
         fontSize = 'large';
     } else if (targetId == 'font-size-xlarge-button') {
         fontSize = 'xlarge';
+    } else {
+        fontSize = 'small';
     }
     saveCacheData('font-size', fontSize);
     $("#setting-modal").modal("hide");
@@ -9221,12 +9227,14 @@ async function settingButtonInit(){
     // 根据设置添加相应按钮的激活状态
     if (fontSize == 'small') {
         document.getElementById('font-size-small-button').classList.add('active');
+    } else if (fontSize == 'normal') {
+        document.getElementById('font-size-normal-button').classList.add('active');
     } else if (fontSize == 'large') {
         document.getElementById('font-size-large-button').classList.add('active');
     } else if (fontSize == 'xlarge') {
         document.getElementById('font-size-xlarge-button').classList.add('active');
     } else {
-        document.getElementById('font-size-normal-button').classList.add('active');
+        document.getElementById('font-size-small-button').classList.add('active');
     }
     if (cheatMeFlag) {
         document.getElementById('cheat-me-button').classList.add('active');
