@@ -8,7 +8,11 @@ let lightRed = [255, 192, 203, 255];
 if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
     // Firefox 环境中，映射 chrome 到 browser
     chrome = browser;
-    isFirefox = true;
+    if(typeof browser.management !== "undefined" 
+        && typeof browser.management.ExtensionType !== "undefined"
+        && typeof browser.management.ExtensionType.EDGE_PANEL_APP === "undefined") {
+        isFirefox = true;
+    }
 }
 // 定时执行任务的函数
 function scheduleTask() {
@@ -53,6 +57,8 @@ chrome.runtime.setUninstallURL("https://zhuanlan.zhihu.com/p/688413206");
 
 // 后台定时执行任务的函数
 function performTask() {
+        console.log('browser', chrome);
+        console.log('browser.runtime', chrome.runtime);
     try {
         getData('MONITOR_STOCK_CODE').then((monitorStockCode) => {
             if (monitorStockCode != null && monitorStockCode != '') {
