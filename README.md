@@ -474,6 +474,7 @@
 447. 云同步自定义大盘指数问题修复 2026/01/16 version 2.2.9.7 --end
 448. 页面字体大小默认为小 2026/01/18
 449. 修复edge浏览器角标问题 2026/01/20 version 2.2.9.8 --end
+450. 导入问题修复 2026/01/31 version 2.2.9.9 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
