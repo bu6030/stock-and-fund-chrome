@@ -959,6 +959,10 @@ document.addEventListener(
 
         // 导入数据页面，导入文件选择 txt 文件导入数据
         document.getElementById('file-input').addEventListener('change', fileInput);
+        // 导入数据页面，点击下载股票导入模版按钮
+        document.getElementById('download-stock-import-template-button').addEventListener('click', downloadStockImportTemplate);
+        // 导入数据页面，点击下载基金导入模版按钮
+        document.getElementById('download-fund-import-template-button').addEventListener('click', downloadFundImportTemplate);
 
         // 基金编辑页面，点击保存按钮
         document.getElementById('fund-save-button').addEventListener('click', saveFund);
@@ -3913,6 +3917,33 @@ function downloadJsonOrTxt(filename, text) {
     } else {
         pom.click();
     }
+}
+
+// 下载导入模版文件
+function downloadStockImportTemplate() {
+    var templateContent = '# 股票导入模版（文件名不含fund）\n' +
+                          '# 格式1: 股票编码,成本价格,持仓数（股票需要带有sh/sz/bj/hk等前缀）\n' +
+                          '# 格式2: 股票编码,成本价格（股票需要带有sh/sz/bj/hk等前缀）\n' +
+                          '# 格式3: 股票编码（股票需要带有sh/sz/bj/hk等前缀）\n' +
+                          '# 示例:\n' +
+                          'sh600519,1680.50,100\n' +
+                          'sz000001,12.50,1000\n' +
+                          'sh600036,35.80\n' +
+                          'hk00700';
+    downloadJsonOrTxt('stock.txt', templateContent);
+}
+
+// 下载导入模版文件
+function downloadFundImportTemplate() {
+    var templateContent = '# 基金导入模版（文件名包含fund）\n' +
+                          '# 格式1: 基金编码,成本价格,持仓数\n' +
+                          '# 格式2: 基金编码,成本价格\n' +
+                          '# 格式3: 基金编码\n' +
+                          '# 示例:\n' +
+                          '000001,1.50,1000\n' +
+                          '000003,2.80\n' +
+                          '000008';
+    downloadJsonOrTxt('fund.txt', templateContent);
 }
 
 // 统一存储缓存
