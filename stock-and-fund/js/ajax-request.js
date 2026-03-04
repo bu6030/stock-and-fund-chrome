@@ -237,6 +237,7 @@ function ajaxGetStockFromEastMoney(code, stocks) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            alertMessage("可能被东方财富封IP，麻烦打开东方财富网站首页即可恢复");
         }
     });
 }
@@ -547,6 +548,7 @@ function ajaxGetLargeMarketData(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            alertMessage("可能被东方财富封IP，麻烦打开东方财富网站首页即可恢复");
         }
     });
 }
