@@ -478,6 +478,8 @@
 451. 导入页面增加导入模版 2026/2/20 version 2.3.0.0 --end
 452. 全屏模式编辑按钮无法无法点击修复 2026/3/3 version 2.3.0.1 --end
 453. 针对插件无法打开问题修复 2026/3/4 version 2.3.0.3 --end
+454. 角标问题修复 2026/3/26
+455. 每日盈利增加计算当日买卖收入 2026/3/26 version 2.3.0.4 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

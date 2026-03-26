@@ -5,7 +5,7 @@ let isFirefox = false;
 let lightBlue = [144, 238, 144, 255];
 let lightRed = [255, 192, 203, 255];
 // 检测是否为 Firefox
-if (typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
+if (typeof chrome == "undefined" && typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
     // Firefox 环境中，映射 chrome 到 browser
     chrome = browser;
     if(typeof browser.management !== "undefined" 
@@ -582,12 +582,44 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
                 var changePercent = parseFloat(stoksArr[k].f3).toFixed(2);
                 var dayIncome = 0.00;
                 if (stock != undefined) {
-                    // 当天新买入
+                    // 当天新买入，计算当日收益，（最新价格 - 成本价格）*持仓数
                     if (stock.newBuy && stock.newBuyDate == getBeijingDate()) {
                         dayIncome = (now - parseFloat(stock.costPrise + ""))*(parseFloat(stock.bonds));
                     // 不是当天新买
                     } else {
-                        dayIncome = parseFloat(stoksArr[k].f4 + "") * parseFloat(stock.bonds)
+                        // 计算当天买卖操作带来的收益
+                        var buyOrSells = stock.buyOrSellStockRequestList;
+                        var todayBuyIncome = 0.00;
+                        var todaySellIncome = 0.00;
+                        var maxBuyOrSellBonds = 0;
+                        var beijingDate = getBeijingDate();
+                        
+                        if (buyOrSells && buyOrSells.length > 0) {
+                            for (var g in buyOrSells) {
+                                // 当天购买过
+                                if (buyOrSells[g].type == "1" && beijingDate == buyOrSells[g].date) {
+                                    maxBuyOrSellBonds = maxBuyOrSellBonds + parseFloat(buyOrSells[g].bonds+"");
+                                    var buyIncome = (now - parseFloat(buyOrSells[g].price + ""))
+                                        * parseFloat(buyOrSells[g].bonds + "")
+                                        - parseFloat(buyOrSells[g].cost + "");
+                                    todayBuyIncome += buyIncome;
+                                }
+                                // 当天卖出过
+                                if (buyOrSells[g].type == "2" && beijingDate == buyOrSells[g].date) {
+                                    todaySellIncome += parseFloat(buyOrSells[g].income + "");
+                                }
+                            }
+                        }
+                        
+                        // 计算剩余持仓的当日盈亏
+                        if (maxBuyOrSellBonds < parseFloat(stock.bonds)) {
+                            var restBonds = parseFloat(stock.bonds) - maxBuyOrSellBonds;
+                            dayIncome = parseFloat(stoksArr[k].f4 + "") * restBonds;
+                        } else {
+                            dayIncome = 0.00;
+                        }
+                        // 加上当天买卖的收益
+                        dayIncome = dayIncome + todayBuyIncome + todaySellIncome;
                     }
                     if (stock.code.indexOf('hk') >= 0 || stock.code.indexOf('HK') >= 0) {
                         dayIncome = await getHuilvDayIncome(dayIncome, 'HK');
