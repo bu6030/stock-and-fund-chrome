@@ -2,17 +2,13 @@ let isCycleInvest = false;
 let performTaskId;
 let count = 0;
 let isFirefox = false;
+let develop = false;
 let lightBlue = [144, 238, 144, 255];
 let lightRed = [255, 192, 203, 255];
 // 检测是否为 Firefox
 if (typeof chrome.action == "undefined" && typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
     // Firefox 环境中，映射 chrome 到 browser
     chrome = browser;
-    if(typeof browser.management !== "undefined" 
-        && typeof browser.management.ExtensionType !== "undefined"
-        && typeof browser.management.ExtensionType.EDGE_PANEL_APP === "undefined") {
-        isFirefox = true;
-    }
 }
 // 定时执行任务的函数
 function scheduleTask() {
