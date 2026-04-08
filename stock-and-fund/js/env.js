@@ -48,5 +48,3 @@ let Env = {
     GO_TO_WENCAI: "https://www.iwencai.com/unifiedwap/result?w=",
     GO_TO_GUBA: "https://guba.eastmoney.com/list,",
 }
-
-let develop = false;
