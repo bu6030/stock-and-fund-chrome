@@ -111,173 +111,181 @@ function monitorStockPrice(stockList) {
     console.log("执行突破股票价格监控任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
-        var stocks = "";
-        for (let k in stockList) {
-            if (stockList[k].monitorAlert == '1' || stockList[k].monitorAlert == '2' 
-                || stockList[k].monitorAlert == '3'|| stockList[k].monitorAlert == '4') {
-                continue;
+        // 获取监控重复触发设置
+        getData('monitor-repeat').then((monitorRepeat) => {
+            if (monitorRepeat == null || monitorRepeat == "true") {
+                monitorRepeat = true;
+            } else if(monitorRepeat == "false") {
+                monitorRepeat = false;
             }
-            if ((typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorHighPrice != '')
-                || (typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorLowPrice != '')
-                || (typeof stockList[k].monitorUpperPercent != 'undefined' && stockList[k].monitorUpperPercent != '')
-                || (typeof stockList[k].monitorLowerPercent != 'undefined' && stockList[k].monitorLowerPercent != '')
-                || (typeof stockList[k].monitorMA20 != 'undefined' && stockList[k].monitorMA20 != '' && stockList[k].monitorMA20)) {
-                stocks += getSecidBack(stockList[k].code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+            var stocks = "";
+            for (let k in stockList) {
+                // 如果设置为只触发一次，且已经触发过监控，则跳过
+                if (!monitorRepeat && (stockList[k].monitorAlert == '1' || stockList[k].monitorAlert == '2' 
+                    || stockList[k].monitorAlert == '3'|| stockList[k].monitorAlert == '4')) {
+                    continue;
+                }
+                if ((typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorHighPrice != '')
+                    || (typeof stockList[k].monitorLowPrice != 'undefined' && stockList[k].monitorLowPrice != '')
+                    || (typeof stockList[k].monitorUpperPercent != 'undefined' && stockList[k].monitorUpperPercent != '')
+                    || (typeof stockList[k].monitorLowerPercent != 'undefined' && stockList[k].monitorLowerPercent != '')
+                    || (typeof stockList[k].monitorMA20 != 'undefined' && stockList[k].monitorMA20 != '' && stockList[k].monitorMA20)) {
+                    stocks += getSecidBack(stockList[k].code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+                }
             }
-        }
-        if (stocks == "") {
-            console.log("没有监控的股票，返回...");
-            return;
-        }
+            if (stocks == "") {
+                console.log("没有监控的股票，返回...");
+                return;
+            }
 
-        fetch("https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f12,f13,f19,f14,f139,f148,f124,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids=" + stocks)
-            .then(response => response.text())
-            .then(repsonse => JSON.parse(repsonse))
-            .then(response => {
-                getData('blueColor').then((blueColor) => {
-                    if (blueColor == null) {
-                        blueColor = '#093';
-                    }
-                    getData('redColor').then((redColor) => {
-                        if (redColor == null) {
-                            redColor = '#ee2500';
+            fetch("https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f12,f13,f19,f14,f139,f148,f124,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids=" + stocks)
+                .then(response => response.text())
+                .then(repsonse => JSON.parse(repsonse))
+                .then(response => {
+                    getData('blueColor').then((blueColor) => {
+                        if (blueColor == null) {
+                            blueColor = '#093';
                         }
-                        if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
-                            blueColor = lightBlue;
-                            redColor = lightRed;
-                        }
-                        // 在这里处理返回的数据
-                        var stoksArr = response.data.diff;
-                        for (let k in stoksArr) {
-                            var monitorStock;
-                            for (let l in stockList) {
-                                if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
-                                    monitorStock = stockList[l];
-                                }
+                        getData('redColor').then((redColor) => {
+                            if (redColor == null) {
+                                redColor = '#ee2500';
                             }
-                            var name = stoksArr[k].f14 + "";
-                            var now = parseFloat(stoksArr[k].f2 + "");
-                            // 9点至9点15分，股票价格如果为0就取昨日收盘价格
-                            if (now == 0) {
-                                now = parseFloat(stoksArr[k].f18 + "");
+                            if (redColor == '#545454' || blueColor == '#545454') {// 已经是隐身模式了角标红绿颜色变淡，更隐蔽
+                                blueColor = lightBlue;
+                                redColor = lightRed;
                             }
-                            if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
-                                var highPrice = parseFloat(monitorStock.monitorHighPrice);
-                                if (now > highPrice) {
-                                    monitorStock.monitorAlert = '1';
-                                    monitorStock.monitorAlertDate = Date.now();
-                                    sendChromeBadge('#FFFFFF', redColor, "" + now);
-                                    var text = name + "涨破监控价格" + highPrice + "，达到" + now;
-                                    saveData('stocks', JSON.stringify(stockList));
-                                    showNotification("通知", text);
-                                    console.log("================监控价格涨破", highPrice, "============");
-                                }
-                            }
-                            if (typeof monitorStock.monitorLowPrice != 'undefined' && monitorStock.monitorLowPrice != '') {
-                                var lowPrice = parseFloat(monitorStock.monitorLowPrice);
-                                if (now < lowPrice) {
-                                    monitorStock.monitorAlert = '2';
-                                    monitorStock.monitorAlertDate = Date.now();
-                                    sendChromeBadge('#FFFFFF', blueColor, "" + now);
-                                    var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
-                                    saveData('stocks', JSON.stringify(stockList));
-                                    showNotification("通知", text);
-                                    console.log("================监控价格跌破", lowPrice, "============");
-                                }
-                            }
-                            // 日涨幅提醒
-                            if (typeof monitorStock.monitorUpperPercent != 'undefined' && monitorStock.monitorUpperPercent != '') {
-                                var upperPercent = parseFloat(monitorStock.monitorUpperPercent);
-                                var openPrice = parseFloat(stoksArr[k].f18 + "");
-                                let currentPercent = (now - openPrice) / openPrice * 100;
-                                if (currentPercent >= upperPercent) {
-                                    monitorStock.monitorAlert = '3';
-                                    monitorStock.monitorAlertDate = Date.now();
-                                    sendChromeBadge('#FFFFFF', redColor, upperPercent + "%");
-                                    var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
-                                    saveData('stocks', JSON.stringify(stockList));
-                                    showNotification("通知", text);
-                                    console.log("================日涨幅提醒", upperPercent, "%============");
-                                }
-                            }
-                            // 日跌幅提醒
-                            if (typeof monitorStock.monitorLowerPercent != 'undefined' && monitorStock.monitorLowerPercent != '') {
-                                var lowerPercent = parseFloat(monitorStock.monitorLowerPercent);
-                                var openPrice = parseFloat(stoksArr[k].f18 + "");
-                                let currentPercent = (openPrice - now) / openPrice * 100;
-                                if (currentPercent >= lowerPercent) {
-                                    monitorStock.monitorAlert = '4';
-                                    monitorStock.monitorAlertDate = Date.now();
-                                    sendChromeBadge('#FFFFFF', blueColor, lowerPercent + "%");
-                                    var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
-                                    saveData('stocks', JSON.stringify(stockList));
-                                    showNotification("通知", text);
-                                    console.log("================日跌幅提醒", lowerPercent, "%============");
-                                }
-                            }
-                            // 20日均线提醒
-                            if (monitorStock.monitorMA20) {
-                                try {
-                                    let klt = 101;
-                                    if(monitorStock.code.startsWith('sh') || monitorStock.code.startsWith('SH')){
-                                        secid = '1';
-                                    } else if(monitorStock.code.startsWith('sz') || monitorStock.code.startsWith('SZ') || monitorStock.code.startsWith('bj') || monitorStock.code.startsWith('BJ')) {
-                                        secid = '0';
-                                    } else {
-                                        secid = '2';
+                            // 在这里处理返回的数据
+                            var stoksArr = response.data.diff;
+                            for (let k in stoksArr) {
+                                var monitorStock;
+                                for (let l in stockList) {
+                                    if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
+                                        monitorStock = stockList[l];
                                     }
-                                    let code = monitorStock.code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
-                                    let end = getBeijingDateNoSlash();
-                                    // now
-                                    fetch("https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=100&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1")
-                                    .then(response => response.text())
-                                    .then(repsonse => JSON.parse(repsonse))
-                                    .then(data => {
-                                        const klines = data.data.klines;
-                                        let stockName = data.data.name;
-                                        const transformedData = klines.map((kline) => {
-                                            const [date, open, close, high, low, volume, money, change] = kline.split(",");
-                                            return [date, parseFloat(open), parseFloat(close), parseFloat(low), parseFloat(high), parseFloat(volume), parseFloat(money), parseFloat(change)];
-                                        });
-                                        const categoryData = [];
-                                        const volumnData = [];
-                                        const priceData = [];
-                                        const values = [];
-                                        const changes = [];
-                                        for (var i = 0; i < transformedData.length; i++) {
-                                            categoryData.push(transformedData[i].splice(0, 1)[0]);
-                                            values.push(transformedData[i]);
-                                            volumnData.push(transformedData[i][4]);
-                                            priceData.push(transformedData[i][3]);
-                                            changes.push(transformedData[i][6]);
+                                }
+                                var name = stoksArr[k].f14 + "";
+                                var now = parseFloat(stoksArr[k].f2 + "");
+                                // 9点至9点15分，股票价格如果为0就取昨日收盘价格
+                                if (now == 0) {
+                                    now = parseFloat(stoksArr[k].f18 + "");
+                                }
+                                if (typeof monitorStock.monitorHighPrice != 'undefined' && monitorStock.monitorHighPrice != '') {
+                                    var highPrice = parseFloat(monitorStock.monitorHighPrice);
+                                    if (now > highPrice) {
+                                            monitorStock.monitorAlert = '1';
+                                            monitorStock.monitorAlertDate = Date.now();
+                                        sendChromeBadge('#FFFFFF', redColor, "" + now);
+                                        var text = name + "涨破监控价格" + highPrice + "，达到" + now;
+                                        saveData('stocks', JSON.stringify(stockList));
+                                        showNotification("通知", text);
+                                        console.log("================监控价格涨破", highPrice, "============");
+                                    }
+                                }
+                                if (typeof monitorStock.monitorLowPrice != 'undefined' && monitorStock.monitorLowPrice != '') {
+                                    var lowPrice = parseFloat(monitorStock.monitorLowPrice);
+                                    if (now < lowPrice) {
+                                            monitorStock.monitorAlert = '2';
+                                            monitorStock.monitorAlertDate = Date.now();
+                                        sendChromeBadge('#FFFFFF', blueColor, "" + now);
+                                        var text = name + "跌破监控价格" + lowPrice + "，达到" + now;
+                                        saveData('stocks', JSON.stringify(stockList));
+                                        showNotification("通知", text);
+                                        console.log("================监控价格跌破", lowPrice, "============");
+                                    }
+                                }
+                                // 日涨幅提醒
+                                if (typeof monitorStock.monitorUpperPercent != 'undefined' && monitorStock.monitorUpperPercent != '') {
+                                    var upperPercent = parseFloat(monitorStock.monitorUpperPercent);
+                                    var openPrice = parseFloat(stoksArr[k].f18 + "");
+                                    let currentPercent = (now - openPrice) / openPrice * 100;
+                                    if (currentPercent >= upperPercent) {
+                                            monitorStock.monitorAlert = '3';
+                                            monitorStock.monitorAlertDate = Date.now();
+                                        sendChromeBadge('#FFFFFF', redColor, upperPercent + "%");
+                                        var text = name + "涨幅超过" + upperPercent + "%，达到" + currentPercent + "%";
+                                        saveData('stocks', JSON.stringify(stockList));
+                                        showNotification("通知", text);
+                                        console.log("================日涨幅提醒", upperPercent, "%============");
+                                    }
+                                }
+                                // 日跌幅提醒
+                                if (typeof monitorStock.monitorLowerPercent != 'undefined' && monitorStock.monitorLowerPercent != '') {
+                                    var lowerPercent = parseFloat(monitorStock.monitorLowerPercent);
+                                    var openPrice = parseFloat(stoksArr[k].f18 + "");
+                                    let currentPercent = (openPrice - now) / openPrice * 100;
+                                    if (currentPercent >= lowerPercent) {
+                                            monitorStock.monitorAlert = '4';
+                                            monitorStock.monitorAlertDate = Date.now();
+                                        sendChromeBadge('#FFFFFF', blueColor, lowerPercent + "%");
+                                        var text = name + "跌幅超过" + lowerPercent + "%，达到" + currentPercent + "%";
+                                        saveData('stocks', JSON.stringify(stockList));
+                                        showNotification("通知", text);
+                                        console.log("================日跌幅提醒", lowerPercent, "%============");
+                                    }
+                                }
+                                // 20日均线提醒
+                                if (monitorStock.monitorMA20) {
+                                    try {
+                                        let klt = 101;
+                                        if(monitorStock.code.startsWith('sh') || monitorStock.code.startsWith('SH')){
+                                            secid = '1';
+                                        } else if(monitorStock.code.startsWith('sz') || monitorStock.code.startsWith('SZ') || monitorStock.code.startsWith('bj') || monitorStock.code.startsWith('BJ')) {
+                                            secid = '0';
+                                        } else {
+                                            secid = '2';
                                         }
-                                        const data0 = {
-                                            categoryData: categoryData,
-                                            volumnData: volumnData,
-                                            priceData: priceData,
-                                            values: values,
-                                            changes: changes,
-                                        };
-                                        let ma20List = calculateMA(20, data0.values);
-                                        let ma20 = ma20List[ma20List.length - 1];
-                                        const currentPrice = data0.values[data0.values.length - 1][1];
-                                        let text = '';
-                                        let monitorAlert = '';
-                                        if (currentPrice > ma20) {
-                                            monitorAlert = '5';
-                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '，大于20日均线' + ma20 + '，可以买入';
-                                        } else if (currentPrice < ma20) {
-                                            monitorAlert = '6';
-                                            text = '股票：' + stockName + '，当前价格' + currentPrice + '，小于20日均线' + ma20 + '，需要卖出';
-                                        }
+                                        let code = monitorStock.code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
+                                        let end = getBeijingDateNoSlash();
+                                        // now
+                                        fetch("https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=100&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1")
+                                        .then(response => response.text())
+                                        .then(repsonse => JSON.parse(repsonse))
+                                        .then(data => {
+                                            const klines = data.data.klines;
+                                            let stockName = data.data.name;
+                                            const transformedData = klines.map((kline) => {
+                                                const [date, open, close, high, low, volume, money, change] = kline.split(",");
+                                                return [date, parseFloat(open), parseFloat(close), parseFloat(low), parseFloat(high), parseFloat(volume), parseFloat(money), parseFloat(change)];
+                                            });
+                                            const categoryData = [];
+                                            const volumnData = [];
+                                            const priceData = [];
+                                            const values = [];
+                                            const changes = [];
+                                            for (var i = 0; i < transformedData.length; i++) {
+                                                categoryData.push(transformedData[i].splice(0, 1)[0]);
+                                                values.push(transformedData[i]);
+                                                volumnData.push(transformedData[i][4]);
+                                                priceData.push(transformedData[i][3]);
+                                                changes.push(transformedData[i][6]);
+                                            }
+                                            const data0 = {
+                                                categoryData: categoryData,
+                                                volumnData: volumnData,
+                                                priceData: priceData,
+                                                values: values,
+                                                changes: changes,
+                                            };
+                                            let ma20List = calculateMA(20, data0.values);
+                                            let ma20 = ma20List[ma20List.length - 1];
+                                            const currentPrice = data0.values[data0.values.length - 1][1];
+                                            let text = '';
+                                            let monitorAlert = '';
+                                            if (currentPrice > ma20) {
+                                                monitorAlert = '5';
+                                                text = '股票：' + stockName + '，当前价格' + currentPrice + '，大于20日均线' + ma20 + '，可以买入';
+                                            } else if (currentPrice < ma20) {
+                                                monitorAlert = '6';
+                                                text = '股票：' + stockName + '，当前价格' + currentPrice + '，小于20日均线' + ma20 + '，需要卖出';
+                                            }
                                         updateStocksMA20(data.data.code, monitorAlert);
-                                        console.log(text);
-                                    });
-                                } catch (error) {
-                                    console.warn("执行20日均线提醒任务:", error);
+                                            console.log(text);
+                                        });
+                                    } catch (error) {
+                                        console.warn("执行20日均线提醒任务:", error);
+                                    }
                                 }
                             }
-                        }
                     });
                 });
             })
@@ -285,6 +293,7 @@ function monitorStockPrice(stockList) {
                 // 处理请求错误
                 console.warn("执行突破价格监控任务:", error);
             });
+        });
     } else {
         console.log("非交易时间，停止执行任务...");
     }
@@ -1011,8 +1020,8 @@ async function updateStocksMA20(code, monitorAlert) {
     var stockList = JSON.parse(stockArr);
     for (let i = 0; i < stockList.length; i++) {
         if (stockList[i].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') == code) {
-            stockList[i].monitorAlert = monitorAlert;
-            stockList[i].monitorAlertDate = Date.now();
+                stockList[i].monitorAlert = monitorAlert;
+                stockList[i].monitorAlertDate = Date.now();
             break;
         }
     }
@@ -1026,10 +1035,18 @@ async function monitorFundPrice(fundList) {
         return;
     }
     console.log("交易时间，执行任务...");
+    // 获取监控重复触发设置
+    var monitorRepeat = await getData('monitor-repeat');
+    if (monitorRepeat == null || monitorRepeat == "true") {
+        monitorRepeat = true;
+    } else if(monitorRepeat == "false") {
+        monitorRepeat = false;
+    }
     var funds = [];
     for (let k in fundList) {
-        if (fundList[k].monitorAlert == '1' || fundList[k].monitorAlert == '2' 
-            || fundList[k].monitorAlert == '3'|| fundList[k].monitorAlert == '4') {
+        // 如果设置为只触发一次，且已经触发过监控，则跳过
+        if (!monitorRepeat && (fundList[k].monitorAlert == '1' || fundList[k].monitorAlert == '2' 
+            || fundList[k].monitorAlert == '3'|| fundList[k].monitorAlert == '4')) {
             continue;
         }
         if ((typeof fundList[k].monitorLowPrice != 'undefined' && fundList[k].monitorHighPrice != '')
@@ -1086,8 +1103,8 @@ async function monitorFundPrice(fundList) {
             if (typeof funds[k].monitorHighPrice != 'undefined' && funds[k].monitorHighPrice != '') {
                 var highPrice = parseFloat(funds[k].monitorHighPrice);
                 if (now > highPrice) {
-                    funds[k].monitorAlert = '1';
-                    funds[k].monitorAlertDate = Date.now();
+                        funds[k].monitorAlert = '1';
+                        funds[k].monitorAlertDate = Date.now();
                     sendChromeBadge('#FFFFFF', redColor, "" + now);
                     saveData('funds', JSON.stringify(fundList));
                     var text = funds[k].fundName + "涨破监控价格" + highPrice + "，达到" + now;
@@ -1098,8 +1115,8 @@ async function monitorFundPrice(fundList) {
             if (typeof funds[k].monitorLowPrice != 'undefined' && funds[k].monitorLowPrice != '') {
                 var lowPrice = parseFloat(funds[k].monitorLowPrice);
                 if (now < lowPrice) {
-                    funds[k].monitorAlert = '2';
-                    funds[k].monitorAlertDate = Date.now();
+                        funds[k].monitorAlert = '2';
+                        funds[k].monitorAlertDate = Date.now();
                     sendChromeBadge('#FFFFFF', blueColor, "" + now);
                     saveData('funds', JSON.stringify(fundList));
                     var text = funds[k].fundName + "跌破监控价格" + lowPrice + "，达到" + now;

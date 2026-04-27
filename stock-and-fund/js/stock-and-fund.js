@@ -573,6 +573,12 @@ async function initLoad() {
     } else if(showHelpButton == "false") {
         showHelpButton = false;
     }
+    monitorRepeat = await readCacheData('monitor-repeat');
+    if (monitorRepeat == null || monitorRepeat == "true") {
+        monitorRepeat = true;
+    } else if(monitorRepeat == "false") {
+        monitorRepeat = false;
+    }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
         lastSort = {
@@ -1361,6 +1367,9 @@ document.addEventListener(
         // 设置页面，点击首页展示/隐藏批量删除按钮
         document.getElementById('batch-delete-button-dont-display-change-button').addEventListener('click', changeBatchDeleteButton);
         document.getElementById('batch-delete-button-display-change-button').addEventListener('click', changeBatchDeleteButton);
+        // 设置页面，点击监控涨破/跌破价格的触发方式
+        document.getElementById('monitor-only-once-button').addEventListener('click', changeMonitorRepeat);
+        document.getElementById('monitor-repeat-button').addEventListener('click', changeMonitorRepeat);
         // 设置页面，点击保存K线图显示日期个数按钮
         document.getElementById('k-line-numbers-save-button').addEventListener('click', saveKLineNumbers);
         // 设置页面，点击开启/关闭自选价格日期换行
@@ -5995,6 +6004,8 @@ async function syncConfigFromCloud() {
             saveCacheData('opacity-percent', opacityPercent);
             largeMarketCode = result.largeMarketCode;
             saveCacheData('large-market-code', JSON.stringify(largeMarketCode));
+            monitorRepeat = result.monitorRepeat;
+            saveCacheData('monitor-repeat', monitorRepeat);
             // 处理配置同步中的自定义指数数据
             if (result.customIndices != null && result.customIndices != undefined) {
                 await saveCacheData('custom-indices', JSON.stringify(result.customIndices));
@@ -6094,6 +6105,7 @@ async function syncConfigToCloud() {
     data.riseFallSort = riseFallSort;
     data.opacityPercent = opacityPercent;
     data.largeMarketCode = largeMarketCode;
+    data.monitorRepeat = monitorRepeat;
     // 添加自定义指数数据到配置同步
     let customIndices = await readCacheData('custom-indices');
     data.customIndices = customIndices ? JSON.parse(customIndices) : [];
@@ -9446,6 +9458,15 @@ async function settingButtonInit(){
         document.getElementById('calculate-all-group-income-disable-button').classList.add('active');
         document.getElementById('calculate-all-group-income-enable-button').classList.remove('active');
     }
+    
+    // 初始化监控涨破/跌破价格的触发方式按钮
+    if (monitorRepeat) {
+        document.getElementById('monitor-only-once-button').classList.remove('active');
+        document.getElementById('monitor-repeat-button').classList.add('active');
+    } else {
+        document.getElementById('monitor-only-once-button').classList.add('active');
+        document.getElementById('monitor-repeat-button').classList.remove('active');
+    }
 }
 
 // 设置全部/股票/基金按钮激活显示状态
@@ -9610,6 +9631,18 @@ async function changeAutoSync(event) {
         autoSync = true;
     }
     saveCacheData('auto-sync', autoSync);
+    settingButtonInit();
+}
+
+// 监控涨破/跌破价格的触发方式
+async function changeMonitorRepeat(event) {
+    let targetId = event.target.id;
+    if (targetId == 'monitor-only-once-button') {
+        monitorRepeat = false;
+    } else {
+        monitorRepeat = true;
+    }
+    saveCacheData('monitor-repeat', monitorRepeat);
     settingButtonInit();
 }
 
