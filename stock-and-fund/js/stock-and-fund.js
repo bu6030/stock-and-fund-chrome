@@ -976,6 +976,14 @@ document.addEventListener(
         document.getElementById('fund-delete-button').addEventListener('click', deleteStockAndFund);
         // 基金编辑页面，点击走势图按钮
         document.getElementById('fund-show-time-image-button').addEventListener('click', showTimeImage);
+        // 基金编辑页面，点击定投买入按钮
+        document.getElementById('fund-cycle-buy-open-button').addEventListener('click', openFundCycleBuyModal);
+        // 场外基金定投买入页面，点击确认买入按钮
+        document.getElementById('fund-cycle-buy-button').addEventListener('click', fundCycleBuy);
+        // 场外基金定投买入页面，买入金额输入变化时计算预计份额
+        document.getElementById('fund-cycle-buy-amount').addEventListener('input', calculateFundCycleBuyShares);
+        // 场外基金定投买入页面，手续费率输入变化时计算预计份额
+        document.getElementById('fund-cycle-buy-rate').addEventListener('input', calculateFundCycleBuyShares);
 
         // 股票编辑页面，点击保存按钮
         document.getElementById('stock-save-button').addEventListener('click', saveStock);
@@ -3908,6 +3916,120 @@ async function saveFund() {
     }
     $("#fund-modal").modal("hide");
     $("#search-fund-modal").modal("hide");
+    if (autoSync) {
+        syncDataToCloud();
+    }
+    initData();
+}
+
+// 打开场外基金定投买入模态框
+function openFundCycleBuyModal() {
+    var fundCode = $("#fund-code").val();
+    var fundName = $("#fund-name").val();
+    
+    // 获取基金最新净值
+    let fundInfo = checkFundExsit(fundCode);
+    if (!fundInfo.checkReuslt) {
+        fundInfo = checkFundExsitFromEastMoney(fundCode);
+    }
+    
+    $("#fund-cycle-buy-name").val(fundName);
+    $("#fund-cycle-buy-code").val(fundCode);
+    $("#fund-cycle-buy-price").val(fundInfo.now);
+    
+    // 初始化预计份额计算
+    calculateFundCycleBuyShares();
+    
+    $("#fund-cycle-buy-modal").modal();
+}
+
+// 计算场外基金定投买入预计份额
+function calculateFundCycleBuyShares() {
+    var price = parseFloat($("#fund-cycle-buy-price").val()) || 0;
+    var amount = parseFloat($("#fund-cycle-buy-amount").val()) || 0;
+    var rate = parseFloat($("#fund-cycle-buy-rate").val()) || 0;
+    
+    if (price <= 0 || amount <= 0) {
+        $("#fund-cycle-buy-shares").val('');
+        return;
+    }
+    
+    // 计算手续费：手续费 = 买入金额 * 手续费率 / 100
+    var fee = amount * rate / 100;
+    // 计算实际买入金额：实际金额 = 买入金额 - 手续费
+    var actualAmount = amount - fee;
+    // 计算买入份额：份额 = 实际金额 / 最新净值
+    var shares = actualAmount / price;
+    
+    $("#fund-cycle-buy-shares").val(shares.toFixed(4));
+}
+
+// 场外基金定投买入操作
+async function fundCycleBuy() {
+    var fundCode = $("#fund-cycle-buy-code").val();
+    var price = parseFloat($("#fund-cycle-buy-price").val()) || 0;
+    var amount = parseFloat($("#fund-cycle-buy-amount").val()) || 0;
+    var rate = parseFloat($("#fund-cycle-buy-rate").val()) || 0;
+    var shares = parseFloat($("#fund-cycle-buy-shares").val()) || 0;
+    
+    if (amount <= 0) {
+        alertMessage("请输入有效的买入金额");
+        return;
+    }
+    
+    if (price <= 0) {
+        alertMessage("无法获取最新净值");
+        return;
+    }
+    
+    // 查找基金并更新持仓
+    var fundIndex = -1;
+    for (var k in fundList) {
+        if (fundList[k].fundCode == fundCode) {
+            fundIndex = k;
+            break;
+        }
+    }
+    
+    if (fundIndex == -1) {
+        alertMessage("未找到该基金");
+        return;
+    }
+    
+    var fund = fundList[fundIndex];
+    var oldBonds = parseFloat(fund.bonds) || 0;
+    var oldCostPrise = parseFloat(fund.costPrise) || 0;
+    
+    // 计算手续费
+    var fee = amount * rate / 100;
+    // 计算实际买入金额
+    var actualAmount = amount - fee;
+    
+    // 更新持有份额
+    var newBonds = oldBonds + shares;
+    fund.bonds = newBonds.toFixed(2);
+    
+    // 更新持仓成本单价（加权平均）
+    // 新成本 = (旧成本 * 旧份额 + 买入金额) / 新份额
+    var oldCostValue = oldCostPrise * oldBonds;
+    var newCostValue = oldCostValue + amount;
+    var newCostPrise = newCostValue / newBonds;
+    fund.costPrise = newCostPrise.toFixed(4);
+    
+    // 保存到缓存
+    if (currentGroup == 'default-group' || currentGroup == 'all-group') {
+        saveCacheData('funds', JSON.stringify(fundList));
+    } else {
+        saveCacheData(currentGroup + '_funds', JSON.stringify(fundList));
+    }
+    
+    // 更新基金编辑页面的显示
+    $("#fund-bonds").val(fund.bonds);
+    $("#fund-costPrise").val(fund.costPrise);
+    
+    $("#fund-cycle-buy-modal").modal("hide");
+    alertMessage("定投买入成功！\n买入份额：" + shares.toFixed(4) + "\n手续费：" + fee.toFixed(2) + "元");
+    
     if (autoSync) {
         syncDataToCloud();
     }

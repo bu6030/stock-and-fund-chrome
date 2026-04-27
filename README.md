@@ -483,6 +483,7 @@
 456. 修复火狐角标问题 2026/3/31 version 2.3.0.5 --end
 457. 修复角标问题 2026/4/9 version 2.3.0.6 --end
 458. 增加监控价格支持重复触发 2026/4/27
+459. 增加基金定投功能 2026/4/27
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
