@@ -2341,6 +2341,7 @@ async function initStockAndFundHtml() {
                 $("#go-to-wencai-detail-button")[0].style.display = 'inline';
                 $("#go-to-guba-detail-button")[0].style.display = 'inline';
                 $("#go-to-tiantianjijin-detail-button")[0].style.display = 'none';
+                $("#fund-cycle-buy-open-button")[0].style.display = 'none';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
                 if ((stockList[this.sectionRowIndex].code + "").includes('sh5') || (stockList[this.sectionRowIndex].code + "").includes('sz5') ||
@@ -2540,6 +2541,7 @@ async function initStockAndFundHtml() {
                 $("#go-to-wencai-detail-button")[0].style.display = 'none';
                 $("#go-to-guba-detail-button")[0].style.display = 'none';
                 $("#go-to-tiantianjijin-detail-button")[0].style.display = 'inline';
+                $("#fund-cycle-buy-open-button")[0].style.display = 'inline';
                 $("#time-image-pre-button")[0].style.display = 'inline';
                 $("#time-image-next-button")[0].style.display = 'inline';
                 let fundCode = $("#fund-code").val();
@@ -3926,6 +3928,9 @@ async function saveFund() {
 function openFundCycleBuyModal() {
     var fundCode = $("#fund-code").val();
     var fundName = $("#fund-name").val();
+    
+    // 先关闭分时图模态框
+    $("#time-image-modal").modal("hide");
     
     // 获取基金最新净值
     let fundInfo = checkFundExsit(fundCode);
@@ -5731,6 +5736,11 @@ function showTimeImage(event) {
     } else {
         timeImageCode = $("#stock-code").val();
         timeImageType = "STOCK";
+    }
+    if (timeImageType == 'FUND') {
+        $("#fund-cycle-buy-open-button").show();
+    } else {
+        $("#fund-cycle-buy-open-button").hide();
     }
     if (trendImageType == 'MINUTE') {
         showMinuteImage('1DAY');
