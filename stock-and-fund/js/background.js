@@ -113,10 +113,10 @@ function monitorStockPrice(stockList) {
         console.log("交易时间，执行任务...");
         // 获取监控重复触发设置
         getData('monitor-repeat').then((monitorRepeat) => {
-            if (monitorRepeat == null || monitorRepeat == "true") {
-                monitorRepeat = true;
-            } else if(monitorRepeat == "false") {
+            if (monitorRepeat == null || monitorRepeat == "false") {
                 monitorRepeat = false;
+            } else if(monitorRepeat == "true") {
+                monitorRepeat = true;
             }
             var stocks = "";
             for (let k in stockList) {
@@ -1037,10 +1037,10 @@ async function monitorFundPrice(fundList) {
     console.log("交易时间，执行任务...");
     // 获取监控重复触发设置
     var monitorRepeat = await getData('monitor-repeat');
-    if (monitorRepeat == null || monitorRepeat == "true") {
-        monitorRepeat = true;
-    } else if(monitorRepeat == "false") {
+    if (monitorRepeat == null || monitorRepeat == "false") {
         monitorRepeat = false;
+    } else if(monitorRepeat == "true") {
+        monitorRepeat = true;
     }
     var funds = [];
     for (let k in fundList) {

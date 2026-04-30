@@ -574,10 +574,10 @@ async function initLoad() {
         showHelpButton = false;
     }
     monitorRepeat = await readCacheData('monitor-repeat');
-    if (monitorRepeat == null || monitorRepeat == "true") {
-        monitorRepeat = true;
-    } else if(monitorRepeat == "false") {
+    if (monitorRepeat == null || monitorRepeat == "false") {
         monitorRepeat = false;
+    } else if(monitorRepeat == "true") {
+        monitorRepeat = true;
     }
     lastSort = await readCacheData('last-sort');
     if (lastSort == null) {
