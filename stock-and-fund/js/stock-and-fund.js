@@ -4399,6 +4399,7 @@ async function initWindowsSize() {
     let groupMenuButton = document.getElementById('group-menu-button');
     let groupMenuHorizontal = document.getElementById('group-menu-horizontal');
     let fullScreenMenuButton = document.getElementById('full-screen-menu-button');
+    let removeBadgeTextButton = document.getElementById('remove-badgetext-button');
     if (largeMarketCode == null || largeMarketCode == '' || largeMarketCode == []) {
         myInputGroup.style.marginTop='1px';
         myHeader.style.height = '0px';
@@ -4485,7 +4486,7 @@ async function initWindowsSize() {
         showBuyOrSellButton.style.display = "none";
         showBuyOrSellButton2.style.display = "none";
         showDataCenterButton.style.display = "none";
-        groupMenuButton.style.display = "none";
+        groupMenuButton.style.display = "inline";
         fullScreenMenuButton.style.display = "none";
         timeImageDialog.style.maxWidth = '400px';
         timeImageNew.style.width = '380px';

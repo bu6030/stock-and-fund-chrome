@@ -145,8 +145,7 @@
                     <!-- 模态框底部 -->
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-primary" id="set-top-button">置顶</button> -->
-                        <button type="button" class="btn btn-primary"
-                            id="fund-show-time-image-button">走势图</button>
+                        <button type="button" class="btn btn-primary" id="fund-show-time-image-button">走势图</button>
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-2">持仓明细</button>
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-button-2">历史净值</button>
                         <button type="button" class="btn btn-primary" id="fund-save-button">保存</button>
@@ -154,6 +153,62 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
 
+                </div>
+            </div>
+        </div>
+        <!-- 场外基金定投买入模态框 -->
+        <div class="modal fade" id="fund-cycle-buy-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">场外基金定投买入</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- 模态框主体 -->
+                    <div class="modal-body my-font">
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">基金名称：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="fund-cycle-buy-name">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">基金编码：</div>
+                            <div class="you">
+                                <input type="text" disabled="disabled" class="am-input-sm my-text" id="fund-cycle-buy-code">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">最新净值（只能获取到前一个交易日的净值）：</div>
+                            <div class="you">
+                                <input type="number" disabled="disabled" class="am-input-sm my-text" id="fund-cycle-buy-price">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">买入金额：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="fund-cycle-buy-amount" placeholder="请输入买入金额" value="100">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">手续费率 %：</div>
+                            <div class="you">
+                                <input type="number" class="am-input-sm my-text" id="fund-cycle-buy-rate" placeholder="请输入手续费率" value="0.15">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo">预计买入份额：</div>
+                            <div class="you">
+                                <input type="number" disabled="disabled" class="am-input-sm my-text" id="fund-cycle-buy-shares">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button type="button" id="fund-cycle-buy-button" class="btn btn-primary">确认买入</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -844,6 +899,15 @@
                             <div class="zuo"></div>
                             <div class="you">
                                 <div class="btn-group btn-group" role="group" aria-label="Basic example">
+                                    <button type="button" id="monitor-only-once-button" class="btn btn-outline-primary">只触发一次</button>
+                                    <button type="button" id="monitor-repeat-button" class="btn btn-outline-primary">重复触发</button>
+                                </div>  监控涨破/跌破价格的触发方式
+                            </div>
+                        </div>
+                        <div class="am-form-group am-cf">
+                            <div class="zuo"></div>
+                            <div class="you">
+                                <div class="btn-group btn-group" role="group" aria-label="Basic example">
                                     <button type="button" id="batch-delete-button-dont-display-change-button" class="btn btn-outline-primary">不展示</button>
                                     <button type="button" id="batch-delete-button-display-change-button" class="btn btn-outline-primary">展示</button>
                                 </div>  在首页展示/不展示批量删除按钮
@@ -1335,6 +1399,7 @@
                         <button type="button" class="btn btn-primary" id="fund-invers-position-button-3">持仓明细</button>
                         <button type="button" class="btn btn-primary" id="fund-net-diagram-button-3">历史净值</button>
                         <button type="button" class="btn btn-primary" id="update-stock-fund-button">编辑</button>
+                        <button type="button" class="btn btn-primary" id="fund-cycle-buy-open-button" style="display: none;">定投买入</button>
                         <div class="btn-group">
                             <!-- <button type="button" id="time-image-button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               走势图
