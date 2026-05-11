@@ -172,6 +172,7 @@ window.addEventListener("load", async (event) => {
         // 隐藏密码保护按钮
         $("#show-password-protect-button")[0].style.display = 'none';
         $("#data-export-button")[0].style.display = 'none';
+        $("#data-export-csv-button")[0].style.display = 'none';
         if (document.getElementById('import-from-local-springboot-div')) {
             document.getElementById('import-from-local-springboot-div').style.display = 'none';
         }
@@ -688,6 +689,7 @@ async function initLoad() {
     // 展示密码保护按钮
     $("#show-password-protect-button")[0].style.display = 'inline';
     $("#data-export-button")[0].style.display = 'inline';
+    $("#data-export-csv-button")[0].style.display = 'inline';
     initWindowsSize();
     initHtml();
     initData();
@@ -1287,6 +1289,8 @@ document.addEventListener(
         document.getElementById('show-import-data').addEventListener('click', showImportData);
         // 设置页面，导出数据按钮点击展导出 txt 文件
         document.getElementById('data-export-button').addEventListener('click', dataExport);
+        // 设置页面，导出CSV按钮点击导出 csv 文件
+        document.getElementById('data-export-csv-button').addEventListener('click', dataExportCsv);
         // 设置页面，价格监控提醒是否允许发送浏览器通知
         document.getElementById('send-chrome-notice-enable-button').addEventListener('click', enableChromeNotice);
         document.getElementById('send-chrome-notice-disable-button').addEventListener('click', enableChromeNotice);
@@ -4861,6 +4865,28 @@ async function dataExport() {
         data[id + '_funds'] = jQuery.parseJSON(await readCacheData(id + '_funds'));
     }));
     downloadJsonOrTxt('股票基金神器.txt', JSON.stringify(data));
+}
+
+// CSV导出
+async function dataExportCsv() {
+    var csvContent = '\uFEFF';
+    csvContent += '类型,名称,编码,成本价,份额,成本\n';
+    var stocks = jQuery.parseJSON(await readCacheData('stocks'));
+    var funds = jQuery.parseJSON(await readCacheData('funds'));
+    for (let stock of stocks) {
+        var bonds = parseFloat(stock.bonds || '0');
+        var costPrise = parseFloat(stock.costPrise || '0');
+        var totalCost = (bonds * costPrise).toFixed(2);
+        csvContent += `股票,${stock.name || ''},${stock.code},${stock.costPrise},${stock.bonds || '0'},${totalCost}\n`;
+    }
+    for (let fund of funds) {
+        var bonds = parseFloat(fund.bonds || '0');
+        var costPrise = parseFloat(fund.costPrise || '0');
+        var totalCost = (bonds * costPrise).toFixed(2);
+        var fundName = fund.name || fund.fundName || '';
+        csvContent += `基金,${fundName},${fund.fundCode},${fund.costPrise},${fund.bonds || '0'},${totalCost}\n`;
+    }
+    downloadJsonOrTxt('股票基金神器.csv', csvContent);
 }
 
 // 清除所有数据
