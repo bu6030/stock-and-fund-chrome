@@ -4870,21 +4870,56 @@ async function dataExport() {
 // CSV导出
 async function dataExportCsv() {
     var csvContent = '\uFEFF';
-    csvContent += '类型,名称,编码,成本价,份额,成本\n';
-    var stocks = jQuery.parseJSON(await readCacheData('stocks'));
-    var funds = jQuery.parseJSON(await readCacheData('funds'));
-    for (let stock of stocks) {
+    csvContent += '类型,名称,编码,成本价,当前价,涨跌幅,涨跌,持仓,市值,成本,收益,收益率,所属分组\n';
+    var allStocks = [];
+    var allFunds = [];
+    var defaultStocks = jQuery.parseJSON(await readCacheData('stocks'));
+    var defaultFunds = jQuery.parseJSON(await readCacheData('funds'));
+    if (defaultStocks && defaultStocks.length > 0) {
+        allStocks = allStocks.concat(defaultStocks);
+    }
+    if (defaultFunds && defaultFunds.length > 0) {
+        allFunds = allFunds.concat(defaultFunds);
+    }
+    await Promise.all(Object.keys(groups).map(async (id) => {
+        if (id == 'default-group') return;
+        var groupStocks = jQuery.parseJSON(await readCacheData(id + '_stocks'));
+        var groupFunds = jQuery.parseJSON(await readCacheData(id + '_funds'));
+        if (groupStocks && groupStocks.length > 0) {
+            allStocks = allStocks.concat(groupStocks);
+        }
+        if (groupFunds && groupFunds.length > 0) {
+            allFunds = allFunds.concat(groupFunds);
+        }
+    }));
+    for (let stock of allStocks) {
+        var stockData = stockList.find(s => s.code === stock.code && s.belongGroup === stock.belongGroup) || stock;
         var bonds = parseFloat(stock.bonds || '0');
         var costPrise = parseFloat(stock.costPrise || '0');
+        var now = parseFloat(stockData.now || stock.now || '0');
         var totalCost = (bonds * costPrise).toFixed(2);
-        csvContent += `股票,${stock.name || ''},${stock.code},${stock.costPrise},${stock.bonds || '0'},${totalCost}\n`;
+        var marketValue = (bonds * now).toFixed(2);
+        var income = stockData.income || stock.income || '0';
+        var incomePercent = stockData.incomePercent || stock.incomePercent || '0';
+        var changePercent = stockData.changePercent || stock.changePercent || '0';
+        var change = stockData.change || stock.change || '0';
+        var groupName = stock.belongGroup ? (groups[stock.belongGroup] || '未知分组') : '默认分组';
+        csvContent += `股票,${stockData.name || stock.name || ''},${stock.code},${stock.costPrise},${stockData.now || stock.now || ''},${changePercent}%,${change},${stock.bonds || '0'},${marketValue},${totalCost},${income},${incomePercent}%,${groupName}\n`;
     }
-    for (let fund of funds) {
+    for (let fund of allFunds) {
+        var fundData = fundList.find(f => f.fundCode === fund.fundCode && f.belongGroup === fund.belongGroup) || fund;
         var bonds = parseFloat(fund.bonds || '0');
         var costPrise = parseFloat(fund.costPrise || '0');
+        var fundNow = parseFloat(fundData.gsz || fund.gsz || fundData.now || fund.now || '0');
         var totalCost = (bonds * costPrise).toFixed(2);
-        var fundName = fund.name || fund.fundName || '';
-        csvContent += `基金,${fundName},${fund.fundCode},${fund.costPrise},${fund.bonds || '0'},${totalCost}\n`;
+        var marketValue = (bonds * fundNow).toFixed(2);
+        var income = fundData.income || fund.income || '0';
+        var incomePercent = fundData.incomePercent || fund.incomePercent || '0';
+        var changePercent = fundData.gszzl || fund.gszzl || '0';
+        var change = fundData.change || fund.change || '0';
+        var fundName = fundData.name || fund.name || fundData.fundName || fund.fundName || '';
+        var fundGroupName = fund.belongGroup ? (groups[fund.belongGroup] || '未知分组') : '默认分组';
+        csvContent += `基金,${fundName},${fund.fundCode},${fund.costPrise},${fundData.gsz || fund.gsz || fundData.now || fund.now || ''},${changePercent}%,${change},${fund.bonds || '0'},${marketValue},${totalCost},${income},${incomePercent}%,${fundGroupName}\n`;
     }
     downloadJsonOrTxt('股票基金神器.csv', csvContent);
 }
