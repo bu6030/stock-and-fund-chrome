@@ -218,6 +218,13 @@ function showMainInterface() {
 
 // 初始化加载基金股票，各种开关缓存
 async function initLoad() {
+    // 初始化深色主题
+    let darkThemeEnabled = await readCacheData('darkThemeEnabled');
+    if (darkThemeEnabled == null || darkThemeEnabled == 'false' || darkThemeEnabled == false) {
+        document.documentElement.classList.remove('dark-theme');
+    } else {
+        document.documentElement.classList.add('dark-theme');
+    }
     blueColor = await readCacheData('blueColor');
     if (blueColor == null) {
         blueColor = '#093';
@@ -1248,6 +1255,8 @@ document.addEventListener(
         // document.getElementById('disable-change-black-button').addEventListener('click', changeBlueRed);
         // 设置页面，点击黄蓝模式
         document.getElementById('change-yellow-button').addEventListener('click', changeBlueRed);
+        // 设置页面，点击深色主题
+        document.getElementById('change-dark-theme-button').addEventListener('click', toggleDarkTheme);
         // 设置页面，点击忽悠自己按钮
         document.getElementById('cheat-me-button').addEventListener('click', cheatMe);
         document.getElementById('disable-cheat-me-button').addEventListener('click', cheatMe);
@@ -4806,6 +4815,23 @@ async function changeBlueRed(event) {
     saveCacheData('blueColor', blueColor);
     initData();
     initLargeMarketData();
+    settingButtonInit();
+}
+
+// 深色主题切换
+async function toggleDarkTheme(event) {
+    let darkThemeEnabled = await readCacheData('darkThemeEnabled');
+    if (darkThemeEnabled == null || darkThemeEnabled == 'false' || darkThemeEnabled == false) {
+        // 开启深色主题
+        document.documentElement.classList.add('dark-theme');
+        darkThemeEnabled = true;
+    } else {
+        // 关闭深色主题
+        document.documentElement.classList.remove('dark-theme');
+        darkThemeEnabled = false;
+    }
+    $("#setting-modal").modal("hide");
+    await saveCacheData('darkThemeEnabled', darkThemeEnabled);
     settingButtonInit();
 }
 
@@ -9307,6 +9333,13 @@ async function changeStockApi(event) {
 
 // 设置页面按钮组展示是否生效的样式
 async function settingButtonInit(){
+    // 设置深色主题按钮状态
+    let darkThemeEnabled = await readCacheData('darkThemeEnabled');
+    if (darkThemeEnabled == 'true' || darkThemeEnabled == true) {
+        document.getElementById('change-dark-theme-button').classList.add('active');
+    } else {
+        document.getElementById('change-dark-theme-button').classList.remove('active');
+    }
     if (windowSize == 'NORMAL') {
         document.getElementById('window-normal-size-change-button').classList.add('active');
         document.getElementById('window-small-size-change-button').classList.remove('active');
