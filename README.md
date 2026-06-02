@@ -487,6 +487,7 @@
 460. 增加导出csv功能 2026/5/11 version 2.3.0.8 --end
 461. 导出增加多列展示 2026/5/22 version 2.3.0.9 --end
 462. 增加深色主题 2026/5/28
+463. 批量并行请求迷你走势图数据 2026/6/2 version 2.3.1.0 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  

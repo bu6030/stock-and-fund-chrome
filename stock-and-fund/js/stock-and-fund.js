@@ -2657,18 +2657,29 @@ async function initStockAndFundHtml() {
 }
 
 async function initMinitesImageMini() {
-    // 初始化迷你走势图
     let showMinuteImageMini = await readCacheData('show-minute-image-mini');
     if (showMinuteImageMini == 'open') {
+        let allCodes = [];
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
             for (const indexK in stockList) {
-                ajaxGetStockTimeImageMinuteMini(stockList[indexK].code);
+                allCodes.push({ type: 'stock', code: stockList[indexK].code });
             }
         }
         if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
             for (const indexL in fundList) {
-                ajaxGetFundTimeImageMinuteMini(fundList[indexL].fundCode);
+                allCodes.push({ type: 'fund', code: fundList[indexL].fundCode });
             }
+        }
+        const batchSize = 3;
+        for (let i = 0; i < allCodes.length; i += batchSize) {
+            const batch = allCodes.slice(i, i + batchSize);
+            await Promise.all(batch.map(item => {
+                if (item.type === 'stock') {
+                    return ajaxGetStockTimeImageMinuteMiniPromise(item.code);
+                } else {
+                    return ajaxGetFundTimeImageMinuteMiniPromise(item.code);
+                }
+            }));
         }
     }
 }
