@@ -1138,6 +1138,8 @@ async function getAllStocksFromAllGroups() {
         groups = {
             'default-group': '默认分组'
         };
+    } else if (typeof groups === 'string') {
+        groups = JSON.parse(groups);
     }
     
     let allStocks = [];
@@ -1174,6 +1176,8 @@ async function getAllFundsFromAllGroups() {
         groups = {
             'default-group': '默认分组'
         };
+    } else if (typeof groups === 'string') {
+        groups = JSON.parse(groups);
     }
     
     let allFunds = [];
