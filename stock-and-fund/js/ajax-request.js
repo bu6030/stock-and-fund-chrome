@@ -242,6 +242,67 @@ function ajaxGetStockFromEastMoney(code, stocks) {
     });
 }
 
+function ajaxGetStockFromEastMoneySync(code) {
+    let result;
+    let eastMoneyCode = convertToEastMoneyCode(code);
+    $.ajax({
+        url: Env.GET_STOCK_FROM_EAST_MONEY_URL
+          + "?fltt=2&fields=f12,f13,f15,f16,f14,f2,f4,f1,f18,f3,f5,f124&secids="
+          + eastMoneyCode,
+        timeout: 5000,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data && data.data && data.data.diff && data.data.diff.length > 0) {
+                result = data.data.diff[0];
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(XMLHttpRequest.status);
+            console.log(XMLHttpRequest.readyState);
+            console.log(textStatus);
+        }
+    });
+    return result;
+}
+
+function convertToEastMoneyCode(code) {
+    let secid;
+    if(code.startsWith('sh') || code.startsWith('SH')){
+        secid = '1';
+    } else if(code.startsWith('sz') || code.startsWith('SZ')) {
+        secid = '0';
+    } else if(code.startsWith('bj') || code.startsWith('BJ')) {
+        secid = '2';
+    } else if(code.startsWith('hk') || code.startsWith('HK')) {
+        secid = '116';
+        if (code == 'hkHSI') {
+            secid = '100';
+        } else if(code == 'hkHSTECH') {
+            secid = '124';
+        }
+    } else if(code.startsWith('us') || code.startsWith('US')) {
+        if (code.endsWith('.oq') || code.endsWith('.OQ')) {
+            secid = '105';
+        } else if (code.endsWith('.ps') || code.endsWith('.PS')) {
+            secid = '153';
+        } else if (code.endsWith('.am') || code.endsWith('.AM')) {
+            secid = '107';
+        } else if(code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
+            secid = '100';
+        } else {
+            secid = '106';
+        }
+    } else {
+        secid = '0';
+    }
+    let cleanCode = code.replace('sh','').replace('sz','').replace('bj','').replace('us','').replace('hk','').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
+    return secid + '.' + cleanCode;
+}
+
 // 接口调用
 function ajaxGetFundFromTiantianjijin(code) {
     let result;

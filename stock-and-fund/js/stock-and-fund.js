@@ -2172,7 +2172,11 @@ function checkFundExsitFromEastMoney(code) {
 // 检查股票是否存在
 function checkStockExsit(code) {
     let stock = {};
-    let result = ajaxGetStockFromGtimg(code);
+    let codeForGtimg = code.replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','');
+    let result = ajaxGetStockFromGtimg(codeForGtimg);
+    if (!result) {
+        return checkStockExsitFromEastMoney(code);
+    }
     let stoksArr = result.split("\n");
     let dataStr = stoksArr[0].substring(stoksArr[0].indexOf("=") + 2, stoksArr[0].length - 2);
     let values = dataStr.split("~");
@@ -2188,8 +2192,36 @@ function checkStockExsit(code) {
         stock.buyOrSellStockRequestList = [];
         stock.checkReuslt = true;
     } else {
-        stock.checkReuslt = false;
+        return checkStockExsitFromEastMoney(code);
     }
+    return stock;
+}
+
+function checkStockExsitFromEastMoney(code) {
+    let stock = {};
+    let result = ajaxGetStockFromEastMoneySync(code);
+    if (!result) {
+        stock.checkReuslt = false;
+        return stock;
+    }
+    let toFixedVolume = 2;
+    stock.name = result.f14 + "";
+    if (stock.name.indexOf('ETF') >= 0 || stock.name.indexOf('LOF') >= 0) {
+        toFixedVolume = 3;
+    }
+    if (parseFloat(result.f2) == 0 && (stock.name.indexOf("发债") != -1 || stock.name.indexOf("转债") != -1)) {
+        stock.now = "100.00";
+    } else {
+        stock.now = parseFloat(result.f2 + "").toFixed(toFixedVolume);
+    }
+    stock.openPrice = parseFloat(result.f5 + "").toFixed(toFixedVolume);
+    stock.change = parseFloat(result.f4 + "").toFixed(toFixedVolume);
+    stock.changePercent = parseFloat(result.f3 + "").toFixed(2);
+    stock.time = result.f124 ? new Date(result.f124 * 1000).toLocaleString() : "";
+    stock.max = parseFloat(result.f15 + "").toFixed(toFixedVolume);
+    stock.min = parseFloat(result.f16 + "").toFixed(toFixedVolume);
+    stock.buyOrSellStockRequestList = [];
+    stock.checkReuslt = true;
     return stock;
 }
 
@@ -3695,9 +3727,10 @@ async function saveStock() {
             return;
         }
     }
-    let checkStockExsitResult = checkStockExsit(stock.code
-        .replace('.oq','').replace('.ps','').replace('.n','').replace('.am','')
-        .replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM',''));
+    // let checkStockExsitResult = checkStockExsit(stock.code
+    //     .replace('.oq','').replace('.ps','').replace('.n','').replace('.am','')
+    //     .replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM',''));
+    let checkStockExsitResult = checkStockExsit(stock.code);
     if (!checkStockExsitResult.checkReuslt) {
         alertMessage("不存在该股票");
         $("#stock-modal").modal("hide");
@@ -7867,27 +7900,27 @@ function getSecid(code) {
                 }
             }
             if (stock != null && stock != undefined) {
-                let name = stock.name != null ? stock.name : stock.code;
-            
-                let result = ajaxGetStockCodeByNameFromGtimg(name);
-                let sec = result.split("^")[0].split('~')[1];
-                if(sec == undefined || sec == 'undefined'){
-                    if (stock.code.endsWith('.oq') || stock.code.endsWith('.OQ')) {
-                        secid = '105';
-                    } else if (stock.code.endsWith('.ps') || stock.code.endsWith('.PS')) {
-                        secid = '153';
-                    } else if (stock.code.endsWith('.am') || stock.code.endsWith('.AM')) {
-                        secid = '107';
-                    } else {
-                        secid = '106';
-                    }
+                if (stock.code.endsWith('.oq') || stock.code.endsWith('.OQ')) {
+                    secid = '105';
+                } else if (stock.code.endsWith('.ps') || stock.code.endsWith('.PS')) {
+                    secid = '153';
+                } else if (stock.code.endsWith('.am') || stock.code.endsWith('.AM')) {
+                    secid = '107';
                 } else {
-                    if (sec.endsWith('.oq')) {
-                        secid = '105';
-                    }else if (sec.endsWith('.ps')) {
-                        secid = '153';
-                    } else {
+                    let name = stock.name != null ? stock.name : stock.code;
+                
+                    let result = ajaxGetStockCodeByNameFromGtimg(name);
+                    let sec = result.split("^")[0].split('~')[1];
+                    if(sec == undefined || sec == 'undefined'){
                         secid = '106';
+                    } else {
+                        if (sec.endsWith('.oq')) {
+                            secid = '105';
+                        }else if (sec.endsWith('.ps')) {
+                            secid = '153';
+                        } else {
+                            secid = '106';
+                        }
                     }
                 }
             } else if(code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
