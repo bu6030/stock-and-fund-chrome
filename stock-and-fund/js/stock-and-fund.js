@@ -2260,6 +2260,17 @@ async function initStockAndFundHtml() {
     fundDayIncome = new BigDecimal("0");
     fundTotalmarketValue = new BigDecimal("0");
     fundTotalCostValue = new BigDecimal("0");
+    var selectedStockCodes = [];
+    var selectedFundCodes = [];
+    if (showBatchDeleteButton) {
+        $('.batch-delete-stock-checkbox:checked').each(function() {
+            selectedStockCodes.push($(this).val());
+        });
+        $('.batch-delete-fund-checkbox:checked').each(function() {
+            selectedFundCodes.push($(this).val());
+        });
+    }
+
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'stock') {
         var str1 = await getStockTableHtml(stockList, totalMarketValue);
         $("#stock-nr").html(str1);
@@ -2267,6 +2278,15 @@ async function initStockAndFundHtml() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
         var str2 = await getFundTableHtml(fundList, totalMarketValue);
         $("#fund-nr").html(str2);
+    }
+
+    if (showBatchDeleteButton) {
+        selectedStockCodes.forEach(function(code) {
+            $('input.batch-delete-stock-checkbox[value="' + code + '"]').prop('checked', true);
+        });
+        selectedFundCodes.forEach(function(code) {
+            $('input.batch-delete-fund-checkbox[value="' + code + '"]').prop('checked', true);
+        });
     }
     allTotalIncome = fundTotalIncome.add(stockTotalIncome);
     allTotalIncomePercent = new BigDecimal("0");
