@@ -3,6 +3,10 @@
 .dark-theme #my-widnwos,
 .dark-theme .admin-main {
     background-color: #1a1a2e !important;
+}
+.dark-theme body :not([style*="color"]),
+.dark-theme #my-widnwos :not([style*="color"]),
+.dark-theme .admin-main :not([style*="color"]) {
     color: #e0e0e0 !important;
 }
 
@@ -11,15 +15,20 @@
 .dark-theme .modal-body,
 .dark-theme .modal-footer {
     background-color: #16213e !important;
-    color: #e0e0e0 !important;
     border-color: #343a40 !important;
 }
-
-.dark-theme .modal-title {
+.dark-theme .modal-content:not([style*="color"]),
+.dark-theme .modal-header:not([style*="color"]),
+.dark-theme .modal-body:not([style*="color"]),
+.dark-theme .modal-footer:not([style*="color"]) {
     color: #e0e0e0 !important;
 }
 
-.dark-theme .close {
+.dark-theme .modal-title:not([style*="color"]) {
+    color: #e0e0e0 !important;
+}
+
+.dark-theme .close:not([style*="color"]) {
     color: #e0e0e0 !important;
     text-shadow: none !important;
 }
@@ -70,8 +79,8 @@
     background-color: #16213e !important;
 }
 
-.dark-theme .table th,
-.dark-theme .table td {
+.dark-theme .table th:not([style*="color"]),
+.dark-theme .table td:not([style*="color"]) {
     color: #e0e0e0 !important;
     border-color: #495057 !important;
 }
@@ -303,6 +312,8 @@
 /* 大盘指数展示样式 */
 .dark-theme .stock-large-market {
     background-color: #16213e !important;
+}
+.dark-theme .stock-large-market:not([style*="color"]) {
     color: #e0e0e0 !important;
 }
 
@@ -313,10 +324,12 @@
 
 .dark-theme .stock-large-market-box {
     background-color: #16213e !important;
+}
+.dark-theme .stock-large-market-box:not([style*="color"]) {
     color: #e0e0e0 !important;
 }
 
-.dark-theme .stock-large-market-box p {
+.dark-theme .stock-large-market-box p:not([style*="color"]) {
     color: #e0e0e0 !important;
 }
 
@@ -339,4 +352,11 @@
 .dark-theme #alert-container .alert-danger {
     background-color: #3d1f1f !important;
     border-color: #dc3545 !important;
+}
+
+.dark-theme [style*="color:#ee2500"] {
+    color: #ee2500 !important;
+}
+.dark-theme [style*="color:#093"] {
+    color: #093 !important;
 }
