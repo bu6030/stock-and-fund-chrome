@@ -1022,7 +1022,7 @@ function setStockImage(type) {
         tooltip: {
             trigger: 'axis',
             axisPointer: {
-                type: 'line',
+                type: 'cross',
                 lineStyle: {
                     color: '#999999',
                     width: 1,
