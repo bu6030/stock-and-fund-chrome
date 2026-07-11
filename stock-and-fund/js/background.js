@@ -6,8 +6,9 @@ let develop = false;
 let lightBlue = [144, 238, 144, 255];
 let lightRed = [255, 192, 203, 255];
 // 检测是否为 Firefox
-if (typeof chrome.action == "undefined" && typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
-    // Firefox 环境中，映射 chrome 到 browser
+if (isFirefox) {
+    chrome.action = chrome.browserAction;
+} else if (typeof chrome.action == "undefined" && typeof browser !== "undefined" && typeof browser.runtime !== "undefined") {
     chrome = browser;
 }
 // 定时执行任务的函数
