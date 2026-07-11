@@ -833,21 +833,15 @@ function setStockImage(type) {
         fundOrStockName = timeImageName;
     }
     let zoomStart = 80;
-    let interval = 12;
     if (data0.values.length <= 30) {
-        interval = 0;
         zoomStart = 0;
     } else if (data0.values.length <= 60) {
-        interval = 1;
         zoomStart = 40;
     } else if (data0.values.length <= 120) {
-        interval = 4;
         zoomStart = 60;
     } else if (data0.values.length <= 240) {
-        interval = 8;
         zoomStart = 80;
     } else {
-        interval = 12;
         zoomStart = 90;
     }
     if (kLineNumbers > 30) {
@@ -858,6 +852,8 @@ function setStockImage(type) {
             zoomStart = 100 - kLinePercent;
         }
     }
+    let initialVisibleCount = Math.round(data0.values.length * (100 - zoomStart) / 100);
+    let xAxisConfig = calculateXAxisConfig(initialVisibleCount, type);
     let optionSeries = [
         {
             type: 'candlestick',
@@ -982,7 +978,8 @@ function setStockImage(type) {
         xAxis: {
             data: data0.categoryData,
             axisLabel: {
-                interval: interval, // 调整刻度显示间隔
+                interval: xAxisConfig.interval,
+                formatter: createDateFormatter(xAxisConfig.formatLevel),
             },
         },
         yAxis: {
@@ -1169,7 +1166,8 @@ function setStockImage(type) {
                 textStyle: {
                     fontSize: imageTextSize // 调小字体大小使其适应空间
                 },
-                interval: interval, // 调整刻度显示间隔
+                interval: xAxisConfig.interval,
+                formatter: createDateFormatter(xAxisConfig.formatLevel),
             },
         },
         yAxis: {
@@ -1225,28 +1223,61 @@ function setStockImage(type) {
     volumnChart.setOption(volumnOption);
     echarts.connect([volumnChart],[myChart])
 
-    // 监听 dataZoom 事件
+    let isUpdatingLabels = false;
+    let labelUpdateTimer = null;
+    function updateXAxisLabels(start, end) {
+        if (isUpdatingLabels) {
+            return;
+        }
+        if (labelUpdateTimer) {
+            clearTimeout(labelUpdateTimer);
+        }
+        labelUpdateTimer = setTimeout(function() {
+            isUpdatingLabels = true;
+            try {
+                let visibleCount = Math.round(data0.values.length * (end - start) / 100);
+                let newConfig = calculateXAxisConfig(visibleCount, type);
+                myChart.setOption({
+                    xAxis: {
+                        axisLabel: {
+                            interval: newConfig.interval,
+                            formatter: createDateFormatter(newConfig.formatLevel)
+                        }
+                    }
+                });
+                volumnChart.setOption({
+                    xAxis: {
+                        axisLabel: {
+                            interval: newConfig.interval,
+                            formatter: createDateFormatter(newConfig.formatLevel)
+                        }
+                    }
+                });
+            } finally {
+                isUpdatingLabels = false;
+            }
+        }, 150);
+    }
     myChart.on('dataZoom', function (event) {
         if (event.batch) {
-            // 批量操作时，不再次触发
             let zoomInfo = event.batch[0];
             volumnChart.dispatchAction({
                 type: 'dataZoom',
                 start: zoomInfo.start,
                 end: zoomInfo.end
             });
+            updateXAxisLabels(zoomInfo.start, zoomInfo.end);
             return;
         }
-        // 根据 event.dataZoomId 判断是哪个图表发生了缩放
         if (event.dataZoomId === 'dataZoom1') {
             volumnChart.dispatchAction({
                 type: 'dataZoom',
                 start: event.start,
                 end: event.end
             });
+            updateXAxisLabels(event.start, event.end);
         }
     });
-    // 监听 dataZoom 事件
     volumnChart.on('dataZoom', function (event) {
         if (event.batch) {
             let zoomInfo = event.batch[0];
@@ -1255,15 +1286,16 @@ function setStockImage(type) {
                 start: zoomInfo.start,
                 end: zoomInfo.end
             });
+            updateXAxisLabels(zoomInfo.start, zoomInfo.end);
             return;
         }
-        // 根据 event.dataZoomId 判断是哪个图表发生了缩放
         if (event.dataZoomId === 'dataZoom2') {
             myChart.dispatchAction({
                 type: 'dataZoom',
                 start: event.start,
                 end: event.end
             });
+            updateXAxisLabels(event.start, event.end);
         }
     });
 
@@ -1367,4 +1399,39 @@ function fundInvesterPositionSetButton() {
         $("#stock-fund-monitor-button")[0].style.display = 'inline';
         $("#add-stock-button")[0].style.display = 'none';
     }
+}
+function calculateXAxisConfig(visibleCount, type) {
+    let interval;
+    let formatLevel;
+    let isMinuteType = type === '1MIN' || type === '5MIN' || type === '15MIN' || type === '30MIN' || type === '60MIN' || type === '120MIN';
+    if (visibleCount <= 8) {
+        interval = 0;
+        formatLevel = isMinuteType ? 'full' : 'full';
+    } else if (visibleCount <= 120) {
+        interval = Math.floor(visibleCount / 8);
+        formatLevel = isMinuteType ? 'date' : 'full';
+    } else if (visibleCount <= 600) {
+        interval = Math.floor(visibleCount / 8);
+        formatLevel = isMinuteType ? 'month' : 'month';
+    } else {
+        interval = Math.floor(visibleCount / 8);
+        formatLevel = 'year';
+    }
+    return { interval, formatLevel };
+}
+function createDateFormatter(formatLevel) {
+    return function(value) {
+        if (!value) {
+            return value;
+        }
+        if (formatLevel === 'year') {
+            return value.substring(0, 4);
+        } else if (formatLevel === 'month') {
+            return value.substring(0, 7);
+        } else if (formatLevel === 'date') {
+            return value.split(' ')[0];
+        } else {
+            return value;
+        }
+    };
 }
