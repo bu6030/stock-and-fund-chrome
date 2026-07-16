@@ -1,3 +1,5 @@
+let _forbiddenLastOpenTime = parseInt(localStorage.getItem('_forbiddenLastOpenTime') || '0');
+
 // 接口调用
 function ajaxGetStockAndFundFromLocalService() {
     var result;
@@ -237,7 +239,15 @@ function ajaxGetStockFromEastMoney(code, stocks) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            alertMessage("可能被东方财富封IP，麻烦打开东方财富网站随便一个个股的分时图即可恢复");
+            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+            let now = Date.now();
+            if (now - _forbiddenLastOpenTime > 60000) {
+                _forbiddenLastOpenTime = now;
+                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+                if (confirm("是否打开东方财富网站恢复访问？")) {
+                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+                }
+            }
         }
     });
 }
@@ -661,7 +671,15 @@ function ajaxGetLargeMarketData(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            alertMessage("可能被东方财富封IP，麻烦打开东方财富网站首页即可恢复");
+            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+            let now = Date.now();
+            if (now - _forbiddenLastOpenTime > 60000) {
+                _forbiddenLastOpenTime = now;
+                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+                if (confirm("是否打开东方财富网站恢复访问？")) {
+                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+                }
+            }
         }
     });
 }

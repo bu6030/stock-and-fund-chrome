@@ -47,4 +47,5 @@ let Env = {
     GO_TO_TONGHUASHUN_F10: "https://basic.10jqka.com.cn",
     GO_TO_WENCAI: "https://www.iwencai.com/unifiedwap/result?w=",
     GO_TO_GUBA: "https://guba.eastmoney.com/list,",
+    GO_TO_FIX_FORBIDDEN: "https://quote.eastmoney.com/sh600519.html",
 }
