@@ -495,7 +495,7 @@
 468. 批量删除选中刷新后失效问题修复 2026/7/10 version 2.3.1.2 --end
 469. firefox无法设置隐藏图标问题修复 2026/7/11 version 2.3.1.3 --end
 470. 优化k线图展示 2026/7/11 version 2.3.1.4 --end
-471. 东方财富IP被封后提示打开东方财富具体分时图 2026/7/16
+471. 东方财富IP被封后提示打开东方财富具体分时图 2026/7/16 version 2.3.1.5 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
