@@ -16,6 +16,7 @@ let Env = {
     GET_STOCK_FROM_EAST_MONEY_URL: "https://push2.eastmoney.com/api/qt/ulist.np/get",
     GET_HUILV_URL: "https://webapi.huilv.cc/api/exchange",
     GET_FUND_FROM_TIANTIANJIJIN: "http://fundgz.1234567.com.cn/js/{CODE}.js",
+    GET_FUND_FROM_TIANTIANJIJIN_NEW:"https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?callback=&m=5&key={CODE}&_={TIMESTAMP}",
     GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN: "http://fund.eastmoney.com/js/fundcode_search.js",
     GET_FUND_SEARCH_FROM_EASTMONEY: "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx",
     GET_FUND_TIME_IMAGE_FROM_DFCFW: "http://webquoteklinepic.eastmoney.com/GetPic.aspx",
