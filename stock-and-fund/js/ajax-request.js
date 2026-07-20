@@ -317,23 +317,36 @@ function convertToEastMoneyCode(code) {
 function ajaxGetFundFromTiantianjijin(code) {
     let result;
     let timestamp = Date.now();
-    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN + '?' + timestamp;
-    FUND_URL = FUND_URL.replace('{CODE}', code);
+    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN_NEW.replace('{CODE}', code).replace('{TIMESTAMP}', timestamp);
     $.ajax({
         url: FUND_URL,
-        timeout: 5000, // 设置超时时间为5000毫秒（5秒）
+        timeout: 5000,
         type: "get",
         data: {},
         async: false,
-        dataType: 'text',
+        dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            result = data;
+            if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                var fundData = data.Datas[0];
+                var fundBaseInfo = fundData.FundBaseInfo || {};
+                result = {
+                    name: fundData.NAME || "",
+                    dwjz: fundBaseInfo.DWJZ || "--",
+                    jzrq: fundBaseInfo.FSRQ || "",
+                    gsz: fundBaseInfo.DWJZ || "--",
+                    gztime: fundBaseInfo.FSRQ || "",
+                    gszzl: "--"
+                };
+            } else {
+                result = null;
+            }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            result = null;
         }
     });
     return result;
@@ -342,19 +355,27 @@ function ajaxGetFundFromTiantianjijin(code) {
 // 接口调用
 function ajaxGetFundFromTiantianjijinAsync(code, last) {
     let timestamp = Date.now();
-    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN + '?' + timestamp;
-    FUND_URL = FUND_URL.replace('{CODE}', code);
+    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN_NEW.replace('{CODE}', code).replace('{TIMESTAMP}', timestamp);
     $.ajax({
         url: FUND_URL,
-        timeout: 10000, // 设置超时时间为10000毫秒（10秒）
+        timeout: 10000,
         type: "get",
         data: {},
-        dataType: 'text',
+        dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            if (data != "jsonpgz();") {
-                var fund = jQuery.parseJSON(data.substring(8, data.length - 2));
-                fund.fundCode = code;
+            if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                var fundData = data.Datas[0];
+                var fundBaseInfo = fundData.FundBaseInfo || {};
+                var fund = {
+                    fundCode: code,
+                    name: fundData.NAME || "",
+                    dwjz: fundBaseInfo.DWJZ || "--",
+                    jzrq: fundBaseInfo.FSRQ || "",
+                    gsz: fundBaseInfo.DWJZ || "--",
+                    gztime: fundBaseInfo.FSRQ || "",
+                    gszzl: "--"
+                };
                 ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last);
             } else {
                 ajaxGetFundFromEastMoneyAsync(code, last);

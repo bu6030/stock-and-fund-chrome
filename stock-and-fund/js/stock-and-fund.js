@@ -2017,24 +2017,23 @@ async function initFund() {
             } else {
                 for (var k in fundList) {
                     if (fundList[k].fundCode == fundCode) {
-                        if (result != "jsonpgz();") {
-                            var json = jQuery.parseJSON(result.substring(8, result.length - 2));
-                            fundList[k].name = json.name + "";
-                            fundList[k].dwjz = json.dwjz + "";
-                            fundList[k].jzrq = json.jzrq + "";
-                            fundList[k].gsz = json.gsz + "";
-                            fundList[k].gztime = json.gztime + "";
-                            var gsz = new BigDecimal(json.gsz + "");
-                            var dwjz = new BigDecimal(json.dwjz + "");
-                            if (json.gszzl == '--') {
+                        if (result) {
+                            fundList[k].name = result.name + "";
+                            fundList[k].dwjz = result.dwjz + "";
+                            fundList[k].jzrq = result.jzrq + "";
+                            fundList[k].gsz = result.gsz + "";
+                            fundList[k].gztime = result.gztime + "";
+                            var gsz = new BigDecimal(result.gsz + "");
+                            var dwjz = new BigDecimal(result.dwjz + "");
+                            if (result.gszzl == '--') {
                                 fundList[k].gszzl = "0";
-                            } else if (cheatMeFlag && parseFloat(json.gszzl) < 0) {
-                                var gszzl = 0 - parseFloat(json.gszzl);
+                            } else if (cheatMeFlag && parseFloat(result.gszzl) < 0) {
+                                var gszzl = 0 - parseFloat(result.gszzl);
                                 fundList[k].gszzl = gszzl + "";
                             } else {
-                                fundList[k].gszzl = json.gszzl + "";
+                                fundList[k].gszzl = result.gszzl + "";
                             }
-                            var now = new BigDecimal(json.gsz + "");
+                            var now = new BigDecimal(result.gsz + "");
                             var costPrice = new BigDecimal(fundList[k].costPrise + "");
                             var incomeDiff = now.add(costPrice.negate());
                             if (costPrice <= 0) {
@@ -2139,19 +2138,16 @@ async function initFund() {
 function checkFundExsit(code) {
     var fund = {};
     let result = ajaxGetFundFromTiantianjijin(code);
-    if (result == "" || result == null || result == undefined || result == "jsonpgz();") {
+    if (!result) {
         fund.checkReuslt = false;
     } else {
-        var json = jQuery.parseJSON(result.substring(8, result.length - 2));
-        fund.name = json.name + "";
-        fund.dwjz = json.dwjz + "";
-        fund.jzrq = json.jzrq + "";
-        fund.gsz = json.gsz + "";
-        fund.gztime = json.gztime + "";
-        var gsz = new BigDecimal(json.gsz + "");
-        var dwjz = new BigDecimal(json.dwjz + "");
-        fund.gszzl = gsz.subtract(dwjz).divide(gsz, 4).multiply(new BigDecimal("100")).setScale(2) + "";
-        var now = new BigDecimal(json.gsz + "");
+        fund.name = result.name + "";
+        fund.dwjz = result.dwjz + "";
+        fund.jzrq = result.jzrq + "";
+        fund.gsz = result.gsz + "";
+        fund.gztime = result.gztime + "";
+        fund.gszzl = result.gszzl + "";
+        var now = new BigDecimal(result.gsz + "");
         fund.checkReuslt = true;
         fund.now = now + "";
     }

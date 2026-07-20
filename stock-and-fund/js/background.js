@@ -323,31 +323,33 @@ function monitorFundCycleInvest(fundList) {
                     }
                     console.log("执行定投任务基金编码", fundList[k].fundCode);
                     var fundListNew = fundList;
-                    fetch("http://fundgz.1234567.com.cn/js/" + fundListNew[k].fundCode + ".js")
-                        .then(response => response.text())
+                    let timestamp = Date.now();
+                        fetch(`https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?callback=&m=5&key=${fundListNew[k].fundCode}&_=${timestamp}`)
+                        .then(response => response.json())
                         .then(data => {
-                            console.log("定投1" + fundListNew[k].fundCode + fundListNew[k].fundCycleInvestType + fundListNew[k].bonds + fundListNew[k].costPrise);
-                            var json = JSON.parse(data.substring(8, data.length - 2));
-                            var gsz = parseFloat(json.gsz);
-                            var fundCycleInvestValue = parseFloat(fundListNew[k].fundCycleInvestValue);
-                            var fundCycleInvestRate = parseFloat(fundListNew[k].fundCycleInvestRate);
-                            // 手续费
-                            var fundCycleInvestFee = fundCycleInvestValue * fundCycleInvestRate / 100;
-                            console.log("手续费" + fundCycleInvestFee.toFixed(2));
-                            var newInvestValue = fundCycleInvestValue - fundCycleInvestFee;
-                            console.log("新买入金额" + newInvestValue.toFixed(2));
-                            var newBonds = newInvestValue / gsz;
-                            console.log("新增持仓" + newBonds.toFixed(2));
-                            var totalPrise = parseFloat(fundListNew[k].costPrise) * parseFloat(fundListNew[k].bonds);
-                            console.log("总金额:" +totalPrise);
-                            console.log("旧持仓:" +fundListNew[k].bonds +";旧成本:"+ fundListNew[k].costPrise);
-                            fundListNew[k].bonds = parseFloat(parseFloat(fundListNew[k].bonds) + parseFloat(newBonds)).toFixed(2);
-                            fundListNew[k].costPrise = ((parseFloat(totalPrise) + parseFloat(newInvestValue)) / parseFloat(fundListNew[k].bonds)).toFixed(4);
-                            console.log("新持仓:" +fundListNew[k].bonds +";新成本:"+ fundListNew[k].costPrise);
-                            saveData('funds', JSON.stringify(fundListNew));
+                            if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                                var fundData = data.Datas[0];
+                                var fundBaseInfo = fundData.FundBaseInfo || {};
+                                console.log("定投1" + fundListNew[k].fundCode + fundListNew[k].fundCycleInvestType + fundListNew[k].bonds + fundListNew[k].costPrise);
+                                var gsz = parseFloat(fundBaseInfo.DWJZ || '0');
+                                var fundCycleInvestValue = parseFloat(fundListNew[k].fundCycleInvestValue);
+                                var fundCycleInvestRate = parseFloat(fundListNew[k].fundCycleInvestRate);
+                                var fundCycleInvestFee = fundCycleInvestValue * fundCycleInvestRate / 100;
+                                console.log("手续费" + fundCycleInvestFee.toFixed(2));
+                                var newInvestValue = fundCycleInvestValue - fundCycleInvestFee;
+                                console.log("新买入金额" + newInvestValue.toFixed(2));
+                                var newBonds = newInvestValue / gsz;
+                                console.log("新增持仓" + newBonds.toFixed(2));
+                                var totalPrise = parseFloat(fundListNew[k].costPrise) * parseFloat(fundListNew[k].bonds);
+                                console.log("总金额:" +totalPrise);
+                                console.log("旧持仓:" +fundListNew[k].bonds +";旧成本:"+ fundListNew[k].costPrise);
+                                fundListNew[k].bonds = parseFloat(parseFloat(fundListNew[k].bonds) + parseFloat(newBonds)).toFixed(2);
+                                fundListNew[k].costPrise = ((parseFloat(totalPrise) + parseFloat(newInvestValue)) / parseFloat(fundListNew[k].bonds)).toFixed(4);
+                                console.log("新持仓:" +fundListNew[k].bonds +";新成本:"+ fundListNew[k].costPrise);
+                                saveData('funds', JSON.stringify(fundListNew));
+                            }
                         })
                     .catch(error => {
-                        // 处理请求错误
                         console.warn("执行定投任务报错:", error);
                     });
                 }
@@ -826,18 +828,20 @@ async function getFundIncome(date) {
                     saveData('current_day_jingzhi_' + fund.fundCode, currentDayNetDiagram.DWJZ);
                     saveData('current_day_jingzhi_date_' + fund.fundCode, date);
                 } else {
-                    let response = await fetch(`http://fundgz.1234567.com.cn/js/${fund.fundCode}.js`);
-                    let data = await response.text();
-                    if (data != 'jsonpgz();') {
-                        var json = JSON.parse(data.substring(8, data.length - 2));
-                        let gztime = json.gztime.substring(0, 10).replace(/-/g, '');
-                        // 如果日期不一致不在计算
+                    let timestamp = Date.now();
+                    let response = await fetch(`https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?callback=&m=5&key=${fund.fundCode}&_=${timestamp}`);
+                    let data = await response.json();
+                    if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                        var fundData = data.Datas[0];
+                        var fundBaseInfo = fundData.FundBaseInfo || {};
+                        let gztime = fundBaseInfo.FSRQ ? fundBaseInfo.FSRQ.substring(0, 10).replace(/-/g, '') : '';
                         if (date != gztime) return;
-                        let dayIncome = parseFloat(json.gszzl) * parseFloat(json.dwjz) * parseFloat(fund.bonds) / 100;
+                        let dwjz = parseFloat(fundBaseInfo.DWJZ || '0');
+                        let dayIncome = parseFloat('0') * dwjz * parseFloat(fund.bonds) / 100;
                         fundDayIncome = fundDayIncome + dayIncome;
-                        let totalIncome = (parseFloat(json.gsz) - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
+                        let totalIncome = (dwjz - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
                         fundTotalIncome = fundTotalIncome + totalIncome;
-                        fundMarketValue += parseFloat(json.gsz) * parseFloat(fund.bonds);
+                        fundMarketValue += dwjz * parseFloat(fund.bonds);
                     }
                 }
             }
@@ -1090,11 +1094,13 @@ async function monitorFundPrice(fundList) {
             if (currentDayNetDiagram != null) {
                 now = parseFloat(currentDayNetDiagram.DWJZ + '');
             } else {
-                let response = await fetch(`http://fundgz.1234567.com.cn/js/${funds[k].fundCode}.js`);
-                let data = await response.text();
-                if (data != 'jsonpgz();') {
-                    var json = JSON.parse(data.substring(8, data.length - 2));
-                    now = parseFloat(json.dwjz + '');
+                let timestamp = Date.now();
+                let response = await fetch(`https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?callback=&m=5&key=${funds[k].fundCode}&_=${timestamp}`);
+                let data = await response.json();
+                if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                    var fundData = data.Datas[0];
+                    var fundBaseInfo = fundData.FundBaseInfo || {};
+                    now = parseFloat(fundBaseInfo.DWJZ || '0');
                 }
             }
             // 没获取估值和净值，跳过
