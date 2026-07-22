@@ -1936,10 +1936,22 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
 // 初始化首页基金列表数据
 async function initFund() {
     if (showStockOrFundOrAll == 'all' || showStockOrFundOrAll == 'fund') {
+        // 提取所有基金代码，批量调用接口
+        var fundCodes = [];
+        for (var idx in fundList) {
+            fundCodes.push(fundList[idx].fundCode);
+        }
+        // 批量获取基金数据
+        var batchResult = ajaxGetFundBatchFromMobileApi(fundCodes);
+        
         for (var l in fundList) {
             var fundCode = fundList[l].fundCode;
-            let result = ajaxGetFundFromTiantianjijin(fundList[l].fundCode);
-            if (result == "" || result == null || result == undefined) {
+            let result = batchResult[fundCode];
+            // 如果批量接口没有返回该基金数据，尝试单个调用
+            if (!result) {
+                result = ajaxGetFundFromTiantianjijin(fundCode);
+            }
+            if (!result) {
                 // 有些基金找不到接口会报 404 报错，调用另外一个接口
                 for (var k in fundList) {
                     if (fundList[k].fundCode == fundCode) {
@@ -2017,78 +2029,35 @@ async function initFund() {
             } else {
                 for (var k in fundList) {
                     if (fundList[k].fundCode == fundCode) {
-                        if (result) {
-                            fundList[k].name = result.name + "";
-                            fundList[k].dwjz = result.dwjz + "";
-                            fundList[k].jzrq = result.jzrq + "";
-                            fundList[k].gsz = result.gsz + "";
-                            fundList[k].gztime = result.gztime + "";
-                            var gsz = new BigDecimal(result.gsz + "");
-                            var dwjz = new BigDecimal(result.dwjz + "");
-                            if (result.gszzl == '--') {
-                                fundList[k].gszzl = "0";
-                            } else if (cheatMeFlag && parseFloat(result.gszzl) < 0) {
-                                var gszzl = 0 - parseFloat(result.gszzl);
-                                fundList[k].gszzl = gszzl + "";
-                            } else {
-                                fundList[k].gszzl = result.gszzl + "";
-                            }
-                            var now = new BigDecimal(result.gsz + "");
-                            var costPrice = new BigDecimal(fundList[k].costPrise + "");
-                            var incomeDiff = now.add(costPrice.negate());
-                            if (costPrice <= 0) {
-                                fundList[k].incomePercent = "0";
-                            } else {
-                                var incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
-                                    .multiply(BigDecimal.TEN)
-                                    .multiply(BigDecimal.TEN)
-                                    .setScale(3, MathContext.ROUND_HALF_UP);
-                                fundList[k].incomePercent = incomePercent + "";
-                            }
-                            var bonds = new BigDecimal(fundList[k].bonds + "");
-                            var income = incomeDiff.multiply(bonds)
-                                .setScale(2, MathContext.ROUND_HALF_UP);
-                            fundList[k].income = income + "";
+                        fundList[k].name = result.name + "";
+                        fundList[k].dwjz = result.dwjz + "";
+                        fundList[k].jzrq = result.jzrq + "";
+                        fundList[k].gsz = result.gsz + "";
+                        fundList[k].gztime = result.gztime + "";
+                        if (result.gszzl == '--') {
+                            fundList[k].gszzl = "0";
+                        } else if (cheatMeFlag && parseFloat(result.gszzl) < 0) {
+                            var gszzl = 0 - parseFloat(result.gszzl);
+                            fundList[k].gszzl = gszzl + "";
                         } else {
-                            let fund = checkFundExsitFromEastMoney(fundCode);
-                            fundList[k].dwjz = fund.dwjz;
-                            fundList[k].jzrq = fund.jzrq;
-                            if (fund.dwjz == '--') {
-                                fundList[k].dwjz = "0";
-                            }
-                            fundList[k].gsz = fund.dwjz;
-                            if (fund.dwjz == '--') {
-                                fundList[k].gsz = "0";
-                            }
-                            fundList[k].gztime = fund.gztime;
-                            if (fund.gszzl == '--') {
-                                fundList[k].gszzl = "0";
-                            } else if (cheatMeFlag && parseFloat(fund.gszzl) < 0) {
-                                var gszzl = 0 - parseFloat(fund.gszzl);
-                                fundList[k].gszzl = gszzl + "";
-                            } else {
-                                fundList[k].gszzl = fund.gszzl + "";
-                            }
-                            fundList[k].income = "0";
-                            fundList[k].incomePercent = "0";
-                            fundList[k].name = fund.name;
-                            var costPrice = new BigDecimal(fundList[k].costPrise + "");
-                            var now = new BigDecimal(fundList[k].dwjz + "");
-                            var incomeDiff = now.add(costPrice.negate());
-                            if (costPrice <= 0) {
-                                fundList[k].incomePercent = "0";
-                            } else {
-                                let incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
-                                    .multiply(BigDecimal.TEN)
-                                    .multiply(BigDecimal.TEN)
-                                    .setScale(3, MathContext.ROUND_HALF_UP);
-                                let bonds = new BigDecimal(fundList[k].bonds + "");
-                                let income = incomeDiff.multiply(bonds)
-                                    .setScale(2, MathContext.ROUND_HALF_UP);
-                                fundList[k].income = income + "";
-                                fundList[k].incomePercent = incomePercent + "";
-                            }
+                            fundList[k].gszzl = result.gszzl + "";
                         }
+                        var now = new BigDecimal(result.gsz + "");
+                        var costPrice = new BigDecimal(fundList[k].costPrise + "");
+                        var incomeDiff = now.add(costPrice.negate());
+                        if (costPrice <= 0) {
+                            fundList[k].incomePercent = "0";
+                        } else {
+                            var incomePercent = incomeDiff.divide(costPrice, 8, MathContext.ROUND_HALF_UP)
+                                .multiply(BigDecimal.TEN)
+                                .multiply(BigDecimal.TEN)
+                                .setScale(3, MathContext.ROUND_HALF_UP);
+                            fundList[k].incomePercent = incomePercent + "";
+                        }
+                        var bonds = new BigDecimal(fundList[k].bonds + "");
+                        var income = incomeDiff.multiply(bonds)
+                            .setScale(2, MathContext.ROUND_HALF_UP);
+                        fundList[k].income = income + "";
                         // 计算其他属性
                         let dayIncome = new BigDecimal("0");
                         let marketValue = new BigDecimal("0");

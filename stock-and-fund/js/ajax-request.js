@@ -313,13 +313,47 @@ function convertToEastMoneyCode(code) {
     return secid + '.' + cleanCode;
 }
 
-// 接口调用
+// 接口调用 - 批量获取基金数据
+function ajaxGetFundBatchFromMobileApi(fundCodes) {
+    let result = {};
+    var fcodes = fundCodes.join(',');
+    var MOBILE_URL = Env.GET_FUND_INFO_FROM_MOBILE_API.replace('{FCODES}', fcodes);
+    $.ajax({
+        url: MOBILE_URL,
+        timeout: 5000,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                for (var i = 0; i < data.Datas.length; i++) {
+                    var fundData = data.Datas[i];
+                    result[fundData.FCODE] = {
+                        name: fundData.SHORTNAME || "",
+                        dwjz: fundData.NAV || "--",
+                        jzrq: fundData.PDATE || "",
+                        gsz: fundData.GSZ || fundData.NAV || "--",
+                        gztime: fundData.GZTIME || fundData.PDATE || "",
+                        gszzl: fundData.NAVCHGRT || "--"
+                    };
+                }
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("Mobile API batch request error");
+        }
+    });
+    return result;
+}
+
+// 接口调用 - 先调用移动端API，失败再调用旧接口
 function ajaxGetFundFromTiantianjijin(code) {
     let result;
-    let timestamp = Date.now();
-    var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN_NEW.replace('{CODE}', code).replace('{TIMESTAMP}', timestamp);
+    var MOBILE_URL = Env.GET_FUND_INFO_FROM_MOBILE_API.replace('{FCODES}', code);
     $.ajax({
-        url: FUND_URL,
+        url: MOBILE_URL,
         timeout: 5000,
         type: "get",
         data: {},
@@ -329,31 +363,98 @@ function ajaxGetFundFromTiantianjijin(code) {
         success: function (data) {
             if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
                 var fundData = data.Datas[0];
-                var fundBaseInfo = fundData.FundBaseInfo || {};
                 result = {
-                    name: fundData.NAME || "",
-                    dwjz: fundBaseInfo.DWJZ || "--",
-                    jzrq: fundBaseInfo.FSRQ || "",
-                    gsz: fundBaseInfo.DWJZ || "--",
-                    gztime: fundBaseInfo.FSRQ || "",
-                    gszzl: "--"
+                    name: fundData.SHORTNAME || "",
+                    dwjz: fundData.NAV || "--",
+                    jzrq: fundData.PDATE || "",
+                    gsz: fundData.GSZ || fundData.NAV || "--",
+                    gztime: fundData.GZTIME || fundData.PDATE || "",
+                    gszzl: fundData.NAVCHGRT || "--"
                 };
             } else {
                 result = null;
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(XMLHttpRequest.status);
-            console.log(XMLHttpRequest.readyState);
-            console.log(textStatus);
+            console.log("Mobile API error, fallback to old API");
             result = null;
         }
     });
+    // 如果移动端API失败，使用旧接口
+    if (!result) {
+        let timestamp = Date.now();
+        var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN_NEW.replace('{CODE}', code).replace('{TIMESTAMP}', timestamp);
+        $.ajax({
+            url: FUND_URL,
+            timeout: 5000,
+            type: "get",
+            data: {},
+            async: false,
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (data) {
+                if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                    var fundData = data.Datas[0];
+                    var fundBaseInfo = fundData.FundBaseInfo || {};
+                    result = {
+                        name: fundData.NAME || "",
+                        dwjz: fundBaseInfo.DWJZ || "--",
+                        jzrq: fundBaseInfo.FSRQ || "",
+                        gsz: fundBaseInfo.DWJZ || "--",
+                        gztime: fundBaseInfo.FSRQ || "",
+                        gszzl: "--"
+                    };
+                } else {
+                    result = null;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.status);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+                result = null;
+            }
+        });
+    }
     return result;
 }
 
-// 接口调用
+// 接口调用 - 先调用移动端API，失败再调用旧接口
 function ajaxGetFundFromTiantianjijinAsync(code, last) {
+    var MOBILE_URL = Env.GET_FUND_INFO_FROM_MOBILE_API.replace('{FCODES}', code);
+    $.ajax({
+        url: MOBILE_URL,
+        timeout: 10000,
+        type: "get",
+        data: {},
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                var fundData = data.Datas[0];
+                var fund = {
+                    fundCode: code,
+                    name: fundData.SHORTNAME || "",
+                    dwjz: fundData.NAV || "--",
+                    jzrq: fundData.PDATE || "",
+                    gsz: fundData.GSZ || fundData.NAV || "--",
+                    gztime: fundData.GZTIME || fundData.PDATE || "",
+                    gszzl: fundData.NAVCHGRT || "--"
+                };
+                ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last);
+            } else {
+                ajaxGetFundFromTiantianjijinAsyncFallback(code, last);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("Mobile API error, fallback to old API");
+            ajaxGetFundFromTiantianjijinAsyncFallback(code, last);
+        }
+    });
+}
+
+// 异步接口的降级函数
+function ajaxGetFundFromTiantianjijinAsyncFallback(code, last) {
     let timestamp = Date.now();
     var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN_NEW.replace('{CODE}', code).replace('{TIMESTAMP}', timestamp);
     $.ajax({
