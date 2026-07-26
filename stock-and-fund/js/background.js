@@ -825,6 +825,7 @@ async function getFundIncome(date) {
     let fundDayIncome = parseFloat("0");
     let fundTotalIncome = parseFloat("0");
     let fundMarketValue = parseFloat("0");
+    let isFailed = false;
     
     try {
         let response = await fetch(`https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=1&Fcodes=${fcodes}`);
@@ -851,11 +852,29 @@ async function getFundIncome(date) {
                     let totalIncome = (dwjz - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
                     fundTotalIncome = fundTotalIncome + totalIncome;
                     fundMarketValue += dwjz * parseFloat(fund.bonds);
+                    
+                    // 计算前一天净值：previous_day_jingzhi = NAV / (1 + NAVCHGRT/100)
+                    let previousDayJingzhi = 0;
+                    if (gszzl != 0) {
+                        previousDayJingzhi = dwjz / (1 + gszzl / 100);
+                    } else {
+                        previousDayJingzhi = dwjz;
+                    }
+                    
+                    // 写入净值缓存数据，供前端判断真实净值是否已出
+                    saveData('previous_day_jingzhi_' + fund.fundCode, previousDayJingzhi.toFixed(4));
+                    saveData('current_day_jingzhi_' + fund.fundCode, dwjz + "");
+                    saveData('current_day_jingzhi_date_' + fund.fundCode, date);
                 }
             }
         }
     } catch (error) {
         console.warn("批量获取基金收益数据失败:", error);
+        isFailed = true;
+    }
+    
+    if (isFailed) {
+        return null;
     }
     
     return {
