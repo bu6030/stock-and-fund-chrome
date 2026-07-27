@@ -1944,6 +1944,80 @@ async function initFund() {
         // 批量获取基金数据
         var batchResult = ajaxGetFundBatchFromMobileApi(fundCodes);
         
+        // 调用新浪接口获取所有基金的估值和 isRealNetValue 信息（异步并行调用）
+        var sinaEstimates = {};
+        var sinaPromises = fundCodes.map(function(code) {
+            return new Promise(function(resolve) {
+                var SINA_URL = Env.GET_FUND_ESTIMATE_FROM_SINA.replace('{CODE}', code);
+                $.ajax({
+                    url: SINA_URL,
+                    timeout: 3000,
+                    type: "get",
+                    data: {},
+                    async: true,
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded',
+                    success: function (data) {
+                        if (data && data.result && data.result.status && data.result.status.code === 0 && data.result.data) {
+                            let worth = data.result.data.worth || '';
+                            let worthDate = data.result.data.worth_date || '';
+                            let worthRate = data.result.data.worth_rate || 0;
+                            
+                            let gsz = parseFloat(worth);
+                            // worth_rate 是小数（如 -0.024694），需要乘以 100 转换为百分比
+                            let gszzl = isNaN(parseFloat(worthRate)) ? 0 : parseFloat(worthRate) * 100;
+                            let date = worthDate;
+                            
+                            // 计算今天的日期（格式：YYYYMMDD）
+                            let today = new Date();
+                            let todayStr = today.getFullYear() + 
+                                String(today.getMonth() + 1).padStart(2, '0') + 
+                                String(today.getDate()).padStart(2, '0');
+                            // worth_date 等于今天表示真实净值已出
+                            let isRealNetValue = !!worthDate && worthDate !== '' && worthDate === todayStr;
+                            
+                            // 如果 worth_date 不为今天（说明真实净值未出），使用 networth 数组中最新的 pre_nav 和 nav_pct
+                            if (data.result.data.networth && data.result.data.networth.length > 0) {
+                                var networthList = data.result.data.networth;
+                                var lastNetworth = networthList[networthList.length - 1];
+                                var preDate = lastNetworth.pre_date ? lastNetworth.pre_date.replace(/-/g, '') : '';
+                                
+                                if (!worthDate || worthDate === '' || worthDate !== todayStr) {
+                                    gsz = parseFloat(lastNetworth.pre_nav || '0');
+                                    gszzl = parseFloat(lastNetworth.nav_pct || '0');
+                                    date = preDate;
+                                }
+                            }
+                            
+                            sinaEstimates[code] = {
+                                gsz: gsz,
+                                gszzl: gszzl,
+                                gztime: date,
+                                isRealNetValue: isRealNetValue
+                            };
+                        }
+                        resolve();
+                    },
+                    error: function () {
+                        // 新浪接口失败，不做处理
+                        resolve();
+                    }
+                });
+            });
+        });
+        // 等待所有新浪接口调用完成
+        await Promise.all(sinaPromises);
+        
+        // 将新浪数据合并到批量结果中
+        for (var code in sinaEstimates) {
+            if (batchResult[code]) {
+                batchResult[code].gsz = sinaEstimates[code].gsz;
+                batchResult[code].gszzl = sinaEstimates[code].gszzl;
+                batchResult[code].gztime = sinaEstimates[code].gztime;
+                batchResult[code].isRealNetValue = sinaEstimates[code].isRealNetValue;
+            }
+        }
+        
         for (var l in fundList) {
             var fundCode = fundList[l].fundCode;
             let result = batchResult[fundCode];
@@ -1990,19 +2064,22 @@ async function initFund() {
                         // 计算其他属性
                         let dayIncome = new BigDecimal("0");
                         let marketValue = new BigDecimal("0");
-                        // 获取到当日净值已出
-                        let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
-                        let gztime = fundList[k].gztime;
-                        if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
-                            // gztime = gztime.substring(0, 10).replaceAll('-', '')
-                            gztime = gztime.substring(0, 10).replace(/-/g, '')
-                        }
+                        // 根据新浪接口返回的 isRealNetValue 判断是否为真实净值
+                        // worth_date 不为空表示真实净值已出
+                        let isRealNetValue = result.isRealNetValue || false;
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");
                         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                         fundList[k].costPriceValue = costPriceValue + "";
-                        if (currentDayNetDiagramDate == gztime) {
-                            let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
-                            let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
+                        if (isRealNetValue) {
+                            // 真实净值已出，使用接口返回的 gsz 作为真实净值
+                            let currentDayJingzhi = result.gsz;
+                            // 计算前一天净值
+                            let previousDayJingzhi = 0;
+                            if (result.gszzl != 0 && result.gszzl != "--") {
+                                previousDayJingzhi = parseFloat(currentDayJingzhi) / (1 + parseFloat(result.gszzl) / 100);
+                            } else {
+                                previousDayJingzhi = parseFloat(currentDayJingzhi);
+                            }
                             // fundList[k].gsz = currentDayJingzhi;
                             fundList[k].currentDayJingzhi = currentDayJingzhi;
                             fundList[k].existJZ = true;
@@ -2061,23 +2138,26 @@ async function initFund() {
                         // 计算其他属性
                         let dayIncome = new BigDecimal("0");
                         let marketValue = new BigDecimal("0");
-                        // 获取到当日净值已出
-                        let currentDayNetDiagramDate = await readCacheData('current_day_jingzhi_date_' + fundCode);
-                        let gztime = fundList[k].gztime;
-                        if (gztime != null && gztime != '' && gztime != undefined && gztime.length >= 10){
-                            // gztime = gztime.substring(0, 10).replaceAll('-', '')
-                            gztime = gztime.substring(0, 10).replace(/-/g, '')
-                        }
+                        // 根据新浪接口返回的 isRealNetValue 判断是否为真实净值
+                        // worth_date 不为空表示真实净值已出
+                        let isRealNetValue = result.isRealNetValue || false;
                         var costPrice = new BigDecimal(fundList[k].costPrise + "");
                         var costPriceValue = new BigDecimal(parseFloat(costPrice.multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                         fundList[k].costPriceValue = costPriceValue + "";
-                        if (currentDayNetDiagramDate == gztime) {
-                            let previousDayJingzhi = await readCacheData('previous_day_jingzhi_' + fundCode);
-                            let currentDayJingzhi = await readCacheData('current_day_jingzhi_' + fundCode);
+                        if (isRealNetValue) {
+                            // 真实净值已出，使用接口返回的 gsz 作为真实净值
+                            let currentDayJingzhi = result.gsz;
+                            // 计算前一天净值
+                            let previousDayJingzhi = 0;
+                            if (result.gszzl != 0 && result.gszzl != "--") {
+                                previousDayJingzhi = parseFloat(currentDayJingzhi) / (1 + parseFloat(result.gszzl) / 100);
+                            } else {
+                                previousDayJingzhi = parseFloat(currentDayJingzhi);
+                            }
                             // fundList[k].gsz = currentDayJingzhi;
                             fundList[k].currentDayJingzhi = currentDayJingzhi;
                             fundList[k].existJZ = true;
-                            fundList[k].jzrq = gztime;
+                            fundList[k].jzrq = result.gztime;
                             dayIncome = new BigDecimal(parseFloat(((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + ""))).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             marketValue = new BigDecimal(parseFloat((new BigDecimal(currentDayJingzhi + "")).multiply(new BigDecimal(fundList[k].bonds + ""))).toFixed(2));
                             fundList[k].gszzl = parseFloat((new BigDecimal(currentDayJingzhi + "")).subtract(new BigDecimal(previousDayJingzhi + "")).multiply(new BigDecimal("100")).divide(new BigDecimal(previousDayJingzhi + ""), 2) + "").toFixed(2);

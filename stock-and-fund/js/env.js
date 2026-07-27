@@ -18,6 +18,7 @@ let Env = {
     GET_FUND_FROM_TIANTIANJIJIN: "http://fundgz.1234567.com.cn/js/{CODE}.js",
     GET_FUND_FROM_TIANTIANJIJIN_NEW:"https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx?callback=&m=5&key={CODE}&_={TIMESTAMP}",
     GET_FUND_INFO_FROM_MOBILE_API:"https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=1&Fcodes={FCODES}",
+    GET_FUND_ESTIMATE_FROM_SINA: "https://stock.finance.sina.com.cn/fundInfo/api/openapi.php/FdFundService.getEstimateNetworthPic?symbol={CODE}",
     GET_FUND_CODE_BY_NAME_FROM_TIANTIANJIJIN: "http://fund.eastmoney.com/js/fundcode_search.js",
     GET_FUND_SEARCH_FROM_EASTMONEY: "https://fundsuggest.eastmoney.com/FundSearch/api/FundSearchAPI.ashx",
     GET_FUND_TIME_IMAGE_FROM_DFCFW: "http://webquoteklinepic.eastmoney.com/GetPic.aspx",

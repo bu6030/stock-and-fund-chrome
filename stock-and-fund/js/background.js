@@ -2,9 +2,69 @@ let isCycleInvest = false;
 let performTaskId;
 let count = 0;
 let isFirefox = false;
-let develop = false;
+let develop = true;
 let lightBlue = [144, 238, 144, 255];
 let lightRed = [255, 192, 203, 255];
+
+// 新浪基金估值接口 - 并行获取多个基金的估值数据
+async function fetchFundEstimatesFromSina(fundCodes) {
+    let estimateMap = {};
+    try {
+        let promises = fundCodes.map(code => {
+            return fetch(`https://stock.finance.sina.com.cn/fundInfo/api/openapi.php/FdFundService.getEstimateNetworthPic?symbol=${code}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.result && data.result.status && data.result.status.code === 0 && data.result.data) {
+                        let worth = data.result.data.worth || '';
+                        let worthDate = data.result.data.worth_date || '';
+                        let worthRate = data.result.data.worth_rate || 0;
+                        
+                        let gsz = parseFloat(worth);
+                        // worth_rate 是小数（如 -0.024694），需要乘以 100 转换为百分比
+                        let gszzl = parseFloat(worthRate) * 100;
+                        let date = worthDate;
+                        
+                        // 如果 worth_date 不是当天日期（说明真实净值未出），使用 networth 数组中最新的 pre_nav 和 nav_pct
+                        if (data.result.data.networth && data.result.data.networth.length > 0) {
+                            let networthList = data.result.data.networth;
+                            let lastNetworth = networthList[networthList.length - 1];
+                            let preDate = lastNetworth.pre_date ? lastNetworth.pre_date.replace(/-/g, '') : '';
+                            
+                            // worth_date 为空或不是当天时，使用估值数据
+                            if (!worthDate || worthDate === '') {
+                                gsz = parseFloat(lastNetworth.pre_nav || '0');
+                                gszzl = parseFloat(lastNetworth.nav_pct || '0');
+                                date = preDate;
+                            }
+                        }
+                        
+                        // 计算今天的日期（格式：YYYYMMDD）
+                        let today = new Date();
+                        let todayStr = today.getFullYear() + 
+                            String(today.getMonth() + 1).padStart(2, '0') + 
+                            String(today.getDate()).padStart(2, '0');
+                        // worth_date 等于今天表示真实净值已出
+                        let isRealNetValue = !!worthDate && worthDate !== '' && worthDate === todayStr;
+                        
+                        estimateMap[code] = {
+                            gsz: gsz,
+                            gszzl: gszzl,
+                            date: date,
+                            isRealNetValue: isRealNetValue
+                        };
+                    }
+                })
+                .catch(e => {
+                    console.warn("新浪接口获取基金估值失败:", code, e);
+                });
+        });
+        await Promise.all(promises);
+    } catch (e) {
+        console.warn("新浪接口批量获取估值失败:", e);
+    }
+    return estimateMap;
+}
+
 // 检测是否为 Firefox
 if (isFirefox) {
     chrome.action = chrome.browserAction;
@@ -68,12 +128,6 @@ function performTask() {
             }
         });
         getData('funds').then((fundArr) => {
-            // 去掉定投，增加监控基金净值
-            // if (fundArr != null && fundArr != "[]") {
-            //     monitorFundCycleInvest(JSON.parse(fundArr));
-            // } else {
-            //     monitorFundCycleInvest(JSON.parse("[]"));
-            // }
             if (fundArr != null && fundArr != "[]") {
                 monitorFundPrice(JSON.parse(fundArr));
             } else {
@@ -298,82 +352,6 @@ function monitorStockPrice(stockList) {
     } else {
         console.log("非交易时间，停止执行任务...");
     }
-}
-// 基金定投
-function monitorFundCycleInvest(fundList) {
-    var date = new Date();
-    if (isCycleInvest) {
-        console.log("执行定投任务...", date.toLocaleString());
-        var isCycleInvestTime = date.toLocaleTimeString() >= "16:45:00" && date.toLocaleTimeString() < "16:45:20";
-        if (isCycleInvestTime) {
-            // 收集需要定投的基金代码和索引
-            var investFunds = [];
-            for (let k in fundList) {
-                if (typeof fundList[k].fundCycleInvestType != 'undefined' && fundList[k].fundCycleInvestType != ''
-                    && fundList[k].fundCycleInvestType != 'no') {
-                    var dayOfWeek = date.getDay();
-                    if (fundList[k].fundCycleInvestType == 'week' && dayOfWeek != fundList[k].fundCycleInvestDate) {
-                        continue;
-                    }
-                    var day = date.toDateString().substring(8, 10);
-                    if (fundList[k].fundCycleInvestType == 'month' && parseInt(day) != fundList[k].fundCycleInvestDate) {
-                        continue;
-                    }
-                    investFunds.push({ index: k, fundCode: fundList[k].fundCode });
-                }
-            }
-            if (investFunds.length === 0) {
-                console.log("没有需要定投的基金");
-                return;
-            }
-            // 批量获取基金数据
-            var fcodes = investFunds.map(f => f.fundCode).join(',');
-            fetch(`https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=1&Fcodes=${fcodes}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
-                        var fundDataMap = {};
-                        for (var i = 0; i < data.Datas.length; i++) {
-                            fundDataMap[data.Datas[i].FCODE] = data.Datas[i];
-                        }
-                        for (var j = 0; j < investFunds.length; j++) {
-                            var item = investFunds[j];
-                            var fundData = fundDataMap[item.fundCode];
-                            if (fundData) {
-                                processCycleInvest(fundList, item.index, fundData);
-                            }
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.warn("执行定投任务批量请求报错:", error);
-                });
-        } else {
-            console.log("没到定投时间16:45:00-16:45:20,停止执行任务...");
-        }
-    }
-}
-
-// 处理单个基金定投
-function processCycleInvest(fundList, index, fundData) {
-    var fundListNew = fundList;
-    console.log("定投" + fundListNew[index].fundCode + fundListNew[index].fundCycleInvestType + fundListNew[index].bonds + fundListNew[index].costPrise);
-    var gsz = parseFloat(fundData.GSZ || fundData.NAV || '0');
-    var fundCycleInvestValue = parseFloat(fundListNew[index].fundCycleInvestValue);
-    var fundCycleInvestRate = parseFloat(fundListNew[index].fundCycleInvestRate);
-    var fundCycleInvestFee = fundCycleInvestValue * fundCycleInvestRate / 100;
-    console.log("手续费" + fundCycleInvestFee.toFixed(2));
-    var newInvestValue = fundCycleInvestValue - fundCycleInvestFee;
-    console.log("新买入金额" + newInvestValue.toFixed(2));
-    var newBonds = newInvestValue / gsz;
-    console.log("新增持仓" + newBonds.toFixed(2));
-    var totalPrise = parseFloat(fundListNew[index].costPrise) * parseFloat(fundListNew[index].bonds);
-    console.log("总金额:" +totalPrise);
-    console.log("旧持仓:" +fundListNew[index].bonds +";旧成本:"+ fundListNew[index].costPrise);
-    fundListNew[index].bonds = parseFloat(parseFloat(fundListNew[index].bonds) + parseFloat(newBonds)).toFixed(2);
-    fundListNew[index].costPrise = ((parseFloat(totalPrise) + parseFloat(newInvestValue)) / parseFloat(fundListNew[index].bonds)).toFixed(4);
-    console.log("新持仓:" +fundListNew[index].bonds +";新成本:"+ fundListNew[index].costPrise);
-    saveData('funds', JSON.stringify(fundListNew));
 }
 
 // 后台监控实时价格并在角标实时显示
@@ -684,6 +662,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         }
         title = title.substring(0, title.length - 1);
         let funcIncome = await getFundIncome(date);
+        console.log("funcIncome=",funcIncome);
         if (funcIncome == null) {
             return;
         }
@@ -820,7 +799,7 @@ async function getFundIncome(date) {
         };
     }
     
-    // 批量获取基金数据
+    // 批量获取基金数据，先尝试新浪接口获取估值，失败降级到旧接口
     var fcodes = validFunds.map(f => f.fundCode).join(',');
     let fundDayIncome = parseFloat("0");
     let fundTotalIncome = parseFloat("0");
@@ -828,43 +807,94 @@ async function getFundIncome(date) {
     let isFailed = false;
     
     try {
-        let response = await fetch(`https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=1&Fcodes=${fcodes}`);
-        let data = await response.json();
+        // 先调用新浪接口获取估值
+        let estimateMap = await fetchFundEstimatesFromSina(validFunds.map(f => f.fundCode));
         
-        if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
-            var fundDataMap = {};
-            for (var i = 0; i < data.Datas.length; i++) {
-                fundDataMap[data.Datas[i].FCODE] = data.Datas[i];
-            }
+        // 使用新浪估值数据计算收益（新浪估值日期为当天，与date参数可能不同，跳过日期检查）
+        // 注意：新浪接口只返回估值，不代表真实净值已出，需删除真实净值缓存避免前端误判
+        let sinaSuccessCount = 0;
+        for (var j = 0; j < validFunds.length; j++) {
+            var fund = validFunds[j];
+            var estimate = estimateMap[fund.fundCode];
             
-            for (var j = 0; j < validFunds.length; j++) {
-                var fund = validFunds[j];
-                var fundData = fundDataMap[fund.fundCode];
+            if (estimate && estimate.gsz > 0) {
+                let gsz = estimate.gsz;
+                let gszzl = estimate.gszzl;
+                let bonds = parseFloat(fund.bonds);
+                let dayIncome, marketValue, totalIncome;
                 
-                if (fundData) {
-                    let gztime = fundData.PDATE ? fundData.PDATE.substring(0, 10).replace(/-/g, '') : '';
-                    if (date != gztime) continue;
-                    
-                    let dwjz = parseFloat(fundData.NAV || '0');
-                    let gszzl = parseFloat(fundData.NAVCHGRT || '0');
-                    let dayIncome = gszzl * dwjz * parseFloat(fund.bonds) / 100;
-                    fundDayIncome = fundDayIncome + dayIncome;
-                    let totalIncome = (dwjz - parseFloat(fund.costPrise)) * parseFloat(fund.bonds);
-                    fundTotalIncome = fundTotalIncome + totalIncome;
-                    fundMarketValue += dwjz * parseFloat(fund.bonds);
-                    
-                    // 计算前一天净值：previous_day_jingzhi = NAV / (1 + NAVCHGRT/100)
+                if (estimate.isRealNetValue) {
+                    // 真实净值已出，使用真实净值计算方式（与前端一致）
+                    // 计算前一天净值
                     let previousDayJingzhi = 0;
                     if (gszzl != 0) {
-                        previousDayJingzhi = dwjz / (1 + gszzl / 100);
+                        previousDayJingzhi = gsz / (1 + gszzl / 100);
                     } else {
-                        previousDayJingzhi = dwjz;
+                        previousDayJingzhi = gsz;
                     }
+                    // 当日收益 = (当日净值 - 前一日净值) * 持仓份额
+                    dayIncome = (gsz - previousDayJingzhi) * bonds;
+                    // 市值 = 当日净值 * 持仓份额
+                    marketValue = gsz * bonds;
+                    // 总收益 = 市值 - 成本总值
+                    let costPriceValue = parseFloat(fund.costPrise) * bonds;
+                    totalIncome = marketValue - costPriceValue;
+                } else {
+                    // 估值模式，使用估值计算方式（与前端一致）
+                    // 当日收益 = 涨跌幅 * 估值 * 持仓份额 / 100
+                    dayIncome = gszzl * gsz * bonds / 100;
+                    // 市值 = 估值 * 持仓份额
+                    marketValue = gsz * bonds;
+                    // 总收益 = (估值 - 成本价) * 持仓份额
+                    totalIncome = (gsz - parseFloat(fund.costPrise)) * bonds;
+                }
+                
+                fundDayIncome = fundDayIncome + dayIncome;
+                fundMarketValue += marketValue;
+                fundTotalIncome = fundTotalIncome + totalIncome;
+                
+                sinaSuccessCount++;
+            }
+        }
+        
+        // 如果新浪接口没有获取到所有基金数据，使用旧接口补充
+        if (sinaSuccessCount < validFunds.length) {
+            let response = await fetch(`https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=1&Fcodes=${fcodes}`);
+            let data = await response.json();
+            
+            if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                var fundDataMap = {};
+                for (var i = 0; i < data.Datas.length; i++) {
+                    fundDataMap[data.Datas[i].FCODE] = data.Datas[i];
+                }
+                
+                for (var j = 0; j < validFunds.length; j++) {
+                    var fund = validFunds[j];
+                    // 如果新浪接口已经获取到数据，跳过
+                    if (estimateMap[fund.fundCode]) continue;
                     
-                    // 写入净值缓存数据，供前端判断真实净值是否已出
-                    saveData('previous_day_jingzhi_' + fund.fundCode, previousDayJingzhi.toFixed(4));
-                    saveData('current_day_jingzhi_' + fund.fundCode, dwjz + "");
-                    saveData('current_day_jingzhi_date_' + fund.fundCode, date);
+                    var fundData = fundDataMap[fund.fundCode];
+                    
+                    if (fundData) {
+                        let gztime = fundData.PDATE ? fundData.PDATE.substring(0, 10).replace(/-/g, '') : '';
+                        if (date != gztime) continue;
+                        
+                        let dwjz = parseFloat(fundData.NAV || '0');
+                        let gszzl = parseFloat(fundData.NAVCHGRT || '0');
+                        let bonds = parseFloat(fund.bonds);
+                        
+                        // 当日收益 = 涨跌幅 * 净值 * 持仓份额 / 100（与前端一致）
+                        let dayIncome = gszzl * dwjz * bonds / 100;
+                        fundDayIncome = fundDayIncome + dayIncome;
+                        
+                        // 市值 = 净值 * 持仓份额（与前端一致）
+                        let marketValue = dwjz * bonds;
+                        fundMarketValue += marketValue;
+                        
+                        // 总收益 = (净值 - 成本价) * 持仓份额（与前端一致）
+                        let totalIncome = (dwjz - parseFloat(fund.costPrise)) * bonds;
+                        fundTotalIncome = fundTotalIncome + totalIncome;
+                    }
                 }
             }
         }
@@ -1098,17 +1128,34 @@ async function monitorFundPrice(fundList) {
         blueColor = lightBlue;
         redColor = lightRed;
     }
-    // 批量获取基金价格数据
+    // 批量获取基金价格数据，先尝试新浪接口，失败降级到旧接口
     let fundPriceMap = {};
     var fcodes = funds.map(f => f.fundCode).join(',');
     
     try {
-        let response = await fetch(`https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=1&Fcodes=${fcodes}`);
-        let data = await response.json();
-        if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
-            for (var i = 0; i < data.Datas.length; i++) {
-                var fundData = data.Datas[i];
-                fundPriceMap[fundData.FCODE] = parseFloat(fundData.NAV || fundData.GSZ || '0');
+        // 使用共享的新浪接口获取估值
+        let estimateMap = await fetchFundEstimatesFromSina(funds.map(f => f.fundCode));
+        
+        // 使用新浪估值数据
+        let sinaSuccessCount = 0;
+        for (let code in estimateMap) {
+            if (estimateMap[code].gsz > 0) {
+                fundPriceMap[code] = estimateMap[code].gsz;
+                sinaSuccessCount++;
+            }
+        }
+        
+        // 如果新浪接口没有获取到所有基金数据，使用旧接口补充
+        if (sinaSuccessCount < funds.length) {
+            let response = await fetch(`https://fundmobapi.eastmoney.com/FundMNewApi/FundMNFInfo?pageIndex=1&pageSize=200&plat=Android&appType=ttjj&product=EFund&Version=1&deviceid=1&Fcodes=${fcodes}`);
+            let data = await response.json();
+            if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
+                for (var i = 0; i < data.Datas.length; i++) {
+                    var fundData = data.Datas[i];
+                    // 如果新浪接口已经获取到数据，跳过
+                    if (fundPriceMap[fundData.FCODE]) continue;
+                    fundPriceMap[fundData.FCODE] = parseFloat(fundData.NAV || fundData.GSZ || '0');
+                }
             }
         }
     } catch (error) {

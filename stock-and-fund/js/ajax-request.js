@@ -313,7 +313,7 @@ function convertToEastMoneyCode(code) {
     return secid + '.' + cleanCode;
 }
 
-// 接口调用 - 批量获取基金数据
+// 接口调用 - 批量获取基金数据（保持原来的快速批量调用方式）
 function ajaxGetFundBatchFromMobileApi(fundCodes) {
     let result = {};
     var fcodes = fundCodes.join(',');
@@ -330,13 +330,16 @@ function ajaxGetFundBatchFromMobileApi(fundCodes) {
             if (data && data.ErrCode === 0 && data.Datas && data.Datas.length > 0) {
                 for (var i = 0; i < data.Datas.length; i++) {
                     var fundData = data.Datas[i];
+                    // 批量接口不调用新浪，isRealNetValue 默认 false（显示"(估)"）
+                    // 单个调用 ajaxGetFundFromTiantianjijin 会调用新浪接口获取精确数据
                     result[fundData.FCODE] = {
                         name: fundData.SHORTNAME || "",
                         dwjz: fundData.NAV || "--",
                         jzrq: fundData.PDATE || "",
                         gsz: fundData.GSZ || fundData.NAV || "--",
                         gztime: fundData.GZTIME || fundData.PDATE || "",
-                        gszzl: fundData.NAVCHGRT || "--"
+                        gszzl: fundData.NAVCHGRT || "--",
+                        isRealNetValue: false
                     };
                 }
             }
@@ -348,9 +351,69 @@ function ajaxGetFundBatchFromMobileApi(fundCodes) {
     return result;
 }
 
-// 接口调用 - 先调用移动端API，失败再调用旧接口
+// 接口调用 - 先调用新浪接口获取估值，再调用移动端API获取其他信息
 function ajaxGetFundFromTiantianjijin(code) {
     let result;
+    let sinaEstimate = null;
+    
+    // 先调用新浪接口获取估值
+    var SINA_URL = Env.GET_FUND_ESTIMATE_FROM_SINA.replace('{CODE}', code);
+    $.ajax({
+        url: SINA_URL,
+        timeout: 5000,
+        type: "get",
+        data: {},
+        async: false,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data && data.result && data.result.status && data.result.status.code === 0 && data.result.data) {
+                let worth = data.result.data.worth || '';
+                let worthDate = data.result.data.worth_date || '';
+                let worthRate = data.result.data.worth_rate || 0;
+                
+                let gsz = worth || "--";
+                // worth_rate 是小数（如 -0.024694），需要乘以 100 转换为百分比
+                    let gszzl = isNaN(parseFloat(worthRate)) ? "--" : parseFloat(worthRate) * 100;
+                let gztime = worthDate || "";
+                // 计算今天的日期（格式：YYYYMMDD）
+                let today = new Date();
+                let todayStr = today.getFullYear() + 
+                    String(today.getMonth() + 1).padStart(2, '0') + 
+                    String(today.getDate()).padStart(2, '0');
+                // worth_date 等于今天表示真实净值已出
+                let isRealNetValue = !!worthDate && worthDate !== '' && worthDate === todayStr;
+                
+                // 如果 worth_date 不为今天（说明真实净值未出），使用 networth 数组中最新的 pre_nav 和 nav_pct
+                if (data.result.data.networth && data.result.data.networth.length > 0) {
+                    var networthList = data.result.data.networth;
+                    var lastNetworth = networthList[networthList.length - 1];
+                    var preDate = lastNetworth.pre_date ? lastNetworth.pre_date.replace(/-/g, '') : '';
+                    
+                    if (!worthDate || worthDate === '' || worthDate !== todayStr) {
+                        gsz = lastNetworth.pre_nav || "--";
+                        gszzl = lastNetworth.nav_pct || "--";
+                        gztime = preDate || "";
+                    }
+                }
+                
+                sinaEstimate = {
+                    gsz: gsz,
+                    gszzl: gszzl,
+                    gztime: gztime,
+                    isRealNetValue: isRealNetValue
+                };
+            } else {
+                sinaEstimate = null;
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("Sina estimate API error, fallback to mobile API");
+            sinaEstimate = null;
+        }
+    });
+    
+    // 调用移动端API获取其他信息
     var MOBILE_URL = Env.GET_FUND_INFO_FROM_MOBILE_API.replace('{FCODES}', code);
     $.ajax({
         url: MOBILE_URL,
@@ -367,9 +430,10 @@ function ajaxGetFundFromTiantianjijin(code) {
                     name: fundData.SHORTNAME || "",
                     dwjz: fundData.NAV || "--",
                     jzrq: fundData.PDATE || "",
-                    gsz: fundData.GSZ || fundData.NAV || "--",
-                    gztime: fundData.GZTIME || fundData.PDATE || "",
-                    gszzl: fundData.NAVCHGRT || "--"
+                    gsz: sinaEstimate ? sinaEstimate.gsz : (fundData.GSZ || fundData.NAV || "--"),
+                    gztime: sinaEstimate ? sinaEstimate.gztime : (fundData.GZTIME || fundData.PDATE || ""),
+                    gszzl: sinaEstimate ? sinaEstimate.gszzl : (fundData.NAVCHGRT || "--"),
+                    isRealNetValue: sinaEstimate ? sinaEstimate.isRealNetValue : false
                 };
             } else {
                 result = null;
@@ -400,9 +464,10 @@ function ajaxGetFundFromTiantianjijin(code) {
                         name: fundData.NAME || "",
                         dwjz: fundBaseInfo.DWJZ || "--",
                         jzrq: fundBaseInfo.FSRQ || "",
-                        gsz: fundBaseInfo.DWJZ || "--",
-                        gztime: fundBaseInfo.FSRQ || "",
-                        gszzl: "--"
+                        gsz: sinaEstimate ? sinaEstimate.gsz : (fundBaseInfo.DWJZ || "--"),
+                        gztime: sinaEstimate ? sinaEstimate.gztime : (fundBaseInfo.FSRQ || ""),
+                        gszzl: sinaEstimate ? sinaEstimate.gszzl : "--",
+                        isRealNetValue: sinaEstimate ? sinaEstimate.isRealNetValue : false
                     };
                 } else {
                     result = null;
@@ -419,8 +484,67 @@ function ajaxGetFundFromTiantianjijin(code) {
     return result;
 }
 
-// 接口调用 - 先调用移动端API，失败再调用旧接口
+// 接口调用 - 先调用新浪接口获取估值，再调用移动端API获取其他信息
 function ajaxGetFundFromTiantianjijinAsync(code, last) {
+    var SINA_URL = Env.GET_FUND_ESTIMATE_FROM_SINA.replace('{CODE}', code);
+    $.ajax({
+        url: SINA_URL,
+        timeout: 5000,
+        type: "get",
+        data: {},
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (sinaData) {
+            let sinaEstimate = null;
+            if (sinaData && sinaData.result && sinaData.result.status && sinaData.result.status.code === 0 && sinaData.result.data) {
+                let worth = sinaData.result.data.worth || '';
+                let worthDate = sinaData.result.data.worth_date || '';
+                let worthRate = sinaData.result.data.worth_rate || 0;
+                
+                let gsz = worth || "--";
+                // worth_rate 是小数（如 -0.024694），需要乘以 100 转换为百分比
+                let gszzl = isNaN(parseFloat(worthRate)) ? "--" : parseFloat(worthRate) * 100;
+                let gztime = worthDate || "";
+                
+                // 计算今天的日期（格式：YYYYMMDD）
+                let today = new Date();
+                let todayStr = today.getFullYear() + 
+                    String(today.getMonth() + 1).padStart(2, '0') + 
+                    String(today.getDate()).padStart(2, '0');
+                // worth_date 等于今天表示真实净值已出
+                let isRealNetValue = !!worthDate && worthDate !== '' && worthDate === todayStr;
+                
+                // 如果 worth_date 不为今天（说明真实净值未出），使用 networth 数组中最新的 pre_nav 和 nav_pct
+                if (sinaData.result.data.networth && sinaData.result.data.networth.length > 0) {
+                    var networthList = sinaData.result.data.networth;
+                    var lastNetworth = networthList[networthList.length - 1];
+                    var preDate = lastNetworth.pre_date ? lastNetworth.pre_date.replace(/-/g, '') : '';
+                    
+                    if (!worthDate || worthDate === '' || worthDate !== todayStr) {
+                        gsz = lastNetworth.pre_nav || "--";
+                        gszzl = lastNetworth.nav_pct || "--";
+                        gztime = preDate || "";
+                    }
+                }
+                
+                sinaEstimate = {
+                    gsz: gsz,
+                    gszzl: gszzl,
+                    gztime: gztime,
+                    isRealNetValue: isRealNetValue
+                };
+            }
+            ajaxGetFundFromTiantianjijinAsyncWithEstimate(code, last, sinaEstimate);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("Sina estimate API error, fallback to mobile API");
+            ajaxGetFundFromTiantianjijinAsyncWithEstimate(code, last, null);
+        }
+    });
+}
+
+// 带估值数据的异步接口调用
+function ajaxGetFundFromTiantianjijinAsyncWithEstimate(code, last, sinaEstimate) {
     var MOBILE_URL = Env.GET_FUND_INFO_FROM_MOBILE_API.replace('{FCODES}', code);
     $.ajax({
         url: MOBILE_URL,
@@ -437,24 +561,25 @@ function ajaxGetFundFromTiantianjijinAsync(code, last) {
                     name: fundData.SHORTNAME || "",
                     dwjz: fundData.NAV || "--",
                     jzrq: fundData.PDATE || "",
-                    gsz: fundData.GSZ || fundData.NAV || "--",
-                    gztime: fundData.GZTIME || fundData.PDATE || "",
-                    gszzl: fundData.NAVCHGRT || "--"
+                    gsz: sinaEstimate ? sinaEstimate.gsz : (fundData.GSZ || fundData.NAV || "--"),
+                    gztime: sinaEstimate ? sinaEstimate.gztime : (fundData.GZTIME || fundData.PDATE || ""),
+                    gszzl: sinaEstimate ? sinaEstimate.gszzl : (fundData.NAVCHGRT || "--"),
+                    isRealNetValue: sinaEstimate ? sinaEstimate.isRealNetValue : false
                 };
                 ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last);
             } else {
-                ajaxGetFundFromTiantianjijinAsyncFallback(code, last);
+                ajaxGetFundFromTiantianjijinAsyncFallback(code, last, sinaEstimate);
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
             console.log("Mobile API error, fallback to old API");
-            ajaxGetFundFromTiantianjijinAsyncFallback(code, last);
+            ajaxGetFundFromTiantianjijinAsyncFallback(code, last, sinaEstimate);
         }
     });
 }
 
 // 异步接口的降级函数
-function ajaxGetFundFromTiantianjijinAsyncFallback(code, last) {
+function ajaxGetFundFromTiantianjijinAsyncFallback(code, last, sinaEstimate) {
     let timestamp = Date.now();
     var FUND_URL = Env.GET_FUND_FROM_TIANTIANJIJIN_NEW.replace('{CODE}', code).replace('{TIMESTAMP}', timestamp);
     $.ajax({
@@ -473,9 +598,10 @@ function ajaxGetFundFromTiantianjijinAsyncFallback(code, last) {
                     name: fundData.NAME || "",
                     dwjz: fundBaseInfo.DWJZ || "--",
                     jzrq: fundBaseInfo.FSRQ || "",
-                    gsz: fundBaseInfo.DWJZ || "--",
-                    gztime: fundBaseInfo.FSRQ || "",
-                    gszzl: "--"
+                    gsz: sinaEstimate ? sinaEstimate.gsz : (fundBaseInfo.DWJZ || "--"),
+                    gztime: sinaEstimate ? sinaEstimate.gztime : (fundBaseInfo.FSRQ || ""),
+                    gszzl: sinaEstimate ? sinaEstimate.gszzl : "--",
+                    isRealNetValue: sinaEstimate ? sinaEstimate.isRealNetValue : false
                 };
                 ajaxGetFundFromTiantianjijinAsyncCallBack(fund, last);
             } else {
