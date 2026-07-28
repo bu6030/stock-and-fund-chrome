@@ -3164,7 +3164,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 } else if(columnName == 'day-income-th') {
                     html = (dayIncomeDisplay == 'DISPLAY' ? "<td " + dayIncomeStyle + ">" + result[k].dayIncome + exsitJZStr + "</td>" : "");
                 } else if(columnName == 'change-percent-th') {
-                    html = "<td " + gszzlStyle + ">" + result[k].gszzl + "%</td>";
+                    let gszzlValue = parseFloat(result[k].gszzl);
+                    html = "<td " + gszzlStyle + ">" + (isNaN(gszzlValue) ? result[k].gszzl : gszzlValue.toFixed(2)) + "%</td>";
                 } else if(columnName == 'change-th') {
                     html = (changeDisplay == 'DISPLAY' ? "<td>--</td>" : "");
                 } else if(columnName == 'pe-th') {
