@@ -979,7 +979,7 @@ function getSecidBack(code) {
         } else {
             secid = '106';
         }
-        if (code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
+        if (code == 'usNDX' || code == 'usNDX100' || code == 'usDJIA' || code == 'usSPX') {
             secid = '100';
         } else if(code === 'USDCNH') {
             secid = '133';

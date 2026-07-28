@@ -301,7 +301,7 @@ function convertToEastMoneyCode(code) {
             secid = '153';
         } else if (code.endsWith('.am') || code.endsWith('.AM')) {
             secid = '107';
-        } else if(code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
+        } else if(code == 'usNDX' || code == 'usNDX100' || code == 'usDJIA' || code == 'usSPX') {
             secid = '100';
         } else {
             secid = '106';

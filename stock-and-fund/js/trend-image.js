@@ -15,7 +15,7 @@ function isLargeMarketIndex(code) {
     return code == "sh000001" || code == "sz399001" || code == "sz399006"
         || code == 'N225' || code == 'KS11' || code == 'FTSE'
         || code == 'GDAXI' || code == 'FCHI' || code == 'SENSEX'
-        || code == 'sh000300' || code == 'usNDX' || code == 'hkHSI'
+        || code == 'sh000300' || code == 'usNDX' || code == 'usNDX100' || code == 'hkHSI'
         || code == 'usSPX' || code == 'usDJIA' || code == 'sz399905'
         || code == 'sh000852' || code == 'sh000688' || code == 'sh000928'
         || code == 'sz399997' || code == 'sh000933' || code == 'sh000926'

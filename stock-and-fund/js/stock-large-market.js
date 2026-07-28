@@ -48,6 +48,8 @@ async function initLargeMarketDataCallBack(bigStocks) {
             name = '美元指数';
         } else if (code == 'NQ00Y') {
             name = '小型纳指当月连续';
+        } else if (code == 'NDX100') {
+            name = '纳斯达克100';
         } else if (code.startsWith('BK') && customIndexMap[code]) {
             // 使用自定义指数名称
             name = customIndexMap[code];
@@ -134,6 +136,7 @@ function convertToTimeImageCode(code) {
         'HSI': 'hkHSI',
         'HSTECH': 'hkHSTECH',
         'NDX': 'usNDX',
+        'NDX100': 'usNDX100',
         'DJIA': 'usDJIA',
         'SPX': 'usSPX'
     };
@@ -328,6 +331,7 @@ async function addLargeMarketCheckEvent() {
     $('input#large-market-code-checkbox[value="100.SPX"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="100.DJIA"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="100.NDX"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="100.NDX100"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="100.N225"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="100.KS11"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="100.FTSE"]').on('change', largeMarketCodeSave);

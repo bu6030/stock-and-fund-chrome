@@ -7989,7 +7989,7 @@ function getSecid(code) {
                         }
                     }
                 }
-            } else if(code == 'usNDX' || code == 'usDJIA' || code == 'usSPX') {
+            } else if(code == 'usNDX' || code == 'usNDX100' || code == 'usDJIA' || code == 'usSPX') {
                 secid = '100';
             } else if(code === 'USDCNH') {
                 secid = '133';
@@ -8611,6 +8611,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'usNDX':
                 name = '纳斯达克'
+                break;
+            case 'usNDX100':
+                name = '纳斯达克100'
                 break;
             case 'usDJIA':
                 name = '道琼斯';
