@@ -2,7 +2,7 @@ let isCycleInvest = false;
 let performTaskId;
 let count = 0;
 let isFirefox = false;
-let develop = true;
+let develop = false;
 let lightBlue = [144, 238, 144, 255];
 let lightRed = [255, 192, 203, 255];
 
