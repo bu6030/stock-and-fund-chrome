@@ -24,7 +24,7 @@ function isLargeMarketIndex(code) {
         || code == '931071' || code == '931582' || code == 'TWII'
         || code == 'VNINDEX' || code == 'hkHSTECH' || code == 'CN00Y'
         || code.startsWith('BK') || code == 'GC00Y' || code == 'USDCNH'
-        || code == 'UDI' || code == 'CL00Y';
+        || code == 'UDI' || code == 'CL00Y' || code == 'NQ00Y';
 }
 // 展示分时图
 function showMinuteImage(ndays) {

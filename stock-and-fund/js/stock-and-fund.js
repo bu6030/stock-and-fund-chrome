@@ -8016,6 +8016,8 @@ function getSecid(code) {
             secid = '100';
         } else if(code == 'CL00Y'){
             secid = '102';
+        } else if(code == 'NQ00Y'){
+            secid = '103';
         }
     }
     return secid;
@@ -8705,6 +8707,9 @@ function getFundOrStockNameByTimeImageCode(timeImageCode, timeImageType) {
                 break;
             case 'CL00Y':
                 name = 'NYMEX原油';
+                break;
+            case 'NQ00Y':
+                name = '小型纳指当月连续';
                 break;
             default:
                 // 检查是否为自定义BK指数

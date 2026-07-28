@@ -46,6 +46,8 @@ async function initLargeMarketDataCallBack(bigStocks) {
             name = 'A50期指';
         } else if (code == 'UDI') {
             name = '美元指数';
+        } else if (code == 'NQ00Y') {
+            name = '小型纳指当月连续';
         } else if (code.startsWith('BK') && customIndexMap[code]) {
             // 使用自定义指数名称
             name = customIndexMap[code];
@@ -355,6 +357,7 @@ async function addLargeMarketCheckEvent() {
     $('input#large-market-code-checkbox[value="133.USDCNH"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="100.UDI"]').on('change', largeMarketCodeSave);
     $('input#large-market-code-checkbox[value="102.CL00Y"]').on('change', largeMarketCodeSave);
+    $('input#large-market-code-checkbox[value="103.NQ00Y"]').on('change', largeMarketCodeSave);
     
     // 添加自定义指数输入功能
     initCustomIndexFeature();

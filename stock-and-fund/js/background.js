@@ -1002,6 +1002,8 @@ function getSecidBack(code) {
             secid = '100';
         } else if(code == 'CL00Y'){
             secid = '102';
+        } else if(code == 'NQ00Y'){
+            secid = '103';
         }
     }
     return secid;
