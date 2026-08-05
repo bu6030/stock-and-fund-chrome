@@ -641,6 +641,15 @@ function ajaxGetStockTimeImageMinuteMini(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+            let now = Date.now();
+            if (now - _forbiddenLastOpenTime > 60000) {
+                _forbiddenLastOpenTime = now;
+                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+                if (confirm("是否打开东方财富网站恢复访问？")) {
+                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+                }
+            }
         }
     });
 }
@@ -668,6 +677,15 @@ function ajaxGetStockTimeImageMinuteMiniPromise(code) {
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
+                alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+                let now = Date.now();
+                if (now - _forbiddenLastOpenTime > 60000) {
+                    _forbiddenLastOpenTime = now;
+                    localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+                    if (confirm("是否打开东方财富网站恢复访问？")) {
+                        chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+                    }
+                }
                 resolve();
             }
         });
@@ -691,6 +709,15 @@ function ajaxGetFundTimeImageMinuteMiniPromise(code) {
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
+                alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+                let now = Date.now();
+                if (now - _forbiddenLastOpenTime > 60000) {
+                    _forbiddenLastOpenTime = now;
+                    localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+                    if (confirm("是否打开东方财富网站恢复访问？")) {
+                        chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+                    }
+                }
                 resolve();
             }
         });
@@ -722,6 +749,15 @@ function ajaxGetStockTimeImageMinute(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+            let now = Date.now();
+            if (now - _forbiddenLastOpenTime > 60000) {
+                _forbiddenLastOpenTime = now;
+                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+                if (confirm("是否打开东方财富网站恢复访问？")) {
+                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+                }
+            }
         }
     });
     return result;
@@ -776,6 +812,15 @@ function ajaxGetFundTimeImageMinuteMini(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
+            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+            let now = Date.now();
+            if (now - _forbiddenLastOpenTime > 60000) {
+                _forbiddenLastOpenTime = now;
+                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+                if (confirm("是否打开东方财富网站恢复访问？")) {
+                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+                }
+            }
         }
     });
     // return result;
