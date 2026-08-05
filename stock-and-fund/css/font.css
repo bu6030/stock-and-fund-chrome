@@ -1,18 +1,23 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
 .my-windows {
     overflow-x: auto;
+    width: 100%;
 }
 .my-main-content {
     width: 800px;
-    min-height: 560px;
+    min-height: auto;
 }
 .my-font {
     font-size: 11px;
 }
 
 .my-div {
-    /* width: 100%; */
     min-height: 400px;
-    height: 400px;
     overflow-x: auto;
     margin-bottom: 45px;
 }
@@ -106,11 +111,11 @@
 
 /* div 居中显示 */
 .my-center {
-    display: flex;
+    display: block;
 }
 
 .my-center-child {
-    margin: auto;
+    margin: 0;
 }
 
 .my-monitor-text {

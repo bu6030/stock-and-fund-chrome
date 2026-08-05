@@ -4563,7 +4563,9 @@ async function initWindowsSize() {
     }
     if (windowSize == 'NORMAL') {
         // 设置首页各项内容宽度 800px
-        myWindows.style.width = '800px';
+        document.documentElement.style.width = '800px';
+        document.body.style.width = '800px';
+        myWindows.style.width = '100%';
         myHeader.style.width = '800px';
         footer.style.width = '800px';
         stockLargeMarket.style.width = '800px';
@@ -4571,8 +4573,7 @@ async function initWindowsSize() {
         myDiv.style.width = '800px';
         myBody.style.width = '800px';
         myMainContent.style.width = '800px';
-        myMainContent.style.height = '100%';
-        myDiv.style.height = '450px';
+        myDiv.style.minHeight = '450px';
         helpDocumentAlert.style.width = '800px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
@@ -4590,7 +4591,9 @@ async function initWindowsSize() {
         volumnImageEchart.style.height = '80px';
     } else if (windowSize == 'SMALL') {
         // 设置首页各项内容宽度 600px
-        myWindows.style.width = '600px';
+        document.documentElement.style.width = '600px';
+        document.body.style.width = '600px';
+        myWindows.style.width = '100%';
         myHeader.style.width = '600px';
         footer.style.width = '600px';
         stockLargeMarket.style.width = '600px';
@@ -4598,8 +4601,7 @@ async function initWindowsSize() {
         myDiv.style.width = '600px';
         myBody.style.width = '600px';
         myMainContent.style.width = '600px';
-        myMainContent.style.height = '100%';
-        myDiv.style.height = '450px';
+        myDiv.style.minHeight = '450px';
         helpDocumentAlert.style.width = '600px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
@@ -4616,7 +4618,9 @@ async function initWindowsSize() {
         volumnImageEchart.style.height = '60px';
     } else if (windowSize == 'MINI') {
         // 设置首页各项内容宽度 400px
-        myWindows.style.width = '400px';
+        document.documentElement.style.width = '400px';
+        document.body.style.width = '400px';
+        myWindows.style.width = '100%';
         myHeader.style.width = '400px';
         footer.style.width = '400px';
         stockLargeMarket.style.width = '400px';
@@ -4624,8 +4628,7 @@ async function initWindowsSize() {
         myDiv.style.width = '400px';
         myBody.style.width = '400px';
         myMainContent.style.width = '400px';
-        myMainContent.style.height = '100%';
-        myDiv.style.height = '450px';
+        myDiv.style.minHeight = '450px';
         helpDocumentAlert.style.width = '400px';
         fundNetDiagramDiv.style.width = '400px';
         fundNetDiagramDiv.style.height = '200px';
