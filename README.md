@@ -500,7 +500,7 @@
 473. 增加新的基金实时接口 2026/7/20 version 2.3.1.7 --end
 474. 新的基金实时问题修复 2026/7/27 version 2.3.1.8 --end
 475. 增加小型纳指当月连续指数和纳斯达克100指数 2026/7/27 version 2.3.1.9 --end
-476. 修复迷你模式下窗口宽度问题 2026/8/5
+476. 修复迷你模式下窗口宽度问题 2026/8/5 version 2.3.2.0 --end
 
 ## <span id="chrome-plugin-stock-and-fund">Chrome应用市场安装</span>
 点击这个[链接到Chrome应用市场安装，需要科学上网工具](https://chrome.google.com/webstore/detail/%E8%82%A1%E7%A5%A8%E5%9F%BA%E9%87%91%E7%A5%9E%E5%99%A8/ldhkaenmfbheigndphpffdgpdcllnmeh)  
