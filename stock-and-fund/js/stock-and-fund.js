@@ -3806,7 +3806,7 @@ async function saveStock() {
     stock.addTimePrice = checkStockExsitResult.now;
     stock.addTime = getCurrentDate();
     stock.belongGroup = currentGroup;
-    stockList.push(stock);
+    stockList.unshift(stock);
     if (currentGroup == 'default-group' || currentGroup == 'all-group') {
         saveCacheData('stocks', JSON.stringify(stockList));
     } else {
@@ -4057,7 +4057,7 @@ async function saveFund() {
     fund.addTimePrice = checkFundExsitReuslt.now;
     fund.addTime = getCurrentDate();
     fund.belongGroup = currentGroup;
-    fundList.push(fund);
+    fundList.unshift(fund);
     if (currentGroup == 'default-group' || currentGroup == 'all-group') {
         saveCacheData('funds', JSON.stringify(fundList));
     } else {
