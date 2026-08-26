@@ -1488,7 +1488,7 @@ async function initData() {
             for (var k in stockList) {
                 stocks += stockList[k].code + ",";
                 let code = stockList[k].code;
-                secIdStockArr += getSecid(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj','').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+                secIdStockArr += getSecid(code) + '.' + cleanStockCode(stockList[k].code) + ',';
             }
             // let result = "";
             // let stoksArr = [];
@@ -1681,7 +1681,7 @@ async function initStockEastMoneyCallBack(stoksArr, stocks) {
     for (var k in stoksArr) {
         let stock = {};
         for (var l in stockList) {
-            if (stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj','').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
+            if (stoksArr[k].f12 == cleanStockCode(stockList[l].code)) {
                 let toFixedVolume = 2;
                 stock = stockList[l];
                 // 本来想这里break出去，结果会导致一些数据undefined，继续遍历吧
@@ -4706,13 +4706,32 @@ async function setMinuteImageMini(event) {
 }
 
 // 各种告警提示
-function alertMessage(message) {
-    $("#alert-content").html(message);
-    $("#alert-container").show();
-    setTimeout(function () {
-        $("#alert-container").hide();
-    }, 3000);
+// type: 'error'(默认,需手动关闭) 或 'success'(3秒后自动关闭)
+function alertMessage(message, type) {
+    var $container = $("#alert-container");
+    var $content = $("#alert-content");
+    var closeBtn = '<button type="button" class="close alert-close-btn" aria-label="关闭">&times;</button>';
+    $content.html(message + closeBtn);
+    // 切换样式类
+    $content.removeClass('alert-danger alert-success').addClass(type === 'success' ? 'alert-success' : 'alert-danger');
+    $container.show();
+    // 清除之前的定时器
+    if (window._alertMessageTimer) {
+        clearTimeout(window._alertMessageTimer);
+        window._alertMessageTimer = null;
+    }
+    // 错误类需手动关闭，成功类 3 秒后自动关闭
+    if (type === 'success') {
+        window._alertMessageTimer = setTimeout(function () {
+            $container.hide();
+        }, 3000);
+    }
 }
+
+// 点击关闭按钮隐藏告警提示
+$(document).on('click', '.alert-close-btn', function () {
+    $("#alert-container").hide();
+});
 
 // 第一次安装后没有数据，展示使用说明
 function initFirstInstall() {

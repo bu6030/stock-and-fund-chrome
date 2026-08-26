@@ -6,6 +6,14 @@ let develop = false;
 let lightBlue = [144, 238, 144, 255];
 let lightRed = [255, 192, 203, 255];
 
+// 清理股票代码：去掉市场前缀(sh/sz/bj/hk/us)和后缀(.oq/.ps/.n/.am 等)，将 '.' 替换为 '_'
+function cleanStockCode(code) {
+    return code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '')
+        .replace('.oq', '').replace('.ps', '').replace('.n', '').replace('.am', '')
+        .replace('.OQ', '').replace('.PS', '').replace('.N', '').replace('.AM', '')
+        .replace('.', '_');
+}
+
 // 新浪基金估值接口 - 并行获取多个基金的估值数据
 async function fetchFundEstimatesFromSina(fundCodes) {
     let estimateMap = {};
@@ -185,7 +193,7 @@ function monitorStockPrice(stockList) {
                     || (typeof stockList[k].monitorUpperPercent != 'undefined' && stockList[k].monitorUpperPercent != '')
                     || (typeof stockList[k].monitorLowerPercent != 'undefined' && stockList[k].monitorLowerPercent != '')
                     || (typeof stockList[k].monitorMA20 != 'undefined' && stockList[k].monitorMA20 != '' && stockList[k].monitorMA20)) {
-                    stocks += getSecidBack(stockList[k].code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+                    stocks += getSecidBack(stockList[k].code) + '.' + cleanStockCode(stockList[k].code) + ',';
                 }
             }
             if (stocks == "") {
@@ -214,7 +222,7 @@ function monitorStockPrice(stockList) {
                             for (let k in stoksArr) {
                                 var monitorStock;
                                 for (let l in stockList) {
-                                    if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
+                                    if(stoksArr[k].f12 == cleanStockCode(stockList[l].code)){
                                         monitorStock = stockList[l];
                                     }
                                 }
@@ -289,7 +297,7 @@ function monitorStockPrice(stockList) {
                                         } else {
                                             secid = '2';
                                         }
-                                        let code = monitorStock.code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
+                                        let code = cleanStockCode(monitorStock.code);
                                         let end = getBeijingDateNoSlash();
                                         // now
                                         fetch("https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=" + secid + "."+ code + "&klt=" + klt + "&fqt=1&lmt=100&end=" + end + "&iscca=1&fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf59&forcect=1")
@@ -360,7 +368,7 @@ function monitorStock(code) {
     console.log("执行监控股票实时价格任务...", date.toLocaleString());
     if (isTradingTime(date)) {
         console.log("交易时间，执行任务...");
-        let secIdStock = getSecidBack(code) + '.' + code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+        let secIdStock = getSecidBack(code) + '.' + cleanStockCode(code) + ',';
         fetch("https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f12,f13,f19,f14,f139,f148,f124,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100,f88,f153&secids=" + secIdStock)
             .then(response => response.text())
             .then(repsonse => JSON.parse(repsonse))
@@ -542,7 +550,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
         }
         for (var k in stockList) {
             let code = stockList[k].code;
-            secIdStockArr += getSecidBack(code) + '.' + stockList[k].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') + ',';
+            secIdStockArr += getSecidBack(code) + '.' + cleanStockCode(stockList[k].code) + ',';
         }
         let response;
         try {
@@ -564,7 +572,7 @@ async function monitorTop20StockChromeTitle(monitoTop20Stock) {
             try {
                 var stock = undefined;
                 for (let l in stockList) {
-                    if(stoksArr[k].f12 == stockList[l].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')){
+                    if(stoksArr[k].f12 == cleanStockCode(stockList[l].code)){
                         stock = stockList[l];
                         break;
                     }
@@ -1077,7 +1085,7 @@ async function updateStocksMA20(code, monitorAlert) {
     }
     var stockList = JSON.parse(stockArr);
     for (let i = 0; i < stockList.length; i++) {
-        if (stockList[i].code.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_') == code) {
+        if (cleanStockCode(stockList[i].code) == code) {
                 stockList[i].monitorAlert = monitorAlert;
                 stockList[i].monitorAlertDate = Date.now();
             break;

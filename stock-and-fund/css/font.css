@@ -145,6 +145,23 @@ html, body {
     margin-top: 3px;
 }
 
+.alert-close-btn {
+    float: right;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 4px;
+}
+.alert-close-btn:hover {
+    opacity: 0.75;
+}
+
 .my-large-alert {
     width: 800px;
     text-align: center;

@@ -457,7 +457,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     if (largeMarketStockMaxs != undefined && largeMarketStockMaxs != '') {
         let largeMarketStockMaxsArr = largeMarketStockMaxs.split("-");
         for (let i = 0; i < largeMarketStockMaxsArr.length; i++) {
-            if (largeMarketStockMaxsArr[i].split("~")[0] == timeImageCode.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
+            if (largeMarketStockMaxsArr[i].split("~")[0] == cleanStockCode(timeImageCode)) {
                 realMaxPrice = largeMarketStockMaxsArr[i].split("~")[1];
                 break;
             }
@@ -475,7 +475,7 @@ function setStockMinitesImageCallBack(result, ndays, code) {
     if (largeMarketStockMins != undefined && largeMarketStockMins != '') {
         let largeMarketStockMinsArr = largeMarketStockMins.split("-");
         for (let i = 0; i < largeMarketStockMinsArr.length; i++) {
-            if (largeMarketStockMinsArr[i].split("~")[0] == timeImageCode.replace('sh', '').replace('sz', '').replace('bj', '').replace('hk', '').replace('us', '').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_')) {
+            if (largeMarketStockMinsArr[i].split("~")[0] == cleanStockCode(timeImageCode)) {
                 realMinPrice = largeMarketStockMinsArr[i].split("~")[1];
                 break;
             }

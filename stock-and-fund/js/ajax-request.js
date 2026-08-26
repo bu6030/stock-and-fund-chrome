@@ -1,5 +1,18 @@
 let _forbiddenLastOpenTime = parseInt(localStorage.getItem('_forbiddenLastOpenTime') || '0');
 
+// 公共处理：被东方财富封 IP 时的提示和恢复
+function handleForbidden() {
+    alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
+    let now = Date.now();
+    if (now - _forbiddenLastOpenTime > 60000) {
+        _forbiddenLastOpenTime = now;
+        localStorage.setItem('_forbiddenLastOpenTime', now.toString());
+        if (confirm("是否打开东方财富网站恢复访问？")) {
+            chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
+        }
+    }
+}
+
 // 接口调用
 function ajaxGetStockAndFundFromLocalService() {
     var result;
@@ -239,15 +252,7 @@ function ajaxGetStockFromEastMoney(code, stocks) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
-            let now = Date.now();
-            if (now - _forbiddenLastOpenTime > 60000) {
-                _forbiddenLastOpenTime = now;
-                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
-                if (confirm("是否打开东方财富网站恢复访问？")) {
-                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
-                }
-            }
+            handleForbidden();
         }
     });
 }
@@ -309,7 +314,7 @@ function convertToEastMoneyCode(code) {
     } else {
         secid = '0';
     }
-    let cleanCode = code.replace('sh','').replace('sz','').replace('bj','').replace('us','').replace('hk','').replace('.oq','').replace('.ps','').replace('.n','').replace('.am','').replace('.OQ','').replace('.PS','').replace('.N','').replace('.AM','').replace('.', '_');
+    let cleanCode = cleanStockCode(code);
     return secid + '.' + cleanCode;
 }
 
@@ -641,15 +646,7 @@ function ajaxGetStockTimeImageMinuteMini(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
-            let now = Date.now();
-            if (now - _forbiddenLastOpenTime > 60000) {
-                _forbiddenLastOpenTime = now;
-                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
-                if (confirm("是否打开东方财富网站恢复访问？")) {
-                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
-                }
-            }
+            handleForbidden();
         }
     });
 }
@@ -677,15 +674,7 @@ function ajaxGetStockTimeImageMinuteMiniPromise(code) {
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
-                alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
-                let now = Date.now();
-                if (now - _forbiddenLastOpenTime > 60000) {
-                    _forbiddenLastOpenTime = now;
-                    localStorage.setItem('_forbiddenLastOpenTime', now.toString());
-                    if (confirm("是否打开东方财富网站恢复访问？")) {
-                        chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
-                    }
-                }
+                handleForbidden();
                 resolve();
             }
         });
@@ -709,15 +698,7 @@ function ajaxGetFundTimeImageMinuteMiniPromise(code) {
                 console.log(XMLHttpRequest.status);
                 console.log(XMLHttpRequest.readyState);
                 console.log(textStatus);
-                alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
-                let now = Date.now();
-                if (now - _forbiddenLastOpenTime > 60000) {
-                    _forbiddenLastOpenTime = now;
-                    localStorage.setItem('_forbiddenLastOpenTime', now.toString());
-                    if (confirm("是否打开东方财富网站恢复访问？")) {
-                        chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
-                    }
-                }
+                handleForbidden();
                 resolve();
             }
         });
@@ -749,15 +730,7 @@ function ajaxGetStockTimeImageMinute(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
-            let now = Date.now();
-            if (now - _forbiddenLastOpenTime > 60000) {
-                _forbiddenLastOpenTime = now;
-                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
-                if (confirm("是否打开东方财富网站恢复访问？")) {
-                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
-                }
-            }
+            handleForbidden();
         }
     });
     return result;
@@ -812,15 +785,7 @@ function ajaxGetFundTimeImageMinuteMini(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
-            let now = Date.now();
-            if (now - _forbiddenLastOpenTime > 60000) {
-                _forbiddenLastOpenTime = now;
-                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
-                if (confirm("是否打开东方财富网站恢复访问？")) {
-                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
-                }
-            }
+            handleForbidden();
         }
     });
     // return result;
@@ -964,15 +929,7 @@ function ajaxGetLargeMarketData(code) {
             console.log(XMLHttpRequest.status);
             console.log(XMLHttpRequest.readyState);
             console.log(textStatus);
-            alertMessage("可能被东方财富封IP，请打开东方财富网站恢复");
-            let now = Date.now();
-            if (now - _forbiddenLastOpenTime > 60000) {
-                _forbiddenLastOpenTime = now;
-                localStorage.setItem('_forbiddenLastOpenTime', now.toString());
-                if (confirm("是否打开东方财富网站恢复访问？")) {
-                    chrome.tabs.create({ url: Env.GO_TO_FIX_FORBIDDEN });
-                }
-            }
+            handleForbidden();
         }
     });
 }
