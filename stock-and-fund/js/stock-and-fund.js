@@ -4577,7 +4577,7 @@ async function initWindowsSize() {
         helpDocumentAlert.style.width = '800px';
         fundNetDiagramDiv.style.width = '540px';
         fundNetDiagramDiv.style.height = '350px';
-        helpDocumentButton.style.display = "inline";
+        helpDocumentButton.style.display = "block";
         showBuyOrSellButton.style.display = "inline";
         showBuyOrSellButton2.style.display = "inline";
         showDataCenterButton.style.display = "inline";
@@ -10703,69 +10703,24 @@ async function updateFooterMenuConfig(key, value) {
 // 根据配置更新底部菜单显示
 async function updateFooterMenuDisplay() {
     const footerMenuConfig = await readCacheData('footer-menu-config');
-    if (footerMenuConfig) {
-        const config = JSON.parse(footerMenuConfig);
-        
-        // 更新刷新按钮显示
-        const refreshButton = document.getElementById('refresh-button');
-        if (refreshButton) {
-            refreshButton.style.display = config.refresh !== false ? 'inline-block' : 'none';
-        }
-        
-        // 更新数据中心按钮显示
-        const dataCenterButton = document.getElementById('show-data-center-button');
-        if (dataCenterButton) {
-            dataCenterButton.style.display = config.dataCenter !== false ? 'inline-block' : 'none';
-        }
-        
-        // 更新清理角标按钮显示
-        const cleanCornerButton = document.getElementById('remove-badgetext-button');
-        if (cleanCornerButton) {
-            cleanCornerButton.style.display = config.cleanCorner !== false ? 'inline-block' : 'none';
-        }
-        
-        // 更新微信群按钮显示
-        const wechatGroupButton = document.getElementById('show-wechat-group-button');
-        if (wechatGroupButton) {
-            wechatGroupButton.style.display = config.wechatGroup !== false ? 'inline-block' : 'none';
-        }
-        
-        // 更新小程序按钮显示
-        const wechatMiniButton = document.getElementById('show-wechat-mini-button');
-        if (wechatMiniButton) {
-            wechatMiniButton.style.display = config.wechatMini !== false ? 'inline-block' : 'none';
-        }
-        
-        // 更新使用说明按钮显示
-        const helpDocumentButton = document.getElementById('help-document-button');
-        if (helpDocumentButton) {
-            helpDocumentButton.style.display = config.helpDocument !== false ? 'inline-block' : 'none';
-        }
-        
-        // 更新打赏按钮显示
-        const donateButton = document.getElementById('show-donate-button-2');
-        if (donateButton) {
-            donateButton.style.display = config.donate !== false ? 'inline-block' : 'none';
-        }
-        
-        // 更新批量编辑按钮显示
-        const batchEditButton = document.getElementById('batch-edit-button');
-        if (batchEditButton) {
-            batchEditButton.style.display = config.batchEdit !== false ? 'inline-block' : 'none';
-        }
-    } else {
-        // 如果没有配置，默认全部显示
-        const buttons = [
-            'refresh-button', 'show-data-center-button', 'remove-badgetext-button',
-            'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button',
-            'show-donate-button-2', 'batch-edit-button'
-        ];
-        
-        for (const buttonId of buttons) {
-            const button = document.getElementById(buttonId);
-            if (button) {
-                button.style.display = 'inline-block';
-            }
+    // 配置项与按钮ID的映射：refresh/dataCenter/batchEdit 在工具栏中(inline-block)，其余在"更多"下拉中(block)
+    const buttonConfigMap = {
+        'refresh': { id: 'refresh-button', inDropdown: false },
+        'dataCenter': { id: 'show-data-center-button', inDropdown: false },
+        'cleanCorner': { id: 'remove-badgetext-button', inDropdown: true },
+        'wechatGroup': { id: 'show-wechat-group-button', inDropdown: true },
+        'wechatMini': { id: 'show-wechat-mini-button', inDropdown: true },
+        'helpDocument': { id: 'help-document-button', inDropdown: true },
+        'donate': { id: 'show-donate-button-2', inDropdown: true },
+        'batchEdit': { id: 'batch-edit-button', inDropdown: false }
+    };
+    const config = footerMenuConfig ? JSON.parse(footerMenuConfig) : {};
+    for (const key in buttonConfigMap) {
+        const item = buttonConfigMap[key];
+        const button = document.getElementById(item.id);
+        if (button) {
+            const show = config[key] !== false; // 未配置时默认显示
+            button.style.display = show ? (item.inDropdown ? 'block' : 'inline-block') : 'none';
         }
     }
 }
