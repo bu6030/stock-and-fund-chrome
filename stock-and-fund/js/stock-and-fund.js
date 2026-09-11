@@ -10196,10 +10196,11 @@ async function batchEdit() {
     document.getElementById('batch-cancel-button').style.display = 'inline-block';
     
     // 隐藏其他按钮
-    const buttonsToHide = ['show-all-button', 'show-stock-button', 'show-fund-button', 
+    const buttonsToHide = ['show-all-button', 'show-stock-button', 'show-fund-button',
         'group-menu-button', 'batch-delete-button', 'refresh-button', 'show-data-center-button',
         'remove-badgetext-button', 'full-screen-menu-button', 'show-setting-button',
-        'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button', 'show-donate-button-2'];
+        'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button', 'show-donate-button-2',
+        'more-menu-button'];
     buttonsToHide.forEach(id => {
         const btn = document.getElementById(id);
         if (btn) btn.style.display = 'none';
@@ -10410,7 +10411,8 @@ function exitBatchEditMode() {
     const buttonsToShow = ['show-all-button', 'show-stock-button', 'show-fund-button',
         'group-menu-button', 'refresh-button', 'show-data-center-button',
         'remove-badgetext-button', 'full-screen-menu-button', 'show-setting-button',
-        'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button', 'show-donate-button-2'];
+        'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button', 'show-donate-button-2',
+        'more-menu-button'];
     buttonsToShow.forEach(id => {
         const btn = document.getElementById(id);
         if (btn) btn.style.display = 'inline-block';
