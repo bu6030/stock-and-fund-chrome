@@ -15,28 +15,28 @@ var cheatMeFlag = false;
 var showStockOrFundOrAll = 'all';
 var windowSize = 'NORMAL'; // 窗口大小
 var marketValueDisplay = 'DISPLAY';
-var marketValuePercentDisplay = 'DISPLAY';
-var costPriceValueDisplay = 'DISPLAY';
+var marketValuePercentDisplay = 'HIDDEN';
+var costPriceValueDisplay = 'HIDDEN';
 var incomePercentDisplay = 'DISPLAY';
-var addtimePriceDisplay = 'DISPLAY';
+var addtimePriceDisplay = 'HIDDEN';
 var dayIncomeDisplay = 'DISPLAY';
 var costPriceDisplay = 'DISPLAY';
 var bondsDisplay = 'DISPLAY';
 var incomeDisplay = 'DISPLAY';
-var allDisplay = 'DISPLAY';
+var allDisplay = 'HIDDEN';
 var codeDisplay = 'HIDDEN';
-var changeDisplay = 'DISPLAY';
-var peDisplay = 'DISPLAY';
-var updateTimeDisplay = 'DISPLAY';
-var turnOverRateDisplay = 'DISPLAY';
-var quantityRelativeRatioDisplay = 'DISPLAY';
+var changeDisplay = 'HIDDEN';
+var peDisplay = 'HIDDEN';
+var updateTimeDisplay = 'HIDDEN';
+var turnOverRateDisplay = 'HIDDEN';
+var quantityRelativeRatioDisplay = 'HIDDEN';
 var priceDisplay = 'DISPLAY';
 var priceRealDisplay = 'HIDDEN';
-var belongGroupDisplay = 'DISPLAY';
-var amplitudeDisplay = 'DISPLAY';
-var upSpeedDisplay = 'DISPLAY';
-var maxDisplay = 'DISPLAY';
-var minDisplay = 'DISPLAY';
+var belongGroupDisplay = 'HIDDEN';
+var amplitudeDisplay = 'HIDDEN';
+var upSpeedDisplay = 'HIDDEN';
+var maxDisplay = 'HIDDEN';
+var minDisplay = 'HIDDEN';
 var starDisplay = 'HIDDEN';
 var starDescDisplay = 'HIDDEN';
 var zjlDisplay = 'HIDDEN';
@@ -267,16 +267,16 @@ async function initLoad() {
         marketValueDisplay = 'HIDDEN';
     }
     marketValuePercentDisplay = await readCacheData('market-value-percent-display');
-    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
-        marketValuePercentDisplay = 'DISPLAY';
-    } else {
+    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'HIDDEN') {
         marketValuePercentDisplay = 'HIDDEN';
+    } else {
+        marketValuePercentDisplay = 'DISPLAY';
     }
     costPriceValueDisplay = await readCacheData('cost-price-value-display');
-    if (costPriceValueDisplay == null || costPriceValueDisplay == 'DISPLAY') {
-        costPriceValueDisplay = 'DISPLAY';
-    } else {
+    if (costPriceValueDisplay == null || costPriceValueDisplay == 'HIDDEN') {
         costPriceValueDisplay = 'HIDDEN';
+    } else {
+        costPriceValueDisplay = 'DISPLAY';
     }
     incomePercentDisplay = await readCacheData('income-percent-display');
     if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
@@ -285,10 +285,10 @@ async function initLoad() {
         incomePercentDisplay = 'HIDDEN';
     }
     addtimePriceDisplay = await readCacheData('addtime-price-display');
-    if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
-        addtimePriceDisplay = 'DISPLAY';
-    } else {
+    if (addtimePriceDisplay == null || addtimePriceDisplay == 'HIDDEN') {
         addtimePriceDisplay = 'HIDDEN';
+    } else {
+        addtimePriceDisplay = 'DISPLAY';
     }
     dayIncomeDisplay = await readCacheData('day-income-display');
     if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
@@ -297,28 +297,28 @@ async function initLoad() {
         dayIncomeDisplay = 'HIDDEN';
     }
     belongGroupDisplay = await readCacheData('belong-group-display');
-    if (belongGroupDisplay == null || belongGroupDisplay == 'DISPLAY') {
-        belongGroupDisplay = 'DISPLAY';
-    } else {
+    if (belongGroupDisplay == null || belongGroupDisplay == 'HIDDEN') {
         belongGroupDisplay = 'HIDDEN';
+    } else {
+        belongGroupDisplay = 'DISPLAY';
     }
     upSpeedDisplay = await readCacheData('up-speed-display');
-    if (upSpeedDisplay == null || upSpeedDisplay == 'DISPLAY') {
-        upSpeedDisplay = 'DISPLAY';
-    } else {
+    if (upSpeedDisplay == null || upSpeedDisplay == 'HIDDEN') {
         upSpeedDisplay = 'HIDDEN';
+    } else {
+        upSpeedDisplay = 'DISPLAY';
     }
     maxDisplay = await readCacheData('max-display');
-    if (maxDisplay == null || maxDisplay == 'DISPLAY') {
-        maxDisplay = 'DISPLAY';
-    } else {
+    if (maxDisplay == null || maxDisplay == 'HIDDEN') {
         maxDisplay = 'HIDDEN';
+    } else {
+        maxDisplay = 'DISPLAY';
     }
     minDisplay = await readCacheData('min-display');
-    if (minDisplay == null || minDisplay == 'DISPLAY') {
-        minDisplay = 'DISPLAY';
-    } else {
+    if (minDisplay == null || minDisplay == 'HIDDEN') {
         minDisplay = 'HIDDEN';
+    } else {
+        minDisplay = 'DISPLAY';
     }
     starDescDisplay = await readCacheData('star-desc-display');
     if (starDescDisplay == null || starDescDisplay == 'HIDDEN') {
@@ -369,12 +369,12 @@ async function initLoad() {
         incomeDisplay = 'HIDDEN';
     }
     allDisplay = await readCacheData('all-display');
-    if (allDisplay == null || allDisplay == 'DISPLAY') {
-        allDisplay = 'DISPLAY';
-        $("#all-display-checkbox").prop("checked", true);
-    } else {
+    if (allDisplay == null || allDisplay == 'HIDDEN') {
         allDisplay = 'HIDDEN';
         $("#all-display-checkbox").prop("checked", false);
+    } else {
+        allDisplay = 'DISPLAY';
+        $("#all-display-checkbox").prop("checked", true);
     }
     codeDisplay = await readCacheData('code-display');
     if (codeDisplay == null || codeDisplay == 'HIDDEN') {
@@ -391,34 +391,34 @@ async function initLoad() {
         changeDisplay = 'DISPLAY';
     }
     peDisplay = await readCacheData('pe-display');
-    if (peDisplay == null || peDisplay == 'DISPLAY') {
-        peDisplay = 'DISPLAY';
-    } else {
+    if (peDisplay == null || peDisplay == 'HIDDEN') {
         peDisplay = 'HIDDEN';
+    } else {
+        peDisplay = 'DISPLAY';
     }
     amplitudeDisplay = await readCacheData('amplitude-display');
-    if (amplitudeDisplay == null || amplitudeDisplay == 'DISPLAY') {
-        amplitudeDisplay = 'DISPLAY';
-    } else {
+    if (amplitudeDisplay == null || amplitudeDisplay == 'HIDDEN') {
         amplitudeDisplay = 'HIDDEN';
+    } else {
+        amplitudeDisplay = 'DISPLAY';
     }
     updateTimeDisplay = await readCacheData('update-time-display');
-    if (updateTimeDisplay == null || updateTimeDisplay == 'DISPLAY') {
-        updateTimeDisplay = 'DISPLAY';
-    } else {
+    if (updateTimeDisplay == null || updateTimeDisplay == 'HIDDEN') {
         updateTimeDisplay = 'HIDDEN';
+    } else {
+        updateTimeDisplay = 'DISPLAY';
     }
     turnOverRateDisplay = await readCacheData('turn-over-rate-display');
-    if (turnOverRateDisplay == null || turnOverRateDisplay == 'DISPLAY') {
-        turnOverRateDisplay = 'DISPLAY';
-    } else {
+    if (turnOverRateDisplay == null || turnOverRateDisplay == 'HIDDEN') {
         turnOverRateDisplay = 'HIDDEN';
+    } else {
+        turnOverRateDisplay = 'DISPLAY';
     }
     quantityRelativeRatioDisplay = await readCacheData('quantity-relative-ratio-display');
-    if (quantityRelativeRatioDisplay == null || quantityRelativeRatioDisplay == 'DISPLAY') {
-        quantityRelativeRatioDisplay = 'DISPLAY';
-    } else {
+    if (quantityRelativeRatioDisplay == null || quantityRelativeRatioDisplay == 'HIDDEN') {
         quantityRelativeRatioDisplay = 'HIDDEN';
+    } else {
+        quantityRelativeRatioDisplay = 'DISPLAY';
     }
     priceDisplay = await readCacheData('price-display');
     if (priceDisplay == null || priceDisplay == 'DISPLAY') {
@@ -8214,12 +8214,12 @@ function addDragAndDropListeners() {
         });
         columnList.hasDropListener = true; // 标记为已添加
     }
-    if (allDisplay == null || allDisplay == 'DISPLAY') {
-        allDisplay = 'DISPLAY';
-        $("#all-display-checkbox").prop("checked", true);
-    } else {
+    if (allDisplay == null || allDisplay == 'HIDDEN') {
         allDisplay = 'HIDDEN';
         $("#all-display-checkbox").prop("checked", false);
+    } else {
+        allDisplay = 'DISPLAY';
+        $("#all-display-checkbox").prop("checked", true);
     }
     if (marketValueDisplay == null || marketValueDisplay == 'DISPLAY') {
         marketValueDisplay = 'DISPLAY';
@@ -8228,19 +8228,19 @@ function addDragAndDropListeners() {
         marketValueDisplay = 'HIDDEN';
         $("#market-value-display-checkbox").prop("checked", false);
     }
-    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'DISPLAY') {
-        marketValuePercentDisplay = 'DISPLAY';
-        $("#market-value-percent-display-checkbox").prop("checked", true);
-    } else {
+    if (marketValuePercentDisplay == null || marketValuePercentDisplay == 'HIDDEN') {
         marketValuePercentDisplay = 'HIDDEN';
         $("#market-value-percent-display-checkbox").prop("checked", false);
-    }
-    if (costPriceValueDisplay == null || costPriceValueDisplay == 'DISPLAY') {
-        costPriceValueDisplay = 'DISPLAY';
-        $("#cost-price-value-display-checkbox").prop("checked", true);
     } else {
+        marketValuePercentDisplay = 'DISPLAY';
+        $("#market-value-percent-display-checkbox").prop("checked", true);
+    }
+    if (costPriceValueDisplay == null || costPriceValueDisplay == 'HIDDEN') {
         costPriceValueDisplay = 'HIDDEN';
         $("#cost-price-value-display-checkbox").prop("checked", false);
+    } else {
+        costPriceValueDisplay = 'DISPLAY';
+        $("#cost-price-value-display-checkbox").prop("checked", true);
     }
     if (incomePercentDisplay == null || incomePercentDisplay == 'DISPLAY') {
         incomePercentDisplay = 'DISPLAY';
@@ -8249,12 +8249,12 @@ function addDragAndDropListeners() {
         incomePercentDisplay = 'HIDDEN';
         $("#income-percent-display-checkbox").prop("checked", false);
     }
-    if (addtimePriceDisplay == null || addtimePriceDisplay == 'DISPLAY') {
-        addtimePriceDisplay = 'DISPLAY';
-        $("#addtime-price-display-checkbox").prop("checked", true);
-    } else {
+    if (addtimePriceDisplay == null || addtimePriceDisplay == 'HIDDEN') {
         addtimePriceDisplay = 'HIDDEN';
         $("#addtime-price-display-checkbox").prop("checked", false);
+    } else {
+        addtimePriceDisplay = 'DISPLAY';
+        $("#addtime-price-display-checkbox").prop("checked", true);
     }
     if (dayIncomeDisplay == null || dayIncomeDisplay == 'DISPLAY') {
         dayIncomeDisplay = 'DISPLAY';
@@ -8263,33 +8263,33 @@ function addDragAndDropListeners() {
         dayIncomeDisplay = 'HIDDEN';
         $("#day-income-display-checkbox").prop("checked", false);
     }
-    if (belongGroupDisplay == null || belongGroupDisplay == 'DISPLAY') {
-        belongGroupDisplay = 'DISPLAY';
-        $("#belong-group-display-checkbox").prop("checked", true);
-    } else {
+    if (belongGroupDisplay == null || belongGroupDisplay == 'HIDDEN') {
         belongGroupDisplay = 'HIDDEN';
         $("#belong-group-display-checkbox").prop("checked", false);
-    }
-    if (upSpeedDisplay == null || upSpeedDisplay == 'DISPLAY') {
-        upSpeedDisplay = 'DISPLAY';
-        $("#up-speed-display-checkbox").prop("checked", true);
     } else {
+        belongGroupDisplay = 'DISPLAY';
+        $("#belong-group-display-checkbox").prop("checked", true);
+    }
+    if (upSpeedDisplay == null || upSpeedDisplay == 'HIDDEN') {
         upSpeedDisplay = 'HIDDEN';
         $("#up-speed-display-checkbox").prop("checked", false);
-    }
-    if (maxDisplay == null || maxDisplay == 'DISPLAY') {
-        maxDisplay = 'DISPLAY';
-        $("#max-display-checkbox").prop("checked", true);
     } else {
+        upSpeedDisplay = 'DISPLAY';
+        $("#up-speed-display-checkbox").prop("checked", true);
+    }
+    if (maxDisplay == null || maxDisplay == 'HIDDEN') {
         maxDisplay = 'HIDDEN';
         $("#max-display-checkbox").prop("checked", false);
-    }
-    if (minDisplay == null || minDisplay == 'DISPLAY') {
-        minDisplay = 'DISPLAY';
-        $("#min-display-checkbox").prop("checked", true);
     } else {
+        maxDisplay = 'DISPLAY';
+        $("#max-display-checkbox").prop("checked", true);
+    }
+    if (minDisplay == null || minDisplay == 'HIDDEN') {
         minDisplay = 'HIDDEN';
         $("#min-display-checkbox").prop("checked", false);
+    } else {
+        minDisplay = 'DISPLAY';
+        $("#min-display-checkbox").prop("checked", true);
     }
     if (starDescDisplay == null || starDescDisplay == 'HIDDEN') {
         starDescDisplay = 'HIDDEN';
@@ -8347,12 +8347,12 @@ function addDragAndDropListeners() {
         incomeDisplay = 'HIDDEN';
         $("#income-display-checkbox").prop("checked", false);
     }
-    if (allDisplay == null || allDisplay == 'DISPLAY') {
-        allDisplay = 'DISPLAY';
-        $("#all-display-checkbox").prop("checked", true);
-    } else {
+    if (allDisplay == null || allDisplay == 'HIDDEN') {
         allDisplay = 'HIDDEN';
         $("#all-display-checkbox").prop("checked", false);
+    } else {
+        allDisplay = 'DISPLAY';
+        $("#all-display-checkbox").prop("checked", true);
     }
     if (codeDisplay == null || codeDisplay == 'HIDDEN') {
         codeDisplay = 'HIDDEN';
@@ -8403,12 +8403,12 @@ function addDragAndDropListeners() {
         quantityRelativeRatioDisplay = 'DISPLAY';
         $("#quantity-relative-ratio-display-checkbox").prop("checked", true);
     }
-    if (priceDisplay == null || priceDisplay == 'HIDDEN') {
-        priceDisplay = 'HIDDEN';
-        $("#price-display-checkbox").prop("checked", false);
-    } else {
+    if (priceDisplay == null || priceDisplay == 'DISPLAY') {
         priceDisplay = 'DISPLAY';
         $("#price-display-checkbox").prop("checked", true);
+    } else {
+        priceDisplay = 'HIDDEN';
+        $("#price-display-checkbox").prop("checked", false);
     }
     if (priceRealDisplay == null || priceRealDisplay == 'HIDDEN') {
         priceRealDisplay = 'HIDDEN';
