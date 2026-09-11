@@ -6835,8 +6835,9 @@ function changeBlackButton() {
     document.getElementById('remove-badgetext-button').classList.add(blackCss);
 
     document.getElementById('show-setting-button').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('show-setting-button').classList.remove(btnInfoCss);
     document.getElementById('show-setting-button').classList.remove(btnLightCss);
-    document.getElementById('show-setting-button').classList.add(blackOutlineCss);
+    document.getElementById('show-setting-button').classList.add(blackCss);
 
     document.getElementById('full-screen-menu-button').classList.remove(btnInfoCss);
     document.getElementById('full-screen-menu-button').classList.remove(btnLightCss);
@@ -6857,6 +6858,23 @@ function changeBlackButton() {
     document.getElementById('show-donate-button-2').classList.remove(btnOutlinePrimaryCss);
     document.getElementById('show-donate-button-2').classList.remove(btnLightCss);
     document.getElementById('show-donate-button-2').classList.add(blackOutlineCss);
+
+    document.getElementById('batch-edit-button').classList.remove(btnInfoCss);
+    document.getElementById('batch-edit-button').classList.remove(btnLightCss);
+    document.getElementById('batch-edit-button').classList.add(blackCss);
+
+    document.getElementById('batch-save-button').classList.remove(btnInfoCss);
+    document.getElementById('batch-save-button').classList.remove(btnLightCss);
+    document.getElementById('batch-save-button').classList.add(blackCss);
+
+    document.getElementById('batch-cancel-button').classList.remove(btnInfoCss);
+    document.getElementById('batch-cancel-button').classList.remove(btnLightCss);
+    document.getElementById('batch-cancel-button').classList.add(blackCss);
+
+    document.getElementById('more-menu-button').classList.remove(btnOutlinePrimaryCss);
+    document.getElementById('more-menu-button').classList.remove(btnInfoCss);
+    document.getElementById('more-menu-button').classList.remove(btnLightCss);
+    document.getElementById('more-menu-button').classList.add(blackCss);
 
 }
 
@@ -10389,14 +10407,18 @@ function exitBatchEditMode() {
     document.getElementById('batch-cancel-button').style.display = 'none';
     
     // 显示其他按钮
-    const buttonsToShow = ['show-all-button', 'show-stock-button', 'show-fund-button', 
-        'group-menu-button', 'batch-delete-button', 'refresh-button', 'show-data-center-button',
+    const buttonsToShow = ['show-all-button', 'show-stock-button', 'show-fund-button',
+        'group-menu-button', 'refresh-button', 'show-data-center-button',
         'remove-badgetext-button', 'full-screen-menu-button', 'show-setting-button',
         'show-wechat-group-button', 'show-wechat-mini-button', 'help-document-button', 'show-donate-button-2'];
     buttonsToShow.forEach(id => {
         const btn = document.getElementById(id);
         if (btn) btn.style.display = 'inline-block';
     });
+
+    // 批量删除按钮受 showBatchDeleteButton 配置控制，需尊重用户设置
+    const batchDeleteBtn = document.getElementById('batch-delete-button');
+    if (batchDeleteBtn) batchDeleteBtn.style.display = showBatchDeleteButton ? 'inline-block' : 'none';
 }
 
 
