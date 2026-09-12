@@ -1973,16 +1973,20 @@ async function initFund() {
                             let todayStr = today.getFullYear() + 
                                 String(today.getMonth() + 1).padStart(2, '0') + 
                                 String(today.getDate()).padStart(2, '0');
-                            // worth_date 等于今天表示真实净值已出
+                            // worth_date 等于今天表示真实净值已出（networth 缺失时的兜底判断）
                             let isRealNetValue = !!worthDate && worthDate !== '' && worthDate === todayStr;
                             
-                            // 如果 worth_date 不为今天（说明真实净值未出），使用 networth 数组中最新的 pre_nav 和 nav_pct
+                            // 如果不是真实净值（盘中估值时段），使用 networth 数组中最新的 pre_nav 和 nav_pct
                             if (data.result.data.networth && data.result.data.networth.length > 0) {
                                 var networthList = data.result.data.networth;
                                 var lastNetworth = networthList[networthList.length - 1];
+                                // pre_date 格式为 2026-09-11，去掉横线转为 YYYYMMDD 后再与 worth_date 比较
                                 var preDate = lastNetworth.pre_date ? lastNetworth.pre_date.replace(/-/g, '') : '';
-                                
-                                if (!worthDate || worthDate === '' || worthDate !== todayStr) {
+
+                                // 周末/节假日最新净值日期不是今天，改为与最新一条 networth 的 pre_date 比较判断真实净值
+                                isRealNetValue = !!worthDate && worthDate !== '' && worthDate === preDate;
+
+                                if (!isRealNetValue) {
                                     gsz = parseFloat(lastNetworth.pre_nav || '0');
                                     gszzl = parseFloat(lastNetworth.nav_pct || '0');
                                     date = preDate;
