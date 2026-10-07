@@ -18,6 +18,7 @@ var marketValueDisplay = 'DISPLAY';
 var marketValuePercentDisplay = 'HIDDEN';
 var costPriceValueDisplay = 'HIDDEN';
 var incomePercentDisplay = 'DISPLAY';
+var breakEvenDisplay = 'HIDDEN';
 var addtimePriceDisplay = 'HIDDEN';
 var dayIncomeDisplay = 'DISPLAY';
 var costPriceDisplay = 'DISPLAY';
@@ -95,6 +96,7 @@ var stockColumnNames = {
     "market-value-percent-th": "持仓占比",
     "cost-price-value-th": "成本",
     "income-percent-th": "收益率",
+    "break-even-th": "回本涨幅",
     "income-th": "收益",
     "update-time-th": "更新时间",
     "addtime-price-th": "自选价格",
@@ -126,6 +128,7 @@ var fundColumnNames = {
     "market-value-percent-th": "持仓占比",
     "cost-price-value-th": "成本",
     "income-percent-th": "收益率",
+    "break-even-th": "回本涨幅",
     "income-th": "收益",
     "update-time-th": "更新时间",
     "addtime-price-th": "自选价格",
@@ -283,6 +286,12 @@ async function initLoad() {
         incomePercentDisplay = 'DISPLAY';
     } else {
         incomePercentDisplay = 'HIDDEN';
+    }
+    breakEvenDisplay = await readCacheData('break-even-display');
+    if (breakEvenDisplay == null || breakEvenDisplay == 'HIDDEN') {
+        breakEvenDisplay = 'HIDDEN';
+    } else {
+        breakEvenDisplay = 'DISPLAY';
     }
     addtimePriceDisplay = await readCacheData('addtime-price-display');
     if (addtimePriceDisplay == null || addtimePriceDisplay == 'HIDDEN') {
@@ -632,6 +641,7 @@ async function initLoad() {
             {"market-value-percent-th": 0},
             {"cost-price-value-th": 0},
             {"income-percent-th": 0},
+            {"break-even-th": 0},
             {"income-th": 0},
             {"amplitude-th": 0},
             {"turn-over-rate-th": 0},
@@ -838,6 +848,8 @@ async function initHtml() {
             document.getElementById('fund-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('fund-income-percent-th'))
             document.getElementById('fund-income-percent-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('fund-break-even-th'))
+            document.getElementById('fund-break-even-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('fund-income-th'))
             document.getElementById('fund-income-th').addEventListener('click', clickSortStockAndFund);
         if (lastSort.fund.targetId != null && lastSort.fund.targetId != '' && document.getElementById(lastSort.fund.targetId)) {
@@ -884,6 +896,8 @@ async function initHtml() {
             document.getElementById('stock-cost-price-value-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-income-percent-th'))
             document.getElementById('stock-income-percent-th').addEventListener('click', clickSortStockAndFund);
+        if(document.getElementById('stock-break-even-th'))
+            document.getElementById('stock-break-even-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-income-th'))
             document.getElementById('stock-income-th').addEventListener('click', clickSortStockAndFund);
         if(document.getElementById('stock-change-th'))
@@ -2850,6 +2864,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             var dayIncomeStyle = parseFloat(result[k].dayIncome + "") == 0 ? "" : (parseFloat(result[k].dayIncome + "") > 0 ? "style=\"color:" + redColor + ";\"" : "style=\"color:" + blueColor + ";\"");
             let now = result[k].now;
             let costPrise = result[k].costPrise;
+            // 回本涨幅：按照当前价格和成本计算，回本需要多少涨幅
+            let breakEvenStr = getBreakEvenPercentStr(result[k].costPrise, result[k].now);
             let marketValue = parseFloat(result[k].marketValue + "").toFixed(2);
             let costPriceValue = result[k].costPriceValue;
             let income = result[k].income;
@@ -2971,6 +2987,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
                     html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + costPriceValue + "</td>" : "");
                 } else if(columnName == 'income-percent-th') {
                     html = (incomePercentDisplay == 'DISPLAY' ? "<td " + incomePercentStyle + ">" + result[k].incomePercent + "%</td>" : "");
+                } else if(columnName == 'break-even-th') {
+                    html = (breakEvenDisplay == 'DISPLAY' ? "<td>" + breakEvenStr + "</td>" : "");
                 } else if(columnName == 'income-th') {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + income + "</td>" : "");
                 } else if(columnName == 'addtime-price-th') {
@@ -3067,6 +3085,8 @@ async function getStockTableHtml(result, totalMarketValueResult) {
             html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + stockTotalCostValue + "</td>" : "");
         } else if(columnName == 'income-percent-th') {
             html = (incomePercentDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncomePercent + "%</td>" : "");
+        } else if(columnName == 'break-even-th') {
+            html = (breakEvenDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'income-th') {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + stockTotalIncomePercentStyle + ">" + stockTotalIncome + "</td>" : "");
         } else if(columnName == 'addtime-price-th') {
@@ -3119,6 +3139,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                 && result[k].existJZ ? '(实)' : '(估)';
             var gsz = result[k].existJZ !== null && result[k].existJZ !== undefined
                 && result[k].existJZ ? result[k].currentDayJingzhi : result[k].gsz;
+            // 回本涨幅：按照当前净值和成本计算，回本需要多少涨幅
+            let breakEvenStr = getBreakEvenPercentStr(result[k].costPrise, gsz);
             var nameOrDesc = result[k].desc ? result[k].desc : result[k].name;
             let nowTimestamp = Date.now();
             let monitorAlertDate = result[k].monitorAlertDate;
@@ -3201,6 +3223,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
                     html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + result[k].costPriceValue + "</td>" : "");
                 } else if(columnName == 'income-percent-th') {
                     html = (incomePercentDisplay == 'DISPLAY' ? "<td " + incomePercentStyle + ">" + result[k].incomePercent + "%</td>" : "");
+                } else if(columnName == 'break-even-th') {
+                    html = (breakEvenDisplay == 'DISPLAY' ? "<td>" + breakEvenStr + "</td>" : "");
                 } else if(columnName == 'income-th') {
                     html = (incomeDisplay == 'DISPLAY' ? "<td " + totalIncomeStyle + ">" + result[k].income + "</td>" : "");
                 } else if(columnName == 'addtime-price-th') {
@@ -3292,6 +3316,8 @@ async function getFundTableHtml(result, totalMarketValueResult) {
             html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + fundTotalCostValue + "</td>" : "");
         } else if(columnName == 'income-percent-th') {
             html = (incomePercentDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncomePercent + "%</td>" : "");
+        } else if(columnName == 'break-even-th') {
+            html = (breakEvenDisplay == 'DISPLAY' ? "<td></td>" : "");
         } else if(columnName == 'income-th') {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + fundTotalIncomePercentStyle + ">" + fundTotalIncome + "</td>" : "");
         } else if(columnName == 'addtime-price-th') {
@@ -3384,6 +3410,8 @@ function getTotalTableHtml(totalMarketValueResult) {
             html = (costPriceValueDisplay == 'DISPLAY' ? "<td>" + totalCostPrice + "</td>" : "" );
         } else if(columnName == 'income-percent-th') {
             html = (incomePercentDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncomePercent + "%</td>" : "" );
+        } else if(columnName == 'break-even-th') {
+            html = (breakEvenDisplay == 'DISPLAY' ? "<td></td>" : "" );
         } else if(columnName == 'income-th') {
             html = (incomeDisplay == 'DISPLAY' ? "<td " + allTotalIncomePercentStyle + ">" + allTotalIncome + "</td>" : "" );
         } else if(columnName == 'addtime-price-th') {
@@ -3412,6 +3440,29 @@ function getTotalTableHtml(totalMarketValueResult) {
 // 判断是否为纯数字
 function isNumeric(str) {
     return str !== "" && !isNaN(Number(str));
+}
+
+// 计算回本涨幅展示文本：按照当前价格和成本计算，回本需要多少涨幅
+function getBreakEvenPercentStr(costPrise, now) {
+    var cost = parseFloat(costPrise);
+    var current = parseFloat(now);
+    if (isNaN(cost) || isNaN(current) || cost <= 0 || current <= 0) {
+        return "--";
+    }
+    if (current >= cost) {
+        return "已回本";
+    }
+    return ((cost - current) / current * 100).toFixed(2) + "%";
+}
+
+// 计算回本涨幅数值（用于排序），已回本或无成本时为负数或0
+function getBreakEvenPercentValue(costPrise, now) {
+    var cost = parseFloat(costPrise);
+    var current = parseFloat(now);
+    if (isNaN(cost) || isNaN(current) || cost <= 0 || current <= 0) {
+        return 0;
+    }
+    return (cost - current) / current;
 }
 
 // 通过股票名称搜索股票列表
@@ -5056,7 +5107,7 @@ async function dataExport() {
 // CSV导出
 async function dataExportCsv() {
     var csvContent = '\uFEFF';
-    csvContent += '类型,名称,编码,成本价,当前价,涨跌幅,涨跌,持仓,市值,成本,收益,收益率,所属分组\n';
+    csvContent += '类型,名称,编码,成本价,当前价,涨跌幅,涨跌,持仓,市值,成本,收益,收益率,回本涨幅,所属分组\n';
     var allStocks = [];
     var allFunds = [];
     var defaultStocks = jQuery.parseJSON(await readCacheData('stocks'));
@@ -5090,7 +5141,8 @@ async function dataExportCsv() {
         var changePercent = stockData.changePercent || stock.changePercent || '0';
         var change = stockData.change || stock.change || '0';
         var groupName = stock.belongGroup ? (groups[stock.belongGroup] || '未知分组') : '默认分组';
-        csvContent += `股票,${stockData.name || stock.name || ''},${stock.code},${stock.costPrise},${stockData.now || stock.now || ''},${changePercent}%,${change},${stock.bonds || '0'},${marketValue},${totalCost},${income},${incomePercent}%,${groupName}\n`;
+        var breakEven = getBreakEvenPercentStr(stock.costPrise, stockData.now || stock.now);
+        csvContent += `股票,${stockData.name || stock.name || ''},${stock.code},${stock.costPrise},${stockData.now || stock.now || ''},${changePercent}%,${change},${stock.bonds || '0'},${marketValue},${totalCost},${income},${incomePercent}%,${breakEven},${groupName}\n`;
     }
     for (let fund of allFunds) {
         var fundData = fundList.find(f => f.fundCode === fund.fundCode && f.belongGroup === fund.belongGroup) || fund;
@@ -5105,7 +5157,8 @@ async function dataExportCsv() {
         var change = fundData.change || fund.change || '0';
         var fundName = fundData.name || fund.name || fundData.fundName || fund.fundName || '';
         var fundGroupName = fund.belongGroup ? (groups[fund.belongGroup] || '未知分组') : '默认分组';
-        csvContent += `基金,${fundName},${fund.fundCode},${fund.costPrise},${fundData.gsz || fund.gsz || fundData.now || fund.now || ''},${changePercent}%,${change},${fund.bonds || '0'},${marketValue},${totalCost},${income},${incomePercent}%,${fundGroupName}\n`;
+        var fundBreakEven = getBreakEvenPercentStr(fund.costPrise, fundData.gsz || fund.gsz || fundData.now || fund.now);
+        csvContent += `基金,${fundName},${fund.fundCode},${fund.costPrise},${fundData.gsz || fund.gsz || fundData.now || fund.now || ''},${changePercent}%,${change},${fund.bonds || '0'},${marketValue},${totalCost},${income},${incomePercent}%,${fundBreakEven},${fundGroupName}\n`;
     }
     downloadJsonOrTxt('股票基金神器.csv', csvContent);
 }
@@ -5546,6 +5599,9 @@ async function setDisplayTr(event) {
     } else if(type == 'income-percent-display-checkbox') {
         incomePercentDisplay = dispaly;
         saveCacheData('income-percent-display', dispaly);
+    } else if(type == 'break-even-display-checkbox') {
+        breakEvenDisplay = dispaly;
+        saveCacheData('break-even-display', dispaly);
     } else if(type == 'addtime-price-display-checkbox') {
         addtimePriceDisplay = dispaly;
         saveCacheData('addtime-price-display', dispaly);
@@ -5618,6 +5674,7 @@ async function setDisplayTr(event) {
         marketValuePercentDisplay = dispaly;
         costPriceValueDisplay = dispaly;
         incomePercentDisplay = dispaly;
+        breakEvenDisplay = dispaly;
         addtimePriceDisplay = dispaly;
         dayIncomeDisplay = dispaly;
         belongGroupDisplay = dispaly;
@@ -5648,6 +5705,7 @@ async function setDisplayTr(event) {
         saveCacheData('market-value-percent-display', dispaly);
         saveCacheData('cost-price-value-display', dispaly);
         saveCacheData('income-percent-display', dispaly);
+        saveCacheData('break-even-display', dispaly);
         saveCacheData('addtime-price-display', dispaly);
         saveCacheData('day-income-display', dispaly);
         saveCacheData('belong-group-display', dispaly);
@@ -5676,6 +5734,7 @@ async function setDisplayTr(event) {
             $("#market-value-percent-display-checkbox").prop("checked", true);
             $("#cost-price-value-display-checkbox").prop("checked", true);
             $("#income-percent-display-checkbox").prop("checked", true);
+            $("#break-even-display-checkbox").prop("checked", true);
             $("#addtime-price-display-checkbox").prop("checked", true);
             $("#belong-group-display-checkbox").prop("checked", true);
             $("#up-speed-display-checkbox").prop("checked", true);
@@ -5704,6 +5763,7 @@ async function setDisplayTr(event) {
             $("#market-value-percent-display-checkbox").prop("checked", false);
             $("#cost-price-value-display-checkbox").prop("checked", false);
             $("#income-percent-display-checkbox").prop("checked", false);
+            $("#break-even-display-checkbox").prop("checked", false);
             $("#addtime-price-display-checkbox").prop("checked", false);
             $("#belong-group-display-checkbox").prop("checked", false);
             $("#up-speed-display-checkbox").prop("checked", false);
@@ -6297,6 +6357,8 @@ async function syncConfigFromCloud() {
             saveCacheData('cost-price-value-display', costPriceValueDisplay);
             incomePercentDisplay = result.incomePercentDisplay;
             saveCacheData('income-percent-display', incomePercentDisplay);
+            breakEvenDisplay = result.breakEvenDisplay;
+            saveCacheData('break-even-display', breakEvenDisplay);
             addtimePriceDisplay = result.addtimePriceDisplay;
             saveCacheData('addtime-price-display', addtimePriceDisplay);
             dayIncomeDisplay = result.dayIncomeDisplay;
@@ -6443,6 +6505,7 @@ async function syncConfigToCloud() {
     data.marketValuePercentDisplay = marketValuePercentDisplay;
     data.costPriceValueDisplay = costPriceValueDisplay;
     data.incomePercentDisplay = incomePercentDisplay;
+    data.breakEvenDisplay = breakEvenDisplay;
     data.addtimePriceDisplay = addtimePriceDisplay;
     data.dayIncomeDisplay = dayIncomeDisplay;
     data.costPriceDisplay = costPriceDisplay;
@@ -7063,6 +7126,12 @@ async function sortStockAndFund(totalMarketValue) {
                 } else {
                     return parseFloat(b.incomePercent + "") - parseFloat(a.incomePercent + "");
                 }
+            } else if (targetId == 'stock-break-even-th') {
+                if(lastSort.stock.sortType == 'asc'){
+                    return getBreakEvenPercentValue(a.costPrise, a.now) - getBreakEvenPercentValue(b.costPrise, b.now);
+                } else {
+                    return getBreakEvenPercentValue(b.costPrise, b.now) - getBreakEvenPercentValue(a.costPrise, a.now);
+                }
             } else if (targetId == 'stock-income-th') {
                 if(lastSort.stock.sortType == 'asc'){
                     return parseFloat(a.income + "") - parseFloat(b.income + "");
@@ -7154,6 +7223,12 @@ async function sortStockAndFund(totalMarketValue) {
                     return parseFloat(a.incomePercent + "") - parseFloat(b.incomePercent + "");
                 } else {
                     return parseFloat(b.incomePercent + "") - parseFloat(a.incomePercent + "");
+                }
+            } else if (targetId == 'fund-break-even-th') {
+                if(lastSort.fund.sortType == 'asc'){
+                    return getBreakEvenPercentValue(a.costPrise, a.gsz) - getBreakEvenPercentValue(b.costPrise, b.gsz);
+                } else {
+                    return getBreakEvenPercentValue(b.costPrise, b.gsz) - getBreakEvenPercentValue(a.costPrise, a.gsz);
                 }
             } else if (targetId == 'fund-income-th') {
                 if(lastSort.fund.sortType == 'asc'){
@@ -8129,6 +8204,8 @@ function getThColumnHtml(columnId, type) {
         html = "";
     } else if (columnId == 'income-percent-th' && incomePercentDisplay != 'DISPLAY') {
         html = "";
+    } else if (columnId == 'break-even-th' && breakEvenDisplay != 'DISPLAY') {
+        html = "";
     } else if (columnId == 'income-th' && incomeDisplay != 'DISPLAY') {
         html = "";
     } else if (columnId == 'addtime-price-th' && addtimePriceDisplay != 'DISPLAY') {
@@ -8252,6 +8329,13 @@ function addDragAndDropListeners() {
     } else {
         incomePercentDisplay = 'HIDDEN';
         $("#income-percent-display-checkbox").prop("checked", false);
+    }
+    if (breakEvenDisplay == null || breakEvenDisplay == 'DISPLAY') {
+        breakEvenDisplay = 'DISPLAY';
+        $("#break-even-display-checkbox").prop("checked", true);
+    } else {
+        breakEvenDisplay = 'HIDDEN';
+        $("#break-even-display-checkbox").prop("checked", false);
     }
     if (addtimePriceDisplay == null || addtimePriceDisplay == 'HIDDEN') {
         addtimePriceDisplay = 'HIDDEN';
@@ -8431,6 +8515,8 @@ function addDragAndDropListeners() {
     document.getElementById("cost-price-value-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，收益率
     document.getElementById("income-percent-display-checkbox").addEventListener('change', setDisplayTr);
+    // 设置页面，隐藏/展示页面展示项，回本涨幅
+    document.getElementById("break-even-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，自选价格
     document.getElementById("addtime-price-display-checkbox").addEventListener('change', setDisplayTr);
     // 设置页面，隐藏/展示页面展示项，当日盈利
@@ -8502,6 +8588,7 @@ function recoveryColumnOrder() {
             {"market-value-percent-th": 0},
             {"cost-price-value-th": 0},
             {"income-percent-th": 0},
+            {"break-even-th": 0},
             {"income-th": 0},
             {"amplitude-th": 0},
             {"turn-over-rate-th": 0},
@@ -10227,6 +10314,7 @@ function convertToInputFields() {
             else if (columnName === 'market-value-percent-th' && marketValuePercentDisplay !== 'DISPLAY') isVisible = false;
             else if (columnName === 'cost-price-value-th' && costPriceValueDisplay !== 'DISPLAY') isVisible = false;
             else if (columnName === 'income-percent-th' && incomePercentDisplay !== 'DISPLAY') isVisible = false;
+            else if (columnName === 'break-even-th' && breakEvenDisplay !== 'DISPLAY') isVisible = false;
             else if (columnName === 'addtime-price-th' && addtimePriceDisplay !== 'DISPLAY') isVisible = false;
             else if (columnName === 'day-income-th' && dayIncomeDisplay !== 'DISPLAY') isVisible = false;
             else if (columnName === 'belong-group-th' && belongGroupDisplay !== 'DISPLAY') isVisible = false;
